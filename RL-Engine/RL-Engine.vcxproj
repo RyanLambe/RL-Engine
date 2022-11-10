@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\EngineException.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\EngineException.h" />
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>

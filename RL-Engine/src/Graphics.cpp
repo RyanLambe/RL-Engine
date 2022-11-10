@@ -29,13 +29,3 @@ void Graphics::EndFrame()
 {
 	swap->Present(0, 0);
 }
-
-Graphics::~Graphics()
-{
-	if (swap != nullptr)
-		swap->Release();
-	if (device != nullptr)
-		device->Release();
-	if (context != nullptr)
-		context->Release();
-}

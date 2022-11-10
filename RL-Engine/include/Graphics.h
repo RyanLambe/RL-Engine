@@ -1,17 +1,16 @@
 #pragma once
 #include <d3d11.h>
+#include <wrl.h>
 
 class Graphics
 {
 public:
-	~Graphics();
-	
 	void Start(HWND hwnd);
 	void EndFrame();
 
 private:
-	ID3D11Device* device = nullptr;
-	IDXGISwapChain* swap = nullptr;
-	ID3D11DeviceContext* context = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> swap;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 };
 

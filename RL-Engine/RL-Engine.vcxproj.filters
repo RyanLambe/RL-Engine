@@ -14,12 +14,16 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
+    <ClCompile Include="src\EngineException.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EngineException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
