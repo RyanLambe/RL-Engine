@@ -1,7 +1,6 @@
 #pragma once
-#include <Windows.h>
 
-#include "EngineException.h"
+#include "WindowException.h"
 #include "Graphics.h"
 
 class Window
@@ -20,21 +19,4 @@ private:
 private:
 	HWND hwnd;
 	Graphics gfx;
-
-//Window Exception
-public:
-	class WindowException : public EngineException
-	{
-	public:
-		WindowException(int line, const char* file, HRESULT hr);
-		const char* what() const override;
-		const char* GetType() const override;
-		static std::string TranslateHResult(HRESULT hr);
-
-	private:
-		HRESULT hr;
-	};
 };
-
-//Exception macro
-#define EXCEPT(hr) Window::WindowException(__LINE__, __FILE__, hr)

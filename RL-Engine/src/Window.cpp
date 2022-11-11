@@ -1,6 +1,5 @@
 #include "../include/Window.h"
 
-
 Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int height)
 {
 	// Create class for window
@@ -20,10 +19,16 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 	size.top = 100;
 	size.bottom = height + size.top;
 
-	AdjustWindowRect(&size, style, false);
+	if (AdjustWindowRect(&size, style, false) == 0) {
+		throw WndExcept(GetLastError());
+	}
 
 	// Create window
 	hwnd = CreateWindow(name, name, style, CW_USEDEFAULT, CW_USEDEFAULT, size.right - size.left, size.bottom - size.top, NULL, NULL, hInstance, this);
+
+	if (hwnd == NULL) {
+		throw WndExcept(GetLastError());
+	}
 
 	ShowWindow(hwnd, SW_SHOW);
 	
@@ -100,38 +105,4 @@ LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
-}
-
-//Window Exception
-
-Window::WindowException::WindowException(int line, const char* file, HRESULT hr) : EngineException(line, file) 
-{
-	this->hr = hr;
-}
-
-const char* Window::WindowException::what() const
-{
-	outBuffer = TranslateHResult(hr) + "\n" + getLocation();
-	return outBuffer.c_str();
-}
-
-const char* Window::WindowException::GetType() const
-{
-	return "Window Exception";
-}
-
-std::string Window::WindowException::TranslateHResult(HRESULT hr)
-{
-	//reformat message
-	char* msgBuffer = nullptr;
-	DWORD msgLength = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&msgBuffer), 0, nullptr);
-
-	//check if there is a message
-	if (msgLength == 0)
-		return "Unknown Exception";
-
-	//return
-	std::string out = msgBuffer;
-	LocalFree(msgBuffer);
-	return out;
 }

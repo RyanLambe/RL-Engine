@@ -15,6 +15,9 @@
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\EngineException.cpp" />
+    <ClCompile Include="src\WindowException.cpp" />
+    <ClCompile Include="src\GraphicsException.cpp" />
+    <ClCompile Include="src\CustomException.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
@@ -24,6 +27,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\EngineException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WindowException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GraphicsException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

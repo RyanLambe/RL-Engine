@@ -1,4 +1,5 @@
 #include "../include/Graphics.h"
+#include "../include/CustomException.h"
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -21,11 +22,17 @@ void Graphics::Start(HWND hwnd)
 	sd.Windowed = TRUE;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = 0;
-
-	D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context);
+	
+	GfxThrowFailed(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
 }
 
 void Graphics::EndFrame()
 {
-	swap->Present(0, 0);
+	HRESULT hr;
+	if (FAILED(hr = swap->Present(0, 0))) {
+		if (hr == DXGI_ERROR_DEVICE_REMOVED)
+			throw GfxExcept(device->GetDeviceRemovedReason());
+		else
+			GfxThrowFailed(hr);
+	}
 }

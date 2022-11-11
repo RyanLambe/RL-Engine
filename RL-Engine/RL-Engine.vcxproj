@@ -19,15 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CustomException.cpp" />
+    <ClCompile Include="src\GraphicsException.cpp" />
     <ClCompile Include="src\EngineException.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Window.cpp" />
+    <ClCompile Include="src\WindowException.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\CustomException.h" />
+    <ClInclude Include="include\GraphicsException.h" />
     <ClInclude Include="include\EngineException.h" />
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\Window.h" />
+    <ClInclude Include="include\WindowException.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
