@@ -47,6 +47,7 @@ int Window::Run()
 	while (!WindowClosed(&exitCode))
 	{
 		//code
+		gfx.DrawTriangle();
 		gfx.EndFrame();
 	}
 	return exitCode;

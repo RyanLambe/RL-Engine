@@ -18,6 +18,7 @@
     <ClCompile Include="src\WindowException.cpp" />
     <ClCompile Include="src\GraphicsException.cpp" />
     <ClCompile Include="src\CustomException.cpp" />
+    <ClCompile Include="src\InfoException.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
@@ -38,5 +39,12 @@
     <ClInclude Include="include\CustomException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\InfoException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\VertexShader.hlsl" />
+    <FxCompile Include="shaders\PixelShader.hlsl" />
   </ItemGroup>
 </Project>
