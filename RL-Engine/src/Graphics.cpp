@@ -42,61 +42,28 @@ void Graphics::EndFrame()
 			GfxThrowFailed(hr);
 	}
 
-	float background_colour[4] = { 0, 0, 1, 1.0f };
+	float background_colour[4] = { 255.0f/255.0f, 64.0f/255.0f, 0, 1.0f };
 	context->ClearRenderTargetView(target.Get(), background_colour);
 }
 
-void Graphics::DrawTriangle() {
-
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
-
-	struct Vertex {
-		float x;
-		float y;
-	};
-
-	Vertex verts[] = {
-		{0.0f, 0.5f },
-		{0.5f, -0.5f},
-		{-0.5f, -0.5f}
-	};
-
-	unsigned int indices[] = { 0, 2, 1 };
-
-	D3D11_BUFFER_DESC ibufferDesc;
-	ibufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	ibufferDesc.ByteWidth = sizeof(unsigned int) * 3;
-	ibufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibufferDesc.CPUAccessFlags = 0;
-	ibufferDesc.MiscFlags = 0;
+void Graphics::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer) {
 
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(Vertex) * 3;
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.ByteWidth = size;
+	bufferDesc.BindFlags = bindFlags;
 	bufferDesc.CPUAccessFlags = 0;
 	bufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA initData;
-	initData.pSysMem = verts;
+	initData.pSysMem = data;
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
 
-	D3D11_SUBRESOURCE_DATA IinitData;
-	IinitData.pSysMem = indices;
-	IinitData.SysMemPitch = 0;
-	IinitData.SysMemSlicePitch = 0;
+	device->CreateBuffer(&bufferDesc, &initData, buffer);
+}
 
-	device->CreateBuffer(&ibufferDesc, &IinitData, &indexBuffer);
-	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-
-
-	device->CreateBuffer(&bufferDesc, &initData, &vertexBuffer);
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-
+void Graphics::SetShaders() {
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> blob;
@@ -109,14 +76,49 @@ void Graphics::DrawTriangle() {
 	device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vertexShader);
 	context->VSSetShader(vertexShader.Get(), 0, 0);
 
-
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
 	D3D11_INPUT_ELEMENT_DESC ied[] = {
 		{"Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"Color", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 8, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 	device->CreateInputLayout(ied, (UINT)std::size(ied), blob->GetBufferPointer(), blob->GetBufferSize(), &inputLayout);
 	context->IASetInputLayout(inputLayout.Get());
+}
 
+void Graphics::DrawTriangle() {
+
+	struct Vertex {
+		float x;
+		float y;
+		float r;
+		float g;
+		float b;
+	};
+
+	Vertex verts[] = {
+		{-0.5f, 0.5f, 1, 0, 0},
+		{0.5f, 0.5f, 0, 1, 0},
+		{-0.5f, -0.5f, 0, 0, 1},
+		{0.5f, -0.5f, 0, 0, 1}
+	};
+
+	unsigned int indices[] = { 0, 1, 2, 2, 1, 3 };
+
+	// create buffers
+	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+
+	CreateBuffer(verts, sizeof(verts), D3D11_BIND_VERTEX_BUFFER, &vertexBuffer);
+	CreateBuffer(indices, sizeof(indices), D3D11_BIND_INDEX_BUFFER, &indexBuffer);
+
+	// set buffers
+	UINT offset = 0;
+	UINT stride = sizeof(Vertex);
+	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+	
+	SetShaders();
 
 	context->OMSetRenderTargets(1, target.GetAddressOf(), nullptr);
 
@@ -131,5 +133,6 @@ void Graphics::DrawTriangle() {
 
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
-	context->Draw(3, 0);
+	//add 
+	context->DrawIndexed(sizeof(indices) / sizeof(int), 0, 0);
 }
