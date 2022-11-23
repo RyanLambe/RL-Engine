@@ -41,13 +41,18 @@ Window::~Window()
 	DestroyWindow(hwnd);
 }
 
+float angle = 0.0f;
+
 int Window::Run()
 {
 	int exitCode;
 	while (!WindowClosed(&exitCode))
 	{
 		//code
-		gfx.DrawTriangle();
+		gfx.DrawTriangle(angle, 0, 0);
+		gfx.DrawTriangle(-angle, 0, 0);
+
+		angle += 0.001f;
 		gfx.EndFrame();
 	}
 	return exitCode;
