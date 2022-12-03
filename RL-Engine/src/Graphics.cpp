@@ -7,6 +7,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
+//update
 void Graphics::Start(HWND hwnd)
 {
 	DXGI_SWAP_CHAIN_DESC sd = {};
@@ -66,6 +67,7 @@ void Graphics::Start(HWND hwnd)
 	context->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
 }
 
+//update
 void Graphics::EndFrame()
 {
 	HRESULT hr;
@@ -81,6 +83,34 @@ void Graphics::EndFrame()
 	context->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 }
 
+void Graphics::Draw() {
+
+	D3D11_VIEWPORT vp;
+	vp.Width = 1280;
+	vp.Height = 720;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	context->RSSetViewports(1, &vp);
+
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	LinkedList<MeshRenderer*> objects = scene.getChildrenOfType<MeshRenderer>();
+	for (int i = 0; i < objects.size(); i++) {
+		objects.get(i)->Draw();
+	}
+}
+
+void setScene(Node scene) {
+
+}
+
+Node* getScene() {
+
+}
+
+//-------------------------remove-below-------------------------//
 void Graphics::CreateBuffer(void* data, UINT size, UINT bindFlags, D3D11_USAGE use, UINT CpuAccess, ID3D11Buffer** buffer) {
 
 	D3D11_BUFFER_DESC bufferDesc;

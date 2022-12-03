@@ -19,12 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\objects\MeshRenderer.cpp" />
+    <ClCompile Include="src\objects\Node.cpp" />
     <ClCompile Include="src\CustomException.cpp" />
     <ClCompile Include="src\GraphicsException.cpp" />
     <ClCompile Include="src\EngineException.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\InfoException.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\types\Mesh.cpp" />
+    <ClCompile Include="src\types\PixelShader.cpp" />
+    <ClCompile Include="src\types\Transform.cpp" />
+    <ClCompile Include="src\types\VertexShader.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\WindowException.cpp" />
   </ItemGroup>
@@ -34,8 +40,15 @@
     <ClInclude Include="include\EngineException.h" />
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\InfoException.h" />
+    <ClInclude Include="include\types\VertexShader.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\WindowException.h" />
+    <ClInclude Include="include\objects\Node.h" />
+    <ClInclude Include="include\types\LinkedList.h" />
+    <ClInclude Include="include\objects\MeshRenderer.h" />
+    <ClInclude Include="include\types\Transform.h" />
+    <ClInclude Include="include\types\Mesh.h" />
+    <ClInclude Include="include\types\PixelShader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\PixelShader.hlsl">
