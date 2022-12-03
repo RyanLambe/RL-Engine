@@ -46,11 +46,20 @@ float angle = 0.0f;
 int Window::Run()
 {
 	int exitCode;
+
+	Entity cube;
+	gfx.createMesh(&cube);
+
+
+	
+
 	while (!WindowClosed(&exitCode))
 	{
 		//code
-		gfx.DrawTriangle(angle, 0, 0);
-		gfx.DrawTriangle(-angle, 0, 0);
+		
+		gfx.Draw();
+		//gfx.DrawTriangle(angle, 0, 0);
+		//gfx.DrawTriangle(-angle, 0, 0);
 
 		angle += 0.001f;
 		gfx.EndFrame();

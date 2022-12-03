@@ -1,5 +1,4 @@
 #include "../include/Graphics.h"
-#include "../include/CustomException.h"
 
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
@@ -7,6 +6,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
+//update
 void Graphics::Start(HWND hwnd)
 {
 	DXGI_SWAP_CHAIN_DESC sd = {};
@@ -64,14 +64,28 @@ void Graphics::Start(HWND hwnd)
 	device->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, &DSV);
 
 	context->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
+
+	//set viewport size
+	D3D11_VIEWPORT vp;
+	vp.Width = 1280;
+	vp.Height = 720;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	context->RSSetViewports(1, &vp);
+
+	//set topology
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
+//update
 void Graphics::EndFrame()
 {
 	HRESULT hr;
 	if (FAILED(hr = swap->Present(0, 0))) {
 		if (hr == DXGI_ERROR_DEVICE_REMOVED)
-			throw GfxExcept(device->GetDeviceRemovedReason());
+			throw GfxExcept(Graphics::device->GetDeviceRemovedReason());
 		else
 			GfxThrowFailed(hr);
 	}
@@ -80,6 +94,71 @@ void Graphics::EndFrame()
 	context->ClearRenderTargetView(target.Get(), background_colour);
 	context->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 }
+
+void Graphics::Draw() {
+	//remove start
+
+	//create constant buffer
+	struct ConstantBuffer {
+		DirectX::XMMATRIX transform;
+	};
+
+	ConstantBuffer cb = {
+		{
+			DirectX::XMMatrixTranspose(
+				DirectX::XMMatrixRotationZ(0.7) *
+				DirectX::XMMatrixRotationX(0.7) *
+				DirectX::XMMatrixTranslation(0, 0, 9) *
+				DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10)
+			)
+		}
+	};
+
+	struct ConstantBuffer2 {
+		struct {
+			float r;
+			float g;
+			float b;
+			float a;
+		} face_colors[6];
+	};
+
+	ConstantBuffer2 cb2 = {
+		{
+			{1, 0, 1},
+			{1, 0, 0},
+			{0, 1, 0},
+			{0, 0, 1},
+			{1, 1, 0},
+			{0, 1, 1}
+		}
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
+	CreateBuffer(&cb, sizeof(cb), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE, &constBuffer);
+	context->VSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer2;
+	CreateBuffer(&cb2, sizeof(cb2), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0, &constBuffer2);
+	context->PSSetConstantBuffers(0, 1, constBuffer2.GetAddressOf());
+
+	//end remove
+
+	//set shaders?
+	Shader temp(device.Get(), context.Get());
+
+	//render
+	for (int i = 0; i < renderers.size(); i++) {
+		renderers[i].Draw(context.Get());
+	}
+}
+
+void Graphics::createMesh(Entity* parent) {
+	renderers.emplace_back(device.Get(), context.Get());
+	parent->addComponent(&renderers[renderers.size()-1]);
+}
+
+//-------------------------remove-below-------------------------//
 
 void Graphics::CreateBuffer(void* data, UINT size, UINT bindFlags, D3D11_USAGE use, UINT CpuAccess, ID3D11Buffer** buffer) {
 
@@ -97,68 +176,8 @@ void Graphics::CreateBuffer(void* data, UINT size, UINT bindFlags, D3D11_USAGE u
 
 	device->CreateBuffer(&bufferDesc, &initData, buffer);
 }
-
-void Graphics::SetShaders() {
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
-	Microsoft::WRL::ComPtr<ID3DBlob> blob;
-
-	D3DReadFileToBlob(L"PixelShader.cso", &blob);
-	device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &pixelShader);
-	context->PSSetShader(pixelShader.Get(), 0, 0);
-
-	D3DReadFileToBlob(L"VertexShader.cso", &blob);
-	device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vertexShader);
-	context->VSSetShader(vertexShader.Get(), 0, 0);
-
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
-	D3D11_INPUT_ELEMENT_DESC ied[] = {
-		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	};
-	device->CreateInputLayout(ied, (UINT)std::size(ied), blob->GetBufferPointer(), blob->GetBufferSize(), &inputLayout);
-	context->IASetInputLayout(inputLayout.Get());
-}
-
+/*
 void Graphics::DrawTriangle(float angle, float x, float y) {
-
-	struct Vertex {
-		float x;
-		float y;
-		float z;
-	};
-
-	Vertex verts[] = {
-		{-1, -1, -1},
-		{1, -1, -1},
-		{-1, 1, -1},
-		{1, 1, -1},
-		{-1, -1, 1},
-		{1, -1, 1},
-		{-1, 1, 1},
-		{1, 1, 1}
-	};
-
-	unsigned int indices[] = {
-		0, 2, 1,  2, 3, 1,
-		1, 3, 5,  3, 7, 5,
-		2, 6, 3,  3, 6, 7,
-		4, 5, 7,  4, 7, 6,
-		0, 4, 2,  2, 4, 6,
-		0, 1, 4,  1, 5, 4
-	};
-
-	// create buffers
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
-
-	CreateBuffer(verts, sizeof(verts), D3D11_BIND_VERTEX_BUFFER, D3D11_USAGE_DEFAULT, 0, &vertexBuffer);
-	CreateBuffer(indices, sizeof(indices), D3D11_BIND_INDEX_BUFFER, D3D11_USAGE_DEFAULT, 0, &indexBuffer);
-
-	// set buffers
-	UINT offset = 0;
-	UINT stride = sizeof(Vertex);
-	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 	//create constant buffer
 	struct ConstantBuffer {
@@ -168,9 +187,9 @@ void Graphics::DrawTriangle(float angle, float x, float y) {
 	ConstantBuffer cb = {
 		{
 			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(angle) *
-				DirectX::XMMatrixRotationX(angle)*
-				DirectX::XMMatrixTranslation(x, y, 9) *
+				DirectX::XMMatrixRotationZ(0.7) *
+				DirectX::XMMatrixRotationX(0.7)*
+				DirectX::XMMatrixTranslation(0, 0, 9) *
 				DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10)
 			)
 		}
@@ -204,19 +223,11 @@ void Graphics::DrawTriangle(float angle, float x, float y) {
 	CreateBuffer(&cb2, sizeof(cb2), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0, &constBuffer2);
 	context->PSSetConstantBuffers(0, 1, constBuffer2.GetAddressOf());
 	
-	SetShaders();
+	//set shaders?
+	Shader temp(device.Get(), context.Get());
 
-	D3D11_VIEWPORT vp;
-	vp.Width = 1280;
-	vp.Height = 720;
-	vp.MinDepth = 0;
-	vp.MaxDepth = 1;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	context->RSSetViewports(1, &vp);
-
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
-	//add 
-	context->DrawIndexed(sizeof(indices) / sizeof(int), 0, 0);
-}
+	//render
+	for (int i = 0; i < renderers.size(); i++) {
+		renderers[i].Draw(context.Get());
+	}
+}*/

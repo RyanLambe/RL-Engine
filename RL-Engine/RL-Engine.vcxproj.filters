@@ -19,6 +19,11 @@
     <ClCompile Include="src\GraphicsException.cpp" />
     <ClCompile Include="src\CustomException.cpp" />
     <ClCompile Include="src\InfoException.cpp" />
+    <ClCompile Include="src\objects\Entity.cpp" />
+    <ClCompile Include="src\objects\MeshRenderer.cpp" />
+    <ClCompile Include="src\types\Transform.cpp" />
+    <ClCompile Include="src\types\Mesh.cpp" />
+    <ClCompile Include="src\types\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
@@ -40,6 +45,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\InfoException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objects\Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\LinkedList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objects\MeshRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
