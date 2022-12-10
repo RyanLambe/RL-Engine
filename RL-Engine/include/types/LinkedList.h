@@ -5,18 +5,20 @@ using namespace std;
 
 //class definition
 
-template<class T>
+template<typename T>
 class LinkedList {
 
 public:
 	LinkedList();
 	LinkedList(T data);
 	LinkedList(T data[]);
+	~LinkedList();
 
 	void put(T data);
 	void set(unsigned int index, T data);
 
 	T get(unsigned int index);
+	T* getArray();
 
 	void remove(unsigned int index);
 	void clear();
@@ -33,6 +35,7 @@ private:
 
 	Node* root = nullptr;
 	int count = 0;
+	T* arr = nullptr;
 };
 
 //function definitions
@@ -55,15 +58,25 @@ inline LinkedList<T>::LinkedList(T data[]) {
 		put(data[i]);
 }
 
+//destructor
+template<typename T>
+inline LinkedList<T>::~LinkedList() {
+	if (arr != nullptr)
+		delete arr;
+}
+
 //add input data to end of list
 template<typename T>
 inline void LinkedList<T>::put(T data) {
 
 	//create node
-	Node* newNode = new Node{data, nullptr};
+	Node* newNode = new Node();
+	if (newNode == nullptr) {
+		//throw error malloc
+	}
 
-	//newNode->data = data;
-	//newNode->next = nullptr;
+	newNode->data = data;
+	newNode->next = nullptr;
 
 	//set node
 	if (root == nullptr)
@@ -84,6 +97,23 @@ inline void LinkedList<T>::set(unsigned int index, T data) {
 template<typename T>
 inline T LinkedList<T>::get(unsigned int index) {
 	return getNode(index)->data;
+}
+
+//fills input array pointer with all values in linked list
+//Note: Array is deleted when called again
+template<typename T>
+inline T* LinkedList<T>::getArray() {
+	if (arr != nullptr)
+		delete arr;
+	arr = new T[size()];
+
+	Node* cur = root;
+	for (int i = 0; i < size(); i++) {
+		arr[i] = cur->data;
+		cur = cur->next;
+	}
+
+	return arr;
 }
 
 //removes node from list

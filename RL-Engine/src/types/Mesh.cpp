@@ -1,7 +1,7 @@
 #include "../../include/types/Mesh.h"
 
 void Mesh::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
-	
+
 	//create buffers
 	CreateBuffer(vertices.data(), sizeof(Vertex) * vertices.size(), D3D11_BIND_VERTEX_BUFFER, &vertexBuffer, device);
 	CreateBuffer(indices.data(), sizeof(unsigned int) * indices.size(), D3D11_BIND_INDEX_BUFFER, &indexBuffer, device);

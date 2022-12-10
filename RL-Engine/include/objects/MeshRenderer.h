@@ -15,7 +15,7 @@ public:
 	
 	
 	void Draw(ID3D11DeviceContext* context);
-
+	
 	Mesh mesh;
 
 	//setters

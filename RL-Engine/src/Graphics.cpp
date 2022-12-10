@@ -187,9 +187,9 @@ void Graphics::DrawTriangle(float angle, float x, float y) {
 	ConstantBuffer cb = {
 		{
 			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(0.7) *
-				DirectX::XMMatrixRotationX(0.7)*
-				DirectX::XMMatrixTranslation(0, 0, 9) *
+				DirectX::XMMatrixRotationZ(angle) *
+				DirectX::XMMatrixRotationX(angle)*
+				DirectX::XMMatrixTranslation(x, y, 9) *
 				DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10)
 			)
 		}
