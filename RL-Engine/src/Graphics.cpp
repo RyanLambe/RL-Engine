@@ -96,24 +96,7 @@ void Graphics::EndFrame()
 }
 
 void Graphics::Draw() {
-	//remove start
-
-	//create constant buffer
-	struct ConstantBuffer {
-		DirectX::XMMATRIX transform;
-	};
-
-	ConstantBuffer cb = {
-		{
-			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(0.7) *
-				DirectX::XMMatrixRotationX(0.7) *
-				DirectX::XMMatrixTranslation(0, 0, 9) *
-				DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10)
-			)
-		}
-	};
-
+	//move to shader or a material class or something
 	struct ConstantBuffer2 {
 		struct {
 			float r;
@@ -134,32 +117,26 @@ void Graphics::Draw() {
 		}
 	};
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
-	CreateBuffer(&cb, sizeof(cb), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE, &constBuffer);
-	context->VSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
-
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer2;
 	CreateBuffer(&cb2, sizeof(cb2), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0, &constBuffer2);
 	context->PSSetConstantBuffers(0, 1, constBuffer2.GetAddressOf());
 
-	//end remove
 
-	//set shaders?
+	//set shaders. move to mesh renderer
 	Shader temp(device.Get(), context.Get());
 
 	//render
 	for (int i = 0; i < renderers.size(); i++) {
-		renderers[i].Draw(context.Get());
+		renderers[i].Draw(device.Get(), context.Get());
 	}
 }
 
 void Graphics::createMesh(Entity* parent) {
-	renderers.emplace_back(device.Get(), context.Get());
+	renderers.emplace_back(device.Get(), context.Get(), parent);
 	parent->addComponent(&renderers[renderers.size()-1]);
 }
 
-//-------------------------remove-below-------------------------//
-
+//remove
 void Graphics::CreateBuffer(void* data, UINT size, UINT bindFlags, D3D11_USAGE use, UINT CpuAccess, ID3D11Buffer** buffer) {
 
 	D3D11_BUFFER_DESC bufferDesc;
@@ -176,58 +153,3 @@ void Graphics::CreateBuffer(void* data, UINT size, UINT bindFlags, D3D11_USAGE u
 
 	device->CreateBuffer(&bufferDesc, &initData, buffer);
 }
-/*
-void Graphics::DrawTriangle(float angle, float x, float y) {
-
-	//create constant buffer
-	struct ConstantBuffer {
-		DirectX::XMMATRIX transform;
-	};
-
-	ConstantBuffer cb = {
-		{
-			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(angle) *
-				DirectX::XMMatrixRotationX(angle)*
-				DirectX::XMMatrixTranslation(x, y, 9) *
-				DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10)
-			)
-		}
-	};
-
-	struct ConstantBuffer2 {
-		struct {
-			float r;
-			float g;
-			float b;
-			float a;
-		} face_colors[6];
-	};
-
-	ConstantBuffer2 cb2 = {
-		{
-			{1, 0, 1},
-			{1, 0, 0},
-			{0, 1, 0},
-			{0, 0, 1},
-			{1, 1, 0},
-			{0, 1, 1}
-		}
-	};
-
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
-	CreateBuffer(&cb, sizeof(cb), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE, &constBuffer);
-	context->VSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
-
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer2;
-	CreateBuffer(&cb2, sizeof(cb2), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0, &constBuffer2);
-	context->PSSetConstantBuffers(0, 1, constBuffer2.GetAddressOf());
-	
-	//set shaders?
-	Shader temp(device.Get(), context.Get());
-
-	//render
-	for (int i = 0; i < renderers.size(); i++) {
-		renderers[i].Draw(context.Get());
-	}
-}*/

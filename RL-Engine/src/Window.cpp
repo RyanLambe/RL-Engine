@@ -47,17 +47,23 @@ int Window::Run()
 {
 	int exitCode;
 
-	Entity cube;
-	gfx.createMesh(&cube);
-	
+	Entity cube1;
+	gfx.createMesh(&cube1);
+	cube1.getTransform()->setPosition(3, 0, 9);
+
+	Entity cube2;
+	gfx.createMesh(&cube2);
+	//cube2.setParent(&cube1);
+	cube2.getTransform()->setPosition(-3, 0, 9);
+	cube2.getTransform()->setScale(0.5);
 
 	while (!WindowClosed(&exitCode))
 	{
 		//code
-		
-		gfx.Draw();
+		angle += 0.01f;
+		//cube1.getTransform()->setRotation(90, 90, 0);
 
-		angle += 0.001f;
+		gfx.Draw();
 		gfx.EndFrame();
 	}
 	return exitCode;

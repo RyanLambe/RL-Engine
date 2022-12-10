@@ -9,12 +9,12 @@ class MeshRenderer : public Entity::Component {
 
 public:
 
-	MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context);//set instance vars
+	MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent);//set instance vars
 
 	//remove
 	
 	
-	void Draw(ID3D11DeviceContext* context);
+	void Draw(ID3D11Device* device, ID3D11DeviceContext* context);
 	
 	Mesh mesh;
 

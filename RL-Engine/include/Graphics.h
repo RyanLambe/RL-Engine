@@ -5,6 +5,7 @@
 
 #include "InfoException.h"
 #include "objects/MeshRenderer.h"
+#include "objects/Entity.h"
 
 class Graphics
 {

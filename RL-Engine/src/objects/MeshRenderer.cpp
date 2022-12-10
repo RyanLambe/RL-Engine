@@ -1,6 +1,6 @@
 #include "../../include/objects/MeshRenderer.h"
 
-MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context) {
+MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent) : Component(parent) {
 	
 	//set indices
 	unsigned int indis[] = {
@@ -38,9 +38,11 @@ MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context) {
 
 }
 
-void MeshRenderer::Draw(ID3D11DeviceContext* context) {
+void MeshRenderer::Draw(ID3D11Device* device, ID3D11DeviceContext* context) {
 	
-	//do stuff?
+	//send transformation matrix to vertex shader
+	entity->getTransform()->UpdateBuffer(device, context);
 
+	//draw
 	context->DrawIndexed(mesh.getIndices().size(), 0, 0);
 }

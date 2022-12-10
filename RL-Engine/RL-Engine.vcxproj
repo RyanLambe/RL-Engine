@@ -29,7 +29,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
     <ClCompile Include="src\types\Shader.cpp" />
-    <ClCompile Include="src\types\Transform.cpp" />
+    <ClCompile Include="src\types\Vec3.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\WindowException.cpp" />
   </ItemGroup>
@@ -40,12 +40,11 @@
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\InfoException.h" />
     <ClInclude Include="include\types\Shader.h" />
+    <ClInclude Include="include\types\Vec3.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\WindowException.h" />
     <ClInclude Include="include\objects\Entity.h" />
-    <ClInclude Include="include\types\LinkedList.h" />
     <ClInclude Include="include\objects\MeshRenderer.h" />
-    <ClInclude Include="include\types\Transform.h" />
     <ClInclude Include="include\types\Mesh.h" />
   </ItemGroup>
   <ItemGroup>

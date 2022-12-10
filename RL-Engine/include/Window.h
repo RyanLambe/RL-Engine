@@ -2,6 +2,7 @@
 
 #include "WindowException.h"
 #include "Graphics.h"
+#include "objects/Entity.h"
 
 class Window
 {
