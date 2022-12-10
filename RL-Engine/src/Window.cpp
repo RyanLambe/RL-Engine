@@ -49,8 +49,6 @@ int Window::Run()
 
 	Entity cube;
 	gfx.createMesh(&cube);
-
-
 	
 
 	while (!WindowClosed(&exitCode))
@@ -58,8 +56,6 @@ int Window::Run()
 		//code
 		
 		gfx.Draw();
-		//gfx.DrawTriangle(angle, 0, 0);
-		//gfx.DrawTriangle(-angle, 0, 0);
 
 		angle += 0.001f;
 		gfx.EndFrame();
