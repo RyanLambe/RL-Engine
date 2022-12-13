@@ -19,13 +19,17 @@ Entity* Entity::getParent() {
 
 void Entity::setParent(Entity* parent) {
 	//remove this from previous parent
-	for (int i = 0; i < this->parent->children.size(); i++) {
-		if (this->parent->getChild(i) == this)
-			this->parent->children.erase(this->parent->children.begin() + i);
+	if (this->parent != nullptr) {
+		for (int i = 0; i < this->parent->children.size(); i++) {
+			if (this->parent->getChild(i) == this)
+				this->parent->children.erase(this->parent->children.begin() + i);
+		}
 	}
 
 	//add this to new parent
-	parent->children.push_back(this);
+	if (parent != nullptr) {
+		parent->children.push_back(this);
+	}
 	//set parent pointer
 	this->parent = parent;
 }
@@ -85,8 +89,8 @@ void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* 
 
 DirectX::XMMATRIX Entity::Transform::getMatrix() {
 	//if matrix hasnt been modified since last call
-	if (updated)
-		return matrix;
+	//if (updated)
+		//return matrix;
 
 	//reset matrix
 	matrix = DirectX::XMMatrixIdentity();
