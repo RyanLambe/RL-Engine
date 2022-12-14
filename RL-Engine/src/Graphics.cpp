@@ -96,35 +96,6 @@ void Graphics::EndFrame()
 }
 
 void Graphics::Draw() {
-	//move to shader or a material class or something
-	struct ConstantBuffer2 {
-		struct {
-			float r;
-			float g;
-			float b;
-			float a;
-		} face_colors[6];
-	};
-
-	ConstantBuffer2 cb2 = {
-		{
-			{1, 0, 1},
-			{1, 0, 0},
-			{0, 1, 0},
-			{0, 0, 1},
-			{1, 1, 0},
-			{0, 1, 1}
-		}
-	};
-
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer2;
-	CreateBuffer(&cb2, sizeof(cb2), D3D11_BIND_CONSTANT_BUFFER, D3D11_USAGE_DEFAULT, 0, &constBuffer2);
-	context->PSSetConstantBuffers(0, 1, constBuffer2.GetAddressOf());
-
-
-	//set shaders. move to mesh renderer
-	Shader temp(device.Get(), context.Get());
-
 	//render
 	for (int i = 0; i < renderers.size(); i++) {
 		renderers[i].Draw(device.Get(), context.Get());
@@ -134,22 +105,4 @@ void Graphics::Draw() {
 void Graphics::createMesh(Entity* parent) {
 	renderers.emplace_back(device.Get(), context.Get(), parent);
 	parent->addComponent(&renderers[renderers.size()-1]);
-}
-
-//remove
-void Graphics::CreateBuffer(void* data, UINT size, UINT bindFlags, D3D11_USAGE use, UINT CpuAccess, ID3D11Buffer** buffer) {
-
-	D3D11_BUFFER_DESC bufferDesc;
-	bufferDesc.Usage = use;
-	bufferDesc.ByteWidth = size;
-	bufferDesc.BindFlags = bindFlags;
-	bufferDesc.CPUAccessFlags = CpuAccess;
-	bufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA initData;
-	initData.pSysMem = data;
-	initData.SysMemPitch = 0;
-	initData.SysMemSlicePitch = 0;
-
-	device->CreateBuffer(&bufferDesc, &initData, buffer);
 }

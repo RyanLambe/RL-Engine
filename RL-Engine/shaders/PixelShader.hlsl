@@ -1,8 +1,8 @@
 cbuffer CBuf {
-	float4 colors[6];
+	float4 color;
 };
 
 float4 main(uint tid : SV_PrimitiveID) : SV_TARGET
 {
-	return colors[tid / 2];
+	return color;
 }

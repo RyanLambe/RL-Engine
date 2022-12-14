@@ -47,23 +47,30 @@ int Window::Run()
 {
 	int exitCode;
 
+	Entity cam;
+	Camera comp(&cam);
+	cam.addComponent(&comp);
+	cam.getTransform()->setPosition(0, 0, -10);
+	comp.fov = 60;
+
 	Entity cube1;
 	gfx.createMesh(&cube1);
-	cube1.getTransform()->setPosition(0, 0, 9);
-	cube1.getTransform()->setScale(0.75f);
+	cube1.getTransform()->setPosition(0, 0, 0);
+	cube1.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 1, 0, 1 };
 
 	Entity cube2;
 	gfx.createMesh(&cube2);
 	cube2.setParent(&cube1);
 	cube2.getTransform()->setPosition(-3, 0, 0);
 	cube2.getTransform()->setScale(0.5);
+	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 1, 0, 0, 1 };
 
 	while (!WindowClosed(&exitCode))
 	{
 		//code
 		angle += 0.01f;
 
-		cube1.getTransform()->setRotation(0, 0, angle);
+		cube1.getTransform()->setRotation(angle/10, 0, angle);
 		cube2.getTransform()->setRotation(0, 0, angle);
 
 		gfx.Draw();

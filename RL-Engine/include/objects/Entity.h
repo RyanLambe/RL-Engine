@@ -4,6 +4,7 @@
 #include <d3d11.h>
 #include <wrl.h>
 #include <vector>
+#include <string>
 
 #include "../types/Vec3.h"
 
@@ -20,6 +21,10 @@ public:
 		}
 
 		Entity* entity;
+
+	private:
+		//this function makes component polymorphic
+		virtual void doNothing() {}
 	};
 
 private:
@@ -27,7 +32,8 @@ private:
 	public:
 		//engine use
 		Transform(Entity* entity);
-		void UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context);
+		void UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context, DirectX::XMMATRIX cam);
+		DirectX::XMMATRIX getMatrix();
 		
 		//transformation functions
 		void setPosition(Vec3 position);
@@ -42,9 +48,6 @@ private:
 		void setScale(float x, float y, float z);
 		void setScale(float scale);
 		Vec3 getScale();
-
-	private:
-		DirectX::XMMATRIX getMatrix();
 
 	private:
 		//constant buffer data
@@ -95,7 +98,7 @@ private:
 template<typename T>
 inline T* Entity::getComponent() {
 	for (int i = 0; i < components.size(); i++) {
-		if (dynamic_cast<T*>(components[i]) != nullptr)
+		if (dynamic_cast<const T*>(components[i]) != nullptr)
 			return (T*)components[i];
 	}
 	return nullptr;

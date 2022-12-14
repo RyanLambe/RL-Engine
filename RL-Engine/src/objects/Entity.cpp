@@ -59,7 +59,7 @@ void Entity::Destroy() {
 
 //transformation functions
 
-void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context, DirectX::XMMATRIX viewMat) {
 	
 	struct data {
 		DirectX::XMMATRIX mat;
@@ -68,7 +68,7 @@ void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* 
 	temp.mat = getMatrix();
 
 	//add view matrix
-	temp.mat *= DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10);//need to fix
+	temp.mat *= viewMat;// DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10);//need to fix
 
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -88,9 +88,6 @@ void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* 
 }
 
 DirectX::XMMATRIX Entity::Transform::getMatrix() {
-	//if matrix hasnt been modified since last call
-	//if (updated)
-		//return matrix;
 
 	//reset matrix
 	matrix = DirectX::XMMatrixIdentity();

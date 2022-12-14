@@ -24,6 +24,8 @@
     <ClCompile Include="src\types\Mesh.cpp" />
     <ClCompile Include="src\types\Shader.cpp" />
     <ClCompile Include="src\types\Vec3.cpp" />
+    <ClCompile Include="src\objects\Camera.cpp" />
+    <ClCompile Include="src\types\Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
@@ -60,6 +62,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\types\Vec3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objects\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

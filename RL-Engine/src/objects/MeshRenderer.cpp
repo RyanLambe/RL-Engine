@@ -1,6 +1,6 @@
 #include "../../include/objects/MeshRenderer.h"
 
-MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent) : Component(parent) {
+MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent) : Component(parent), shader(device, context) {
 	
 	//set indices
 	unsigned int indis[] = {
@@ -35,14 +35,23 @@ MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, E
 	mesh.setVertices(vertices);
 
 	mesh.Update(device, context);
-
 }
 
 void MeshRenderer::Draw(ID3D11Device* device, ID3D11DeviceContext* context) {
 	
+	//update material
+	material.Update(device, context);
+
+	//get view matrix
+	DirectX::XMMATRIX viewMat = Camera::mainCamera->getViewMatrix();
+
 	//send transformation matrix to vertex shader
-	entity->getTransform()->UpdateBuffer(device, context);
+	entity->getTransform()->UpdateBuffer(device, context, viewMat);
 
 	//draw
 	context->DrawIndexed(mesh.getIndices().size(), 0, 0);
+}
+
+Material* MeshRenderer::getMaterial() {
+	return &material;
 }

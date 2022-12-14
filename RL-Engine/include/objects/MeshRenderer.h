@@ -2,8 +2,10 @@
 #include <d3d11.h>
 
 #include "Entity.h"
+#include "Camera.h"
 #include "../types/Mesh.h"
 #include "../types/Shader.h"
+#include "../types/Material.h"
 
 class MeshRenderer : public Entity::Component {
 
@@ -20,11 +22,12 @@ public:
 
 	//setters
 	//getters
+	Material* getMaterial();
 
 private:
 
 	
-	//materials?
-	//shaders
+	Material material;
+	Shader shader;
 
 };
