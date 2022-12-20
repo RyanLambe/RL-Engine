@@ -59,26 +59,19 @@ void Entity::Destroy() {
 
 //transformation functions
 
-void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context, DirectX::XMMATRIX viewMat) {
+void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context) {
 	
-	struct data {
-		DirectX::XMMATRIX mat;
-	};
-	data temp;
-	temp.mat = getMatrix();
-
-	//add view matrix
-	temp.mat *= viewMat;// DirectX::XMMatrixPerspectiveLH(1, 720.0f / 1280.0f, 0.5f, 10);//need to fix
+	DirectX::XMMATRIX mat = getMatrix();
 
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	bufferDesc.ByteWidth = sizeof(temp);
+	bufferDesc.ByteWidth = sizeof(mat);
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA initData;
-	initData.pSysMem = &temp;
+	initData.pSysMem = &mat;
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
 

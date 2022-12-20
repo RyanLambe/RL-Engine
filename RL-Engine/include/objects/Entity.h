@@ -32,7 +32,7 @@ private:
 	public:
 		//engine use
 		Transform(Entity* entity);
-		void UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context, DirectX::XMMATRIX cam);
+		void UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context);
 		DirectX::XMMATRIX getMatrix();
 		
 		//transformation functions

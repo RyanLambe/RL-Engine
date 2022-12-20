@@ -8,10 +8,13 @@ Camera::Camera(Entity* entity) : Entity::Component(entity) {
 
 DirectX::XMMATRIX Camera::getViewMatrix() {
 
-	DirectX::XMMATRIX pos = DirectX::XMMatrixInverse(nullptr, entity->getTransform()->getMatrix());
-
 	if(perspective)
-		return pos * DirectX::XMMatrixPerspectiveFovLH(fov * pi / 180.0, 16.0f / 9.0f, nearPlane, farPlane);
+		return DirectX::XMMatrixPerspectiveFovRH(fov * pi / 180.0, 16.0f / 9.0f, nearPlane, farPlane);
 
-	return pos * DirectX::XMMatrixOrthographicLH(viewWidth, viewHeight, farPlane, farPlane);
+	return DirectX::XMMatrixOrthographicRH(viewWidth, viewHeight, farPlane, farPlane);
+}
+
+DirectX::XMMATRIX Camera::getPositionMatrix() {
+
+	return DirectX::XMMatrixInverse(nullptr, entity->getTransform()->getMatrix());
 }

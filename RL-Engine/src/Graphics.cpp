@@ -77,9 +77,21 @@ void Graphics::Start(HWND hwnd)
 
 	//set topology
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//setup sampler
+	D3D11_SAMPLER_DESC sampleDesc = {};
+	sampleDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampleDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+
+	device->CreateSamplerState(&sampleDesc, &sampler);
+	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
+
+	lightData = { 0 };
 }
 
-//update
+//Draw Calls
 void Graphics::EndFrame()
 {
 	HRESULT hr;
@@ -96,13 +108,133 @@ void Graphics::EndFrame()
 }
 
 void Graphics::Draw() {
-	//render
+
+	//get view matrix
+	DirectX::XMMATRIX viewMat = Camera::mainCamera->getViewMatrix();
+	DirectX::XMMATRIX posMat = Camera::mainCamera->getPositionMatrix();
+
+	updateCameraBuffer(posMat * viewMat);
+	
+	//handle lights
+	updateLightBuffer();
+
+	//render mesh renderers
 	for (int i = 0; i < renderers.size(); i++) {
 		renderers[i].Draw(device.Get(), context.Get());
 	}
 }
 
-void Graphics::createMesh(Entity* parent) {
+//Componenet Management
+MeshRenderer* Graphics::createMesh(Entity* parent) {
 	renderers.emplace_back(device.Get(), context.Get(), parent);
-	parent->addComponent(&renderers[renderers.size()-1]);
+	parent->addComponent(&renderers[renderers.size() - 1]);
+	return &renderers[renderers.size() - 1];
+}
+
+PointLight* Graphics::createPointLight(Entity* parent) {
+	pointLights.emplace_back(parent);
+	parent->addComponent(&pointLights[pointLights.size() - 1]);
+	return &pointLights[pointLights.size() - 1];
+}
+
+void Graphics::setDirectionalLight(DirectionalLight* light) {
+	directionalLight = light;
+}
+
+
+//Update Calls
+void Graphics::updateLightData() {
+
+	//get closest point lights
+	PointLight* closest[MaxLights];
+
+	//update positions
+	Vec3 temp;
+
+	if (directionalLight == nullptr) {
+		lightData.positions[0] = { 0, 0, 0 };
+	}
+	else {
+		//convert deg to rad
+		temp = directionalLight->entity->getTransform()->getRotation();
+		temp.x = temp.x * (pi / 180);
+		temp.z = -temp.z * (pi / 180);
+		temp.y = temp.y * (pi / 180);
+		Vec3 newDir;
+		//needs work
+		//turn into direction
+		newDir.x = std::cos(temp.y) * std::cos(temp.x) * -std::sin(temp.z) + std::sin(temp.x) * -std::sin(temp.y);
+		newDir.y = std::cos(temp.x) * std::cos(temp.z);
+		newDir.z = std::sin(temp.x) * std::cos(temp.y) + std::sin(temp.x) * std::sin(temp.y);
+
+		lightData.positions[0] = { newDir.x, newDir.y, newDir.z };
+	}
+
+	for (int i = 0; i < MaxLights; i++) {
+		if (pointLights.size() <= i) {
+			lightData.positions[i+1] = { 0 };
+			continue;
+		}
+
+		temp = pointLights[i].entity->getTransform()->getPosition();
+		lightData.positions[i+1] = { temp.x, temp.y, temp.z };
+	}
+
+	//update light properties
+
+}
+
+void Graphics::updateLightBuffer() {
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
+
+	//update data before sending to buffer
+	updateLightData();
+
+	//update light positions
+	D3D11_BUFFER_DESC bufferDesc;
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.ByteWidth = sizeof(LightData::LightPos) * 5 + 4; // *5+4 is temp
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData;
+	initData.pSysMem = &lightData.positions;
+	initData.SysMemPitch = 0;
+	initData.SysMemSlicePitch = 0;
+	
+	//set constant buffer
+	device->CreateBuffer(&bufferDesc, &initData, &constBuffer);
+	context->VSSetConstantBuffers(2, 1, constBuffer.GetAddressOf());
+
+	//make changes to settings
+	bufferDesc.ByteWidth = sizeof(LightData::LightDetails) * 5 + 4; // *5+4 is temp
+	initData.pSysMem = &lightData.details;
+
+	//set new constant buffer
+	device->CreateBuffer(&bufferDesc, &initData, &constBuffer);
+	context->PSSetConstantBuffers(1, 1, constBuffer.GetAddressOf());
+}
+
+void Graphics::updateCameraBuffer(DirectX::XMMATRIX mat) {
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
+
+	//update 
+	D3D11_BUFFER_DESC bufferDesc;
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.ByteWidth = sizeof(mat);
+	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData;
+	initData.pSysMem = &(mat);
+	initData.SysMemPitch = 0;
+	initData.SysMemSlicePitch = 0;
+
+	//create constant buffer
+	device->CreateBuffer(&bufferDesc, &initData, &constBuffer);
+	context->VSSetConstantBuffers(1, 1, constBuffer.GetAddressOf());
 }

@@ -50,8 +50,13 @@ int Window::Run()
 	Entity cam;
 	Camera comp(&cam);
 	cam.addComponent(&comp);
-	cam.getTransform()->setPosition(0, 0, -10);
+	cam.getTransform()->setPosition(0, 0, 5);
 	comp.fov = 60;
+
+	Entity Dirlight;
+	DirectionalLight comp2(&Dirlight);
+	gfx.setDirectionalLight(&comp2);
+	Dirlight.getTransform()->setRotation(-45, 0, 45);
 
 	Entity cube1;
 	gfx.createMesh(&cube1);
@@ -63,14 +68,15 @@ int Window::Run()
 	cube2.setParent(&cube1);
 	cube2.getTransform()->setPosition(-3, 0, 0);
 	cube2.getTransform()->setScale(0.5);
-	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 1, 0, 0, 1 };
+	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0, 1, 1 };
 
 	while (!WindowClosed(&exitCode))
 	{
 		//code
 		angle += 0.01f;
+		Dirlight.getTransform()->setRotation(0, angle, 45);
 
-		cube1.getTransform()->setRotation(angle/10, 0, angle);
+		cube1.getTransform()->setRotation(angle, 0, angle);
 		cube2.getTransform()->setRotation(0, 0, angle);
 
 		gfx.Draw();

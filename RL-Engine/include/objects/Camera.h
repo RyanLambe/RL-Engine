@@ -10,6 +10,7 @@ public:
 	Camera(Entity* entity);
 
 	DirectX::XMMATRIX getViewMatrix();
+	DirectX::XMMATRIX getPositionMatrix();
 
 
 	bool perspective = true;

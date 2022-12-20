@@ -17,3 +17,18 @@ Vec3::Vec3(float x, float y, float z) {
 	this->y = y;
 	this->z = z;
 }
+
+Vec3::Vec3Struct* Vec3::getStruct() {
+	str.x = x;
+	str.y = y;
+	str.z = z;
+	return &str;
+}
+
+float Vec3::distance(Vec3 a, Vec3 b) {
+	float Out = 0;
+	Out += pow(a.x - b.x, 2);
+	Out += pow(a.y - b.y, 2);
+	Out += pow(a.z - b.z, 2);
+	return sqrt(Out);
+}

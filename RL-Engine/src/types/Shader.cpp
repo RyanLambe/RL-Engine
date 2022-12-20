@@ -16,7 +16,9 @@ Shader::Shader(ID3D11Device* device, ID3D11DeviceContext* context) {
 	//input Layout
 	D3D11_INPUT_ELEMENT_DESC ied[] = {
 		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TexCoord", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"NormalVS", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
-	device->CreateInputLayout(ied, /*(UINT)std::size(ied)*/ sizeof(ied)/sizeof(D3D11_INPUT_ELEMENT_DESC), blob->GetBufferPointer(), blob->GetBufferSize(), &inputLayout);
+	device->CreateInputLayout(ied, sizeof(ied)/sizeof(D3D11_INPUT_ELEMENT_DESC), blob->GetBufferPointer(), blob->GetBufferSize(), &inputLayout);
 	context->IASetInputLayout(inputLayout.Get());
 }

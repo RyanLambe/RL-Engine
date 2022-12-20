@@ -26,6 +26,11 @@
     <ClCompile Include="src\types\Vec3.cpp" />
     <ClCompile Include="src\objects\Camera.cpp" />
     <ClCompile Include="src\types\Material.cpp" />
+    <ClCompile Include="src\types\Texture.cpp" />
+    <ClCompile Include="External\LodePng\lodepng.cpp" />
+    <ClCompile Include="src\types\Vec2.cpp" />
+    <ClCompile Include="src\objects\PointLight.cpp" />
+    <ClCompile Include="src\objects\DirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
@@ -70,9 +75,40 @@
     <ClInclude Include="include\types\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\types\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="External\LodePng\lodepng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\Vec2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objects\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objects\DirectionalLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\VertexShader.hlsl" />
     <FxCompile Include="shaders\PixelShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\temp.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\Untitled.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\abc.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="assets\uvTest.obj" />
+    <Object Include="assets\test.obj" />
+    <Object Include="assets\abc.obj" />
   </ItemGroup>
 </Project>

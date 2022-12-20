@@ -2,6 +2,7 @@
 
 #include <wrl.h>
 #include <d3d11.h>
+#include "Texture.h"
 
 class Material {
 public:
@@ -12,10 +13,11 @@ public:
 			float b;
 			float a;
 		} color;
+
+		std::string textureName;
 	};
 
 public:
-
 
 	Material();
 	void Update(ID3D11Device* device, ID3D11DeviceContext* context);
@@ -23,7 +25,10 @@ public:
 
 	MaterialInfo settings;
 
+	Texture texture;
+
 private:
 	bool set = false;
 
+	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
 };

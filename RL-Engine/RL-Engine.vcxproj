@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="External\LodePng\lodepng.cpp" />
     <ClCompile Include="src\objects\Camera.cpp" />
+    <ClCompile Include="src\objects\DirectionalLight.cpp" />
     <ClCompile Include="src\objects\MeshRenderer.cpp" />
     <ClCompile Include="src\objects\Entity.cpp" />
     <ClCompile Include="src\CustomException.cpp" />
@@ -28,22 +30,30 @@
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\InfoException.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\objects\PointLight.cpp" />
     <ClCompile Include="src\types\Material.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
     <ClCompile Include="src\types\Shader.cpp" />
+    <ClCompile Include="src\types\Texture.cpp" />
+    <ClCompile Include="src\types\Vec2.cpp" />
     <ClCompile Include="src\types\Vec3.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\WindowException.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="External\LodePng\lodepng.h" />
     <ClInclude Include="include\CustomException.h" />
     <ClInclude Include="include\GraphicsException.h" />
     <ClInclude Include="include\EngineException.h" />
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\InfoException.h" />
     <ClInclude Include="include\objects\Camera.h" />
+    <ClInclude Include="include\objects\DirectionalLight.h" />
+    <ClInclude Include="include\objects\PointLight.h" />
     <ClInclude Include="include\types\Material.h" />
     <ClInclude Include="include\types\Shader.h" />
+    <ClInclude Include="include\types\Texture.h" />
+    <ClInclude Include="include\types\Vec2.h" />
     <ClInclude Include="include\types\Vec3.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\WindowException.h" />
@@ -76,6 +86,31 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\abc.png" />
+    <Image Include="assets\temp.png" />
+    <Image Include="assets\Untitled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="assets\abc.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="assets\test.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="assets\uvTest.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
