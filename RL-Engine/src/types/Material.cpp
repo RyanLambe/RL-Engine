@@ -3,6 +3,8 @@
 Material::Material() {
 	settings.color = { 1, 1, 1, 1 };
 	settings.textureName = "assets/temp.png";
+	settings.smoothness = 0.5f;
+	settings.reflectivity = 0;// .25f;
 }
 
 void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
@@ -19,13 +21,13 @@ void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	//setup
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(settings.color);
+	bufferDesc.ByteWidth = sizeof(settings.color) + 16;
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDesc.CPUAccessFlags = 0;
 	bufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA initData;
-	initData.pSysMem = &(settings.color);
+	initData.pSysMem = &(settings);
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
 
@@ -34,7 +36,7 @@ void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	context->PSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
 
 	//set texture
-	//texture.Set(device, settings.textureName);
+	texture.Set(device, settings.textureName);
 
 	set = true;
 }

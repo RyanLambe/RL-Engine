@@ -2,7 +2,7 @@
 
 MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent) : Component(parent), shader(device, context) {
 	
-	mesh.ImportObj("assets/ssphere.obj");
+	mesh.ImportObj("assets/storus.obj");
 	mesh.Update(device, context);
 }
 

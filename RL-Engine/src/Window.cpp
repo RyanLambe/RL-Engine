@@ -50,31 +50,38 @@ int Window::Run()
 	Entity cam;
 	Camera comp(&cam);
 	cam.addComponent(&comp);
-	cam.getTransform()->setPosition(0, 0, 5);
+	cam.getTransform()->setPosition(0, 0, -10);
+	//cam.getTransform()->setRotation(90, 0, 0);
 	comp.fov = 60;
 
 	Entity Dirlight;
-	DirectionalLight comp2(&Dirlight);
+	/*DirectionalLight comp2(&Dirlight);
 	gfx.setDirectionalLight(&comp2);
-	Dirlight.getTransform()->setRotation(-45, 0, 45);
+	Dirlight.getTransform()->setRotation(-45, 45, 0);
+	comp2.Colour = Vec3(1, 1, 1);*/
+
+	Entity Pntlight;
+	PointLight* pnt = gfx.createPointLight(&Pntlight);
+	pnt->Colour = (1, 0, 0);
+	Pntlight.getTransform()->setPosition(3, 3, -1);
 
 	Entity cube1;
 	gfx.createMesh(&cube1);
 	cube1.getTransform()->setPosition(0, 0, 0);
-	cube1.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 1, 0, 1 };
+	cube1.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 1, 0.435f, 1 };
 
 	Entity cube2;
 	gfx.createMesh(&cube2);
 	cube2.setParent(&cube1);
 	cube2.getTransform()->setPosition(-3, 0, 0);
 	cube2.getTransform()->setScale(0.5);
-	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0, 1, 1 };
+	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
 
 	while (!WindowClosed(&exitCode))
 	{
 		//code
-		angle += 0.01f;
-		Dirlight.getTransform()->setRotation(0, angle, 45);
+		angle += 0.05f;
+		//Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
 
 		cube1.getTransform()->setRotation(angle, 0, angle);
 		cube2.getTransform()->setRotation(0, 0, angle);

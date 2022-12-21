@@ -155,17 +155,23 @@ void Graphics::updateLightData() {
 		lightData.positions[0] = { 0, 0, 0 };
 	}
 	else {
-		//convert deg to rad
+		//get rotation of light and convert to rad
 		temp = directionalLight->entity->getTransform()->getRotation();
 		temp.x = temp.x * (pi / 180);
 		temp.z = -temp.z * (pi / 180);
-		temp.y = temp.y * (pi / 180);
+		temp.y = -temp.y * (pi / 180);
+		
+		//rotate -y unit vector around x and z axis
 		Vec3 newDir;
-		//needs work
-		//turn into direction
-		newDir.x = std::cos(temp.y) * std::cos(temp.x) * -std::sin(temp.z) + std::sin(temp.x) * -std::sin(temp.y);
+		newDir.x = std::cos(temp.x) * -std::sin(temp.z);
 		newDir.y = std::cos(temp.x) * std::cos(temp.z);
-		newDir.z = std::sin(temp.x) * std::cos(temp.y) + std::sin(temp.x) * std::sin(temp.y);
+		newDir.z = std::sin(temp.x);
+		
+		//rotate new direction around y axis
+		float x = newDir.x, z = newDir.z;
+		newDir.x = (x * std::cos(temp.y)) - (z * std::sin(temp.y));
+		newDir.z = (x * std::sin(temp.y)) + (z * std::cos(temp.y));
+
 
 		lightData.positions[0] = { newDir.x, newDir.y, newDir.z };
 	}
@@ -181,7 +187,20 @@ void Graphics::updateLightData() {
 	}
 
 	//update light properties
+	if (directionalLight == nullptr)
+		lightData.details[0] = { 0, 0, 0 };
+	else
+		lightData.details[0] = { directionalLight->Colour.x, directionalLight->Colour.y, directionalLight->Colour.z };
 
+	for (int i = 0; i < MaxLights; i++) {
+		if (pointLights.size() <= i) {
+			lightData.details[i + 1] = { 0 };
+			continue;
+		}
+
+		temp = pointLights[i].Colour;
+		lightData.details[i + 1] = { temp.x, temp.y, temp.z };
+	}
 }
 
 void Graphics::updateLightBuffer() {

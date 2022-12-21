@@ -14,6 +14,9 @@ public:
 			float a;
 		} color;
 
+		float smoothness;
+		float reflectivity;
+
 		std::string textureName;
 	};
 
