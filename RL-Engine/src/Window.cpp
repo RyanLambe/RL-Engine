@@ -50,25 +50,36 @@ int Window::Run()
 	Entity cam;
 	Camera comp(&cam);
 	cam.addComponent(&comp);
-	cam.getTransform()->setPosition(0, 0, -10);
-	//cam.getTransform()->setRotation(90, 0, 0);
+	cam.getTransform()->setPosition(0, 10, -10);
+	cam.getTransform()->setRotation(45, 0, 0);
 	comp.fov = 60;
 
-	Entity Dirlight;
-	/*DirectionalLight comp2(&Dirlight);
+	/*Entity Dirlight;
+	DirectionalLight comp2(&Dirlight);
 	gfx.setDirectionalLight(&comp2);
 	Dirlight.getTransform()->setRotation(-45, 45, 0);
 	comp2.Colour = Vec3(1, 1, 1);*/
 
 	Entity Pntlight;
 	PointLight* pnt = gfx.createPointLight(&Pntlight);
-	pnt->Colour = (1, 0, 0);
-	Pntlight.getTransform()->setPosition(3, 3, -1);
+	pnt->Colour = Vec3(1, 0, 0);
+	Pntlight.getTransform()->setScale(0.1f, 0.1f, 0.1f);
+	MeshRenderer* light = gfx.createMesh(&Pntlight);
+	light->mesh.ImportObj("assets/ssphere.obj");
+	light->getMaterial()->settings.color = {1, 0, 0, 1};
+	
+	Entity Pntlight2;
+	PointLight* pnt2 = gfx.createPointLight(&Pntlight2);
+	pnt2->Colour = Vec3(0, 1, 0);
+	Pntlight2.getTransform()->setScale(0.1f, 0.1f, 0.1f);
+	MeshRenderer* light2 = gfx.createMesh(&Pntlight2);
+	light2->mesh.ImportObj("assets/ssphere.obj");
+	light2->getMaterial()->settings.color = { 0, 1, 0, 1 };
 
 	Entity cube1;
 	gfx.createMesh(&cube1);
 	cube1.getTransform()->setPosition(0, 0, 0);
-	cube1.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 1, 0.435f, 1 };
+	cube1.getComponent<MeshRenderer>()->getMaterial()->settings.color = {1, 1, 1};// { 0, 1, 0.435f, 1 };
 
 	Entity cube2;
 	gfx.createMesh(&cube2);
@@ -77,14 +88,24 @@ int Window::Run()
 	cube2.getTransform()->setScale(0.5);
 	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
 
+	Entity floor;
+	MeshRenderer* floorRend = gfx.createMesh(&floor);
+	floorRend->mesh.ImportObj("assets/plane.obj");
+	floor.getTransform()->setPosition(0, 0, 0);
+	floor.getTransform()->setRotation(0, 0, 0);
+	floor.getTransform()->setScale(10, 10, 10);
+
 	while (!WindowClosed(&exitCode))
 	{
 		//code
 		angle += 0.05f;
 		//Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
 
-		cube1.getTransform()->setRotation(angle, 0, angle);
-		cube2.getTransform()->setRotation(0, 0, angle);
+		Pntlight.getTransform()->setPosition(angle/20 - 5, 3, 0);
+		Pntlight2.getTransform()->setPosition(-angle / 20 + 5, 3, angle / 20 - 5);
+
+		//cube1.getTransform()->setRotation(angle, 0, angle);
+		//cube2.getTransform()->setRotation(0, 0, angle);
 
 		gfx.Draw();
 		gfx.EndFrame();

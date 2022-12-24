@@ -8,4 +8,7 @@ public:
 
 	Vec3 Colour;
 
+	float power = 1;
+	float range = 10;
+
 };

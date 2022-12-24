@@ -45,7 +45,7 @@ VSOut main(VSIn In)
 
 	//point lights 
 	for (int i = 1; i <= MaxLights; i++) {
-		Out.toLight[i] = lightPos[i] + worldPos;
+		Out.toLight[i] = lightPos[i] - worldPos;
 	}
 
 	return Out;

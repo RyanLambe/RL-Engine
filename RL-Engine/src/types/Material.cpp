@@ -2,9 +2,9 @@
 
 Material::Material() {
 	settings.color = { 1, 1, 1, 1 };
-	settings.textureName = "assets/temp.png";
+	settings.textureName = "assets/default.png";
 	settings.smoothness = 0.5f;
-	settings.reflectivity = 0;// .25f;
+	settings.reflectivity = 0.25f;
 }
 
 void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {

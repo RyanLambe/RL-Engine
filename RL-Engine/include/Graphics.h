@@ -39,17 +39,23 @@ private:
 	//const static int maxLights = 4;
 	struct LightData {
 
-		struct LightPos {
-			float x;
-			float y;
-			float z;
-		}positions[1 + MaxLights];//1 dir + max point
+		DirectX::XMVECTOR positions[1 + MaxLights];//1 dir + max point
 
-		struct LightDetails {
+		struct DirectionalLightDetails {
 			float r;
 			float g;
 			float b;
-		}details[1 + MaxLights];
+			float space; // space to align floats by 4
+		}dirDetails;
+
+		struct PointLightDetails {
+			float r;
+			float g;
+			float b;
+			float power;
+			float range;
+			float space1, space2, space3; // spaces to align floats by 4
+		}pntDetails[MaxLights];
 
 	} lightData;
 

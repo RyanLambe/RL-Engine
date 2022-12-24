@@ -67,6 +67,8 @@ public:
 
 	void Update(ID3D11Device* device, ID3D11DeviceContext* context);
 
+	void Refresh();
+
 	void ImportObj(std::string fileName);
 
 private:
@@ -76,6 +78,8 @@ private:
 private:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices; 
+
+	bool refresh = true;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;

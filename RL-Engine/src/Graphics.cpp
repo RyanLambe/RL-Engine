@@ -152,7 +152,7 @@ void Graphics::updateLightData() {
 	Vec3 temp;
 
 	if (directionalLight == nullptr) {
-		lightData.positions[0] = { 0, 0, 0 };
+		lightData.positions[0] = DirectX::XMVectorSet(0, 0, 0, 0);
 	}
 	else {
 		//get rotation of light and convert to rad
@@ -173,33 +173,35 @@ void Graphics::updateLightData() {
 		newDir.z = (x * std::sin(temp.y)) + (z * std::cos(temp.y));
 
 
-		lightData.positions[0] = { newDir.x, newDir.y, newDir.z };
+		lightData.positions[0] = DirectX::XMVectorSet(newDir.x, newDir.y, newDir.z, 1);
 	}
 
 	for (int i = 0; i < MaxLights; i++) {
 		if (pointLights.size() <= i) {
-			lightData.positions[i+1] = { 0 };
+			lightData.positions[i+1] = DirectX::XMVectorSet(0, 0, 0, 0);
 			continue;
 		}
 
 		temp = pointLights[i].entity->getTransform()->getPosition();
-		lightData.positions[i+1] = { temp.x, temp.y, temp.z };
+		lightData.positions[i + 1] = DirectX::XMVectorSet(temp.x, temp.y, temp.z, 1);// {temp.x, temp.y, temp.z};
 	}
 
 	//update light properties
 	if (directionalLight == nullptr)
-		lightData.details[0] = { 0, 0, 0 };
+		lightData.dirDetails = { 0, 0, 0 };
 	else
-		lightData.details[0] = { directionalLight->Colour.x, directionalLight->Colour.y, directionalLight->Colour.z };
+		lightData.dirDetails = { directionalLight->Colour.x, directionalLight->Colour.y, directionalLight->Colour.z };
 
 	for (int i = 0; i < MaxLights; i++) {
 		if (pointLights.size() <= i) {
-			lightData.details[i + 1] = { 0 };
+			lightData.pntDetails[i] = { 0, 0, 0 };
 			continue;
 		}
 
 		temp = pointLights[i].Colour;
-		lightData.details[i + 1] = { temp.x, temp.y, temp.z };
+		lightData.pntDetails[i] = { temp.x, temp.y, temp.z };
+		lightData.pntDetails[i].power = pointLights[i].power;
+		lightData.pntDetails[i].range = pointLights[i].range;
 	}
 }
 
@@ -213,7 +215,7 @@ void Graphics::updateLightBuffer() {
 	//update light positions
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	bufferDesc.ByteWidth = sizeof(LightData::LightPos) * 5 + 4; // *5+4 is temp
+	bufferDesc.ByteWidth = sizeof(DirectX::XMVECTOR) * (MaxLights + 1);
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bufferDesc.MiscFlags = 0;
@@ -228,8 +230,8 @@ void Graphics::updateLightBuffer() {
 	context->VSSetConstantBuffers(2, 1, constBuffer.GetAddressOf());
 
 	//make changes to settings
-	bufferDesc.ByteWidth = sizeof(LightData::LightDetails) * 5 + 4; // *5+4 is temp
-	initData.pSysMem = &lightData.details;
+	bufferDesc.ByteWidth = sizeof(LightData::dirDetails) + sizeof(LightData::pntDetails) * MaxLights;
+	initData.pSysMem = &lightData.dirDetails;
 
 	//set new constant buffer
 	device->CreateBuffer(&bufferDesc, &initData, &constBuffer);
