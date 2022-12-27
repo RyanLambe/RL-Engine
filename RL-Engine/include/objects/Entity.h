@@ -73,7 +73,7 @@ public:
 	//manage components
 	void addComponent(Component* component);
 	template<typename T> T* getComponent();
-	template<typename T> void removeComponent();
+	template<typename T> T* removeComponent();
 
 	//todo: fix tree
 	//manage tree
@@ -105,9 +105,13 @@ inline T* Entity::getComponent() {
 }
 
 template<typename T>
-inline void Entity::removeComponent() {
+inline T* Entity::removeComponent() {
 	for (int i = 0; i < components.size(); i++) {
-		if (dynamic_cast<T*>(components[i]) != nullptr)
+		if (dynamic_cast<T*>(components[i]) != nullptr) {
+			T* temp = dynamic_cast<T*>(components[i]);
 			components.erase(components.begin() + i);
+			return temp;
+		}
 	}
+	return nullptr;
 }

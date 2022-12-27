@@ -81,9 +81,9 @@ void Graphics::Start(HWND hwnd)
 	//setup sampler
 	D3D11_SAMPLER_DESC sampleDesc = {};
 	sampleDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	sampleDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 
 	device->CreateSamplerState(&sampleDesc, &sampler);
 	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
@@ -102,8 +102,7 @@ void Graphics::EndFrame()
 			GfxThrowFailed(hr);
 	}
 
-	float background_colour[4] = { 255.0f/255.0f, 64.0f/255.0f, 0, 1.0f };
-	context->ClearRenderTargetView(target.Get(), background_colour);
+	context->ClearRenderTargetView(target.Get(), backgroundColour);
 	context->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 }
 
@@ -112,11 +111,17 @@ void Graphics::Draw() {
 	//get view matrix
 	DirectX::XMMATRIX viewMat = Camera::mainCamera->getViewMatrix();
 	DirectX::XMMATRIX posMat = Camera::mainCamera->getPositionMatrix();
+	Vec3 camPos = Camera::mainCamera->entity->getTransform()->getPosition();
 
 	updateCameraBuffer(posMat * viewMat);
-	
+
 	//handle lights
 	updateLightBuffer();
+
+	//update skybox
+	skybox.getTransform()->setPosition(camPos);
+	skybox.getTransform()->setRotation(0, 0, 0);
+	skybox.getTransform()->setScale(Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2);
 
 	//render mesh renderers
 	for (int i = 0; i < renderers.size(); i++) {
@@ -141,6 +146,64 @@ void Graphics::setDirectionalLight(DirectionalLight* light) {
 	directionalLight = light;
 }
 
+
+void Graphics::setSkybox(std::string sides[6])
+{
+	//remove all components
+	while (skybox.removeComponent<MeshRenderer>() != nullptr);
+
+	float AverageColour[3] = { 0, 0, 0 };
+
+	//add sides
+	MeshRenderer* cur;
+	for (int i = 0; i < 6; i++) {
+		cur = createMesh(&skybox);
+		std::string meshLoc = "assets/skybox/skybox-";
+		meshLoc += std::to_string(i);
+		meshLoc += ".obj";
+
+		cur->getMesh()->ImportObj(meshLoc);
+		cur->getMaterial()->settings.textureName = sides[i];
+		cur->getMaterial()->settings.glow = 1;
+		cur->getMaterial()->Update(device.Get(), context.Get());
+
+		float* curAv = cur->getMaterial()->texture.getAverage();
+		AverageColour[0] += curAv[0];
+		AverageColour[1] += curAv[1];
+		AverageColour[2] += curAv[2];
+	}
+
+	AverageColour[0] /= 6;
+	AverageColour[1] /= 6;
+	AverageColour[2] /= 6;
+
+	backgroundColour[0] = AverageColour[0];
+	backgroundColour[1] = AverageColour[1];
+	backgroundColour[2] = AverageColour[2];
+	backgroundColour[3] = 1;
+
+	AverageColour[0] *= ambientStrength;
+	AverageColour[1] *= ambientStrength;
+	AverageColour[2] *= ambientStrength;
+
+	lightData.ambientLight = { AverageColour[0], AverageColour[1], AverageColour[2], 1 };
+	skyboxEnabled = true;
+}
+
+void Graphics::setAmbientStrength(float strength)
+{
+	ambientStrength = strength;
+}
+
+void Graphics::setBackgroundColour(float colour[4])
+{
+	//get rid of skybox
+	while (skybox.removeComponent<MeshRenderer>() != nullptr);
+	skyboxEnabled = false;
+
+	for (int i = 0; i < 4; i++)
+		backgroundColour[i] = colour[i];
+}
 
 //Update Calls
 void Graphics::updateLightData() {
@@ -202,6 +265,7 @@ void Graphics::updateLightData() {
 		lightData.pntDetails[i] = { temp.x, temp.y, temp.z };
 		lightData.pntDetails[i].power = pointLights[i].power;
 		lightData.pntDetails[i].range = pointLights[i].range;
+
 	}
 }
 
@@ -230,7 +294,7 @@ void Graphics::updateLightBuffer() {
 	context->VSSetConstantBuffers(2, 1, constBuffer.GetAddressOf());
 
 	//make changes to settings
-	bufferDesc.ByteWidth = sizeof(LightData::dirDetails) + sizeof(LightData::pntDetails) * MaxLights;
+	bufferDesc.ByteWidth = sizeof(LightData::DirectionalLightDetails) + (sizeof(LightData::PointLightDetails) * MaxLights) + sizeof(LightData::AmbientLight);
 	initData.pSysMem = &lightData.dirDetails;
 
 	//set new constant buffer

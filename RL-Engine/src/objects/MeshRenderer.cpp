@@ -23,3 +23,8 @@ void MeshRenderer::Draw(ID3D11Device* device, ID3D11DeviceContext* context) {
 Material* MeshRenderer::getMaterial() {
 	return &material;
 }
+
+Mesh* MeshRenderer::getMesh()
+{
+	return &mesh;
+}

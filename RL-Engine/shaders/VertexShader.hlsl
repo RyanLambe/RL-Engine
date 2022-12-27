@@ -43,7 +43,7 @@ VSOut main(VSIn In)
 	//directional Light
 	Out.toLight[0] = lightPos[0];
 
-	//point lights 
+	//point lights
 	for (int i = 1; i <= MaxLights; i++) {
 		Out.toLight[i] = lightPos[i] - worldPos;
 	}

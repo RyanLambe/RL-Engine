@@ -65,16 +65,18 @@ int Window::Run()
 	pnt->Colour = Vec3(1, 0, 0);
 	Pntlight.getTransform()->setScale(0.1f, 0.1f, 0.1f);
 	MeshRenderer* light = gfx.createMesh(&Pntlight);
-	light->mesh.ImportObj("assets/ssphere.obj");
+	light->getMesh()->ImportObj("assets/ssphere.obj");
 	light->getMaterial()->settings.color = {1, 0, 0, 1};
+	light->getMaterial()->settings.glow = 1;
 	
 	Entity Pntlight2;
 	PointLight* pnt2 = gfx.createPointLight(&Pntlight2);
 	pnt2->Colour = Vec3(0, 1, 0);
 	Pntlight2.getTransform()->setScale(0.1f, 0.1f, 0.1f);
 	MeshRenderer* light2 = gfx.createMesh(&Pntlight2);
-	light2->mesh.ImportObj("assets/ssphere.obj");
+	light2->getMesh()->ImportObj("assets/ssphere.obj");
 	light2->getMaterial()->settings.color = { 0, 1, 0, 1 };
+	light2->getMaterial()->settings.glow = 1;
 
 	Entity cube1;
 	gfx.createMesh(&cube1);
@@ -88,18 +90,28 @@ int Window::Run()
 	cube2.getTransform()->setScale(0.5);
 	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
 
-	Entity floor;
+	/*Entity floor;
 	MeshRenderer* floorRend = gfx.createMesh(&floor);
-	floorRend->mesh.ImportObj("assets/plane.obj");
-	floor.getTransform()->setPosition(0, 0, 0);
-	floor.getTransform()->setRotation(0, 0, 0);
-	floor.getTransform()->setScale(10, 10, 10);
+	floorRend->getMesh()->ImportObj("assets/plane.obj");
+	floorRend->getMaterial()->settings.glow = 1;*/
+	//floor.getTransform()->setScale(10, 10, 10);
+
+	std::string skybox[6];
+	skybox[0] = "assets/skybox/top.png";
+	skybox[1] = "assets/skybox/bottom.png";
+	skybox[2] = "assets/skybox/left.png";
+	skybox[3] = "assets/skybox/right.png";
+	skybox[4] = "assets/skybox/front.png";
+	skybox[5] = "assets/skybox/back.png";
+	gfx.setSkybox(skybox);
 
 	while (!WindowClosed(&exitCode))
 	{
 		//code
 		angle += 0.05f;
 		//Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
+
+		//cam.getTransform()->setRotation(angle, angle, 0);
 
 		Pntlight.getTransform()->setPosition(angle/20 - 5, 3, 0);
 		Pntlight2.getTransform()->setPosition(-angle / 20 + 5, 3, angle / 20 - 5);

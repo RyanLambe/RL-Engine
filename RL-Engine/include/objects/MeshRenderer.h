@@ -18,15 +18,16 @@ public:
 	
 	void Draw(ID3D11Device* device, ID3D11DeviceContext* context);
 	
-	Mesh mesh;
+	
 
 	//setters
 	//getters
 	Material* getMaterial();
+	Mesh* getMesh();
 
-private:
+protected:
 
-	
+	Mesh mesh;
 	Material material;
 	Shader shader;
 

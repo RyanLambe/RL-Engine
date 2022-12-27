@@ -8,30 +8,35 @@ class Material {
 public:
 	struct MaterialInfo {
 		struct {
-			float r;
-			float g;
-			float b;
-			float a;
+			float r = 1;
+			float g = 1;
+			float b = 1;
+			float a = 1;
 		} color;
 
-		float smoothness;
-		float reflectivity;
+		float smoothness = 0.5f;
+		float reflectivity = 0.25f;
 
-		std::string textureName;
-	};
+		int glow = 0;
+
+		int texId = 0;
+
+		std::string textureName = "assets/temp.png";
+	} settings;
 
 public:
 
 	Material();
 	void Update(ID3D11Device* device, ID3D11DeviceContext* context);
+	void SetTexture(std::string textureName);
 	void Refresh();
 
-	MaterialInfo settings;
 
 	Texture texture;
-
 private:
 	bool set = false;
+
+	//Texture texture;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
 };
