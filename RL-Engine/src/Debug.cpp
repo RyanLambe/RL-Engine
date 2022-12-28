@@ -36,7 +36,7 @@ void Debug::close()
 void Debug::log(std::string out)
 {
     //line to be written
-    std::string line = "INFO [time]: " + out + "\n";
+    std::string line = "INFO " + formatedTime() + out + "\n";
 
     //write to console
     if (debugMode) {
@@ -54,7 +54,7 @@ void Debug::log(std::string out)
 void Debug::logError(std::string out)
 {
     //line to be written
-    std::string line = "ERROR [time]: " + out + "\n";
+    std::string line = "ERROR " + formatedTime() + out + "\n";
 
     //write to console
     if (debugMode) {
@@ -72,7 +72,7 @@ void Debug::logError(std::string out)
 void Debug::logWarning(std::string out)
 {
     //line to be written
-    std::string line = "WARNING [time]: " + out + "\n";
+    std::string line = "WARNING " + formatedTime() + out + "\n";
 
     //write to console
     if (debugMode) {
@@ -106,5 +106,28 @@ std::string Debug::TranslateHResult(HRESULT code)
     //return
     std::string out = msgBuffer;
     LocalFree(msgBuffer);
+    return out;
+}
+
+std::string Debug::formatedTime()
+{
+    //get values
+    int secs = Time::getTime();
+    int mins = floor(secs / 60);
+    secs -= mins * 60;
+
+    //format string
+    std::string out = "[";
+    out += std::to_string(mins);
+    out += ":";
+
+    //make seconds 2 digits
+    if (secs < 10)
+        out += "0";
+
+    out += std::to_string(secs);
+    out += "]: ";
+
+    //return
     return out;
 }

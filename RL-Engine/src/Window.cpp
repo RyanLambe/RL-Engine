@@ -107,10 +107,14 @@ int Window::Run()
 	skybox[5] = "assets/skybox/back.png";
 	gfx.setSkybox(skybox);
 
+	//update frame to start counting delta frames right before first frame
+	Time::update();
+
 	while (!WindowClosed(&exitCode))
 	{
 		//code
-		angle += 0.05f;
+		angle += 50 * Time::deltaTime();
+
 		//Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
 
 		//cam.getTransform()->setRotation(angle, angle, 0);
@@ -121,6 +125,7 @@ int Window::Run()
 		//cube1.getTransform()->setRotation(angle, 0, angle);
 		//cube2.getTransform()->setRotation(0, 0, angle);
 
+		Time::update();
 		gfx.Draw();
 		gfx.EndFrame();
 	}

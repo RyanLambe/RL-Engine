@@ -5,6 +5,8 @@
 #include <fstream>
 #include <string>
 
+#include "Time.h"
+
 static class Debug
 {
 public:
@@ -20,6 +22,9 @@ public:
 	static std::string TranslateHResult(HRESULT code);
 
 private:
+	
+	//gets time as "[mins:secs]: "
+	static std::string formatedTime();
 
 	//console
 	static bool debugMode;

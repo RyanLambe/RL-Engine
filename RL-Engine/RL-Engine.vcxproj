@@ -28,6 +28,7 @@
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\objects\PointLight.cpp" />
+    <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\types\Material.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
     <ClCompile Include="src\types\Shader.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="include\objects\Camera.h" />
     <ClInclude Include="include\objects\DirectionalLight.h" />
     <ClInclude Include="include\objects\PointLight.h" />
+    <ClInclude Include="include\Time.h" />
     <ClInclude Include="include\types\Material.h" />
     <ClInclude Include="include\types\Shader.h" />
     <ClInclude Include="include\types\Texture.h" />
