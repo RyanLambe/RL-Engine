@@ -19,15 +19,17 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 	size.top = 100;
 	size.bottom = height + size.top;
 
+	//set size and check for error
 	if (AdjustWindowRect(&size, style, false) == 0) {
-		throw WndExcept(GetLastError());
+		throw std::exception(Debug::TranslateHResult(GetLastError()).c_str());
 	}
 
 	// Create window
 	hwnd = CreateWindow(name, name, style, CW_USEDEFAULT, CW_USEDEFAULT, size.right - size.left, size.bottom - size.top, NULL, NULL, hInstance, this);
 
+	//check for error
 	if (hwnd == NULL) {
-		throw WndExcept(GetLastError());
+		throw std::exception(Debug::TranslateHResult(GetLastError()).c_str());
 	}
 
 	ShowWindow(hwnd, SW_SHOW);

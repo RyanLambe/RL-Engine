@@ -1,12 +1,17 @@
 #pragma once
 
-#include <wrl.h>
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
 #include <vector>
+#include <wrl.h>
 
-#include "InfoException.h"
+#include "Debug.h"
 #include "objects/MeshRenderer.h"
 #include "objects/PointLight.h"
 #include "objects/DirectionalLight.h"
+
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
 #define MaxLights 4
 
@@ -73,7 +78,7 @@ private:
 
 	} lightData;
 
-	float ambientStrength = 0.2f;
+	float ambientStrength = 0.25f;
 	bool skyboxEnabled = false;
 	float backgroundColour[4] = {1, 155.0f/255.0f, 0, 1};
 

@@ -1,10 +1,6 @@
 #include "../include/Graphics.h"
 
-#include <d3dcompiler.h>
-#include <DirectXMath.h>
-
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "D3DCompiler.lib")
+#define checkError(code) if(FAILED(code)) throw std::exception(Debug::TranslateHResult(code).c_str())
 
 //update
 void Graphics::Start(HWND hwnd)
@@ -27,12 +23,12 @@ void Graphics::Start(HWND hwnd)
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = 0;
 	
-	GfxThrowFailed(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
+	checkError(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
 
 	// get render target
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> frameBuffer;
-	swap->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&frameBuffer);
-	device->CreateRenderTargetView(frameBuffer.Get(), 0, &target);
+	checkError(swap->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&frameBuffer));
+	checkError(device->CreateRenderTargetView(frameBuffer.Get(), 0, &target));
 	
 	// render closer object on top
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
@@ -41,7 +37,7 @@ void Graphics::Start(HWND hwnd)
 	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthState;
-	device->CreateDepthStencilState(&dsDesc, &depthState);
+	checkError(device->CreateDepthStencilState(&dsDesc, &depthState));
 	context->OMSetDepthStencilState(depthState.Get(), 1);
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthTexture;
@@ -55,13 +51,13 @@ void Graphics::Start(HWND hwnd)
 	depthDesc.SampleDesc.Quality = 0;
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	device->CreateTexture2D(&depthDesc, nullptr, &depthTexture);
+	checkError(device->CreateTexture2D(&depthDesc, nullptr, &depthTexture));
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC DSVdesc = {};
 	DSVdesc.Format = DXGI_FORMAT_D32_FLOAT;
 	DSVdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	DSVdesc.Texture2D.MipSlice = 0;
-	device->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, &DSV);
+	checkError(device->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, &DSV));
 
 	context->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
 
@@ -85,7 +81,7 @@ void Graphics::Start(HWND hwnd)
 	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 
-	device->CreateSamplerState(&sampleDesc, &sampler);
+	checkError(device->CreateSamplerState(&sampleDesc, &sampler));
 	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
 
 	lightData = { 0 };
@@ -97,9 +93,9 @@ void Graphics::EndFrame()
 	HRESULT hr;
 	if (FAILED(hr = swap->Present(0, 0))) {
 		if (hr == DXGI_ERROR_DEVICE_REMOVED)
-			throw GfxExcept(Graphics::device->GetDeviceRemovedReason());
+			checkError(Graphics::device->GetDeviceRemovedReason());
 		else
-			GfxThrowFailed(hr);
+			Debug::logError(hr);
 	}
 
 	context->ClearRenderTargetView(target.Get(), backgroundColour);

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "WindowException.h"
 #include "Graphics.h"
 #include "objects/Entity.h"
 

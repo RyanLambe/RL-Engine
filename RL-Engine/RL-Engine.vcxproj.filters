@@ -14,11 +14,6 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
-    <ClCompile Include="src\EngineException.cpp" />
-    <ClCompile Include="src\WindowException.cpp" />
-    <ClCompile Include="src\GraphicsException.cpp" />
-    <ClCompile Include="src\CustomException.cpp" />
-    <ClCompile Include="src\InfoException.cpp" />
     <ClCompile Include="src\objects\Entity.cpp" />
     <ClCompile Include="src\objects\MeshRenderer.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
@@ -31,27 +26,13 @@
     <ClCompile Include="src\types\Vec2.cpp" />
     <ClCompile Include="src\objects\PointLight.cpp" />
     <ClCompile Include="src\objects\DirectionalLight.cpp" />
+    <ClCompile Include="src\Debug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\EngineException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\WindowException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GraphicsException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\CustomException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\InfoException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\objects\Entity.h">
@@ -88,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\objects\DirectionalLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
