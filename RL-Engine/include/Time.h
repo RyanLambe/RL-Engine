@@ -15,8 +15,8 @@ public:
 		DWORD startFrame;
 	};
 
-	static void start();
-	static void update();
+	Time();
+	void update();
 
 	static float getTime();
 	static float deltaTime();

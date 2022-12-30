@@ -3,6 +3,7 @@
 #include <wrl.h>
 #include <d3d11.h>
 #include "Texture.h"
+#include "../Debug.h"
 
 class Material {
 public:

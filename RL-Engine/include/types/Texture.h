@@ -10,6 +10,8 @@
 //https://lodev.org/lodepng/
 #include "../../External/LodePng/lodepng.h"
 
+#include "../Debug.h"
+
 class Texture {
 public:
 

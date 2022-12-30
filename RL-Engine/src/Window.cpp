@@ -34,8 +34,10 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 
 	ShowWindow(hwnd, SW_SHOW);
 	
-	//create graphics
-	gfx.Start(hwnd);
+	//setup input, debug, and graphics
+	input.start(hwnd);
+	debug.start(true);
+	gfx.Start(hwnd, size.right - size.left, size.bottom - size.top);
 }
 
 Window::~Window()
@@ -50,17 +52,17 @@ int Window::Run()
 	int exitCode;
 
 	Entity cam;
-	Camera comp(&cam);
+	Camera comp(&cam, Graphics::getWidth(), Graphics::getHeight());
 	cam.addComponent(&comp);
 	cam.getTransform()->setPosition(0, 10, -10);
 	cam.getTransform()->setRotation(45, 0, 0);
 	comp.fov = 60;
 
-	/*Entity Dirlight;
+	Entity Dirlight;
 	DirectionalLight comp2(&Dirlight);
 	gfx.setDirectionalLight(&comp2);
 	Dirlight.getTransform()->setRotation(-45, 45, 0);
-	comp2.Colour = Vec3(1, 1, 1);*/
+	comp2.Colour = Vec3(1, 1, 1);
 
 	Entity Pntlight;
 	PointLight* pnt = gfx.createPointLight(&Pntlight);
@@ -107,25 +109,56 @@ int Window::Run()
 	skybox[5] = "assets/skybox/back.png";
 	gfx.setSkybox(skybox);
 
-	//update frame to start counting delta frames right before first frame
-	Time::update();
+	gfx.setFullscreen(true);
+
+	//update to clear data during load time
+	time.update();
+	input.update();
 
 	while (!WindowClosed(&exitCode))
 	{
 		//code
 		angle += 50 * Time::deltaTime();
 
-		//Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
+		//Debug::log(Input::getKey('A'));
+		float speed = 10;
+
+		if (Input::getKey('W')) {
+			cam.getTransform()->Translate(0, 0, speed * Time::deltaTime());
+		}
+
+		if (Input::getKey('S')) {
+			cam.getTransform()->Translate(0, 0, -speed * Time::deltaTime());
+		}
+
+		if (Input::getKey('D')) {
+			cam.getTransform()->Translate(speed * Time::deltaTime(), 0, 0);
+		}
+
+		if (Input::getKey('A')) {
+			cam.getTransform()->Translate(-speed * Time::deltaTime(), 0, 0);
+		}
+
+		Vec2 mouse = Input::getMouse();
+		float sens = 50;
+
+		//Debug::log(cam.getTransform()->foreward());
+
+		//Debug::log(mouse);
+		//cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
+
+		Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
 
 		//cam.getTransform()->setRotation(angle, angle, 0);
 
 		Pntlight.getTransform()->setPosition(angle/20 - 5, 3, 0);
 		Pntlight2.getTransform()->setPosition(-angle / 20 + 5, 3, angle / 20 - 5);
 
-		//cube1.getTransform()->setRotation(angle, 0, angle);
-		//cube2.getTransform()->setRotation(0, 0, angle);
+		cube1.getTransform()->setRotation(angle, 0, angle);
+		cube2.getTransform()->setRotation(0, 0, angle);
 
-		Time::update();
+		input.update();
+		time.update();
 		gfx.Draw();
 		gfx.EndFrame();
 	}
@@ -145,7 +178,7 @@ bool Window::WindowClosed(int* quitMessage)
 
 		//deal with messages
 		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		Debug::logErrorCode(DispatchMessage(&msg));
 	}
 
 	// if not quitting, return false
@@ -180,6 +213,50 @@ LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
+
+	//keyboard
+	case WM_SYSKEYDOWN:
+	case WM_KEYDOWN:
+		input.updateKey(wParam, true);
+		break;
+
+	case WM_SYSKEYUP:
+	case WM_KEYUP:
+		input.updateKey(wParam, false);
+		break;
+
+	//mouse buttons
+	case WM_LBUTTONDOWN:
+		input.updateMouse(0, true);
+		break;
+	case WM_LBUTTONUP:
+		input.updateMouse(0, false);
+		break;
+
+	case WM_RBUTTONDOWN:
+		input.updateMouse(1, true);
+		break;
+	case WM_RBUTTONUP:
+		input.updateMouse(1, false);
+		break;
+
+	case WM_MBUTTONDOWN:
+		input.updateMouse(2, true);
+		break;
+	case WM_MBUTTONUP:
+		input.updateMouse(2, false);
+		break;
+
+	//mouse pos
+	case WM_MOUSEMOVE:
+		//Input::updateMousePos();
+		break;
+
+	case WM_INPUT:
+		input.updateMousePos((HRAWINPUT)lParam);
+		break;
+	
+	//close window
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;

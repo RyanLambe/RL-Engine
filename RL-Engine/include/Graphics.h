@@ -18,7 +18,7 @@
 class Graphics
 {
 public:
-	void Start(HWND hwnd);
+	void Start(HWND hwnd, int width, int height);
 	void EndFrame();
 	void Draw();
 
@@ -33,32 +33,46 @@ public:
 	void setAmbientStrength(float strength);
 	void setBackgroundColour(float colour[4]);
 
+	static int getWidth();
+	static int getHeight();
+
+	void updateDimensions(int width, int height);
+	void setFullscreen(bool fullscreen);
+
 private:
 
 	void updateLightData();
+	void updatePixelShader();
+	void updateVertexShader();
+
 	void updateLightBuffer();
 	void updateCameraBuffer(DirectX::XMMATRIX mat);
 
 private:
 
-	int width;
-	int height;
+	static int width;
+	static int height;
 
-	//meshs to be rendered
-	std::vector<MeshRenderer> renderers;
-	 
-	//lights
-	//const static int maxLights = 4;
-	struct LightData {
+	//constant buffers
+	//vertex shader
+	bool vsBufferCreated = false;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> vsBuffer;
+	struct VSBufferData {
+		DirectX::XMMATRIX camMatrix;
+		DirectX::XMVECTOR lightPos[MaxLights + 1];
+	} vsBufferData;
 
-		DirectX::XMVECTOR positions[1 + MaxLights];//1 dir + max point
+	//pixel shader
+	bool psBufferCreated = false;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> psBuffer;
+	struct PSBufferData {
 
 		struct DirectionalLightDetails {
 			float r;
 			float g;
 			float b;
 			float space; // space to align floats by 4
-		}dirDetails;
+		}dirLightDetails;
 
 		struct PointLightDetails {
 			float r;
@@ -67,7 +81,7 @@ private:
 			float power;
 			float range;
 			float space1, space2, space3; // spaces to align floats by 4
-		}pntDetails[MaxLights];
+		}pntLightDetails[MaxLights];
 
 		struct AmbientLight {
 			float r;
@@ -76,8 +90,12 @@ private:
 			float space; // space to align floats by 4
 		}ambientLight;
 
-	} lightData;
+	} psBufferData;
 
+	//meshs to be rendered
+	std::vector<MeshRenderer> renderers;
+	 
+	//lights
 	float ambientStrength = 0.25f;
 	bool skyboxEnabled = false;
 	float backgroundColour[4] = {1, 155.0f/255.0f, 0, 1};

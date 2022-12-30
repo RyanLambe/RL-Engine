@@ -7,10 +7,8 @@ Mesh::Mesh() {
 void Mesh::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 
 	if (refresh) {
-		//create new buffers
 		CreateBuffer(vertices.data(), sizeof(Vertex) * vertices.size(), D3D11_BIND_VERTEX_BUFFER, &vertexBuffer, device);
 		CreateBuffer(indices.data(), sizeof(unsigned int) * indices.size(), D3D11_BIND_INDEX_BUFFER, &indexBuffer, device);
-
 		refresh = false;
 	}
 
@@ -78,11 +76,8 @@ void Mesh::ImportObj(std::string fileName) {
 				temp.normal.y = norms[curNorm[i] - 1].y;
 				temp.normal.z = norms[curNorm[i] - 1].z;
 
-
-				out.push_back(temp);
-				inds.push_back(out.size() - 1);
 				//check if vertex exists
-				/*bool exists = false;
+				bool exists = false;
 				for (int j = 0; j < out.size(); j++) {
 					if (out[j] == temp) {
 						inds.push_back(j);
@@ -93,7 +88,7 @@ void Mesh::ImportObj(std::string fileName) {
 				if (!exists) {
 					out.push_back(temp);
 					inds.push_back(out.size() - 1);
-				}*/
+				}
 			}
 
 			continue;
@@ -152,10 +147,10 @@ std::vector<unsigned int> Mesh::getIndices() {
 void Mesh::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, ID3D11Device* device) {
 
 	D3D11_BUFFER_DESC bufferDesc;
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	bufferDesc.ByteWidth = size;
 	bufferDesc.BindFlags = bindFlags;
-	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA initData;
@@ -163,5 +158,5 @@ void Mesh::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** bu
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
 
-	device->CreateBuffer(&bufferDesc, &initData, buffer);
+	Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, buffer));
 }

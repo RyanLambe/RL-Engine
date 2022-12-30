@@ -5,11 +5,8 @@ cbuffer Object : register(b0) {
 	matrix transform;
 };
 
-cbuffer Camera : register(b1) {
+cbuffer Scene : register(b1) {
 	matrix cam;
-};
-
-cbuffer Lights : register(b2) {
 	float3 lightPos[1 + MaxLights];
 };
 

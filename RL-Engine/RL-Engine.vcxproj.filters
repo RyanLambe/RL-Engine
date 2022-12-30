@@ -28,6 +28,7 @@
     <ClCompile Include="src\objects\DirectionalLight.cpp" />
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Window.h">
@@ -76,6 +77,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

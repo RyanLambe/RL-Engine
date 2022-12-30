@@ -26,73 +26,254 @@ void Debug::start(bool debug)
     file.open("log.txt", std::ios::trunc);
 }
 
-void Debug::close()
+Debug::~Debug()
 {
-    if(debugMode)
+    if (debugMode)
         FreeConsole();
     file.close();
 }
 
+//logs
 void Debug::log(std::string out)
 {
-    //line to be written
     std::string line = "INFO " + formatedTime() + out + "\n";
-
-    //write to console
-    if (debugMode) {
-        //set correct font
-        SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-
-        //print to console
-        WriteConsoleA(hOut, line.c_str(), line.size(), nullptr, nullptr);
-    }
-    
-    //file logging
-    file << line;
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
+void Debug::log(int out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(unsigned int out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(float out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(long out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(double out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(long long out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(long double out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(unsigned long out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(unsigned long long out)
+{
+    std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(bool out)
+{
+    std::string line;
+    if(out)
+        line = "INFO " + formatedTime() + "True" + "\n";
+    else
+        line = "INFO " + formatedTime() + "False" + "\n";
+
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(Vec2 out)
+{
+    std::string line = "INFO " + formatedTime();
+    line += "x: " + std::to_string(out.x);
+    line += ", y: " + std::to_string(out.y) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(Vec3 out)
+{
+    std::string line = "INFO " + formatedTime();
+    line += "x: " + std::to_string(out.x);
+    line += ", y: " + std::to_string(out.y);
+    line += ", z: " + std::to_string(out.z) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+//errors
 void Debug::logError(std::string out)
 {
-    //line to be written
     std::string line = "ERROR " + formatedTime() + out + "\n";
-
-    //write to console
-    if (debugMode) {
-        //set correct font
-        SetConsoleTextAttribute(hOut, FOREGROUND_RED);
-
-        //print to console
-        WriteConsoleA(hOut, line.c_str(), line.size(), nullptr, nullptr);
-    }
-    
-    //file logging
-    file << line;
+    print(line, FOREGROUND_RED);
 }
 
-void Debug::logWarning(std::string out)
+void Debug::logError(int out)
 {
-    //line to be written
-    std::string line = "WARNING " + formatedTime() + out + "\n";
-
-    //write to console
-    if (debugMode) {
-        //set correct font
-        SetConsoleTextAttribute(hOut, FOREGROUND_RED | FOREGROUND_GREEN);
-
-        //print to console
-        WriteConsoleA(hOut, line.c_str(), line.size(), nullptr, nullptr);
-    }
-
-    //file logging
-    file << line;
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
 }
 
-void Debug::logError(HRESULT code)
+void Debug::logError(unsigned int out)
 {
-    if (FAILED(code)) 
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(float out)
+{
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(long out)
+{
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(double out)
+{
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(long long out)
+{
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(long double out)
+{
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(unsigned long out)
+{
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(unsigned long long out)
+{
+    std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(bool out)
+{
+    std::string line;
+    if (out)
+        line = "ERROR " + formatedTime() + "True" + "\n";
+    else
+        line = "ERROR " + formatedTime() + "False" + "\n";
+
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logErrorCode(HRESULT code)
+{
+    if (FAILED(code))
         logError(TranslateHResult(code));
 }
 
+//warnings
+void Debug::logWarning(std::string out)
+{
+    std::string line = "WARNING " + formatedTime() + out + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(int out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(unsigned int out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(float out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(long out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(double out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(long long out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(long double out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(unsigned long out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(unsigned long long out)
+{
+    std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(bool out)
+{
+    std::string line;
+    if (out)
+        line = "WARNING " + formatedTime() + "True" + "\n";
+    else
+        line = "WARNING " + formatedTime() + "False" + "\n";
+
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+
+//helper functions
 std::string Debug::TranslateHResult(HRESULT code)
 {
     //reformat message
@@ -130,4 +311,19 @@ std::string Debug::formatedTime()
 
     //return
     return out;
+}
+
+void Debug::print(std::string out, WORD colour)
+{
+    //write to console
+    if (debugMode) {
+        //set correct font
+        SetConsoleTextAttribute(hOut, colour);
+
+        //print to console
+        WriteConsoleA(hOut, out.c_str(), out.size(), nullptr, nullptr);
+    }
+
+    //file logging
+    file << out;
 }

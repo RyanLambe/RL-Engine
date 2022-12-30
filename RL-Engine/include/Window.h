@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Graphics.h"
-#include "objects/Entity.h"
+#include "Input.h"
+//#include "objects/Entity.h"
 
 class Window
 {
@@ -18,5 +19,9 @@ private:
 
 private:
 	HWND hwnd;
+
 	Graphics gfx;
+	Input input;
+	Time time;
+	Debug debug;
 };

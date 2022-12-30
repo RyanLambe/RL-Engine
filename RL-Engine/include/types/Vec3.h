@@ -5,24 +5,38 @@
 class Vec3 {
 public:
 
-	struct Vec3Struct {
-		float x;
-		float y;
-		float z;
-	};
-
+	//conponents
 	float x;
 	float y;
 	float z;
 
+	//constructors
 	Vec3();
 	Vec3(float value);
 	Vec3(float x, float y, float z);
 
-	Vec3Struct* getStruct();
-
+	//functions
 	static float distance(Vec3 a, Vec3 b);
 
-private:
-	Vec3Struct str;
+	//operators
+	Vec3 operator+(Vec3 other);
+	Vec3 operator+(float other);
+	void operator+=(Vec3 other);
+	void operator+=(float other);
+
+	Vec3 operator-(Vec3 other);
+	Vec3 operator-(float other);
+	void operator-=(Vec3 other);
+	void operator-=(float other);
+
+	Vec3 operator*(Vec3 other);
+	Vec3 operator*(float other);
+	void operator*=(Vec3 other);
+	void operator*=(float other);
+
+	Vec3 operator/(Vec3 other);
+	Vec3 operator/(float other);
+	void operator/=(Vec3 other);
+	void operator/=(float other);
+
 };

@@ -4,6 +4,8 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
+#include "../Debug.h"
+
 class Shader {
 public:
 	Shader(ID3D11Device* device, ID3D11DeviceContext* context);

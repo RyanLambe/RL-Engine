@@ -3,13 +3,11 @@
 #include <wrl.h>
 #include <d3d11.h>
 #include <vector>
-#include <string>
-#include <fstream>
 #include <sstream>
-#include <algorithm>
 
 #include "Vec3.h"
 #include "Vec2.h"
+#include "../Debug.h"
 
 class Mesh {
 public:
@@ -74,12 +72,14 @@ public:
 private:
 
 	void CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, ID3D11Device* device);
-	
+	void UpdateBuffer(void* data, UINT size, ID3D11Buffer* buffer, ID3D11DeviceContext* context);
+
 private:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices; 
 
 	bool refresh = true;
+	bool buffersCreated = false;
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;

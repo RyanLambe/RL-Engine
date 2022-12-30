@@ -5,7 +5,7 @@ DWORD Time::prevFrame;
 
 std::vector<Time::Timer*> Time::timers;
 
-void Time::start()
+Time::Time()
 {
 	//frames since start
 	startFrame = GetTickCount64();
