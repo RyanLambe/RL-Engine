@@ -110,7 +110,7 @@ int Window::Run()
 	gfx.setSkybox(skybox);
 
 	gfx.setFullscreen(false);
-	Input::setCursorState(CursorState::Free);
+	//Input::setCursorState(CursorState::Locked);
 
 	//update to clear data during load time
 	time.update();
@@ -141,12 +141,12 @@ int Window::Run()
 		}
 
 		Vec2 mouse = Input::getMouse();
-		float sens = 50;
+		float sens = 100;
 
 		//Debug::log(cam.getTransform()->foreward());
 
 		//Debug::log(mouse);
-		cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
+		cam.getTransform()->Rotate(-mouse.y * Time::deltaTime() * sens, -mouse.x * Time::deltaTime() * sens, 0);
 
 		Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
 
@@ -266,5 +266,6 @@ LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		return 0;
 	}
+
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

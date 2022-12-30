@@ -9,7 +9,8 @@ RECT Input::windowRect;
 std::map<UINT, bool> Input::keys;
 
 bool Input::mouseButtons[3]; 
-Vec2 Input::mousePos;
+Vec2 Input::mousePos = Vec2(0, 0);
+Vec2 Input::deltaMousePos = Vec2(0, 0);
 float Input::mouseWheel;
 
 CursorState Input::state = CursorState::Free;
@@ -28,12 +29,12 @@ void Input::start(HWND window)
 	rawInputDevice.usUsagePage = 0x01;
 	rawInputDevice.usUsage = 0x02;
 	rawInputDevice.dwFlags = 0;
-	rawInputDevice.hwndTarget = NULL;
+	rawInputDevice.hwndTarget = window;
 
 	// register the raw input device
 	if (!RegisterRawInputDevices(&rawInputDevice, 1, sizeof(RAWINPUTDEVICE)))
 	{
-		throw std::exception("Mouse not connected");
+		throw std::exception("Input not connected");
 	}
 }
 
@@ -47,6 +48,7 @@ Input::~Input()
 void Input::update()
 {
 	//reset values
+	deltaMousePos = mousePos;
 	mousePos = Vec2(0, 0);
 	mouseWheel = 0;
 	GetWindowRect(window, &windowRect);
@@ -102,7 +104,6 @@ Vec2 Input::getMousePos()
 {
 	POINT pnt;
 	GetCursorPos(&pnt);
-	ScreenToClient(window, &pnt);
 	return Vec2(pnt.x, pnt.y);
 }
 
@@ -129,21 +130,20 @@ float Input::getMouseWheel()
 void Input::updateMousePos(HRAWINPUT input)
 {
 	//get raw mouse input
-	UINT dataSize;
-	GetRawInputData(input, RID_INPUT, NULL, &dataSize, sizeof(RAWINPUTHEADER));
-
-	BYTE* rawInputData = new BYTE[dataSize];
-	GetRawInputData(input, RID_INPUT, rawInputData, &dataSize, sizeof(RAWINPUTHEADER));
+	UINT dataSize = sizeof(RAWINPUT);
+	static BYTE lpb[sizeof(RAWINPUT)];
+	GetRawInputData(input, RID_INPUT, lpb, &dataSize, sizeof(RAWINPUTHEADER));
 
 	// save mouse pos
-	RAWINPUT* rawInput = (RAWINPUT*)rawInputData;
+	RAWINPUT* rawInput = (RAWINPUT*)lpb;
+	//mousePos = Vec2(0, 0);
 	if (rawInput->header.dwType == RIM_TYPEMOUSE)
 	{
-		mousePos = Vec2(rawInput->data.mouse.lLastX, rawInput->data.mouse.lLastY);
-	}
+		float xPos = mousePos.x * (1.0f - lowPassAlpha) + rawInput->data.mouse.lLastX * lowPassAlpha;
+		float yPos = mousePos.y * (1.0f - lowPassAlpha) + rawInput->data.mouse.lLastY * lowPassAlpha;
 
-	// clean up
-	delete[] rawInputData;
+		mousePos = Vec2(xPos, yPos);
+	}
 }
 
 void Input::updateMouseWheel(float input)

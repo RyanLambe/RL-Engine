@@ -6,6 +6,8 @@
 #include "types/Vec2.h"
 #include "Debug.h"
 
+#define lowPassAlpha 0.25f
+
 enum CursorState{
 	Free = 0,
 	Confined = 1,
@@ -39,6 +41,8 @@ public:
 	//cursor
 	static void setCursorState(CursorState state);
 
+	//move
+
 private:
 
 	//general
@@ -51,6 +55,7 @@ private:
 	//mouse
 	static bool mouseButtons[3];
 	static Vec2 mousePos;
+	static Vec2 deltaMousePos;
 	static float mouseWheel;
 
 	//cursor
