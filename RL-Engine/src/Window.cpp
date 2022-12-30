@@ -94,11 +94,11 @@ int Window::Run()
 	cube2.getTransform()->setScale(0.5);
 	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
 
-	/*Entity floor;
+	Entity floor;
 	MeshRenderer* floorRend = gfx.createMesh(&floor);
 	floorRend->getMesh()->ImportObj("assets/plane.obj");
-	floorRend->getMaterial()->settings.glow = 1;*/
-	//floor.getTransform()->setScale(10, 10, 10);
+	floorRend->getMaterial()->settings.glow = 1;
+	floorRend->getMaterial()->SetTexture("assets/trans.png");
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";
@@ -109,7 +109,8 @@ int Window::Run()
 	skybox[5] = "assets/skybox/back.png";
 	gfx.setSkybox(skybox);
 
-	gfx.setFullscreen(true);
+	gfx.setFullscreen(false);
+	Input::setCursorState(CursorState::Free);
 
 	//update to clear data during load time
 	time.update();
@@ -120,7 +121,7 @@ int Window::Run()
 		//code
 		angle += 50 * Time::deltaTime();
 
-		//Debug::log(Input::getKey('A'));
+		Debug::log(Input::getMouseWheel());
 		float speed = 10;
 
 		if (Input::getKey('W')) {
@@ -145,7 +146,7 @@ int Window::Run()
 		//Debug::log(cam.getTransform()->foreward());
 
 		//Debug::log(mouse);
-		//cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
+		cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
 
 		Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
 
@@ -211,6 +212,7 @@ LRESULT Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+
 	switch (uMsg)
 	{
 
@@ -248,8 +250,11 @@ LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	//mouse pos
-	case WM_MOUSEMOVE:
-		//Input::updateMousePos();
+	case WM_MOUSEWHEEL:
+		if(GET_WHEEL_DELTA_WPARAM(wParam) < 0)
+			input.updateMouseWheel(-1);
+		else
+			input.updateMouseWheel(1);
 		break;
 
 	case WM_INPUT:

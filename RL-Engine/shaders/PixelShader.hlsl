@@ -78,13 +78,12 @@ float4 getPointSpecular(PSIn In, float4 specularTint, int index) {
 float4 main(PSIn In) : SV_TARGET
 {
     //get values
-    //float3 texCoord = float3(In.tc.x, In.tc.y, 0);
     float4 albedo = colour * sampleTexture(In, texId);
 	float4 specularTint = albedo * reflectivity;
 	albedo *= 1 - reflectivity;
 
-	if (glow == 1)
-		return albedo;
+    if (glow == 1)
+        return albedo;
 
 	//directional light
 	float diffuse = dot(normalize(In.norm), normalize(In.toLight[0]));

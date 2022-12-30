@@ -4,20 +4,27 @@
 #include <map>
 
 #include "types/Vec2.h"
+#include "Debug.h"
+
+enum CursorState{
+	Free = 0,
+	Confined = 1,
+	Locked = 2,
+	Hidden = 3
+};
 
 static class Input {
 public:
 
 	//updates
 	void update();
-	void updateKey(UINT key, bool pressed);
-	void updateMouse(int button, bool pressed);
-	void updateMousePos(HRAWINPUT input);
-	void updateMouseWheel(float input);
 	void start(HWND window);
+	~Input();
 
 	//keys
 	static bool getKey(UINT key);
+
+	void updateKey(UINT key, bool pressed);
 
 	//mouse
 	static Vec2 getMousePos();
@@ -25,10 +32,18 @@ public:
 	static bool getMouseButton(int button);
 	static float getMouseWheel();
 
+	void updateMouse(int button, bool pressed);
+	void updateMousePos(HRAWINPUT input);
+	void updateMouseWheel(float input);
+
+	//cursor
+	static void setCursorState(CursorState state);
+
 private:
 
 	//general
 	static HWND window;
+	static RECT windowRect;
 
 	//keys
 	static std::map<UINT, bool> keys;
@@ -37,5 +52,9 @@ private:
 	static bool mouseButtons[3];
 	static Vec2 mousePos;
 	static float mouseWheel;
+
+	//cursor
+	static CursorState state;
+	static Vec2 windowCenter;
 
 };

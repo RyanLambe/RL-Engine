@@ -1,7 +1,10 @@
 #include "../include/Input.h"
 
+#include "../include/Graphics.h"
+
 //setup static variables
 HWND Input::window;
+RECT Input::windowRect;
 
 std::map<UINT, bool> Input::keys;
 
@@ -9,10 +12,15 @@ bool Input::mouseButtons[3];
 Vec2 Input::mousePos;
 float Input::mouseWheel;
 
-//updates to be used by windows class
+CursorState Input::state = CursorState::Free;
+Vec2 Input::windowCenter;
+
+
+//updates
+
 void Input::start(HWND window)
 {
-	//save the windows HWND
+	//save input values
 	Input::window = window;
 
 	//get raw input
@@ -29,14 +37,49 @@ void Input::start(HWND window)
 	}
 }
 
+Input::~Input()
+{
+	//free cursor
+	ClipCursor(nullptr);
+	ShowCursor(true);
+}
+
 void Input::update()
 {
+	//reset values
 	mousePos = Vec2(0, 0);
 	mouseWheel = 0;
+	GetWindowRect(window, &windowRect);
+
+	//if window isnt active, free cursor
+	if (GetActiveWindow() != window) {
+		ClipCursor(nullptr);
+		ShowCursor(true);
+		return;
+	}
+
+	//get screen center
+	RECT clientRect;
+	GetClientRect(window, &clientRect);
+	MapWindowPoints(window, NULL, (POINT*)&clientRect, 2);
+
+	windowCenter = Vec2((clientRect.left + clientRect.right) / 2, (clientRect.top + clientRect.bottom) / 2);
+
+	//lock cursor if set to
+	if (state == CursorState::Confined) 
+		ClipCursor(&windowRect);
+	
+	if (state == CursorState::Locked || state == CursorState::Hidden)
+		SetCursorPos(windowCenter.x, windowCenter.y);
+	
 }
+
+
+//keyboard
 
 void Input::updateKey(UINT key, bool pressed)
 {
+	//add key if doesnt exist
 	if (!keys.contains(key)) {
 		keys.emplace(key, pressed);
 		return;
@@ -45,9 +88,42 @@ void Input::updateKey(UINT key, bool pressed)
 	keys.at(key) = pressed;
 }
 
+bool Input::getKey(UINT key)
+{
+	if (keys.contains(key))
+		return keys.at(key);
+	return false;
+}
+
+
+//mouse
+
+Vec2 Input::getMousePos()
+{
+	POINT pnt;
+	GetCursorPos(&pnt);
+	ScreenToClient(window, &pnt);
+	return Vec2(pnt.x, pnt.y);
+}
+
 void Input::updateMouse(int button, bool pressed)
 {
 	mouseButtons[button] = pressed;
+}
+
+Vec2 Input::getMouse()
+{
+	return mousePos;
+}
+
+bool Input::getMouseButton(int button)
+{
+	return mouseButtons[button];
+}
+
+float Input::getMouseWheel()
+{
+	return mouseWheel;
 }
 
 void Input::updateMousePos(HRAWINPUT input)
@@ -75,33 +151,17 @@ void Input::updateMouseWheel(float input)
 	mouseWheel = input;
 }
 
-//static functions to used by user
-bool Input::getKey(UINT key)
-{
-	if (keys.contains(key))
-		return keys.at(key);
-	return false;
-}
 
-Vec2 Input::getMousePos()
-{
-	POINT pnt;
-	GetCursorPos(&pnt);
-	ScreenToClient(window, &pnt);
-	return Vec2(pnt.x, pnt.y);
-}
+//cursor
 
-Vec2 Input::getMouse()
+void Input::setCursorState(CursorState state)
 {
-	return mousePos;
-}
+	//save state
+	Input::state = state;
 
-bool Input::getMouseButton(int button)
-{
-	return mouseButtons[button];
-}
-
-float Input::getMouseWheel()
-{
-	return mouseWheel;
+	//show/hide cursor
+	if (state == CursorState::Hidden) 
+		ShowCursor(false);
+	else
+		ShowCursor(true);
 }

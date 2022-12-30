@@ -5,7 +5,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine,
 	//creates and runs engine window, catchs all exceptions
 	try {
 		//setup
-		Window window(hInstance, L"RL-Engine", WS_OVERLAPPEDWINDOW, 1920, 1080);// 1280, 720);
+		Window window(hInstance, L"RL-Engine", WS_OVERLAPPEDWINDOW, 1280, 720);
 		
 		//run
 		int out = window.Run();
