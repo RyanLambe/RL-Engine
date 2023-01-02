@@ -40,6 +40,18 @@ void Debug::log(std::string out)
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
+void Debug::log(char out[])
+{
+    std::string line = "INFO " + formatedTime() + out + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
+void Debug::log(const char out[])
+{
+    std::string line = "INFO " + formatedTime() + out + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
 void Debug::log(int out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
@@ -129,6 +141,18 @@ void Debug::logError(std::string out)
     print(line, FOREGROUND_RED);
 }
 
+void Debug::logError(char out[])
+{
+    std::string line = "ERROR " + formatedTime() + out + "\n";
+    print(line, FOREGROUND_RED);
+}
+
+void Debug::logError(const char out[])
+{
+    std::string line = "ERROR " + formatedTime() + out + "\n";
+    print(line, FOREGROUND_RED);
+}
+
 void Debug::logError(int out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
@@ -202,6 +226,18 @@ void Debug::logErrorCode(HRESULT code)
 
 //warnings
 void Debug::logWarning(std::string out)
+{
+    std::string line = "WARNING " + formatedTime() + out + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(char out[])
+{
+    std::string line = "WARNING " + formatedTime() + out + "\n";
+    print(line, FOREGROUND_RED | FOREGROUND_GREEN);
+}
+
+void Debug::logWarning(const char out[])
 {
     std::string line = "WARNING " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);

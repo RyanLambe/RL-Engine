@@ -47,9 +47,8 @@ Input::~Input()
 
 void Input::update()
 {
-	//reset values
-	deltaMousePos = mousePos;
-	mousePos = Vec2(0, 0);
+	//update values
+	mousePos -= Vec2(mousePos.x * lowPassAlpha, mousePos.y * lowPassAlpha);
 	mouseWheel = 0;
 	GetWindowRect(window, &windowRect);
 
@@ -127,22 +126,19 @@ float Input::getMouseWheel()
 	return mouseWheel;
 }
 
-void Input::updateMousePos(HRAWINPUT input)
+void Input::updateMousePos(LPARAM lparam)
 {
 	//get raw mouse input
-	UINT dataSize = sizeof(RAWINPUT);
-	static BYTE lpb[sizeof(RAWINPUT)];
-	GetRawInputData(input, RID_INPUT, lpb, &dataSize, sizeof(RAWINPUTHEADER));
+	HRAWINPUT hInput = (HRAWINPUT)lparam;
+	RAWINPUT input = { 0 };
 
-	// save mouse pos
-	RAWINPUT* rawInput = (RAWINPUT*)lpb;
-	//mousePos = Vec2(0, 0);
-	if (rawInput->header.dwType == RIM_TYPEMOUSE)
+	UINT size = sizeof(RAWINPUT);
+	GetRawInputData(hInput, RID_INPUT, &input, &size, sizeof(RAWINPUTHEADER));
+	if (RIM_TYPEMOUSE == input.header.dwType)
 	{
-		float xPos = mousePos.x * (1.0f - lowPassAlpha) + rawInput->data.mouse.lLastX * lowPassAlpha;
-		float yPos = mousePos.y * (1.0f - lowPassAlpha) + rawInput->data.mouse.lLastY * lowPassAlpha;
-
-		mousePos = Vec2(xPos, yPos);
+		//update mouse pos value
+		mousePos.x = input.data.mouse.lLastX;
+		mousePos.y = input.data.mouse.lLastY;
 	}
 }
 

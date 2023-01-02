@@ -17,6 +17,8 @@ public:
 	~Debug();
 
 	static void log(std::string out);
+	static void log(char out[]);
+	static void log(const char out[]);
 	static void log(int out);
 	static void log(unsigned int out);
 	static void log(float out);
@@ -31,6 +33,8 @@ public:
 	static void log(Vec3 out);
 
 	static void logError(std::string out);
+	static void logError(char out[]);
+	static void logError(const char out[]);
 	static void logError(int out);
 	static void logError(unsigned int out);
 	static void logError(float out);
@@ -47,6 +51,8 @@ public:
 
 
 	static void logWarning(std::string out);
+	static void logWarning(char out[]);
+	static void logWarning(const char out[]);
 	static void logWarning(int out);
 	static void logWarning(unsigned int out);
 	static void logWarning(float out);

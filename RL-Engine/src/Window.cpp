@@ -1,5 +1,7 @@
 #include "../include/Window.h"
 
+#include <random>
+
 Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int height)
 {
 	// Create class for window
@@ -37,6 +39,9 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 	//setup input, debug, and graphics
 	input.start(hwnd);
 	debug.start(true);
+
+	Debug::log("test");
+
 	gfx.Start(hwnd, size.right - size.left, size.bottom - size.top);
 }
 
@@ -64,23 +69,34 @@ int Window::Run()
 	Dirlight.getTransform()->setRotation(-45, 45, 0);
 	comp2.Colour = Vec3(1, 1, 1);
 
-	Entity Pntlight;
+	/*Entity Pntlight;
+	Pntlight = Entity();
 	PointLight* pnt = gfx.createPointLight(&Pntlight);
 	pnt->Colour = Vec3(1, 0, 0);
 	Pntlight.getTransform()->setScale(0.1f, 0.1f, 0.1f);
 	MeshRenderer* light = gfx.createMesh(&Pntlight);
 	light->getMesh()->ImportObj("assets/ssphere.obj");
 	light->getMaterial()->settings.color = {1, 0, 0, 1};
-	light->getMaterial()->settings.glow = 1;
+	light->getMaterial()->settings.glow = 1;*/
 	
-	Entity Pntlight2;
-	PointLight* pnt2 = gfx.createPointLight(&Pntlight2);
-	pnt2->Colour = Vec3(0, 1, 0);
-	Pntlight2.getTransform()->setScale(0.1f, 0.1f, 0.1f);
-	MeshRenderer* light2 = gfx.createMesh(&Pntlight2);
-	light2->getMesh()->ImportObj("assets/ssphere.obj");
-	light2->getMaterial()->settings.color = { 0, 1, 0, 1 };
-	light2->getMaterial()->settings.glow = 1;
+	//std::vector<Entity> Pntlights(20, Entity());
+	
+	/*for (int i = 0; i < 20; i++) {
+		//Pntlights[i] = Entity();
+		srand(Time::getTime());
+		Vec3 random = Vec3((std::rand() % 40) - 20, (std::rand() % 40) - 20, (std::rand() % 40) - 20);
+
+		PointLight* pnt2 = gfx.createPointLight(&Pntlights[i]);
+		pnt2->Colour = random;
+
+		Pntlights[i].getTransform()->setScale(0.1f, 0.1f, 0.1f);
+		Pntlights[i].getTransform()->setPosition(random);
+
+		MeshRenderer* light2 = gfx.createMesh(&Pntlights[i]);
+		light2->getMesh()->ImportObj("assets/ssphere.obj");
+		light2->getMaterial()->settings.color = { random.x, random.y, random.z, 1 };
+		light2->getMaterial()->settings.glow = 1;
+	}*/
 
 	Entity cube1;
 	gfx.createMesh(&cube1);
@@ -94,11 +110,11 @@ int Window::Run()
 	cube2.getTransform()->setScale(0.5);
 	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
 
-	Entity floor;
+	/*Entity floor;
 	MeshRenderer* floorRend = gfx.createMesh(&floor);
 	floorRend->getMesh()->ImportObj("assets/plane.obj");
 	floorRend->getMaterial()->settings.glow = 1;
-	floorRend->getMaterial()->SetTexture("assets/trans.png");
+	floorRend->getMaterial()->SetTexture("assets/trans.png");*/
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";
@@ -109,19 +125,21 @@ int Window::Run()
 	skybox[5] = "assets/skybox/back.png";
 	gfx.setSkybox(skybox);
 
-	gfx.setFullscreen(false);
-	//Input::setCursorState(CursorState::Locked);
+	//gfx.setFullscreen(true);
+	//Input::setCursorState(CursorState::Hidden);
 
 	//update to clear data during load time
 	time.update();
 	input.update();
+
+	
 
 	while (!WindowClosed(&exitCode))
 	{
 		//code
 		angle += 50 * Time::deltaTime();
 
-		Debug::log(Input::getMouseWheel());
+		//Debug::log(Input::getMouseWheel());
 		float speed = 10;
 
 		if (Input::getKey('W')) {
@@ -141,19 +159,19 @@ int Window::Run()
 		}
 
 		Vec2 mouse = Input::getMouse();
-		float sens = 100;
+		float sens = 50;
 
 		//Debug::log(cam.getTransform()->foreward());
 
 		//Debug::log(mouse);
-		cam.getTransform()->Rotate(-mouse.y * Time::deltaTime() * sens, -mouse.x * Time::deltaTime() * sens, 0);
+		cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
 
 		Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
 
 		//cam.getTransform()->setRotation(angle, angle, 0);
 
-		Pntlight.getTransform()->setPosition(angle/20 - 5, 3, 0);
-		Pntlight2.getTransform()->setPosition(-angle / 20 + 5, 3, angle / 20 - 5);
+		//Pntlight.getTransform()->setPosition(angle/20 - 5, 3, 0);
+		//Pntlight2.getTransform()->setPosition(-angle / 20 + 5, 3, angle / 20 - 5);
 
 		cube1.getTransform()->setRotation(angle, 0, angle);
 		cube2.getTransform()->setRotation(0, 0, angle);
@@ -258,7 +276,7 @@ LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_INPUT:
-		input.updateMousePos((HRAWINPUT)lParam);
+		input.updateMousePos(lParam);
 		break;
 	
 	//close window

@@ -35,7 +35,7 @@ public:
 	static float getMouseWheel();
 
 	void updateMouse(int button, bool pressed);
-	void updateMousePos(HRAWINPUT input);
+	void updateMousePos(LPARAM input);
 	void updateMouseWheel(float input);
 
 	//cursor
