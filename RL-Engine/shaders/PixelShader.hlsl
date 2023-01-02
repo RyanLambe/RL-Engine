@@ -46,12 +46,12 @@ float4 getPointDiffuse(PSIn In, float4 albedo, int index) {
 	float range = pow(saturate(1 - pow(distanceSqr * (1 / max(pointData[index].range * pointData[index].range, 0.00001f)), 2)), 2);
 
 	//return
-	float4 Out = albedo;
-	Out *= float4(pointData[index].colour, 1);
+	float4 Out = float4(pointData[index].colour, 1);
 	Out *= diffuse;
 	Out *= pointData[index].power;
 	Out *= range;
-	return Out;
+    Out = max(Out, ambientLight);
+	return albedo * Out;
 }
 
 float4 getPointSpecular(PSIn In, float4 specularTint, int index) {
@@ -67,23 +67,23 @@ float4 getPointSpecular(PSIn In, float4 specularTint, int index) {
 	float range = pow(saturate(1 - pow(distanceSqr * (1 / max(pointData[index].range * pointData[index].range, 0.00001f)), 2)), 2);
 	
 	//return
-	float4 Out = specularTint;
-	Out *= float4(pointData[index].colour, 1);
+	float4 Out = float4(pointData[index].colour, 1);
 	Out *= specular;
 	Out *= pointData[index].power;
 	Out *= range;
-	return Out;
+	return specularTint * Out;
 }
 
 float4 main(PSIn In) : SV_TARGET
 {
     //get values
     float4 albedo = colour * sampleTexture(In, texId);
-	float4 specularTint = albedo * reflectivity;
-	albedo *= 1 - reflectivity;
 
     if (glow == 1)
-        return albedo;
+        return sampleTexture(In, texId);
+
+	float4 specularTint = albedo * reflectivity;
+	albedo *= 1 - reflectivity;
 
 	//directional light
 	float diffuse = dot(normalize(In.norm), normalize(In.toLight[0]));
@@ -94,8 +94,8 @@ float4 main(PSIn In) : SV_TARGET
 	float specular = pow(specAngle, smoothness * 100);
 
 	//Create Diffuse/Specular
-	float4 DiffuseFinal =  albedo * float4(dirColour, 1) * diffuse;
-	float4 specFinal = specularTint * float4(dirColour, 1) * specular;
+	float4 DiffuseFinal =  albedo * max(float4(dirColour, 1) * diffuse, ambientLight);
+	float4 specFinal = specularTint * max(float4(dirColour, 1) * specular, ambientLight);
 
 	//point lights
 	for (int i = 0; i < MaxLights; i++) {
@@ -103,7 +103,7 @@ float4 main(PSIn In) : SV_TARGET
 		specFinal += getPointSpecular(In, specularTint, i);
 	}
 
-    return max(DiffuseFinal + specFinal, ambientLight);
+    return DiffuseFinal + specFinal;
 }
 
 //unable to load on draw or load all textures into Texture Array

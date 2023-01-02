@@ -110,11 +110,11 @@ int Window::Run()
 	cube2.getTransform()->setScale(0.5);
 	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
 
-	/*Entity floor;
+	Entity floor;
 	MeshRenderer* floorRend = gfx.createMesh(&floor);
 	floorRend->getMesh()->ImportObj("assets/plane.obj");
-	floorRend->getMaterial()->settings.glow = 1;
-	floorRend->getMaterial()->SetTexture("assets/trans.png");*/
+	//floorRend->getMaterial()->settings.glow = 1;
+	floorRend->getMaterial()->SetTexture("assets/trans.png");
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";
@@ -166,15 +166,15 @@ int Window::Run()
 		//Debug::log(mouse);
 		cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
 
-		Dirlight.getTransform()->setRotation(5 * angle, 10 * angle, 0);
+		Dirlight.getTransform()->Rotate(0, angle / 10000, 0);
 
 		//cam.getTransform()->setRotation(angle, angle, 0);
 
 		//Pntlight.getTransform()->setPosition(angle/20 - 5, 3, 0);
 		//Pntlight2.getTransform()->setPosition(-angle / 20 + 5, 3, angle / 20 - 5);
 
-		cube1.getTransform()->setRotation(angle, 0, angle);
-		cube2.getTransform()->setRotation(0, 0, angle);
+		//cube1.getTransform()->setRotation(angle, 0, angle);
+		//cube2.getTransform()->setRotation(0, 0, angle);
 
 		input.update();
 		time.update();

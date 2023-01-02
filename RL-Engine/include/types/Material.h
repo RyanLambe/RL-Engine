@@ -22,7 +22,7 @@ public:
 
 		int texId = 0;
 
-		std::string textureName = "assets/temp.png";
+		std::string textureName = "assets/default.png";
 	} settings;
 
 public:

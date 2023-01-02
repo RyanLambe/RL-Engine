@@ -36,6 +36,7 @@ void Graphics::Start(HWND hwnd, int width, int height)
 
 	// create depth stencil
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+
 	dsDesc.DepthEnable = true;
 	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
@@ -43,6 +44,21 @@ void Graphics::Start(HWND hwnd, int width, int height)
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthState;
 	checkError(device->CreateDepthStencilState(&dsDesc, &depthState));
 	context->OMSetDepthStencilState(depthState.Get(), 1);
+
+	//setup transparency
+	D3D11_BLEND_DESC BlendStateDescription = CD3D11_BLEND_DESC{ CD3D11_DEFAULT{} };
+	ID3D11BlendState* blend;
+
+	BlendStateDescription.RenderTarget[0].BlendEnable = TRUE;
+	BlendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	BlendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	BlendStateDescription.AlphaToCoverageEnable = true;
+	BlendStateDescription.IndependentBlendEnable = false;
+
+	device->CreateBlendState(&BlendStateDescription, &blend);
+
+	float blendFactor[] = { 1, 1, 1, 1 };
+	context->OMSetBlendState(blend, blendFactor, 0xffffffff);
 
 	//update size of window
 	updateDimensions(width, height);
@@ -162,7 +178,7 @@ void Graphics::setSkybox(std::string sides[6])
 	AverageColour[1] *= ambientStrength;
 	AverageColour[2] *= ambientStrength;
 
-	psBufferData.ambientLight = { AverageColour[0], AverageColour[1], AverageColour[2], 1 };
+	psBufferData.ambientLight = { AverageColour[0], AverageColour[1], AverageColour[2],  1 };
 	skyboxEnabled = true;
 }
 
@@ -224,6 +240,7 @@ void Graphics::updateDimensions(int width, int height)
 
 	//set depth texture so closer objects are on top
 	D3D11_DEPTH_STENCIL_VIEW_DESC DSVdesc = {};
+
 	DSVdesc.Format = DXGI_FORMAT_D32_FLOAT;
 	DSVdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	DSVdesc.Texture2D.MipSlice = 0;
