@@ -118,6 +118,7 @@
     <ProjectGuid>{ff655ef2-b9b0-44c8-a56e-51307dd380cd}</ProjectGuid>
     <RootNamespace>RLEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>RL-EngineCore</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
