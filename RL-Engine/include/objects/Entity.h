@@ -100,7 +100,7 @@ public:
 //instance variables
 private:
 	std::vector<Component*> components;
-	Entity* parent;
+	Entity* parent = nullptr;
 	std::vector<Entity*> children;
 	Transform transform;
 };

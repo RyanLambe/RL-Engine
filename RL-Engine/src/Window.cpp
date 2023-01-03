@@ -33,15 +33,12 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 	if (hwnd == NULL) {
 		throw std::exception(Debug::TranslateHResult(GetLastError()).c_str());
 	}
-
-	ShowWindow(hwnd, SW_SHOW);
 	
 	//setup input, debug, and graphics
 	input.start(hwnd);
 	debug.start(true);
 
-	Debug::log("test");
-
+	ShowWindow(hwnd, SW_SHOW);
 	gfx.Start(hwnd, size.right - size.left, size.bottom - size.top);
 }
 
@@ -63,38 +60,48 @@ int Window::Run()
 	cam.getTransform()->setRotation(45, 0, 0);
 	comp.fov = 60;
 
+	Entity colourTest;
+	colourTest.setParent(&cam);
+	MeshRenderer* colourTestMesh = gfx.createMesh(&colourTest);
+	colourTestMesh->getMesh()->ImportObj("assets/plane.obj");
+	colourTest.getTransform()->setScale(0.1f, 0.1f, 0.1f);
+	colourTest.getTransform()->setPosition(0, -1, 2);
+
+
 	Entity Dirlight;
 	DirectionalLight comp2(&Dirlight);
 	gfx.setDirectionalLight(&comp2);
 	Dirlight.getTransform()->setRotation(-45, 45, 0);
 	comp2.Colour = Vec3(1, 1, 1);
 
-	/*Entity Pntlight;
-	Pntlight = Entity();
+	Entity Pntlight;
 	PointLight* pnt = gfx.createPointLight(&Pntlight);
 	pnt->Colour = Vec3(1, 0, 0);
 	Pntlight.getTransform()->setScale(0.1f, 0.1f, 0.1f);
+	Pntlight.getTransform()->setPosition(5, 5, 5);
 	MeshRenderer* light = gfx.createMesh(&Pntlight);
 	light->getMesh()->ImportObj("assets/ssphere.obj");
 	light->getMaterial()->settings.color = {1, 0, 0, 1};
-	light->getMaterial()->settings.glow = 1;*/
+	light->getMaterial()->settings.glow = 1;
 	
-	//std::vector<Entity> Pntlights(20, Entity());
-	
-	/*for (int i = 0; i < 20; i++) {
-		//Pntlights[i] = Entity();
-		srand(Time::getTime());
-		Vec3 random = Vec3((std::rand() % 40) - 20, (std::rand() % 40) - 20, (std::rand() % 40) - 20);
+	/*std::vector<Entity> Pntlights(20, Entity());
 
-		PointLight* pnt2 = gfx.createPointLight(&Pntlights[i]);
-		pnt2->Colour = random;
+	srand(Time::getTime());
+	
+	for (int i = 0; i < 20; i++) {
+		//Pntlights[i] = Entity();
+		Vec3 pos = Vec3((std::rand() % 20) - 10, (float)(std::rand() % 100) * 0.05f, (std::rand() % 20) - 10);
+		Vec3 col = Vec3((float)(std::rand() % 100) / 100, (float)(std::rand() % 100) / 100, (float)(std::rand() % 100) / 100);
+		
+		PointLight* pnt2 = gfx.createPointLight(&(Pntlights[i]));
+		pnt2->Colour = col;
 
 		Pntlights[i].getTransform()->setScale(0.1f, 0.1f, 0.1f);
-		Pntlights[i].getTransform()->setPosition(random);
+		Pntlights[i].getTransform()->setPosition(pos);
 
-		MeshRenderer* light2 = gfx.createMesh(&Pntlights[i]);
+		MeshRenderer* light2 = gfx.createMesh(&(Pntlights[i]));
 		light2->getMesh()->ImportObj("assets/ssphere.obj");
-		light2->getMaterial()->settings.color = { random.x, random.y, random.z, 1 };
+		light2->getMaterial()->settings.color = { col.x, col.y, col.z, 1 };
 		light2->getMaterial()->settings.glow = 1;
 	}*/
 
@@ -114,7 +121,7 @@ int Window::Run()
 	MeshRenderer* floorRend = gfx.createMesh(&floor);
 	floorRend->getMesh()->ImportObj("assets/plane.obj");
 	//floorRend->getMaterial()->settings.glow = 1;
-	floorRend->getMaterial()->SetTexture("assets/trans.png");
+	//floorRend->getMaterial()->SetTexture("assets/trans.png");
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";
@@ -166,7 +173,7 @@ int Window::Run()
 		//Debug::log(mouse);
 		cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
 
-		Dirlight.getTransform()->Rotate(0, angle / 10000, 0);
+		//Dirlight.getTransform()->Rotate(0, angle / 10000, 0);
 
 		//cam.getTransform()->setRotation(angle, angle, 0);
 

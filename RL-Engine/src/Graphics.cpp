@@ -14,8 +14,8 @@ void Graphics::Start(HWND hwnd, int width, int height)
 	sd.BufferDesc.Width = width;
 	sd.BufferDesc.Height = height;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;
+	sd.BufferDesc.RefreshRate.Numerator = 0;
+	sd.BufferDesc.RefreshRate.Denominator = 0;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.SampleDesc.Count = 1;
@@ -104,9 +104,6 @@ void Graphics::Draw() {
 	vsBufferData.camMatrix = posMat * viewMat;
 	updateLightData();
 
-
-	//updateCameraBuffer(posMat * viewMat);
-	//updateLightBuffer();
 	updateVertexShader();
 	updatePixelShader();
 
@@ -264,41 +261,34 @@ void Graphics::updateDimensions(int width, int height)
 void Graphics::setFullscreen(bool fullscreen)
 {
 	Debug::logErrorCode(swap->SetFullscreenState(fullscreen, nullptr));
-	//context->Flush();
 }
 
 void Graphics::updateLightData() {
+	
+	int closest[MaxLights];
 
-	//get closest point lights
-	std::vector<PointLight*> closest(pointLights.size());
-
-	//reset point light dist to cam
-	/*for (int i = 0; i < pointLights.size(); i++) {
-		pointLights[i].distToCam(true);
-		closest[i] = &pointLights[i];
-	}*/
-
-	/*//insertion sort point lights based on distance to camera
-	for (int i = 1; i < closest.size(); i++) {
-		PointLight* key = closest[i];
-		int j = i - 1;
-		while (j >= 0 && closest[j]->distToCam() > key->distToCam()) {
-			closest[j + 1] = closest[j];
-			j--;
+	for (int i = 0; i < max(pointLights.size(), MaxLights); i++) {
+		if (i >= pointLights.size()) {
+			closest[i] = -1;
+			continue;
 		}
-		closest[j + 1] = key;
+		
+		if (i < MaxLights) {
+			closest[i] = i;
+			continue;
+		}
+
+		for (int j = 0; j < MaxLights; j++) {
+			if (Vec3::distance(pointLights[i].entity->getTransform()->getPosition(), Camera::mainCamera->entity->getTransform()->getPosition()) < Vec3::distance(pointLights[closest[j]].entity->getTransform()->getPosition(), Camera::mainCamera->entity->getTransform()->getPosition())) {
+				closest[j] = i;
+				break;
+			}
+		}
 	}
 
-	int j = 0;
-	for (int i = 0; i < MaxLights + j; i++) {
-		//Vec3 camPos = pointLights[i].entity->getTransform()->getPosition();
-		//DirectX::XMVECTOR camSpace = DirectX::XMVector3Transform(DirectX::XMVectorSet(camPos.x, camPos.y, camPos.z, 1.0f), vsBufferData.camMatrix);
-		//if (DirectX::XMVectorGetZ(camSpace) < 0)
-			//j++;
-		//else
-			//closest.push_back(&pointLights[i]);
-	}*/
-	
+	//check if in front?
+
+
 	// update directional light position
 	if (directionalLight == nullptr) {
 		vsBufferData.lightPos[0] = DirectX::XMVectorSet(0, 0, 0, 0);
@@ -311,14 +301,12 @@ void Graphics::updateLightData() {
 	//update point light positions
 	Vec3 temp;
 	for (int i = 0; i < MaxLights; i++) {
-		//if less lights than max
-		if (closest.size() <= i) {
-			vsBufferData.lightPos[i+1] = DirectX::XMVectorSet(0, 0, 0, 0);
+		if (closest[i] == -1) {
+			vsBufferData.lightPos[i + 1] = DirectX::XMVectorSet(0, 0, 0, 0);
 			continue;
 		}
 
-		//update
-		temp = closest[i]->entity->getTransform()->getPosition();
+		temp = pointLights[closest[i]].entity->getTransform()->getPosition();
 		vsBufferData.lightPos[i + 1] = DirectX::XMVectorSet(temp.x, temp.y, temp.z, 1);
 	}
 
@@ -331,16 +319,16 @@ void Graphics::updateLightData() {
 	//update point light properties
 	for (int i = 0; i < MaxLights; i++) {
 		//if less lights than max
-		if (closest.size() <= i) {
+		if (closest[i] == -1) {
 			psBufferData.pntLightDetails[i] = { 0, 0, 0 };
 			continue;
 		}
 
 		//update
-		temp = closest[i]->Colour;
+		temp = pointLights[closest[i]].Colour;
 		psBufferData.pntLightDetails[i] = { temp.x, temp.y, temp.z };
-		psBufferData.pntLightDetails[i].power = closest[i]->power;
-		psBufferData.pntLightDetails[i].range = closest[i]->range;
+		psBufferData.pntLightDetails[i].power = pointLights[closest[i]].power;
+		psBufferData.pntLightDetails[i].range = pointLights[closest[i]].range;
 	}
 }
 

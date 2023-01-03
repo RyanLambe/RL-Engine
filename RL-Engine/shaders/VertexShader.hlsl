@@ -1,4 +1,4 @@
-#define MaxLights 4
+#define MaxLights 8
 
 //constant buffers
 cbuffer Object : register(b0) {
@@ -40,9 +40,8 @@ VSOut main(VSIn In)
 	//directional Light
 	Out.toLight[0] = lightPos[0];
 
-	//point lights
-	for (int i = 1; i <= MaxLights; i++) {
-		Out.toLight[i] = lightPos[i] - worldPos;
+	for (int i = 0; i < MaxLights; i++) {
+		Out.toLight[i + 1] = lightPos[i + 1] - worldPos;
 	}
 
 	return Out;

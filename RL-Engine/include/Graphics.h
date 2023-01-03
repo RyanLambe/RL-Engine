@@ -13,7 +13,8 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
-#define MaxLights 4
+#define MaxTotalLights 128
+#define MaxLights 8
 
 class Graphics
 {
@@ -45,9 +46,6 @@ private:
 	void updatePixelShader();
 	void updateVertexShader();
 
-	void updateLightBuffer();
-	void updateCameraBuffer(DirectX::XMMATRIX mat);
-
 private:
 
 	static int width;
@@ -59,7 +57,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vsBuffer;
 	struct VSBufferData {
 		DirectX::XMMATRIX camMatrix;
-		DirectX::XMVECTOR lightPos[MaxLights + 1];
+		DirectX::XMVECTOR lightPos[MaxTotalLights + 1];
 	} vsBufferData;
 
 	//pixel shader

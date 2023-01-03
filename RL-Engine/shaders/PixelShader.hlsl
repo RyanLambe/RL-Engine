@@ -1,4 +1,4 @@
-#define MaxLights 4
+#define MaxLights 8
 
 //constant buffers
 cbuffer material : register(b0) {
@@ -35,7 +35,7 @@ struct PSIn {
 
 float4 sampleTexture(PSIn In, int id);
 
-float4 getPointDiffuse(PSIn In, float4 albedo, int index) {
+float4 getPointDiffuse(PSIn In, int index) {
 
 	//diffuse
 	float diffuse = dot(normalize(In.norm), normalize(In.toLight[index + 1]));
@@ -50,11 +50,10 @@ float4 getPointDiffuse(PSIn In, float4 albedo, int index) {
 	Out *= diffuse;
 	Out *= pointData[index].power;
 	Out *= range;
-    Out = max(Out, ambientLight);
-	return albedo * Out;
+	return Out;
 }
 
-float4 getPointSpecular(PSIn In, float4 specularTint, int index) {
+float4 getPointSpecular(PSIn In, int index) {
 
 	//calculate
 	float3 halfDir = normalize(In.toLight[index + 1] + In.toCam);
@@ -71,7 +70,7 @@ float4 getPointSpecular(PSIn In, float4 specularTint, int index) {
 	Out *= specular;
 	Out *= pointData[index].power;
 	Out *= range;
-	return specularTint * Out;
+	return Out;
 }
 
 float4 main(PSIn In) : SV_TARGET
@@ -80,7 +79,7 @@ float4 main(PSIn In) : SV_TARGET
     float4 albedo = colour * sampleTexture(In, texId);
 
     if (glow == 1)
-        return sampleTexture(In, texId);
+        return albedo;
 
 	float4 specularTint = albedo * reflectivity;
 	albedo *= 1 - reflectivity;
@@ -94,14 +93,17 @@ float4 main(PSIn In) : SV_TARGET
 	float specular = pow(specAngle, smoothness * 100);
 
 	//Create Diffuse/Specular
-	float4 DiffuseFinal =  albedo * max(float4(dirColour, 1) * diffuse, ambientLight);
-	float4 specFinal = specularTint * max(float4(dirColour, 1) * specular, ambientLight);
+	float4 DiffuseFinal =  float4(dirColour, 1) * diffuse;
+	float4 specFinal = float4(dirColour, 1) * specular;
 
 	//point lights
 	for (int i = 0; i < MaxLights; i++) {
-		DiffuseFinal += getPointDiffuse(In, albedo, i);
-		specFinal += getPointSpecular(In, specularTint, i);
+		DiffuseFinal += getPointDiffuse(In, i);
+		specFinal += getPointSpecular(In, i);
 	}
+
+    DiffuseFinal = albedo * max(DiffuseFinal, ambientLight);
+    specFinal = specularTint * max(specFinal, ambientLight);
 
     return DiffuseFinal + specFinal;
 }
