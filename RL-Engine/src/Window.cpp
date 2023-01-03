@@ -68,7 +68,7 @@ int Window::Run()
 	colourTest.getTransform()->setPosition(0, -1, 2);
 
 
-	Entity Dirlight;
+	/*Entity Dirlight;
 	DirectionalLight comp2(&Dirlight);
 	gfx.setDirectionalLight(&comp2);
 	Dirlight.getTransform()->setRotation(-45, 45, 0);
@@ -82,9 +82,9 @@ int Window::Run()
 	MeshRenderer* light = gfx.createMesh(&Pntlight);
 	light->getMesh()->ImportObj("assets/ssphere.obj");
 	light->getMaterial()->settings.color = {1, 0, 0, 1};
-	light->getMaterial()->settings.glow = 1;
+	light->getMaterial()->settings.glow = 1;*/
 	
-	/*std::vector<Entity> Pntlights(20, Entity());
+	std::vector<Entity> Pntlights(20, Entity());
 
 	srand(Time::getTime());
 	
@@ -103,7 +103,7 @@ int Window::Run()
 		light2->getMesh()->ImportObj("assets/ssphere.obj");
 		light2->getMaterial()->settings.color = { col.x, col.y, col.z, 1 };
 		light2->getMaterial()->settings.glow = 1;
-	}*/
+	}
 
 	Entity cube1;
 	gfx.createMesh(&cube1);
