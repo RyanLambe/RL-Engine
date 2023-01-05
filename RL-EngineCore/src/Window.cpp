@@ -38,6 +38,8 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 	input.start(hwnd);
 	debug.start(true);
 
+	Debug::log("test");
+
 	ShowWindow(hwnd, SW_SHOW);
 	gfx.Start(hwnd, size.right - size.left, size.bottom - size.top);
 }

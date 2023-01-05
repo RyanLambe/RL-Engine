@@ -2,7 +2,8 @@
 
 #include "Graphics.h"
 #include "Input.h"
-//#include "objects/Entity.h"
+
+#pragma comment(lib, "user32.lib")
 
 class Window
 {
