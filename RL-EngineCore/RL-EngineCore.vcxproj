@@ -49,6 +49,7 @@
     <ClInclude Include="include\Time.h" />
     <ClInclude Include="include\types\Material.h" />
     <ClInclude Include="include\types\Shader.h" />
+    <ClInclude Include="include\types\SmartPtr.h" />
     <ClInclude Include="include\types\Texture.h" />
     <ClInclude Include="include\types\Vec2.h" />
     <ClInclude Include="include\types\Vec3.h" />

@@ -2,11 +2,11 @@
 
 #include <DirectXMath.h>
 #include <d3d11.h>
-#include <wrl.h>
 #include <vector>
 #include <string>
 
 #include "../types/Vec3.h"
+#include "../types/SmartPtr.h"
 
 #define pi 3.141592653589793238463
 
@@ -64,7 +64,7 @@ private:
 	private:
 		//constant buffer data
 		DirectX::XMMATRIX matrix;
-		Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
+		SmartPtr<ID3D11Buffer> constBuffer;
 		bool bufferCreated = false;
 
 		//transform data

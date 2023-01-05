@@ -3,9 +3,9 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <vector>
-#include <wrl.h>
 
 #include "Debug.h"
+#include "types/SmartPtr.h"
 #include "objects/MeshRenderer.h"
 #include "objects/PointLight.h"
 #include "objects/DirectionalLight.h"
@@ -54,7 +54,7 @@ private:
 	//constant buffers
 	//vertex shader
 	bool vsBufferCreated = false;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vsBuffer;
+	SmartPtr<ID3D11Buffer> vsBuffer;
 	struct VSBufferData {
 		DirectX::XMMATRIX camMatrix;
 		DirectX::XMVECTOR lightPos[MaxTotalLights + 1];
@@ -62,7 +62,7 @@ private:
 
 	//pixel shader
 	bool psBufferCreated = false;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> psBuffer;
+	SmartPtr<ID3D11Buffer> psBuffer;
 	struct PSBufferData {
 
 		struct DirectionalLightDetails {
@@ -105,15 +105,15 @@ private:
 	Entity skybox;
 
 	//rendering
-	Microsoft::WRL::ComPtr<IDXGISwapChain> swap;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> target;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DSV;
+	SmartPtr<IDXGISwapChain> swap;
+	SmartPtr<ID3D11RenderTargetView> target;
+	SmartPtr<ID3D11DepthStencilView> DSV;
 
 	//accessing directX
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
-	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	SmartPtr<ID3D11DeviceContext> context;
+	SmartPtr<ID3D11Device> device;
 
 	//textures
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> sampler;
+	SmartPtr<ID3D11SamplerState> sampler;
 };
 

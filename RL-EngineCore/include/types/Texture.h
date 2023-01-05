@@ -1,6 +1,5 @@
 #pragma once
 
-#include <wrl.h>
 #include <d3d11.h>
 #include <string>
 #include <vector>
@@ -11,6 +10,7 @@
 #include "../../External/LodePng/lodepng.h"
 
 #include "../Debug.h"
+#include "SmartPtr.h"
 
 class Texture {
 public:
@@ -29,7 +29,7 @@ private:
 	static int nextId;
 	static std::map<std::string, int> idMap;
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2D;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texView;
+	SmartPtr<ID3D11Texture2D> texture2D;
+	SmartPtr<ID3D11ShaderResourceView> texView;
 
 };

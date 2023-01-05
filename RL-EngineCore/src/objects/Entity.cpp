@@ -77,7 +77,7 @@ void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* 
 		initData.SysMemPitch = 0;
 		initData.SysMemSlicePitch = 0;
 
-		Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, &constBuffer));
+		Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, constBuffer.Create()));
 
 		bufferCreated = true;
 	}
@@ -96,7 +96,7 @@ void Entity::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* 
 		context->Unmap(constBuffer.Get(), 0);
 	}
 
-	context->VSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
+	context->VSSetConstantBuffers(0, 1, constBuffer.GetAddress());
 }
 
 DirectX::XMMATRIX Entity::Transform::getMatrix() {

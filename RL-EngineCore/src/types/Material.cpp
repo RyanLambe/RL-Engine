@@ -9,7 +9,7 @@ void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	//if the material has already been setup dont do it again
 	if (set) {
 		texture.Update(device, context);
-		context->PSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
+		context->PSSetConstantBuffers(0, 1, constBuffer.GetAddress());
 		return;
 	}
 
@@ -32,8 +32,8 @@ void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	initData.SysMemSlicePitch = 0;
 
 	//create constant buffer
-	Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, &constBuffer));
-	context->PSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
+	Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, constBuffer.Create()));
+	context->PSSetConstantBuffers(0, 1, constBuffer.GetAddress());
 
 	set = true;
 }

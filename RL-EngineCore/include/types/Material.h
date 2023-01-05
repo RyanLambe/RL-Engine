@@ -1,9 +1,9 @@
 #pragma once
 
-#include <wrl.h>
 #include <d3d11.h>
 #include "Texture.h"
 #include "../Debug.h"
+#include "SmartPtr.h"
 
 class Material {
 public:
@@ -39,5 +39,5 @@ private:
 
 	//Texture texture;
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> constBuffer;
+	SmartPtr<ID3D11Buffer> constBuffer;
 };

@@ -63,8 +63,8 @@ void Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	data.pSysMem = image.data();
 	data.SysMemPitch = width * 4;
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2D;
-	Debug::logErrorCode(device->CreateTexture2D(&imgDesc, &data, &texture2D));
+	SmartPtr<ID3D11Texture2D> texture2D;
+	Debug::logErrorCode(device->CreateTexture2D(&imgDesc, &data, texture2D.Create()));
 
 	//create resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC resDesc = {};
@@ -73,14 +73,14 @@ void Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	resDesc.Texture2D.MostDetailedMip = 0;
 	resDesc.Texture2D.MipLevels = 1;
 
-	Debug::logErrorCode(device->CreateShaderResourceView(texture2D.Get(), &resDesc, &texView));
+	Debug::logErrorCode(device->CreateShaderResourceView(texture2D.Get(), &resDesc, texView.Create()));
 
 	if (idMap.count(name) != 1) {
 		idMap.insert(std::pair<std::string, int>(name, nextId));
 		nextId++;
 	}
 
-	context->PSSetShaderResources(idMap.at(name), 1, texView.GetAddressOf());
+	context->PSSetShaderResources(idMap.at(name), 1, texView.GetAddress());
 }
 
 int Texture::getId()

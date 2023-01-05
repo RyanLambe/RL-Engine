@@ -27,12 +27,12 @@ void Graphics::Start(HWND hwnd, int width, int height)
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 	
-	checkError(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
+	checkError(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, swap.Create(), device.Create(), nullptr, context.Create()));
 
 	// get render target
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> frameBuffer;
-	checkError(swap->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&frameBuffer));
-	checkError(device->CreateRenderTargetView(frameBuffer.Get(), 0, &target));
+	SmartPtr<ID3D11Texture2D> frameBuffer;
+	checkError(swap->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)frameBuffer.Create()));
+	checkError(device->CreateRenderTargetView(frameBuffer.Get(), 0, target.Create()));
 
 	// create depth stencil
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
@@ -41,8 +41,8 @@ void Graphics::Start(HWND hwnd, int width, int height)
 	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthState;
-	checkError(device->CreateDepthStencilState(&dsDesc, &depthState));
+	SmartPtr<ID3D11DepthStencilState> depthState;
+	checkError(device->CreateDepthStencilState(&dsDesc, depthState.Create()));
 	context->OMSetDepthStencilState(depthState.Get(), 1);
 
 	//setup transparency
@@ -73,8 +73,8 @@ void Graphics::Start(HWND hwnd, int width, int height)
 	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 
-	checkError(device->CreateSamplerState(&sampleDesc, &sampler));
-	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
+	checkError(device->CreateSamplerState(&sampleDesc, sampler.Create()));
+	context->PSSetSamplers(0, 1, sampler.GetAddress());
 }
 
 //Draw Calls
@@ -222,7 +222,7 @@ void Graphics::updateDimensions(int width, int height)
 
 	//update depth texture
 	//create depth texture buffer
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthTexture;
+	SmartPtr<ID3D11Texture2D> depthTexture;
 	D3D11_TEXTURE2D_DESC depthDesc = {};
 	depthDesc.Width = width;
 	depthDesc.Height = height;
@@ -233,7 +233,7 @@ void Graphics::updateDimensions(int width, int height)
 	depthDesc.SampleDesc.Quality = 0;
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	Debug::logErrorCode(device->CreateTexture2D(&depthDesc, nullptr, &depthTexture));
+	Debug::logErrorCode(device->CreateTexture2D(&depthDesc, nullptr, depthTexture.Create()));
 
 	//set depth texture so closer objects are on top
 	D3D11_DEPTH_STENCIL_VIEW_DESC DSVdesc = {};
@@ -241,9 +241,9 @@ void Graphics::updateDimensions(int width, int height)
 	DSVdesc.Format = DXGI_FORMAT_D32_FLOAT;
 	DSVdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	DSVdesc.Texture2D.MipSlice = 0;
-	Debug::logErrorCode(device->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, &DSV));
+	Debug::logErrorCode(device->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, DSV.Create()));
 
-	context->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
+	context->OMSetRenderTargets(1, target.GetAddress(), DSV.Get());
 
 	//update viewport size
 	D3D11_VIEWPORT vp;
@@ -349,7 +349,7 @@ void Graphics::updatePixelShader()
 		initData.SysMemSlicePitch = 0;
 
 		//create buffer
-		Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, &psBuffer));
+		Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, psBuffer.Create()));
 
 		psBufferCreated = true;
 	}
@@ -367,7 +367,7 @@ void Graphics::updatePixelShader()
 		context->Unmap(psBuffer.Get(), 0);
 	}
 
-	context->PSSetConstantBuffers(1, 1, psBuffer.GetAddressOf());
+	context->PSSetConstantBuffers(1, 1, psBuffer.GetAddress());
 }
 
 void Graphics::updateVertexShader()
@@ -387,7 +387,7 @@ void Graphics::updateVertexShader()
 		initData.SysMemSlicePitch = 0;
 
 		//create buffer
-		Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, &vsBuffer));
+		Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, vsBuffer.Create()));
 
 		vsBufferCreated = true;
 	}
@@ -405,5 +405,5 @@ void Graphics::updateVertexShader()
 		context->Unmap(vsBuffer.Get(), 0);
 	}
 
-	context->VSSetConstantBuffers(1, 1, vsBuffer.GetAddressOf());
+	context->VSSetConstantBuffers(1, 1, vsBuffer.GetAddress());
 }

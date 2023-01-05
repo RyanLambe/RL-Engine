@@ -7,15 +7,15 @@ Mesh::Mesh() {
 void Mesh::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 
 	if (refresh) {
-		CreateBuffer(vertices.data(), sizeof(Vertex) * vertices.size(), D3D11_BIND_VERTEX_BUFFER, &vertexBuffer, device);
-		CreateBuffer(indices.data(), sizeof(unsigned int) * indices.size(), D3D11_BIND_INDEX_BUFFER, &indexBuffer, device);
+		CreateBuffer(vertices.data(), sizeof(Vertex) * vertices.size(), D3D11_BIND_VERTEX_BUFFER, vertexBuffer.Create(), device);
+		CreateBuffer(indices.data(), sizeof(unsigned int) * indices.size(), D3D11_BIND_INDEX_BUFFER, indexBuffer.Create(), device);
 		refresh = false;
 	}
 
 	// set buffers
 	UINT offset = 0;
 	UINT stride = sizeof(Vertex);
-	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddress(), &stride, &offset);
 	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 }
 

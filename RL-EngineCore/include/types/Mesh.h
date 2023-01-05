@@ -1,6 +1,5 @@
 #pragma once
 
-#include <wrl.h>
 #include <d3d11.h>
 #include <vector>
 #include <sstream>
@@ -8,6 +7,7 @@
 #include "Vec3.h"
 #include "Vec2.h"
 #include "../Debug.h"
+#include "SmartPtr.h"
 
 class Mesh {
 public:
@@ -81,6 +81,6 @@ private:
 	bool refresh = true;
 	bool buffersCreated = false;
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+	SmartPtr<ID3D11Buffer> vertexBuffer;
+	SmartPtr<ID3D11Buffer> indexBuffer;
 };
