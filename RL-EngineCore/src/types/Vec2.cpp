@@ -1,5 +1,7 @@
 #include "../../include/types/Vec2.h"
 
+using namespace Core;
+
 //constructors
 Vec2::Vec2() {
 	this->x = 0;

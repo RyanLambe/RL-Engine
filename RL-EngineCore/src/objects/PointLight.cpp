@@ -1,5 +1,7 @@
 #include "../../include/objects/PointLight.h"
 
+using namespace Core;
+
 PointLight::PointLight(Entity* entity) : Entity::Component(entity) {
 }
 

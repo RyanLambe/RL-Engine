@@ -5,24 +5,29 @@
 
 #pragma comment(lib, "user32.lib")
 
-class Window
-{
-public:
-	Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int height);
-	~Window();
+namespace Core {
+	class Window
+	{
+	public:
+		Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int height);
+		~Window();
 
-	int Run();
+		int Run(void (*UpdateFunc)(void));
 
-private:
-	bool WindowClosed(int* quitMessage);
-	static LRESULT CALLBACK WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT CALLBACK WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
+		Graphics* getGraphics();
+		static Window* main;
 
-private:
-	HWND hwnd;
+	private:
+		bool WindowClosed(int* quitMessage);
+		static LRESULT CALLBACK WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		LRESULT CALLBACK WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	Graphics gfx;
-	Input input;
-	Time time;
-	Debug debug;
-};
+	private:
+		HWND hwnd;
+
+		Graphics gfx;
+		Input input;
+		Time time;
+		Debug debug;
+	};
+}

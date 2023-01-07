@@ -21,19 +21,20 @@
   <ItemGroup>
     <ClCompile Include="External\LodePng\lodepng.cpp" />
     <ClCompile Include="src\Debug.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\objects\Camera.cpp" />
     <ClCompile Include="src\objects\DirectionalLight.cpp" />
     <ClCompile Include="src\objects\MeshRenderer.cpp" />
     <ClCompile Include="src\objects\Entity.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
-    <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\objects\PointLight.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\types\Material.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
     <ClCompile Include="src\types\Shader.cpp" />
     <ClCompile Include="src\types\Texture.cpp" />
+    <ClCompile Include="src\types\Transform.cpp" />
     <ClCompile Include="src\types\Vec2.cpp" />
     <ClCompile Include="src\types\Vec3.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -41,9 +42,9 @@
   <ItemGroup>
     <ClInclude Include="External\LodePng\lodepng.h" />
     <ClInclude Include="include\Debug.h" />
+    <ClInclude Include="include\Engine.h" />
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\LibrarySetup.h" />
     <ClInclude Include="include\objects\Camera.h" />
     <ClInclude Include="include\objects\DirectionalLight.h" />
     <ClInclude Include="include\objects\PointLight.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="include\types\Shader.h" />
     <ClInclude Include="include\types\SmartPtr.h" />
     <ClInclude Include="include\types\Texture.h" />
+    <ClInclude Include="include\types\Transform.h" />
     <ClInclude Include="include\types\Vec2.h" />
     <ClInclude Include="include\types\Vec3.h" />
     <ClInclude Include="include\Window.h" />

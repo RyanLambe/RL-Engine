@@ -2,6 +2,8 @@
 
 #include "../include/Graphics.h"
 
+using namespace Core;
+
 //setup static variables
 HWND Input::window;
 RECT Input::windowRect;

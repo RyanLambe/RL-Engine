@@ -7,28 +7,27 @@
 #include "../types/Shader.h"
 #include "../types/Material.h"
 
-class MeshRenderer : public Entity::Component {
+namespace Core {
+	class MeshRenderer : public Entity::Component {
 
-public:
+	public:
 
-	MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent);//set instance vars
+		MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent);
+		void Draw(ID3D11Device* device, ID3D11DeviceContext* context);
 
-	//remove
-	
-	
-	void Draw(ID3D11Device* device, ID3D11DeviceContext* context);
-	
-	
+		//setters
+		void setMaterial(Material mat);
+		void setMesh(Mesh mesh);
 
-	//setters
-	//getters
-	Material* getMaterial();
-	Mesh* getMesh();
+		//getters
+		Material* getMaterial();
+		Mesh* getMesh();
 
-protected:
+	protected:
 
-	Mesh mesh;
-	Material material;
-	Shader shader;
+		Mesh mesh;
+		Material material;
+		Shader shader;
 
-};
+	};
+}

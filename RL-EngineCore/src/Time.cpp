@@ -1,5 +1,7 @@
 #include "../include/Time.h"
 
+//using namespace Core;
+
 DWORD Time::startFrame;
 DWORD Time::prevFrame;
 

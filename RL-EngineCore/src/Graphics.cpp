@@ -1,5 +1,7 @@
 #include "../include/Graphics.h"
 
+using namespace Core;
+
 #define checkError(code) if(FAILED(code)) throw std::exception(Debug::TranslateHResult(code).c_str())
 
 int Graphics::width = 0;
@@ -98,7 +100,7 @@ void Graphics::Draw() {
 	//get view matrix
 	DirectX::XMMATRIX viewMat = Camera::mainCamera->getViewMatrix();
 	DirectX::XMMATRIX posMat = Camera::mainCamera->getPositionMatrix();
-	Vec3 camPos = Camera::mainCamera->entity->getTransform()->getPosition();
+	Vec3 camPos = Camera::mainCamera->entity->transform.getPosition();
 
 	//update buffers
 	vsBufferData.camMatrix = posMat * viewMat;
@@ -108,9 +110,9 @@ void Graphics::Draw() {
 	updatePixelShader();
 
 	//update skybox
-	skybox.getTransform()->setPosition(camPos);
-	skybox.getTransform()->setRotation(0, 0, 0);
-	skybox.getTransform()->setScale(Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2);
+	skybox.transform.setPosition(camPos);
+	skybox.transform.setRotation(0, 0, 0);
+	skybox.transform.setScale(Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2);
 
 	//render mesh renderers
 	for (int i = 0; i < renderers.size(); i++) {
@@ -129,6 +131,13 @@ PointLight* Graphics::createPointLight(Entity* parent) {
 	pointLights.emplace_back(parent);
 	parent->addComponent(&pointLights[pointLights.size() - 1]);
 	return &pointLights[pointLights.size() - 1];
+}
+
+DirectionalLight* Graphics::createDirectionalLight(Entity* parent) {
+	dirLights.emplace_back(parent);
+	parent->addComponent(&dirLights[dirLights.size() - 1]);
+	setDirectionalLight(&dirLights[dirLights.size() - 1]);
+	return &dirLights[dirLights.size() - 1];
 }
 
 void Graphics::setDirectionalLight(DirectionalLight* light) {
@@ -279,7 +288,7 @@ void Graphics::updateLightData() {
 		}
 
 		for (int j = 0; j < MaxLights; j++) {
-			if (Vec3::distance(pointLights[i].entity->getTransform()->getPosition(), Camera::mainCamera->entity->getTransform()->getPosition()) < Vec3::distance(pointLights[closest[j]].entity->getTransform()->getPosition(), Camera::mainCamera->entity->getTransform()->getPosition())) {
+			if (Vec3::distance(pointLights[i].entity->transform.getPosition(), Camera::mainCamera->entity->transform.getPosition()) < Vec3::distance(pointLights[closest[j]].entity->transform.getPosition(), Camera::mainCamera->entity->transform.getPosition())) {
 				closest[j] = i;
 				break;
 			}
@@ -294,7 +303,7 @@ void Graphics::updateLightData() {
 		vsBufferData.lightPos[0] = DirectX::XMVectorSet(0, 0, 0, 0);
 	}
 	else {
-		Vec3 dir = directionalLight->entity->getTransform()->up();
+		Vec3 dir = directionalLight->entity->transform.up();
 		vsBufferData.lightPos[0] = DirectX::XMVectorSet(dir.x, dir.y, dir.z, 1);
 	}
 
@@ -306,7 +315,7 @@ void Graphics::updateLightData() {
 			continue;
 		}
 
-		temp = pointLights[closest[i]].entity->getTransform()->getPosition();
+		temp = pointLights[closest[i]].entity->transform.getPosition();
 		vsBufferData.lightPos[i + 1] = DirectX::XMVectorSet(temp.x, temp.y, temp.z, 1);
 	}
 

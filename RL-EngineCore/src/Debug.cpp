@@ -1,5 +1,7 @@
 #include "../include/Debug.h"
 
+using namespace Core;
+
 bool Debug::debugMode;
 HANDLE Debug::hOut;
 
@@ -352,7 +354,7 @@ std::string Debug::formatedTime()
 void Debug::print(std::string out, WORD colour)
 {
     //write to console
-    if (debugMode) {
+    if (true) {
         //set correct font
         SetConsoleTextAttribute(hOut, colour);
 

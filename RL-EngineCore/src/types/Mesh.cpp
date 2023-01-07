@@ -1,5 +1,7 @@
 #include "../../include/types/Mesh.h"
 
+using namespace Core;
+
 Mesh::Mesh() {
 
 }

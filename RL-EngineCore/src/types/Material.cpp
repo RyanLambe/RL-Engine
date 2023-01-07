@@ -1,5 +1,7 @@
 #include "../../include/types/Material.h"
 
+using namespace Core;
+
 Material::Material() {
 	texture.Set(settings.textureName);
 }
@@ -41,7 +43,7 @@ void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 void Material::SetTexture(std::string textureName)
 {
 	settings.textureName = textureName;
-
+	Refresh();
 }
 
 void Material::Refresh() {

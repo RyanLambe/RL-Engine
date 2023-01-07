@@ -1,5 +1,7 @@
 #include "../../include/types/Texture.h"
 
+using namespace Core;
+
 int Texture::nextId = 0;
 std::map<std::string, int> Texture::idMap;
 

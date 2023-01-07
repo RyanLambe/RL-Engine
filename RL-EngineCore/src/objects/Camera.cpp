@@ -1,5 +1,7 @@
 #include "../../include/objects/Camera.h"
 
+using namespace Core;
+
 Camera* Camera::mainCamera = nullptr;
 
 Camera::Camera(Entity* entity, int width, int height) : Entity::Component(entity) {
@@ -15,5 +17,5 @@ DirectX::XMMATRIX Camera::getViewMatrix() {
 
 DirectX::XMMATRIX Camera::getPositionMatrix() {
 
-	return DirectX::XMMatrixInverse(nullptr, entity->getTransform()->getMatrix());
+	return DirectX::XMMatrixInverse(nullptr, entity->transform.getMatrix());
 }

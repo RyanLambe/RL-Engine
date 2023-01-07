@@ -2,8 +2,14 @@
 
 #include <random>
 
+using namespace Core;
+
+Window* Window::main = nullptr;
+
 Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int height)
 {
+	main = this;
+
 	// Create class for window
 	WNDCLASS wClass = {};
 
@@ -38,53 +44,36 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 	input.start(hwnd);
 	debug.start(true);
 
-	Debug::log("test");
+	Debug::log("test25");
 
 	ShowWindow(hwnd, SW_SHOW);
 	gfx.Start(hwnd, size.right - size.left, size.bottom - size.top);
 }
 
-Window::~Window()
+Core::Window::~Window()
 {
 	DestroyWindow(hwnd);
 }
 
 float angle = 0.0f;
 
-int Window::Run()
+int Window::Run(void (*UpdateFunc)(void))
 {
 	int exitCode;
 
-	Entity cam;
+	/*Entity cam;
 	Camera comp(&cam, Graphics::getWidth(), Graphics::getHeight());
 	cam.addComponent(&comp);
-	cam.getTransform()->setPosition(0, 10, -10);
-	cam.getTransform()->setRotation(45, 0, 0);
-	comp.fov = 60;
+	cam.transform.setPosition(0, 10, -10);
+	cam.transform.setRotation(45, 0, 0);
+	comp.fov = 60;*/
 
-	Entity colourTest;
+	/*Entity colourTest;
 	colourTest.setParent(&cam);
 	MeshRenderer* colourTestMesh = gfx.createMesh(&colourTest);
 	colourTestMesh->getMesh()->ImportObj("assets/plane.obj");
-	colourTest.getTransform()->setScale(0.1f, 0.1f, 0.1f);
-	colourTest.getTransform()->setPosition(0, -1, 2);
-
-
-	/*Entity Dirlight;
-	DirectionalLight comp2(&Dirlight);
-	gfx.setDirectionalLight(&comp2);
-	Dirlight.getTransform()->setRotation(-45, 45, 0);
-	comp2.Colour = Vec3(1, 1, 1);
-
-	Entity Pntlight;
-	PointLight* pnt = gfx.createPointLight(&Pntlight);
-	pnt->Colour = Vec3(1, 0, 0);
-	Pntlight.getTransform()->setScale(0.1f, 0.1f, 0.1f);
-	Pntlight.getTransform()->setPosition(5, 5, 5);
-	MeshRenderer* light = gfx.createMesh(&Pntlight);
-	light->getMesh()->ImportObj("assets/ssphere.obj");
-	light->getMaterial()->settings.color = {1, 0, 0, 1};
-	light->getMaterial()->settings.glow = 1;*/
+	colourTest.transform.setScale(0.1f, 0.1f, 0.1f);
+	colourTest.transform.setPosition(0, -1, 2);*/
 	
 	std::vector<Entity> Pntlights(20, Entity());
 
@@ -98,8 +87,8 @@ int Window::Run()
 		PointLight* pnt2 = gfx.createPointLight(&(Pntlights[i]));
 		pnt2->Colour = col;
 
-		Pntlights[i].getTransform()->setScale(0.1f, 0.1f, 0.1f);
-		Pntlights[i].getTransform()->setPosition(pos);
+		Pntlights[i].transform.setScale(0.1f, 0.1f, 0.1f);
+		Pntlights[i].transform.setPosition(pos);
 
 		MeshRenderer* light2 = gfx.createMesh(&(Pntlights[i]));
 		light2->getMesh()->ImportObj("assets/ssphere.obj");
@@ -109,21 +98,19 @@ int Window::Run()
 
 	Entity cube1;
 	gfx.createMesh(&cube1);
-	cube1.getTransform()->setPosition(0, 0, 0);
+	cube1.transform.setPosition(0, 0, 0);
 	cube1.getComponent<MeshRenderer>()->getMaterial()->settings.color = {1, 1, 1};// { 0, 1, 0.435f, 1 };
 
 	Entity cube2;
 	gfx.createMesh(&cube2);
 	cube2.setParent(&cube1);
-	cube2.getTransform()->setPosition(-3, 0, 0);
-	cube2.getTransform()->setScale(0.5);
+	cube2.transform.setPosition(-3, 0, 0);
+	cube2.transform.setScale(0.5);
 	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
 
 	Entity floor;
 	MeshRenderer* floorRend = gfx.createMesh(&floor);
 	floorRend->getMesh()->ImportObj("assets/plane.obj");
-	//floorRend->getMaterial()->settings.glow = 1;
-	//floorRend->getMaterial()->SetTexture("assets/trans.png");
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";
@@ -134,56 +121,17 @@ int Window::Run()
 	skybox[5] = "assets/skybox/back.png";
 	gfx.setSkybox(skybox);
 
-	//gfx.setFullscreen(true);
-	//Input::setCursorState(CursorState::Hidden);
-
 	//update to clear data during load time
 	time.update();
 	input.update();
 
-	
-
 	while (!WindowClosed(&exitCode))
 	{
-		//code
-		angle += 50 * Time::deltaTime();
+		//updates
+		/*for (int i = 0; i < scripts.size(); i++)
+			scripts[i]->Update();*/
 
-		//Debug::log(Input::getMouseWheel());
-		float speed = 10;
-
-		if (Input::getKey('W')) {
-			cam.getTransform()->Translate(0, 0, speed * Time::deltaTime());
-		}
-
-		if (Input::getKey('S')) {
-			cam.getTransform()->Translate(0, 0, -speed * Time::deltaTime());
-		}
-
-		if (Input::getKey('D')) {
-			cam.getTransform()->Translate(speed * Time::deltaTime(), 0, 0);
-		}
-
-		if (Input::getKey('A')) {
-			cam.getTransform()->Translate(-speed * Time::deltaTime(), 0, 0);
-		}
-
-		Vec2 mouse = Input::getMouse();
-		float sens = 50;
-
-		//Debug::log(cam.getTransform()->foreward());
-
-		//Debug::log(mouse);
-		cam.getTransform()->Rotate(mouse.y * Time::deltaTime() * sens, mouse.x * Time::deltaTime() * sens, 0);
-
-		//Dirlight.getTransform()->Rotate(0, angle / 10000, 0);
-
-		//cam.getTransform()->setRotation(angle, angle, 0);
-
-		//Pntlight.getTransform()->setPosition(angle/20 - 5, 3, 0);
-		//Pntlight2.getTransform()->setPosition(-angle / 20 + 5, 3, angle / 20 - 5);
-
-		//cube1.getTransform()->setRotation(angle, 0, angle);
-		//cube2.getTransform()->setRotation(0, 0, angle);
+		UpdateFunc();
 
 		input.update();
 		time.update();
@@ -191,6 +139,11 @@ int Window::Run()
 		gfx.EndFrame();
 	}
 	return exitCode;
+}
+
+Graphics* Window::getGraphics()
+{
+	return &gfx;
 }
 
 bool Window::WindowClosed(int* quitMessage)

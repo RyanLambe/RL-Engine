@@ -1,12 +1,14 @@
 #pragma once
 #include "Entity.h"
 
-class DirectionalLight : public Entity::Component {
+namespace Core {
+	class DirectionalLight : public Entity::Component {
 
-public:
+	public:
 
-	DirectionalLight(Entity* entity);
+		DirectionalLight(Entity* entity);
 
-	Vec3 Colour;
+		Vec3 Colour;
 
-};
+	};
+}

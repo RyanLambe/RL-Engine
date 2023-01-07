@@ -16,104 +16,107 @@
 #define MaxTotalLights 128
 #define MaxLights 8
 
-class Graphics
-{
-public:
-	void Start(HWND hwnd, int width, int height);
-	void EndFrame();
-	void Draw();
+namespace Core {
+	class Graphics
+	{
+	public:
+		void Start(HWND hwnd, int width, int height);
+		void EndFrame();
+		void Draw();
 
-	MeshRenderer* createMesh(Entity* parent);
-	PointLight* createPointLight(Entity* parent);
-	void setDirectionalLight(DirectionalLight* light);
+		MeshRenderer* createMesh(Entity* parent);
+		PointLight* createPointLight(Entity* parent);
+		DirectionalLight* createDirectionalLight(Entity* parent);
+		void setDirectionalLight(DirectionalLight* light);
 
-	//[0] = top, [1] = bottom
-	//[2] = left, [3] = right
-	//[4] = front, [5] = back
-	void setSkybox(std::string sides[6]);
-	void setAmbientStrength(float strength);
-	void setBackgroundColour(float colour[4]);
+		//[0] = top, [1] = bottom
+		//[2] = left, [3] = right
+		//[4] = front, [5] = back
+		void setSkybox(std::string sides[6]);
+		void setAmbientStrength(float strength);
+		void setBackgroundColour(float colour[4]);
 
-	static int getWidth();
-	static int getHeight();
+		static int getWidth();
+		static int getHeight();
 
-	void updateDimensions(int width, int height);
-	void setFullscreen(bool fullscreen);
+		void updateDimensions(int width, int height);
+		void setFullscreen(bool fullscreen);
 
-private:
+	private:
 
-	void updateLightData();
-	void updatePixelShader();
-	void updateVertexShader();
+		void updateLightData();
+		void updatePixelShader();
+		void updateVertexShader();
 
-private:
+	private:
 
-	static int width;
-	static int height;
+		static int width;
+		static int height;
 
-	//constant buffers
-	//vertex shader
-	bool vsBufferCreated = false;
-	SmartPtr<ID3D11Buffer> vsBuffer;
-	struct VSBufferData {
-		DirectX::XMMATRIX camMatrix;
-		DirectX::XMVECTOR lightPos[MaxTotalLights + 1];
-	} vsBufferData;
+		//constant buffers
+		//vertex shader
+		bool vsBufferCreated = false;
+		SmartPtr<ID3D11Buffer> vsBuffer;
+		struct VSBufferData {
+			DirectX::XMMATRIX camMatrix;
+			DirectX::XMVECTOR lightPos[MaxTotalLights + 1];
+		} vsBufferData;
 
-	//pixel shader
-	bool psBufferCreated = false;
-	SmartPtr<ID3D11Buffer> psBuffer;
-	struct PSBufferData {
+		//pixel shader
+		bool psBufferCreated = false;
+		SmartPtr<ID3D11Buffer> psBuffer;
+		struct PSBufferData {
 
-		struct DirectionalLightDetails {
-			float r;
-			float g;
-			float b;
-			float space; // space to align floats by 4
-		}dirLightDetails;
+			struct DirectionalLightDetails {
+				float r;
+				float g;
+				float b;
+				float space; // space to align floats by 4
+			}dirLightDetails;
 
-		struct PointLightDetails {
-			float r;
-			float g;
-			float b;
-			float power;
-			float range;
-			float space1, space2, space3; // spaces to align floats by 4
-		}pntLightDetails[MaxLights];
+			struct PointLightDetails {
+				float r;
+				float g;
+				float b;
+				float power;
+				float range;
+				float space1, space2, space3; // spaces to align floats by 4
+			}pntLightDetails[MaxLights];
 
-		struct AmbientLight {
-			float r;
-			float g;
-			float b;
-			float space; // space to align floats by 4
-		}ambientLight;
+			struct AmbientLight {
+				float r;
+				float g;
+				float b;
+				float space; // space to align floats by 4
+			}ambientLight;
 
-	} psBufferData;
+		} psBufferData;
 
-	//meshs to be rendered
-	std::vector<MeshRenderer> renderers;
-	 
-	//lights
-	float ambientStrength = 0.25f;
-	bool skyboxEnabled = false;
-	float backgroundColour[4] = {1, 155.0f/255.0f, 0, 1};
+		//meshs to be rendered
+		std::vector<MeshRenderer> renderers;
 
-	std::vector<PointLight> pointLights;
-	DirectionalLight* directionalLight;
+		//lights
+		float ambientStrength = 0.25f;
+		bool skyboxEnabled = false;
+		float backgroundColour[4] = { 1, 155.0f / 255.0f, 0, 1 };
 
-	//skybox
-	Entity skybox;
+		std::vector<PointLight> pointLights;
+		std::vector<DirectionalLight> dirLights;
+		DirectionalLight* directionalLight = nullptr;
 
-	//rendering
-	SmartPtr<IDXGISwapChain> swap;
-	SmartPtr<ID3D11RenderTargetView> target;
-	SmartPtr<ID3D11DepthStencilView> DSV;
+		//skybox
+		Entity skybox;
 
-	//accessing directX
-	SmartPtr<ID3D11DeviceContext> context;
-	SmartPtr<ID3D11Device> device;
+		//rendering
+		SmartPtr<IDXGISwapChain> swap;
+		SmartPtr<ID3D11RenderTargetView> target;
+		SmartPtr<ID3D11DepthStencilView> DSV;
 
-	//textures
-	SmartPtr<ID3D11SamplerState> sampler;
-};
+		//accessing directX
+		SmartPtr<ID3D11DeviceContext> context;
+		SmartPtr<ID3D11Device> device;
 
+		//textures
+		SmartPtr<ID3D11SamplerState> sampler;
+	};
+}
