@@ -6,13 +6,13 @@ namespace Core {
     {
     private:
         void AddRef() {
-            if (ptr_) {
+            if (ptr_ != nullptr) {
                 ptr_->AddRef();
             }
         }
 
         void Release() {
-            if (ptr_) {
+            if (ptr_ != nullptr) {
                 ptr_->Release();
                 ptr_ = nullptr;
             }

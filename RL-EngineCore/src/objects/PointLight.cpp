@@ -1,13 +1,11 @@
 #include "../../include/objects/PointLight.h"
 
-using namespace Core;
-
-PointLight::PointLight(Entity* entity) : Entity::Component(entity) {
+Core::PointLight::PointLight(Entity* entity) : Core::Entity::Component(entity) {
 }
 
 
 //used for light culling
-float PointLight::distToCam()
+float Core::PointLight::distToCam()
 {
 	//if (!reset) {
 		//return camDist;
@@ -22,7 +20,7 @@ float PointLight::distToCam()
 	return camDist;
 }
 
-float PointLight::distToCam(bool reset)
+float Core::PointLight::distToCam(bool reset)
 {
 	//this->reset = reset;
 	return -1;

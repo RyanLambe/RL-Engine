@@ -1,9 +1,8 @@
-#include "../../pch.h"
 #include "../../include/types/Mesh.h"
 
 using namespace msclr::interop;
 
-Engine::Mesh::Mesh() : Managed(new Core::Mesh()) {
+Engine::Mesh::Mesh(Core::Mesh* mesh) : Managed(mesh) {
 
 }
 

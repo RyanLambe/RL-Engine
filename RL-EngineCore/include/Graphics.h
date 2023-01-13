@@ -24,10 +24,10 @@ namespace Core {
 		void EndFrame();
 		void Draw();
 
-		MeshRenderer* createMesh(Entity* parent);
-		PointLight* createPointLight(Entity* parent);
-		DirectionalLight* createDirectionalLight(Entity* parent);
-		void setDirectionalLight(DirectionalLight* light);
+		static MeshRenderer* createMesh(Entity* parent);
+		static PointLight* createPointLight(Entity* parent);
+		static DirectionalLight* createDirectionalLight(Entity* parent);
+		static void setDirectionalLight(DirectionalLight* light);
 
 		//[0] = top, [1] = bottom
 		//[2] = left, [3] = right
@@ -40,7 +40,7 @@ namespace Core {
 		static int getHeight();
 
 		void updateDimensions(int width, int height);
-		void setFullscreen(bool fullscreen);
+		static void setFullscreen(bool fullscreen);
 
 	private:
 
@@ -56,7 +56,7 @@ namespace Core {
 		//constant buffers
 		//vertex shader
 		bool vsBufferCreated = false;
-		SmartPtr<ID3D11Buffer> vsBuffer;
+		SmartPtr<ID3D11Buffer> vsBuffer = SmartPtr<ID3D11Buffer>();
 		struct VSBufferData {
 			DirectX::XMMATRIX camMatrix;
 			DirectX::XMVECTOR lightPos[MaxTotalLights + 1];
@@ -64,7 +64,7 @@ namespace Core {
 
 		//pixel shader
 		bool psBufferCreated = false;
-		SmartPtr<ID3D11Buffer> psBuffer;
+		SmartPtr<ID3D11Buffer> psBuffer = SmartPtr<ID3D11Buffer>();
 		struct PSBufferData {
 
 			struct DirectionalLightDetails {
@@ -93,30 +93,31 @@ namespace Core {
 		} psBufferData;
 
 		//meshs to be rendered
-		std::vector<MeshRenderer> renderers;
+		static std::vector<MeshRenderer> renderers;
+		Shader shader;
 
 		//lights
 		float ambientStrength = 0.25f;
 		bool skyboxEnabled = false;
 		float backgroundColour[4] = { 1, 155.0f / 255.0f, 0, 1 };
 
-		std::vector<PointLight> pointLights;
-		std::vector<DirectionalLight> dirLights;
-		DirectionalLight* directionalLight = nullptr;
+		static std::vector<PointLight> pointLights;
+		static std::vector<DirectionalLight> dirLights;
+		static DirectionalLight* directionalLight;
 
 		//skybox
 		Entity skybox;
 
 		//rendering
-		SmartPtr<IDXGISwapChain> swap;
-		SmartPtr<ID3D11RenderTargetView> target;
-		SmartPtr<ID3D11DepthStencilView> DSV;
+		static SmartPtr<IDXGISwapChain> swap;
+		SmartPtr<ID3D11RenderTargetView> target = SmartPtr<ID3D11RenderTargetView>();
+		SmartPtr<ID3D11DepthStencilView> DSV = SmartPtr<ID3D11DepthStencilView>();
 
 		//accessing directX
-		SmartPtr<ID3D11DeviceContext> context;
-		SmartPtr<ID3D11Device> device;
+		static SmartPtr<ID3D11DeviceContext> context;
+		static SmartPtr<ID3D11Device> device;
 
 		//textures
-		SmartPtr<ID3D11SamplerState> sampler;
+		SmartPtr<ID3D11SamplerState> sampler = SmartPtr<ID3D11SamplerState>();
 	};
 }

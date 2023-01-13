@@ -40,6 +40,6 @@ namespace Core {
 
 		//Texture texture;
 
-		SmartPtr<ID3D11Buffer> constBuffer;
+		SmartPtr<ID3D11Buffer> constBuffer = SmartPtr<ID3D11Buffer>();
 	};
 }

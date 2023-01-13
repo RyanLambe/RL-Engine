@@ -30,8 +30,8 @@ namespace Core {
 		static int nextId;
 		static std::map<std::string, int> idMap;
 
-		SmartPtr<ID3D11Texture2D> texture2D;
-		SmartPtr<ID3D11ShaderResourceView> texView;
+		SmartPtr<ID3D11Texture2D> texture2D = SmartPtr<ID3D11Texture2D>();
+		SmartPtr<ID3D11ShaderResourceView> texView = SmartPtr<ID3D11ShaderResourceView>();
 
 	};
 }

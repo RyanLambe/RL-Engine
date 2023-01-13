@@ -1,14 +1,21 @@
 #include "../include/Graphics.h"
 
-using namespace Core;
-
 #define checkError(code) if(FAILED(code)) throw std::exception(Debug::TranslateHResult(code).c_str())
 
-int Graphics::width = 0;
-int Graphics::height = 0;
+Core::SmartPtr<ID3D11DeviceContext> Core::Graphics::context = Core::SmartPtr<ID3D11DeviceContext>();
+Core::SmartPtr<ID3D11Device> Core::Graphics::device = Core::SmartPtr<ID3D11Device>();
+Core::SmartPtr<IDXGISwapChain> Core::Graphics::swap = SmartPtr<IDXGISwapChain>();
+
+std::vector<Core::MeshRenderer> Core::Graphics::renderers = std::vector<Core::MeshRenderer>();
+std::vector<Core::PointLight> Core::Graphics::pointLights = std::vector<Core::PointLight>();
+std::vector<Core::DirectionalLight> Core::Graphics::dirLights = std::vector<Core::DirectionalLight>();
+Core::DirectionalLight* Core::Graphics::directionalLight = nullptr;
+
+int Core::Graphics::width = 0;
+int Core::Graphics::height = 0;
 
 //update
-void Graphics::Start(HWND hwnd, int width, int height)
+void Core::Graphics::Start(HWND hwnd, int width, int height)
 {
 
 	//create device, context, and swap chain
@@ -35,6 +42,7 @@ void Graphics::Start(HWND hwnd, int width, int height)
 	SmartPtr<ID3D11Texture2D> frameBuffer;
 	checkError(swap->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)frameBuffer.Create()));
 	checkError(device->CreateRenderTargetView(frameBuffer.Get(), 0, target.Create()));
+	frameBuffer.~SmartPtr();
 
 	// create depth stencil
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
@@ -46,6 +54,7 @@ void Graphics::Start(HWND hwnd, int width, int height)
 	SmartPtr<ID3D11DepthStencilState> depthState;
 	checkError(device->CreateDepthStencilState(&dsDesc, depthState.Create()));
 	context->OMSetDepthStencilState(depthState.Get(), 1);
+	depthState.~SmartPtr();
 
 	//setup transparency
 	D3D11_BLEND_DESC BlendStateDescription = CD3D11_BLEND_DESC{ CD3D11_DEFAULT{} };
@@ -77,10 +86,12 @@ void Graphics::Start(HWND hwnd, int width, int height)
 
 	checkError(device->CreateSamplerState(&sampleDesc, sampler.Create()));
 	context->PSSetSamplers(0, 1, sampler.GetAddress());
+
+	shader.Start(device.Get(), context.Get());
 }
 
 //Draw Calls
-void Graphics::EndFrame()
+void Core::Graphics::EndFrame()
 {
 	HRESULT hr;
 	//context->Flush();
@@ -95,9 +106,12 @@ void Graphics::EndFrame()
 	context->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 }
 
-void Graphics::Draw() {
+void Core::Graphics::Draw() {
 
 	//get view matrix
+	if (Camera::mainCamera == nullptr)
+		return;
+
 	DirectX::XMMATRIX viewMat = Camera::mainCamera->getViewMatrix();
 	DirectX::XMMATRIX posMat = Camera::mainCamera->getPositionMatrix();
 	Vec3 camPos = Camera::mainCamera->entity->transform.getPosition();
@@ -113,42 +127,48 @@ void Graphics::Draw() {
 	skybox.transform.setPosition(camPos);
 	skybox.transform.setRotation(0, 0, 0);
 	skybox.transform.setScale(Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2);
+	
+	Debug::log(camPos);
 
 	//render mesh renderers
 	for (int i = 0; i < renderers.size(); i++) {
-		renderers[i].Draw(device.Get(), context.Get());//check
+		renderers[i].Draw(device.Get(), context.Get());
 	}
 }
 
 //Componenet Management
-MeshRenderer* Graphics::createMesh(Entity* parent) {
-	renderers.emplace_back(device.Get(), context.Get(), parent);
+Core::MeshRenderer* Core::Graphics::createMesh(Entity* parent) {
+	if (parent == nullptr) {
+		Debug::logError("Cannot create mesh as Input is nullptr.");
+		return nullptr;
+	}
+	renderers.emplace_back(parent);
 	parent->addComponent(&renderers[renderers.size() - 1]);
-	return &renderers[renderers.size() - 1];
+	return &(renderers[renderers.size() - 1]);
 }
 
-PointLight* Graphics::createPointLight(Entity* parent) {
+Core::PointLight* Core::Graphics::createPointLight(Entity* parent) {
 	pointLights.emplace_back(parent);
 	parent->addComponent(&pointLights[pointLights.size() - 1]);
 	return &pointLights[pointLights.size() - 1];
 }
 
-DirectionalLight* Graphics::createDirectionalLight(Entity* parent) {
+Core::DirectionalLight* Core::Graphics::createDirectionalLight(Entity* parent) {
 	dirLights.emplace_back(parent);
 	parent->addComponent(&dirLights[dirLights.size() - 1]);
 	setDirectionalLight(&dirLights[dirLights.size() - 1]);
 	return &dirLights[dirLights.size() - 1];
 }
 
-void Graphics::setDirectionalLight(DirectionalLight* light) {
+void Core::Graphics::setDirectionalLight(DirectionalLight* light) {
 	directionalLight = light;
 }
 
 
-void Graphics::setSkybox(std::string sides[6])
+void Core::Graphics::setSkybox(std::string sides[6])
 {
 	//remove all components
-	while (skybox.removeComponent<MeshRenderer>() != nullptr);
+	//while (skybox.removeComponent<MeshRenderer>() != nullptr);
 
 	float AverageColour[3] = { 0, 0, 0 };
 
@@ -188,12 +208,12 @@ void Graphics::setSkybox(std::string sides[6])
 	skyboxEnabled = true;
 }
 
-void Graphics::setAmbientStrength(float strength)
+void Core::Graphics::setAmbientStrength(float strength)
 {
 	ambientStrength = strength;
 }
 
-void Graphics::setBackgroundColour(float colour[4])
+void Core::Graphics::setBackgroundColour(float colour[4])
 {
 	//get rid of skybox
 	while (skybox.removeComponent<MeshRenderer>() != nullptr);
@@ -203,17 +223,17 @@ void Graphics::setBackgroundColour(float colour[4])
 		backgroundColour[i] = colour[i];
 }
 
-int Graphics::getWidth()
+int Core::Graphics::getWidth()
 {
 	return width;
 }
 
-int Graphics::getHeight()
+int Core::Graphics::getHeight()
 {
 	return height;
 }
 
-void Graphics::updateDimensions(int width, int height)
+void Core::Graphics::updateDimensions(int width, int height)
 {
 	//save new dimensions
 	this->width = width;
@@ -267,12 +287,12 @@ void Graphics::updateDimensions(int width, int height)
 	
 }
 
-void Graphics::setFullscreen(bool fullscreen)
+void Core::Graphics::setFullscreen(bool fullscreen)
 {
 	Debug::logErrorCode(swap->SetFullscreenState(fullscreen, nullptr));
 }
 
-void Graphics::updateLightData() {
+void Core::Graphics::updateLightData() {
 	
 	int closest[MaxLights];
 
@@ -341,7 +361,7 @@ void Graphics::updateLightData() {
 	}
 }
 
-void Graphics::updatePixelShader()
+void Core::Graphics::updatePixelShader()
 {
 	if (!psBufferCreated) {
 		//setup
@@ -379,7 +399,7 @@ void Graphics::updatePixelShader()
 	context->PSSetConstantBuffers(1, 1, psBuffer.GetAddress());
 }
 
-void Graphics::updateVertexShader()
+void Core::Graphics::updateVertexShader()
 {
 	if (!vsBufferCreated) {
 		//setup

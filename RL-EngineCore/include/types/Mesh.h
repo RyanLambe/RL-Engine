@@ -73,7 +73,7 @@ namespace Core {
 	private:
 
 		void CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, ID3D11Device* device);
-		void UpdateBuffer(void* data, UINT size, ID3D11Buffer* buffer, ID3D11DeviceContext* context);
+		//void UpdateBuffer(void* data, UINT size, ID3D11Buffer* buffer, ID3D11DeviceContext* context);
 
 	private:
 		std::vector<Vertex> vertices;
@@ -81,8 +81,8 @@ namespace Core {
 
 		bool refresh = true;
 		bool buffersCreated = false;
-
-		SmartPtr<ID3D11Buffer> vertexBuffer;
-		SmartPtr<ID3D11Buffer> indexBuffer;
+		
+		SmartPtr<ID3D11Buffer> vertexBuffer = SmartPtr<ID3D11Buffer>();
+		SmartPtr<ID3D11Buffer> indexBuffer = SmartPtr<ID3D11Buffer>();
 	};
 }

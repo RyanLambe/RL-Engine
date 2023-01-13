@@ -1,6 +1,11 @@
 #pragma once
-#include "../../pch.h"
+#ifndef INCLUDE
+#define INCLUDE
+#include "../../../RL-EngineCore/include/Window.h"
+#endif
 
+#ifndef SCRIPT
+#define SCRIPT
 #include "Entity.h"
 
 namespace Engine {
@@ -20,5 +25,4 @@ namespace Engine {
 
 	};
 }
-
-
+#endif

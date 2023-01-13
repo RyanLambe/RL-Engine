@@ -1,7 +1,10 @@
 #pragma once
-#include "../../pch.h"
-
 #include <msclr\marshal_cppstd.h>
+
+#ifndef INCLUDE
+#define INCLUDE
+#include "../../../RL-EngineCore/include/Window.h"
+#endif
 
 #include "../types/ManagedComponent.h"
 #include "../types/Material.h"
@@ -11,7 +14,7 @@ namespace Engine {
 	public ref class MeshRenderer : public ManagedComponent<Core::MeshRenderer> {
 	public:
 
-		MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity^ entity);
+		MeshRenderer(Entity^ entity);
 
 		//setters
 		void setMaterial(Material^ mat);

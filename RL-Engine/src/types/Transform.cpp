@@ -1,9 +1,13 @@
-#include "../../pch.h"
 #include "../../include/types/Transform.h"
 
 using namespace Engine;
 
 Transform::Transform() : Managed(new Core::Transform()) {
+	
+}
+
+Engine::Transform::Transform(Core::Transform* transform) : Managed (transform)
+{
 	
 }
 

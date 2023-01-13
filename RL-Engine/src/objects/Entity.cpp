@@ -1,4 +1,3 @@
-#include "../../pch.h"
 #include "../../include/objects/Entity.h"
 
 using namespace Engine;
@@ -16,14 +15,14 @@ Engine::Entity::Component::Component(Core::Entity::Component* comp) :
 }
 
 Entity::Entity() : 
-	Managed(new Core::Entity()), transform(gcnew Transform(instance)) {
-
+	Managed(new Core::Entity()) {
+	transform = gcnew Transform(&instance->transform);
 }
 
 Engine::Entity::Entity(Core::Entity* entity) : 
-	Managed(entity), transform(gcnew Transform(instance))
+	Managed(entity)
 {
-
+	transform = gcnew Transform(&entity->transform);
 }
 
 void Entity::Destroy() {

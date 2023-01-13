@@ -1,10 +1,9 @@
-#include "../../pch.h"
 #include "../../include/objects/DirectionalLight.h"
 
 using namespace Engine;
 
 DirectionalLight::DirectionalLight(Entity^ entity) : 
-	ManagedComponent(new Core::DirectionalLight(entity->GetInstance()), entity)
+	ManagedComponent(Core::Graphics::createDirectionalLight(entity->GetInstance()), entity)
 {
 	setColour(gcnew Vec3(1));
 }

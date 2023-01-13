@@ -1,4 +1,3 @@
-#include "../../pch.h"
 #include "../../include/types/Vec3.h"
 
 using namespace Engine;
@@ -19,6 +18,12 @@ Vec3::Vec3(float x, float y, float z) : Managed(new Core::Vec3(x, y, z)) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
+}
+
+Vec3::Vec3(Core::Vec3* vec3) : Managed(new Core::Vec3(vec3->x, vec3->y, vec3->z)) {
+	this->x = vec3->x;
+	this->y = vec3->y;
+	this->z = vec3->z;
 }
 
 //functions

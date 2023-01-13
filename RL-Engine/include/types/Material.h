@@ -1,8 +1,13 @@
 #pragma once
-#include "../../pch.h"
+#ifndef INCLUDE
+#define INCLUDE
+#include "../../../RL-EngineCore/include/Window.h"
+#endif
 
 namespace Engine{
-	public ref class Material {
+
+	ref class Material;
+	public ref class Engine::Material {
 	public:
 
 		ref struct Colour {

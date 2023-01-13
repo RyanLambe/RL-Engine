@@ -1,4 +1,3 @@
-#include "../../pch.h"
 #include "../../include/types/Vec2.h"
 
 using namespace Engine;
@@ -16,6 +15,12 @@ Vec2::Vec2(float value) : Managed(new Core::Vec2(value)) {
 Vec2::Vec2(float x, float y) : Managed(new Core::Vec2(x, y)) {
 	this->x = x;
 	this->y = y;
+}
+
+Engine::Vec2::Vec2(Core::Vec2* vec2) : Managed(new Core::Vec2(vec2->x, vec2->y))
+{
+	this->x = vec2->x;
+	this->y = vec2->y;
 }
 
 //functions

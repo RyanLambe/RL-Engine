@@ -1,21 +1,24 @@
 #include "../../include/Objects/Entity.h"
 #include "../../include/Debug.h"
 
-using namespace Core;
-
-Entity::Entity() : transform(this) {
+Core::Entity::Entity() : transform(this) {
 
 }
 
-void Entity::addComponent(Component* component) {
+Core::Entity::~Entity()
+{
+	Destroy();
+}
+
+void Core::Entity::addComponent(Component* component) {
 	components.push_back(component);
 }
 
-Entity* Entity::getParent() {
+Core::Entity* Core::Entity::getParent() {
 	return parent;
 }
 
-void Entity::setParent(Entity* parent) {
+void Core::Entity::setParent(Entity* parent) {
 	//remove this from previous parent
 	if (this->parent != nullptr) {
 		for (int i = 0; i < this->parent->children.size(); i++) {
@@ -32,19 +35,19 @@ void Entity::setParent(Entity* parent) {
 	this->parent = parent;
 }
 
-std::vector<Entity*> Entity::getChildren() {
+std::vector<Core::Entity*> Core::Entity::getChildren() {
 	return children;
 }
 
-Entity* Entity::getChild(int index) {
+Core::Entity* Core::Entity::getChild(int index) {
 	return children[index];
 }
 
-int Entity::getChildCount() {
+int Core::Entity::getChildCount() {
 	return children.size();
 }
 
-void Entity::Destroy() {
+void Core::Entity::Destroy() {
 	//set children parents to this parent
 	for (int i = 0; i < getChildCount(); i++) {
 		getChild(i)->setParent(parent);

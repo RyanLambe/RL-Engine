@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
-    <ProjectGuid>{CA87CED6-28F9-481C-8805-8728893C9B7C}</ProjectGuid>
+    <ProjectGuid>{99050B20-7420-42A1-8F15-7400A5008821}</ProjectGuid>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>RLEngine</RootNamespace>
@@ -119,39 +119,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\ManagedWindow.h" />
-    <ClInclude Include="include\objects\Camera.h" />
-    <ClInclude Include="include\Debug.h" />
-    <ClInclude Include="include\objects\DirectionalLight.h" />
-    <ClInclude Include="include\objects\Entity.h" />
-    <ClInclude Include="include\objects\MeshRenderer.h" />
-    <ClInclude Include="include\objects\PointLight.h" />
-    <ClInclude Include="include\Time.h" />
-    <ClInclude Include="include\types\Managed.h" />
-    <ClInclude Include="include\types\ManagedComponent.h" />
-    <ClInclude Include="include\types\Material.h" />
-    <ClInclude Include="include\types\Mesh.h" />
-    <ClInclude Include="include\types\Transform.h" />
-    <ClInclude Include="include\types\Vec2.h" />
-    <ClInclude Include="include\types\Vec3.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="include\objects\Script.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\ManagedWindow.cpp" />
-    <ClCompile Include="src\objects\Camera.cpp" />
-    <ClCompile Include="src\Debug.cpp" />
+    <ClCompile Include="src\objects\Cameras.cpp" />
     <ClCompile Include="src\objects\DirectionalLight.cpp" />
     <ClCompile Include="src\objects\Entity.cpp" />
     <ClCompile Include="src\objects\MeshRenderer.cpp" />
     <ClCompile Include="src\objects\PointLight.cpp" />
+    <ClCompile Include="src\objects\Script.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\types\Managed.cpp" />
-    <ClCompile Include="src\objects\Script.cpp" />
     <ClCompile Include="src\types\ManagedComponent.cpp" />
     <ClCompile Include="src\types\Material.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
@@ -169,6 +148,26 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Debug.h" />
+    <ClInclude Include="include\Input.h" />
+    <ClInclude Include="include\ManagedWindow.h" />
+    <ClInclude Include="include\objects\Camera.h" />
+    <ClInclude Include="include\objects\DirectionalLight.h" />
+    <ClInclude Include="include\objects\Entity.h" />
+    <ClInclude Include="include\objects\MeshRenderer.h" />
+    <ClInclude Include="include\objects\PointLight.h" />
+    <ClInclude Include="include\objects\Script.h" />
+    <ClInclude Include="include\Time.h" />
+    <ClInclude Include="include\types\Managed.h" />
+    <ClInclude Include="include\types\ManagedComponent.h" />
+    <ClInclude Include="include\types\Material.h" />
+    <ClInclude Include="include\types\Mesh.h" />
+    <ClInclude Include="include\types\Transform.h" />
+    <ClInclude Include="include\types\Vec2.h" />
+    <ClInclude Include="include\types\Vec3.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RL-EngineCore\RL-EngineCore.vcxproj">

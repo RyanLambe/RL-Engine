@@ -1,4 +1,3 @@
-#include "../../pch.h"
 #include "../../include/objects/Script.h"
 
 

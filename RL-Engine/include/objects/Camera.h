@@ -1,6 +1,10 @@
 #pragma once
 
-#include "../../pch.h"
+#ifndef INCLUDE
+#define INCLUDE
+#include "../../../RL-EngineCore/include/Window.h"
+#endif
+
 #include "../types/ManagedComponent.h"
 
 namespace Engine {
@@ -20,6 +24,6 @@ namespace Engine {
 		float getNearPlane();
 		float getFarPlane();
 	};
-}
 
+}
 

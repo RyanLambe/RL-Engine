@@ -1,14 +1,12 @@
 #include "../../include/objects/MeshRenderer.h"
 
-using namespace Core;
-
-MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent) : Component(parent), shader(device, context) {
+Core::MeshRenderer::MeshRenderer(Entity* parent) : Component(parent) {
 	
 	mesh.ImportObj("assets/storus.obj");
 }
 
-void MeshRenderer::Draw(ID3D11Device* device, ID3D11DeviceContext* context) {
-	
+void Core::MeshRenderer::Draw(ID3D11Device* device, ID3D11DeviceContext* context) {
+
 	//update material
 	material.Update(device, context);
 
@@ -32,11 +30,11 @@ void Core::MeshRenderer::setMesh(Mesh mesh)
 	this->mesh = mesh;
 }
 
-Material* MeshRenderer::getMaterial() {
+Core::Material* Core::MeshRenderer::getMaterial() {
 	return &material;
 }
 
-Mesh* MeshRenderer::getMesh()
+Core::Mesh* Core::MeshRenderer::getMesh()
 {
 	return &mesh;
 }

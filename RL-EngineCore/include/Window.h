@@ -9,10 +9,19 @@ namespace Core {
 	class Window
 	{
 	public:
-		Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int height);
+		
+		Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height);
 		~Window();
 
-		int Run(void (*UpdateFunc)(void));
+		struct ExitCode {
+
+			bool close = false;
+			int exitCode;
+
+		};
+
+		ExitCode Spagetti();
+		void Run();
 
 		Graphics* getGraphics();
 		static Window* main;
@@ -23,7 +32,7 @@ namespace Core {
 		LRESULT CALLBACK WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	private:
-		HWND hwnd;
+		HWND hwnd = nullptr;
 
 		Graphics gfx;
 		Input input;

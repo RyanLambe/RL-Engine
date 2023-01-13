@@ -50,11 +50,11 @@ namespace Core {
 	private:
 		//constant buffer data
 		DirectX::XMMATRIX matrix;
-		SmartPtr<ID3D11Buffer> constBuffer;
+		SmartPtr<ID3D11Buffer> constBuffer = SmartPtr<ID3D11Buffer>();
 		bool bufferCreated = false;
 
 		//transform data
-		Entity* entity;
+		Entity* entity = nullptr;
 		Vec3 position;
 		Vec3 rotation;
 		Vec3 scale = Vec3(1);

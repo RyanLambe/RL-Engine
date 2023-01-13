@@ -1,21 +1,15 @@
 #include "../include/Window.h"
 
-#include <random>
+Core::Window* Core::Window::main = nullptr;
 
-using namespace Core;
-
-Window* Window::main = nullptr;
-
-Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int height)
-{
+Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height) {
 	main = this;
-
 	// Create class for window
 	WNDCLASS wClass = {};
 
 	wClass.hInstance = hInstance;
 	wClass.lpfnWndProc = WindowProcThunk;
-	wClass.lpszClassName = name;
+	wClass.lpszClassName = name.c_str();
 	
 	RegisterClass(&wClass);
 
@@ -33,7 +27,7 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 	}
 
 	// Create window
-	hwnd = CreateWindow(name, name, style, CW_USEDEFAULT, CW_USEDEFAULT, size.right - size.left, size.bottom - size.top, NULL, NULL, hInstance, this);
+	hwnd = CreateWindow(name.c_str(), name.c_str(), style, CW_USEDEFAULT, CW_USEDEFAULT, size.right - size.left, size.bottom - size.top, NULL, NULL, hInstance, this);
 
 	//check for error
 	if (hwnd == NULL) {
@@ -48,69 +42,6 @@ Window::Window(HINSTANCE hInstance, LPCWSTR name, DWORD style, int width, int he
 
 	ShowWindow(hwnd, SW_SHOW);
 	gfx.Start(hwnd, size.right - size.left, size.bottom - size.top);
-}
-
-Core::Window::~Window()
-{
-	DestroyWindow(hwnd);
-}
-
-float angle = 0.0f;
-
-int Window::Run(void (*UpdateFunc)(void))
-{
-	int exitCode;
-
-	/*Entity cam;
-	Camera comp(&cam, Graphics::getWidth(), Graphics::getHeight());
-	cam.addComponent(&comp);
-	cam.transform.setPosition(0, 10, -10);
-	cam.transform.setRotation(45, 0, 0);
-	comp.fov = 60;*/
-
-	/*Entity colourTest;
-	colourTest.setParent(&cam);
-	MeshRenderer* colourTestMesh = gfx.createMesh(&colourTest);
-	colourTestMesh->getMesh()->ImportObj("assets/plane.obj");
-	colourTest.transform.setScale(0.1f, 0.1f, 0.1f);
-	colourTest.transform.setPosition(0, -1, 2);*/
-	
-	std::vector<Entity> Pntlights(20, Entity());
-
-	srand(Time::getTime());
-	
-	for (int i = 0; i < 20; i++) {
-		//Pntlights[i] = Entity();
-		Vec3 pos = Vec3((std::rand() % 20) - 10, (float)(std::rand() % 100) * 0.05f, (std::rand() % 20) - 10);
-		Vec3 col = Vec3((float)(std::rand() % 100) / 100, (float)(std::rand() % 100) / 100, (float)(std::rand() % 100) / 100);
-		
-		PointLight* pnt2 = gfx.createPointLight(&(Pntlights[i]));
-		pnt2->Colour = col;
-
-		Pntlights[i].transform.setScale(0.1f, 0.1f, 0.1f);
-		Pntlights[i].transform.setPosition(pos);
-
-		MeshRenderer* light2 = gfx.createMesh(&(Pntlights[i]));
-		light2->getMesh()->ImportObj("assets/ssphere.obj");
-		light2->getMaterial()->settings.color = { col.x, col.y, col.z, 1 };
-		light2->getMaterial()->settings.glow = 1;
-	}
-
-	Entity cube1;
-	gfx.createMesh(&cube1);
-	cube1.transform.setPosition(0, 0, 0);
-	cube1.getComponent<MeshRenderer>()->getMaterial()->settings.color = {1, 1, 1};// { 0, 1, 0.435f, 1 };
-
-	Entity cube2;
-	gfx.createMesh(&cube2);
-	cube2.setParent(&cube1);
-	cube2.transform.setPosition(-3, 0, 0);
-	cube2.transform.setScale(0.5);
-	cube2.getComponent<MeshRenderer>()->getMaterial()->settings.color = { 0, 0.6706f, 1, 1 };
-
-	Entity floor;
-	MeshRenderer* floorRend = gfx.createMesh(&floor);
-	floorRend->getMesh()->ImportObj("assets/plane.obj");
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";
@@ -120,33 +51,51 @@ int Window::Run(void (*UpdateFunc)(void))
 	skybox[4] = "assets/skybox/front.png";
 	skybox[5] = "assets/skybox/back.png";
 	gfx.setSkybox(skybox);
-
-	//update to clear data during load time
-	time.update();
-	input.update();
-
-	while (!WindowClosed(&exitCode))
-	{
-		//updates
-		/*for (int i = 0; i < scripts.size(); i++)
-			scripts[i]->Update();*/
-
-		UpdateFunc();
-
-		input.update();
-		time.update();
-		gfx.Draw();
-		gfx.EndFrame();
-	}
-	return exitCode;
 }
 
-Graphics* Window::getGraphics()
+Core::Window::ExitCode Core::Window::Spagetti()
+{
+	ExitCode out;
+	try {
+		if (!WindowClosed(&out.exitCode)) {
+
+			time.update();
+			input.update();
+			gfx.Draw();
+			gfx.EndFrame();
+			out.close = false;
+		}
+		else {
+			out.close = true;
+		}
+		return out;
+	}
+	catch (std::exception& e) {
+		MessageBoxA(nullptr, e.what(), "Error", MB_OK | MB_ICONEXCLAMATION);
+	}
+	catch (...) {
+		MessageBoxA(nullptr, "Check log file for more info.", "Error", MB_OK | MB_ICONEXCLAMATION);
+	}
+
+	out.close = true;
+	//out.exitCode = -1;
+	return out;
+}
+
+Core::Window::~Window()
+{
+	if(hwnd != nullptr)
+		DestroyWindow(hwnd);
+}
+
+float angle = 0.0f;
+
+Core::Graphics* Core::Window::getGraphics()
 {
 	return &gfx;
 }
 
-bool Window::WindowClosed(int* quitMessage)
+bool Core::Window::WindowClosed(int* quitMessage)
 {
 	// for all messages in queue
 	MSG msg = {};
@@ -166,7 +115,7 @@ bool Window::WindowClosed(int* quitMessage)
 	return false;
 }
 
-LRESULT Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT Core::Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// save pointer to window in hwnd from create method
 	if (uMsg == WM_CREATE) {
@@ -190,7 +139,7 @@ LRESULT Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	return wnd->WindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT Core::Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
 	switch (uMsg)
@@ -243,7 +192,7 @@ LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	
 	//close window
 	case WM_DESTROY:
-		PostQuitMessage(0);
+		PostQuitMessage(25);
 		return 0;
 	}
 

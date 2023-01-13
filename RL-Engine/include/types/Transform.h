@@ -1,5 +1,8 @@
 #pragma once
-#include "../../pch.h"
+#ifndef INCLUDE
+#define INCLUDE
+#include "../../../RL-EngineCore/include/Window.h"
+#endif
 
 #include "../types/Vec3.h"
 
@@ -8,6 +11,7 @@ namespace Engine {
 	public:
 		//engine use
 		Transform();
+		Transform(Core::Transform* transform);
 		Transform(Core::Entity* entity);
 
 		//directions
@@ -38,10 +42,5 @@ namespace Engine {
 		void Scale(float scale) { instance->Scale(scale, scale, scale); }
 		Vec3^ getScale() { return gcnew Vec3(instance->getScale().x, instance->getScale().y, instance->getScale().z); }
 
-	private:
-		//transform data
-		Vec3^ position = gcnew Vec3(0.0f);
-		Vec3^ rotation = gcnew Vec3(0.0f);
-		Vec3^ scale = gcnew Vec3(1.0f);
 	};
 }

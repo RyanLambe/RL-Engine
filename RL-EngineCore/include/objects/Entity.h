@@ -29,6 +29,7 @@ namespace Core {
 
 		//general
 		Entity();
+		~Entity();
 		void Destroy();
 		Transform transform;
 

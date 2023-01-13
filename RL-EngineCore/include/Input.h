@@ -8,14 +8,16 @@
 
 #define lowPassAlpha 0.25f
 
-enum CursorState {
-	Free = 0,
-	Confined = 1,
-	Locked = 2,
-	Hidden = 3
-};
+
 
 namespace Core {
+	enum CursorState {
+		Free = 0,
+		Confined = 1,
+		Locked = 2,
+		Hidden = 3
+	};
+
 	static class Input {
 	public:
 

@@ -1,5 +1,8 @@
 #pragma once
-#include "../../pch.h"
+#ifndef INCLUDE
+#define INCLUDE
+#include "../../../RL-EngineCore/include/Window.h"
+#endif
 
 #include "Managed.h"
 
@@ -14,6 +17,7 @@ namespace Engine {
 		Vec2();
 		Vec2(float value);
 		Vec2(float x, float y);
+		Vec2(Core::Vec2* vec2);
 
 		//functions
 		static float distance(Vec2^ a, Vec2^ b);

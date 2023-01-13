@@ -12,7 +12,7 @@ namespace Core {
 
 	public:
 
-		MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity* parent);
+		MeshRenderer(Entity* parent);
 		void Draw(ID3D11Device* device, ID3D11DeviceContext* context);
 
 		//setters
@@ -23,11 +23,10 @@ namespace Core {
 		Material* getMaterial();
 		Mesh* getMesh();
 
-	protected:
+	private:
 
 		Mesh mesh;
 		Material material;
-		Shader shader;
 
 	};
 }

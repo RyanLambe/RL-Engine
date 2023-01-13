@@ -1,30 +1,26 @@
 #include "../include/Input.h"
 
-#include "../include/Graphics.h"
-
-using namespace Core;
-
 //setup static variables
-HWND Input::window;
-RECT Input::windowRect;
+HWND Core::Input::window;
+RECT Core::Input::windowRect;
 
-std::map<UINT, bool> Input::keys;
+std::map<UINT, bool> Core::Input::keys;
 
-bool Input::mouseButtons[3]; 
-Vec2 Input::mousePos = Vec2(0, 0);
-Vec2 Input::deltaMousePos = Vec2(0, 0);
-float Input::mouseWheel;
+bool Core::Input::mouseButtons[3];
+Core::Vec2 Core::Input::mousePos = Vec2(0, 0);
+Core::Vec2 Core::Input::deltaMousePos = Vec2(0, 0);
+float Core::Input::mouseWheel;
 
-CursorState Input::state = CursorState::Free;
-Vec2 Input::windowCenter;
+Core::CursorState Core::Input::state = CursorState::Free;
+Core::Vec2 Core::Input::windowCenter;
 
 
 //updates
 
-void Input::start(HWND window)
+void Core::Input::start(HWND window)
 {
 	//save input values
-	Input::window = window;
+	Core::Input::window = window;
 
 	//get raw input
 	RAWINPUTDEVICE rawInputDevice;
@@ -40,14 +36,14 @@ void Input::start(HWND window)
 	}
 }
 
-Input::~Input()
+Core::Input::~Input()
 {
 	//free cursor
 	ClipCursor(nullptr);
 	ShowCursor(true);
 }
 
-void Input::update()
+void Core::Input::update()
 {
 	//update values
 	mousePos -= Vec2(mousePos.x * lowPassAlpha, mousePos.y * lowPassAlpha);
@@ -80,7 +76,7 @@ void Input::update()
 
 //keyboard
 
-void Input::updateKey(UINT key, bool pressed)
+void Core::Input::updateKey(UINT key, bool pressed)
 {
 	//add key if doesnt exist
 	if (!keys.contains(key)) {
@@ -91,7 +87,7 @@ void Input::updateKey(UINT key, bool pressed)
 	keys.at(key) = pressed;
 }
 
-bool Input::getKey(UINT key)
+bool Core::Input::getKey(UINT key)
 {
 	if (keys.contains(key))
 		return keys.at(key);
@@ -101,34 +97,34 @@ bool Input::getKey(UINT key)
 
 //mouse
 
-Vec2 Input::getMousePos()
+Core::Vec2 Core::Input::getMousePos()
 {
 	POINT pnt;
 	GetCursorPos(&pnt);
 	return Vec2(pnt.x, pnt.y);
 }
 
-void Input::updateMouse(int button, bool pressed)
+void Core::Input::updateMouse(int button, bool pressed)
 {
 	mouseButtons[button] = pressed;
 }
 
-Vec2 Input::getMouse()
+Core::Vec2 Core::Input::getMouse()
 {
 	return mousePos;
 }
 
-bool Input::getMouseButton(int button)
+bool Core::Input::getMouseButton(int button)
 {
 	return mouseButtons[button];
 }
 
-float Input::getMouseWheel()
+float Core::Input::getMouseWheel()
 {
 	return mouseWheel;
 }
 
-void Input::updateMousePos(LPARAM lparam)
+void Core::Input::updateMousePos(LPARAM lparam)
 {
 	//get raw mouse input
 	HRAWINPUT hInput = (HRAWINPUT)lparam;
@@ -144,7 +140,7 @@ void Input::updateMousePos(LPARAM lparam)
 	}
 }
 
-void Input::updateMouseWheel(float input)
+void Core::Input::updateMouseWheel(float input)
 {
 	mouseWheel = input;
 }
@@ -152,10 +148,10 @@ void Input::updateMouseWheel(float input)
 
 //cursor
 
-void Input::setCursorState(CursorState state)
+void Core::Input::setCursorState(CursorState state)
 {
 	//save state
-	Input::state = state;
+	Core::Input::state = state;
 
 	//show/hide cursor
 	if (state == CursorState::Hidden) 

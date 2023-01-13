@@ -3,30 +3,32 @@
 #include <Windows.h>
 #include <vector>
 
-static class Time {
-public:
-
-	class Timer {
+namespace Core {
+	static class Time {
 	public:
-		void start();
-		float getTime();
+
+		class Timer {
+		public:
+			void start();
+			float getTime();
+
+		private:
+			DWORD startFrame;
+		};
+
+		Time();
+		void update();
+
+		static float getTime();
+		static float deltaTime();
 
 	private:
-		DWORD startFrame;
+
+		static void addTimer(Timer* timer);
+
+		static DWORD startFrame;
+		static DWORD prevFrame;
+
+		static std::vector<Timer*> timers;
 	};
-
-	Time();
-	void update();
-
-	static float getTime();
-	static float deltaTime();
-
-private:
-
-	static void addTimer(Timer* timer);
-
-	static DWORD startFrame;
-	static DWORD prevFrame;
-
-	static std::vector<Timer*> timers;
-};
+}

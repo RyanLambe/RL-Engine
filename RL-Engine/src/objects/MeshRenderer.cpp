@@ -1,13 +1,12 @@
-#include "../../pch.h"
 #include "../../include/objects/MeshRenderer.h"
 
 using namespace Engine;
 using namespace msclr::interop;
 
-MeshRenderer::MeshRenderer(ID3D11Device* device, ID3D11DeviceContext* context, Entity^ entity) : 
-	ManagedComponent(new Core::MeshRenderer(device, context, entity->GetInstance()), entity)
+MeshRenderer::MeshRenderer(Entity^ entity) :
+	ManagedComponent(Core::Graphics::createMesh(entity->GetInstance()), entity)
 {
-	
+
 }
 
 void MeshRenderer::setMaterial(Material^ mat) {
@@ -51,7 +50,7 @@ Material^ MeshRenderer::getMaterial() {
 }
 
 Mesh^ MeshRenderer::getMesh() {
-	Mesh^ mesh = gcnew Mesh();
+	Mesh^ mesh = gcnew Mesh(instance->getMesh());
 
 	mesh->GetInstance()->setIndices(instance->getMesh()->getIndices());
 	mesh->GetInstance()->setVertices(instance->getMesh()->getVertices());

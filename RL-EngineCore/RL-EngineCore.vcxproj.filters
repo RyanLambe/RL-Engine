@@ -28,7 +28,6 @@
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\Time.cpp" />
     <ClCompile Include="src\Input.cpp" />
-    <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\types\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -84,9 +83,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\types\SmartPtr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\types\Transform.h">
