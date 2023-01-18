@@ -22,14 +22,16 @@ namespace Engine {
         {
             if (instance != nullptr)
             {
-                delete instance;
+                ((Core::Entity::Component*)instance)->exists = false;
+                //delete instance;
             }
         }
         !ManagedComponent()
         {
             if (instance != nullptr)
             {
-                delete instance;
+                ((Core::Entity::Component*)instance)->exists = false;
+                //delete instance;
             }
         }
         T* GetInstance()

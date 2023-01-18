@@ -15,9 +15,10 @@
 namespace Core {
 	class Texture {
 	public:
-
+		Texture();
+		Texture(const Texture&) = delete;
 		void Set(std::string fileName);
-		void Update(ID3D11Device* device, ID3D11DeviceContext* context);
+		void Update(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context);
 		int getId();
 		float* getAverage();
 

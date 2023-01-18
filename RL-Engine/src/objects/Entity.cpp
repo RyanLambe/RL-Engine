@@ -26,7 +26,9 @@ Engine::Entity::Entity(Core::Entity* entity) :
 }
 
 void Entity::Destroy() {
-	instance->Destroy();
+	//destroy in scene when added
+	instance->~Entity();
+	instance = nullptr;
 }
 
 /*void Engine::Entity::addComponent(Component^ component)

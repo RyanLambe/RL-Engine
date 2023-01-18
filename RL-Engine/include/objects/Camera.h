@@ -12,9 +12,11 @@ namespace Engine {
 	{
 	public:
 
-		static Camera^ main;
-
 		Camera(Entity^ entity);
+
+		static Camera^ getMain();
+		static void setMain(Camera^ main);
+		void setMain();
 
 		void setFOV(float fov);
 		void setNearPlane(float nearPlane);
@@ -23,6 +25,9 @@ namespace Engine {
 		float getFOV();
 		float getNearPlane();
 		float getFarPlane();
+
+	private:
+		static Camera^ main;
 	};
 
 }

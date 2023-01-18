@@ -11,7 +11,6 @@ namespace Engine {
 	{
 	public:
 
-		//sub class
 		//component
 		ref class Component : Managed<Core::Entity::Component> {
 		public:

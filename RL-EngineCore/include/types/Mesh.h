@@ -58,29 +58,30 @@ namespace Core {
 	public:
 
 		Mesh();
+		Mesh(const Mesh&) = delete;
 
 		void setVertices(std::vector<Vertex> vertices);
 		std::vector<Vertex> getVertices();
 		void setIndices(std::vector<unsigned int> indices);
 		std::vector<unsigned int> getIndices();
 
-		void Update(ID3D11Device* device, ID3D11DeviceContext* context);
+		void Update(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context);
 
 		void Refresh();
 
 		void ImportObj(std::string fileName);
 
+		Mesh& operator=(const Mesh& other);
+
 	private:
 
-		void CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, ID3D11Device* device);
-		//void UpdateBuffer(void* data, UINT size, ID3D11Buffer* buffer, ID3D11DeviceContext* context);
+		void CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, SmartPtr<ID3D11Device> device);
 
 	private:
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 
 		bool refresh = true;
-		bool buffersCreated = false;
 		
 		SmartPtr<ID3D11Buffer> vertexBuffer = SmartPtr<ID3D11Buffer>();
 		SmartPtr<ID3D11Buffer> indexBuffer = SmartPtr<ID3D11Buffer>();

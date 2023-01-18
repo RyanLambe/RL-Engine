@@ -1,9 +1,23 @@
 #include "../../include/objects/Camera.h"
 
 Engine::Camera::Camera(Entity^ entity) : 
-	ManagedComponent(new Core::Camera(entity->GetInstance(), Core::Graphics::getWidth(), Core::Graphics::getHeight()), entity)
+	ManagedComponent(Core::Graphics::createCamera(entity->GetInstance()), entity)
 {
-	main = this;
+	setMain();
+}
+
+Engine::Camera^ Engine::Camera::getMain() {
+	return main;
+}
+
+void Engine::Camera::setMain(Camera^ main) {
+	Camera::main = main;
+	Core::Camera::setMainCamera(main->GetInstance());
+}
+
+void Engine::Camera::setMain() {
+	Camera::main = this;
+	Core::Camera::setMainCamera(instance);
 }
 
 void Engine::Camera::setFOV(float fov)

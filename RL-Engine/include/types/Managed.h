@@ -1,4 +1,8 @@
 #pragma once
+#ifndef INCLUDE
+#define INCLUDE
+#include "../../../RL-EngineCore/include/Window.h"
+#endif
 
 namespace Engine {
 

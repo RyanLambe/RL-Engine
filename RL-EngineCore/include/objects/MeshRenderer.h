@@ -13,7 +13,9 @@ namespace Core {
 	public:
 
 		MeshRenderer(Entity* parent);
-		void Draw(ID3D11Device* device, ID3D11DeviceContext* context);
+		MeshRenderer(const MeshRenderer& other);
+		std::string getType() override { return "MeshRenderer"; }
+		void Draw(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context);
 
 		//setters
 		void setMaterial(Material mat);

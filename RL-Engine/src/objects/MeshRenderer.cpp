@@ -24,11 +24,13 @@ void MeshRenderer::setMaterial(Material^ mat) {
 	instance->getMaterial()->SetTexture(marshal_as<std::string>(test));
 }
 
-void MeshRenderer::setMesh(Mesh^ mat) {
-
-	instance->getMesh()->setIndices(mat->GetInstance()->getIndices());
-	instance->getMesh()->setVertices(mat->GetInstance()->getVertices());
+void MeshRenderer::setMesh(Mesh^ mesh) {
+	//move mesh data to core mesh
 	instance->getMesh()->Refresh();
+}
+
+void MeshRenderer::ImportMeshObj(System::String^ fileName) {
+	instance->getMesh()->ImportObj(marshal_as<std::string>(fileName));
 }
 
 Material^ MeshRenderer::getMaterial() {
@@ -50,10 +52,9 @@ Material^ MeshRenderer::getMaterial() {
 }
 
 Mesh^ MeshRenderer::getMesh() {
-	Mesh^ mesh = gcnew Mesh(instance->getMesh());
+	Mesh^ mesh = gcnew Mesh();
 
-	mesh->GetInstance()->setIndices(instance->getMesh()->getIndices());
-	mesh->GetInstance()->setVertices(instance->getMesh()->getVertices());
+	//move core mesh data to mesh output
 
 	return mesh;
 }

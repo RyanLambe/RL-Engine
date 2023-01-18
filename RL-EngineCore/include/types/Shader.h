@@ -10,7 +10,9 @@
 namespace Core {
 	class Shader {
 	public:
-		void Start(ID3D11Device* device, ID3D11DeviceContext* context);
+		Shader();
+		Shader(const Shader&) = delete;
+		void Start(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context);
 
 	private:
 		SmartPtr<ID3D11VertexShader> vertexShader = SmartPtr<ID3D11VertexShader>();

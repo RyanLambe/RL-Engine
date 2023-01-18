@@ -7,7 +7,7 @@
 #include "Managed.h"
 
 namespace Engine {
-	public ref class Vec2 : Managed<Core::Vec2> {
+	public ref class Vec2 {
 	public:
 		//components
 		float x;
@@ -17,10 +17,11 @@ namespace Engine {
 		Vec2();
 		Vec2(float value);
 		Vec2(float x, float y);
-		Vec2(Core::Vec2* vec2);
+		Vec2(Core::Vec2 vec2);
 
 		//functions
 		static float distance(Vec2^ a, Vec2^ b);
+		Core::Vec2 getCoreFormat();
 
 		//operators
 		Vec2^ operator+(Vec2^ other);
@@ -42,6 +43,5 @@ namespace Engine {
 		Vec2^ operator/(float other);
 		void operator/=(Vec2^ other);
 		void operator/=(float other);
-
 	};
 }

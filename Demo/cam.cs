@@ -5,14 +5,11 @@ class CameraController : Script
 {
     Entity plate;
 
-
-
-
     public CameraController(Entity entity) : base(entity)
     {
         plate = new Entity();
+        plate.transform.setPosition(0, 2, 0);
         MeshRenderer mesh = new MeshRenderer(plate);
-        plate.addComponent(mesh);
         plate.transform.setScale(0.1f);
 
         Input.setCursorState(3);//locked and hidden
@@ -24,8 +21,9 @@ class CameraController : Script
         //close on escape
         if (Input.getKey(0x1B))//VK_ESCAPE = 0x1B
         {
-            //ManagedWindow.Close();
-            throw new Exception("Closed");
+            ManagedWindow.Close();
+            return;
+            //throw new Exception("Closed");
         }
 
         float speed = 5 * Time.deltaTime();
@@ -71,7 +69,7 @@ class CameraController : Script
         plate.transform.setPosition(f.x, f.y, f.z);
 
         //check what has been clicked on
-        clickedOn(new Vec2(), new Vec2());
+        //clickedOn(new Vec2(), new Vec2());
     }
 
     bool clickedOn(Vec2 a, Vec2 b)

@@ -29,10 +29,12 @@ namespace Core {
 	public:
 
 		Material();
-		void Update(ID3D11Device* device, ID3D11DeviceContext* context);
+		Material(const Material&) = delete;
+		void Update(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context);
 		void SetTexture(std::string textureName);
 		void Refresh();
 
+		Material& operator=(const Material& other);
 
 		Texture texture;
 	private:

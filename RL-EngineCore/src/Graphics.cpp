@@ -7,12 +7,16 @@ Core::SmartPtr<ID3D11Device> Core::Graphics::device = Core::SmartPtr<ID3D11Devic
 Core::SmartPtr<IDXGISwapChain> Core::Graphics::swap = SmartPtr<IDXGISwapChain>();
 
 std::vector<Core::MeshRenderer> Core::Graphics::renderers = std::vector<Core::MeshRenderer>();
+std::vector<Core::Camera> Core::Graphics::cameras = std::vector<Core::Camera>();
 std::vector<Core::PointLight> Core::Graphics::pointLights = std::vector<Core::PointLight>();
 std::vector<Core::DirectionalLight> Core::Graphics::dirLights = std::vector<Core::DirectionalLight>();
 Core::DirectionalLight* Core::Graphics::directionalLight = nullptr;
 
 int Core::Graphics::width = 0;
 int Core::Graphics::height = 0;
+
+Core::Graphics::Graphics() {
+}
 
 //update
 void Core::Graphics::Start(HWND hwnd, int width, int height)
@@ -87,7 +91,7 @@ void Core::Graphics::Start(HWND hwnd, int width, int height)
 	checkError(device->CreateSamplerState(&sampleDesc, sampler.Create()));
 	context->PSSetSamplers(0, 1, sampler.GetAddress());
 
-	shader.Start(device.Get(), context.Get());
+	shader.Start(device, context);
 }
 
 //Draw Calls
@@ -108,13 +112,32 @@ void Core::Graphics::EndFrame()
 
 void Core::Graphics::Draw() {
 
+	//update cameras
+	Camera* cam = Camera::getMainCamera();
+	bool updateMain = false;
+	for (int i = 0; i < cameras.size(); i++) {
+		if (!cameras[i].exists) {
+			if (cam == &cameras[i])
+				updateMain = true;
+			cameras.erase(cameras.begin() + i);
+		}
+	}
+
+	if (updateMain) {
+		if (cameras.size() > 0)
+			Camera::setMainCamera(&cameras[0]);
+		else
+			Camera::setMainCamera(nullptr);
+	}
+	
 	//get view matrix
-	if (Camera::mainCamera == nullptr)
+	cam = Camera::getMainCamera();
+	if (cam == nullptr)
 		return;
 
-	DirectX::XMMATRIX viewMat = Camera::mainCamera->getViewMatrix();
-	DirectX::XMMATRIX posMat = Camera::mainCamera->getPositionMatrix();
-	Vec3 camPos = Camera::mainCamera->entity->transform.getPosition();
+	DirectX::XMMATRIX viewMat = cam->getViewMatrix();
+	DirectX::XMMATRIX posMat = cam->getPositionMatrix();
+	Vec3 camPos = cam->entity->transform.getPosition();
 
 	//update buffers
 	vsBufferData.camMatrix = posMat * viewMat;
@@ -126,13 +149,17 @@ void Core::Graphics::Draw() {
 	//update skybox
 	skybox.transform.setPosition(camPos);
 	skybox.transform.setRotation(0, 0, 0);
-	skybox.transform.setScale(Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2, Camera::mainCamera->farPlane/2);
+	skybox.transform.setScale(cam->farPlane/2, cam->farPlane/2, cam->farPlane/2);
 	
-	Debug::log(camPos);
+	Debug::log("Frame Updated");
 
 	//render mesh renderers
 	for (int i = 0; i < renderers.size(); i++) {
-		renderers[i].Draw(device.Get(), context.Get());
+		if(renderers[i].exists)
+			renderers[i].Draw(device, context);
+		else 
+			renderers.erase(renderers.begin() + i);
+		
 	}
 }
 
@@ -148,12 +175,31 @@ Core::MeshRenderer* Core::Graphics::createMesh(Entity* parent) {
 }
 
 Core::PointLight* Core::Graphics::createPointLight(Entity* parent) {
+	if (parent == nullptr) {
+		Debug::logError("Cannot create point light as Input is nullptr.");
+		return nullptr;
+	}
 	pointLights.emplace_back(parent);
 	parent->addComponent(&pointLights[pointLights.size() - 1]);
 	return &pointLights[pointLights.size() - 1];
 }
 
+Core::Camera* Core::Graphics::createCamera(Entity* parent) {
+	if (parent == nullptr) {
+		Debug::logError("Cannot create camera as Input is nullptr.");
+		return nullptr;
+	}
+	cameras.push_back(Camera(parent, Graphics::getWidth(), Graphics::getHeight()));
+	parent->addComponent(&cameras[cameras.size() - 1]);
+	Camera::setMainCamera(&cameras[cameras.size() - 1]);
+	return &cameras[cameras.size() - 1];
+}
+
 Core::DirectionalLight* Core::Graphics::createDirectionalLight(Entity* parent) {
+	if (parent == nullptr) {
+		Debug::logError("Cannot create directional light as Input is nullptr.");
+		return nullptr;
+	}
 	dirLights.emplace_back(parent);
 	parent->addComponent(&dirLights[dirLights.size() - 1]);
 	setDirectionalLight(&dirLights[dirLights.size() - 1]);
@@ -183,7 +229,7 @@ void Core::Graphics::setSkybox(std::string sides[6])
 		cur->getMesh()->ImportObj(meshLoc);
 		cur->getMaterial()->settings.textureName = sides[i];
 		cur->getMaterial()->settings.glow = 1;
-		cur->getMaterial()->Update(device.Get(), context.Get());
+		cur->getMaterial()->Update(device, context);
 
 		float* curAv = cur->getMaterial()->texture.getAverage();
 		AverageColour[0] += curAv[0];
@@ -295,7 +341,7 @@ void Core::Graphics::setFullscreen(bool fullscreen)
 void Core::Graphics::updateLightData() {
 	
 	int closest[MaxLights];
-
+	Camera* cam = Camera::getMainCamera();
 	for (int i = 0; i < max(pointLights.size(), MaxLights); i++) {
 		if (i >= pointLights.size()) {
 			closest[i] = -1;
@@ -306,17 +352,26 @@ void Core::Graphics::updateLightData() {
 			closest[i] = i;
 			continue;
 		}
-
+		
 		for (int j = 0; j < MaxLights; j++) {
-			if (Vec3::distance(pointLights[i].entity->transform.getPosition(), Camera::mainCamera->entity->transform.getPosition()) < Vec3::distance(pointLights[closest[j]].entity->transform.getPosition(), Camera::mainCamera->entity->transform.getPosition())) {
+			if (Vec3::distance(pointLights[i].entity->transform.getPosition(), cam->entity->transform.getPosition()) < Vec3::distance(pointLights[closest[j]].entity->transform.getPosition(), cam->entity->transform.getPosition())) {
 				closest[j] = i;
 				break;
 			}
 		}
 	}
 
-	//check if in front?
+	//destroy non existent components
+	for(int i = 0; i < dirLights.size(); i++)
+		if(!dirLights[i].exists)
+			dirLights.erase(dirLights.begin() + i);
 
+	for (int i = 0; i < pointLights.size(); i++)
+		if (!pointLights[i].exists)
+			pointLights.erase(pointLights.begin() + i);
+
+	//if (directionalLight == nullptr && dirLights.size() > 0)
+		//directionalLight = &dirLights[0];
 
 	// update directional light position
 	if (directionalLight == nullptr) {

@@ -7,10 +7,10 @@ bool Engine::Input::getKey(UINT key) {
 
 //mouse
 Engine::Vec2^ Engine::Input::getMousePos() {
-	return gcnew Vec2(&Core::Input::getMousePos());
+	return gcnew Vec2(Core::Input::getMousePos());
 }
 Engine::Vec2^ Engine::Input::getMouse() {
-	return gcnew Vec2(&Core::Input::getMouse());
+	return gcnew Vec2(Core::Input::getMouse());
 }
 bool Engine::Input::getMouseButton(int button) {
 	return Core::Input::getMouseButton(button);

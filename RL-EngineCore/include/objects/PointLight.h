@@ -6,7 +6,8 @@ namespace Core {
 	class PointLight : public Entity::Component {
 	public:
 
-		PointLight(Entity* entity);
+		PointLight(Entity* entity); 
+		std::string getType() override { return "PointLight"; }
 
 		Vec3 Colour;
 

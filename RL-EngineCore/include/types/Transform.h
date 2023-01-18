@@ -16,9 +16,13 @@ namespace Core {
 	class Transform {
 	public:
 		//engine use
+		~Transform();
 		Transform();
 		Transform(Entity* entity);
-		void UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context);
+		Transform(const Transform&) = delete;
+		Transform& operator=(const Transform&) = delete;
+
+		void UpdateBuffer(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context);
 		DirectX::XMMATRIX getMatrix();
 
 		//directions
@@ -55,8 +59,8 @@ namespace Core {
 
 		//transform data
 		Entity* entity = nullptr;
-		Vec3 position;
-		Vec3 rotation;
+		Vec3 position = Vec3();
+		Vec3 rotation = Vec3();
 		Vec3 scale = Vec3(1);
 	};
 }

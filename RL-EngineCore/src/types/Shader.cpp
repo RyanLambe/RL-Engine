@@ -1,14 +1,19 @@
 #include "../../include/types/Shader.h"
 
-void Core::Shader::Start(ID3D11Device* device, ID3D11DeviceContext* context) {
+Core::Shader::Shader() {
+}
+
+void Core::Shader::Start(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context) {
 	
 	//pixel shader
 	Debug::logErrorCode(D3DReadFileToBlob(L"../../../../PixelShader.cso", blob.Create()));
+	//Debug::logErrorCode(D3DReadFileToBlob(L"../PixelShader.cso", blob.Create()));
 	Debug::logErrorCode(device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, pixelShader.Create()));
 	context->PSSetShader(pixelShader.Get(), 0, 0);
 
 	//vertex shader
 	Debug::logErrorCode(D3DReadFileToBlob(L"../../../../VertexShader.cso", blob.Create()));
+	//Debug::logErrorCode(D3DReadFileToBlob(L"../VertexShader.cso", blob.Create()));
 	Debug::logErrorCode(device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, vertexShader.Create()));
 	context->VSSetShader(vertexShader.Get(), 0, 0);
 

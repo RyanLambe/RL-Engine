@@ -3,11 +3,14 @@
 int Core::Texture::nextId = 0;
 std::map<std::string, int> Core::Texture::idMap;
 
+Core::Texture::Texture() {
+}
+
 void Core::Texture::Set(std::string fileName) {
 	name = fileName;
 }
 
-void Core::Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Core::Texture::Update(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context) {
 	
 	//if correct return
 	if (idMap.count(name) == 1) 

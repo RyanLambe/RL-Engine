@@ -4,7 +4,7 @@ Core::Mesh::Mesh() {
 
 }
 
-void Core::Mesh::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Core::Mesh::Update(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context) {
 
 	if (refresh) {
 		CreateBuffer(vertices.data(), sizeof(Vertex) * vertices.size(), D3D11_BIND_VERTEX_BUFFER, vertexBuffer.Create(), device);
@@ -126,6 +126,14 @@ void Core::Mesh::ImportObj(std::string fileName) {
 	Refresh();
 }
 
+Core::Mesh& Core::Mesh::operator=(const Mesh& other) {
+	this->vertices = other.vertices;
+	this->indices = other.indices;
+
+	this->refresh = true;
+	return *this;
+}
+
 
 
 void Core::Mesh::setVertices(std::vector<Vertex> vertices) {
@@ -144,7 +152,7 @@ std::vector<unsigned int> Core::Mesh::getIndices() {
 	return indices;
 }
 
-void Core::Mesh::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, ID3D11Device* device) {
+void Core::Mesh::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, SmartPtr<ID3D11Device> device) {
 
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;

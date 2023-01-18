@@ -7,17 +7,24 @@
 
 
 
+Core::Transform::~Transform() {
+	Debug::log("Deleting transform");
+
+}
+
 Core::Transform::Transform()
 {
 	entity = nullptr;
+	matrix = DirectX::XMMatrixIdentity();
 }
 
 Core::Transform::Transform(Entity* entity)
 {
 	this->entity = entity;
+	matrix = DirectX::XMMatrixIdentity();
 }
 
-void Core::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Core::Transform::UpdateBuffer(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context) {
 
 	DirectX::XMMATRIX mat = getMatrix();
 

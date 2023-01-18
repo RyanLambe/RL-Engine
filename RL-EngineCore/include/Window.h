@@ -11,6 +11,7 @@ namespace Core {
 	public:
 		
 		Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height);
+		Window(const Window&) = delete;
 		~Window();
 
 		struct ExitCode {
@@ -20,8 +21,7 @@ namespace Core {
 
 		};
 
-		ExitCode Spagetti();
-		void Run();
+		ExitCode Run();
 
 		Graphics* getGraphics();
 		static Window* main;

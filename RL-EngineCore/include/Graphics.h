@@ -20,6 +20,8 @@ namespace Core {
 	class Graphics
 	{
 	public:
+		Graphics();
+		Graphics(const Graphics&) = delete;
 		void Start(HWND hwnd, int width, int height);
 		void EndFrame();
 		void Draw();
@@ -27,6 +29,7 @@ namespace Core {
 		static MeshRenderer* createMesh(Entity* parent);
 		static PointLight* createPointLight(Entity* parent);
 		static DirectionalLight* createDirectionalLight(Entity* parent);
+		static Camera* createCamera(Entity* parent);
 		static void setDirectionalLight(DirectionalLight* light);
 
 		//[0] = top, [1] = bottom
@@ -93,6 +96,7 @@ namespace Core {
 		} psBufferData;
 
 		//meshs to be rendered
+		static std::vector<Camera> cameras;
 		static std::vector<MeshRenderer> renderers;
 		Shader shader;
 

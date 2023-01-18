@@ -53,7 +53,12 @@ Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int wi
 	gfx.setSkybox(skybox);
 }
 
-Core::Window::ExitCode Core::Window::Spagetti()
+Core::Window::~Window() {
+	if (hwnd != nullptr)
+		DestroyWindow(hwnd);
+}
+
+Core::Window::ExitCode Core::Window::Run()
 {
 	ExitCode out;
 	try {
@@ -63,11 +68,13 @@ Core::Window::ExitCode Core::Window::Spagetti()
 			input.update();
 			gfx.Draw();
 			gfx.EndFrame();
+
 			out.close = false;
 		}
 		else {
 			out.close = true;
 		}
+
 		return out;
 	}
 	catch (std::exception& e) {
@@ -77,22 +84,9 @@ Core::Window::ExitCode Core::Window::Spagetti()
 		MessageBoxA(nullptr, "Check log file for more info.", "Error", MB_OK | MB_ICONEXCLAMATION);
 	}
 
+	//error
 	out.close = true;
-	//out.exitCode = -1;
 	return out;
-}
-
-Core::Window::~Window()
-{
-	if(hwnd != nullptr)
-		DestroyWindow(hwnd);
-}
-
-float angle = 0.0f;
-
-Core::Graphics* Core::Window::getGraphics()
-{
-	return &gfx;
 }
 
 bool Core::Window::WindowClosed(int* quitMessage)
@@ -113,6 +107,10 @@ bool Core::Window::WindowClosed(int* quitMessage)
 
 	// if not quitting, return false
 	return false;
+}
+
+Core::Graphics* Core::Window::getGraphics() {
+	return &gfx;
 }
 
 LRESULT Core::Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

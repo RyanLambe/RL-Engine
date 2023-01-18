@@ -7,12 +7,11 @@
 #include "../types/Vec3.h"
 
 namespace Engine {
-	public ref class Transform : public Managed<Core::Transform>{
+	public ref class Transform/* : public Managed<Core::Transform> */{
 	public:
 		//engine use
-		Transform();
 		Transform(Core::Transform* transform);
-		Transform(Core::Entity* entity);
+		Core::Transform* getCoreFormat();
 
 		//directions
 		Vec3^ foreward();
@@ -20,27 +19,29 @@ namespace Engine {
 		Vec3^ up();
 
 		//position
-		void setPosition(Vec3^ position) { instance->setPosition(position->GetInstance()); }
-		void setPosition(float x, float y, float z) { instance->setPosition(x, y, z); }
-		void Translate(Vec3^ offset) { instance->Translate(offset->GetInstance()); }
-		void Translate(float x, float y, float z) { instance->Translate(x, y, z); }
-		Vec3^ getPosition() { return gcnew Vec3(instance->getPosition().x, instance->getPosition().y, instance->getPosition().z); }
+		void setPosition(Vec3^ position);
+		void setPosition(float x, float y, float z);
+		void Translate(Vec3^ offset);
+		void Translate(float x, float y, float z);
+		Vec3^ getPosition();
 
 		//rotation
-		void setRotation(Vec3^ rotation) { instance->setRotation(rotation->GetInstance()); }
-		void setRotation(float x, float y, float z) { instance->setRotation(x, y, z); }
-		void Rotate(Vec3^ offset) { instance->Rotate(offset->GetInstance()); }
-		void Rotate(float x, float y, float z) { instance->Rotate(x, y, z); }
-		Vec3^ getRotation() { return gcnew Vec3(instance->getRotation().x, instance->getRotation().y, instance->getRotation().z); }
+		void setRotation(Vec3^ rotation);
+		void setRotation(float x, float y, float z);
+		void Rotate(Vec3^ offset);
+		void Rotate(float x, float y, float z);
+		Vec3^ getRotation();
 
 		//scale
-		void setScale(Vec3^ scale) { instance->setScale(scale->GetInstance()); }
-		void setScale(float x, float y, float z) { instance->setScale(x, y, z); }
-		void setScale(float scale) { instance->setScale(scale, scale, scale); }
-		void Scale(Vec3^ scale) { instance->Scale(scale->GetInstance()); }
-		void Scale(float x, float y, float z) { instance->Scale(x, y, z); }
-		void Scale(float scale) { instance->Scale(scale, scale, scale); }
-		Vec3^ getScale() { return gcnew Vec3(instance->getScale().x, instance->getScale().y, instance->getScale().z); }
+		void setScale(Vec3^ scale);
+		void setScale(float x, float y, float z);
+		void setScale(float scale);
+		void Scale(Vec3^ scale);
+		void Scale(float x, float y, float z);
+		void Scale(float scale);
+		Vec3^ getScale();
 
+	private:
+		Core::Transform* instance;
 	};
 }

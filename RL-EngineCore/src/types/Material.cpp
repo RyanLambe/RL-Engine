@@ -4,7 +4,7 @@ Core::Material::Material() {
 	texture.Set(settings.textureName);
 }
 
-void Core::Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Core::Material::Update(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context) {
 
 	//if the material has already been setup dont do it again
 	if (set) {
@@ -46,4 +46,10 @@ void Core::Material::SetTexture(std::string textureName)
 
 void Core::Material::Refresh() {
 	set = false;
+}
+
+Core::Material& Core::Material::operator=(const Material& other) {
+	this->settings = other.settings;
+	set = false;
+	return *this;
 }

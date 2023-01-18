@@ -2,28 +2,28 @@
 
 using namespace Engine;
 
-Vec3::Vec3() : Managed(new Core::Vec3()) {
+Vec3::Vec3() {
 	x = 0;
 	y = 0;
 	z = 0;
 }
 
-Vec3::Vec3(float value) : Managed(new Core::Vec3(value)) {
+Vec3::Vec3(float value) {
 	x = value;
 	y = value;
 	z = value;
 }
 
-Vec3::Vec3(float x, float y, float z) : Managed(new Core::Vec3(x, y, z)) {
+Vec3::Vec3(float x, float y, float z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-Vec3::Vec3(Core::Vec3* vec3) : Managed(new Core::Vec3(vec3->x, vec3->y, vec3->z)) {
-	this->x = vec3->x;
-	this->y = vec3->y;
-	this->z = vec3->z;
+Vec3::Vec3(Core::Vec3 vec3) {
+	this->x = vec3.x;
+	this->y = vec3.y;
+	this->z = vec3.z;
 }
 
 //functions
@@ -33,6 +33,10 @@ float Vec3::distance(Vec3^ a, Vec3^ b) {
 	Out += pow(a->y - b->y, 2);
 	Out += pow(a->z - b->z, 2);
 	return sqrt(Out);
+}
+
+Core::Vec3 Vec3::getCoreFormat() {
+	return Core::Vec3(x, y, z);
 }
 
 //addition
@@ -51,7 +55,6 @@ void Vec3::operator+=(Vec3^ other)
 	this->x += other->x;
 	this->y += other->y;
 	this->z += other->z;
-	*instance += *other->instance;
 }
 
 void Vec3::operator+=(float other)
@@ -59,7 +62,6 @@ void Vec3::operator+=(float other)
 	this->x += other;
 	this->y += other;
 	this->z += other;
-	*instance += other;
 }
 
 //subtraction
@@ -78,7 +80,6 @@ void Vec3::operator-=(Vec3^ other)
 	this->x -= other->x;
 	this->y -= other->y;
 	this->z -= other->z;
-	*instance -= *other->instance;
 }
 
 void Vec3::operator-=(float other)
@@ -86,7 +87,6 @@ void Vec3::operator-=(float other)
 	this->x -= other;
 	this->y -= other;
 	this->z -= other;
-	*instance -= other;
 }
 
 //multiplication
@@ -105,7 +105,6 @@ void Vec3::operator*=(Vec3^ other)
 	this->x *= other->x;
 	this->y *= other->y;
 	this->z *= other->z;
-	*instance *= *other->instance;
 }
 
 void Vec3::operator*=(float other)
@@ -113,7 +112,6 @@ void Vec3::operator*=(float other)
 	this->x *= other;
 	this->y *= other;
 	this->z *= other;
-	*instance *= other;
 }
 
 //division
@@ -132,7 +130,6 @@ void Vec3::operator/=(Vec3^ other)
 	this->x /= other->x;
 	this->y /= other->y;
 	this->z /= other->z;
-	*instance *= *other->instance;
 }
 
 void Vec3::operator/=(float other)
@@ -140,5 +137,4 @@ void Vec3::operator/=(float other)
 	this->x /= other;
 	this->y /= other;
 	this->z /= other;
-	*instance *= other;
 }

@@ -16,9 +16,11 @@ int Engine::ManagedWindow::Run(array<Script^>^ scripts)
 {
 	if (instance == nullptr)
 		return -1;
-	while (!WindowClosed(instance->Spagetti()))
+	while (!WindowClosed(instance->Run())) {
 		for (int i = 0; i < scripts->Length; i++)
 			scripts[i]->Update();
+	}
+		
 	return exitCode;
 }
 

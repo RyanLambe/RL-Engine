@@ -2,25 +2,25 @@
 
 using namespace Engine;
 
-Vec2::Vec2() : Managed(new Core::Vec2()) {
+Vec2::Vec2() {
 	x = 0;
 	y = 0;
 }
 
-Vec2::Vec2(float value) : Managed(new Core::Vec2(value)) {
+Vec2::Vec2(float value) {
 	x = value;
 	y = value;
 }
 
-Vec2::Vec2(float x, float y) : Managed(new Core::Vec2(x, y)) {
+Vec2::Vec2(float x, float y) {
 	this->x = x;
 	this->y = y;
 }
 
-Engine::Vec2::Vec2(Core::Vec2* vec2) : Managed(new Core::Vec2(vec2->x, vec2->y))
+Engine::Vec2::Vec2(Core::Vec2 vec2)
 {
-	this->x = vec2->x;
-	this->y = vec2->y;
+	this->x = vec2.x;
+	this->y = vec2.y;
 }
 
 //functions
@@ -29,6 +29,10 @@ float Vec2::distance(Vec2^ a, Vec2^ b) {
 	Out += pow(a->x - b->x, 2);
 	Out += pow(a->y - b->y, 2);
 	return sqrt(Out);
+}
+
+Core::Vec2 Vec2::getCoreFormat() {
+	return Core::Vec2(x, y);
 }
 
 //addition
@@ -46,14 +50,12 @@ void Vec2::operator+=(Vec2^ other)
 {
 	this->x += other->x;
 	this->y += other->y;
-	instance->operator+=(*other->instance);
 }
 
 void Vec2::operator+=(float other)
 {
 	this->x += other;
 	this->y += other;
-	instance->operator+=(other);
 }
 
 //subtraction
@@ -71,14 +73,12 @@ void Vec2::operator-=(Vec2^ other)
 {
 	this->x -= other->x;
 	this->y -= other->y;
-	instance->operator-=(*other->instance);
 }
 
 void Vec2::operator-=(float other)
 {
 	this->x -= other;
 	this->y -= other;
-	instance->operator-=(other);
 }
 
 //multiplication
@@ -96,14 +96,12 @@ void Vec2::operator*=(Vec2^ other)
 {
 	this->x *= other->x;
 	this->y *= other->y;
-	instance->operator*=(*other->instance);
 }
 
 void Vec2::operator*=(float other)
 {
 	this->x *= other;
 	this->y *= other;
-	instance->operator*=(other);
 }
 
 //division
@@ -121,12 +119,10 @@ void Vec2::operator/=(Vec2^ other)
 {
 	this->x /= other->x;
 	this->y /= other->y;
-	instance->operator/=(*other->instance);
 }
 
 void Vec2::operator/=(float other)
 {
 	this->x /= other;
 	this->y /= other;
-	instance->operator/=(other);
 }

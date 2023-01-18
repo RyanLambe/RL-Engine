@@ -1,14 +1,9 @@
 #pragma once
 
-#include <DirectXMath.h>
-#include <d3d11.h>
 #include <vector>
 #include <string>
 
 #include "../types/Transform.h"
-
-#include "../types/Vec3.h"
-#include "../types/SmartPtr.h"
 
 namespace Core {
 	class Entity {
@@ -16,21 +11,18 @@ namespace Core {
 		//Component subclass
 		class Component {
 		public:
-			Component(Entity* entity) {
-				this->entity = entity;
-			}
+			Component(Entity* entity) : entity(entity), exists(true) { }
 
-			Entity* entity;
+			Entity* entity = nullptr;
+			bool exists = false;
 
-		private:
-			//this function makes component polymorphic
-			virtual void doNothing() {}
+			virtual std::string getType() { return "Component"; }
 		};
 
 		//general
 		Entity();
+		Entity(const Entity&) = delete;
 		~Entity();
-		void Destroy();
 		Transform transform;
 
 		//manage components

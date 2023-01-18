@@ -9,10 +9,9 @@
 #include "Managed.h"
 
 namespace Engine {
-	public ref class Mesh : public Managed<Core::Mesh> {
+	public ref class Mesh {
 	public:
-		Mesh(Core::Mesh* mesh);
 
-		void ImportObj(System::String^ fileName);
+		//add mesh data here
 	};
 }

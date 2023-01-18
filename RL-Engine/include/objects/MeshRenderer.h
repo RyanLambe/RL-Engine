@@ -19,6 +19,7 @@ namespace Engine {
 		//setters
 		void setMaterial(Material^ mat);
 		void setMesh(Mesh^ mesh);
+		void ImportMeshObj(System::String^ fileName);
 
 		//getters
 		Material^ getMaterial();
