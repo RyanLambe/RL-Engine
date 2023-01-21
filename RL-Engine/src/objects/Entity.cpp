@@ -2,36 +2,100 @@
 
 using namespace Engine;
 
-Entity::Component::Component(Entity^ entity) : 
-	Managed(new Core::Entity::Component(entity->GetInstance())) 
+//component functions
+
+Entity::Component::Component(Entity^ entity)
 {
-	this->entity = entity;
+	if (entity) {
+		instance = new Core::Entity::Component(entity->GetInstance());
+		this->entity = entity;
+		this->transform = entity->transform;
+	}
+	else
+		instance = new Core::Entity::Component(nullptr);
+	instanceOnHeap = true;
 }
 
-Engine::Entity::Component::Component(Core::Entity::Component* comp) : 
-	Managed(comp)
+Entity::Component::Component(Core::Entity::Component* comp)
 {
-	this->entity = gcnew Entity(comp->entity);
+	instance = comp;
+	instanceOnHeap = false;
+	if (comp && comp->entity) {
+		this->entity = gcnew Entity(comp->entity);
+		this->transform = entity->transform;
+	}
 }
 
-Entity::Entity() : 
-	Managed(new Core::Entity()) {
-	transform = gcnew Transform(&instance->transform);
+Entity::Component::~Component() {
+	CleanUp();
 }
 
-Engine::Entity::Entity(Core::Entity* entity) : 
-	Managed(entity)
+Entity::Component::!Component() {
+	CleanUp();
+}
+
+void Entity::Component::CleanUp() {
+	if (instance == nullptr)
+		return;
+
+	if (instanceOnHeap) {
+		delete instance;
+		return;
+	}
+
+	if (((Core::Entity::Component*)instance)->entity == nullptr) {
+		((Core::Entity::Component*)instance)->exists = false;
+	}
+}
+
+void Entity::Component::SetEntity(Entity^ newEntity) {
+	
+	newEntity->GetInstance()->addComponent(GetInstance());
+	entity = newEntity;
+	if (entity) {
+		GetInstance()->entity = entity->GetInstance();
+		transform = entity->transform;
+	}
+}
+
+Core::Entity::Component* Entity::Component::GetInstance() {
+	return (Core::Entity::Component*)instance;
+}
+
+//entity functions
+
+Entity::Entity(Core::Entity* entity)
 {
-	transform = gcnew Transform(&entity->transform);
+	instance = entity;
+	if (entity)
+		transform = gcnew Transform(&entity->transform);
+	else
+		transform = nullptr;
 }
 
-void Entity::Destroy() {
-	//destroy in scene when added
-	instance->~Entity();
-	instance = nullptr;
+//tree management
+
+Entity^ Entity::getParent() {
+	return gcnew Entity(instance->getParent());
 }
 
-/*void Engine::Entity::addComponent(Component^ component)
-{
-	instance->addComponent(component->GetInstance());
-}*/
+void Entity::setParent(Entity^ parent) {
+	instance->setParent(parent->GetInstance());
+}
+
+int Entity::getChildCount() {
+	return instance->getChildCount();
+}
+
+Entity^ Entity::getChild(int index) {
+	return gcnew Entity(instance->getChild(index));
+}
+
+array<Entity^>^ Entity::getChildren() {
+	std::vector<Core::Entity*> in = instance->getChildren();
+	array<Entity^>^ out = gcnew array<Entity^>(in.size());
+
+	for (int i = 0; i < in.size(); i++)
+		out[i] = gcnew Entity(in[i]);
+	return out;
+}

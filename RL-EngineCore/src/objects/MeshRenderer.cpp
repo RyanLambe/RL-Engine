@@ -2,15 +2,20 @@
 
 Core::MeshRenderer::MeshRenderer(Entity* parent) : Component(parent) {
 	
+	setType("MeshRenderer");
 	mesh.ImportObj("assets/storus.obj");
 }
 
 Core::MeshRenderer::MeshRenderer(const MeshRenderer& other) : Component(other.entity) {
+	setType("MeshRenderer");
 	this->material = other.material;
 	this->mesh = other.mesh;
 }
 
 void Core::MeshRenderer::Draw(SmartPtr<ID3D11Device> device, SmartPtr<ID3D11DeviceContext> context) {
+
+	if (entity == nullptr)
+		return;
 
 	//update material
 	material.Update(device, context);

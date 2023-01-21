@@ -2,7 +2,7 @@
 
 Core::Window* Core::Window::main = nullptr;
 
-Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height) {
+Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height, bool debugMode) {
 	main = this;
 	// Create class for window
 	WNDCLASS wClass = {};
@@ -13,21 +13,8 @@ Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int wi
 	
 	RegisterClass(&wClass);
 
-	// get size of window
-	RECT size;
-	
-	size.left = 100;
-	size.right = width + size.left;
-	size.top = 100;
-	size.bottom = height + size.top;
-
-	//set size and check for error
-	if (AdjustWindowRect(&size, style, false) == 0) {
-		throw std::exception(Debug::TranslateHResult(GetLastError()).c_str());
-	}
-
 	// Create window
-	hwnd = CreateWindow(name.c_str(), name.c_str(), style, CW_USEDEFAULT, CW_USEDEFAULT, size.right - size.left, size.bottom - size.top, NULL, NULL, hInstance, this);
+	hwnd = CreateWindow(name.c_str(), name.c_str(), style, CW_USEDEFAULT, CW_USEDEFAULT, width, height, NULL, NULL, hInstance, this);
 
 	//check for error
 	if (hwnd == NULL) {
@@ -36,12 +23,12 @@ Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int wi
 	
 	//setup input, debug, and graphics
 	input.start(hwnd);
-	debug.start(true);
+	debug.start(debugMode);
 
 	Debug::log("test25");
 
 	ShowWindow(hwnd, SW_SHOW);
-	gfx.Start(hwnd, size.right - size.left, size.bottom - size.top);
+	gfx.Start(hwnd, width, height);
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";

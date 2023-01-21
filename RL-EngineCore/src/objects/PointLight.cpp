@@ -1,6 +1,7 @@
 #include "../../include/objects/PointLight.h"
 
 Core::PointLight::PointLight(Entity* entity) : Core::Entity::Component(entity) {
+	setType("PointLight");
 }
 
 

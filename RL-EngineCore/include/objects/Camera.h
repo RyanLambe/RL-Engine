@@ -6,11 +6,8 @@ namespace Core {
 	class Camera : public Entity::Component {
 	public:
 
-		//Camera() = delete;
-		Camera(Entity* entity, int width, int height);
-		//Camera(const Camera&) = delete;
-
-		std::string getType() override { return "Camera"; }
+		Camera(Entity* entity);
+		~Camera();
 
 		DirectX::XMMATRIX getViewMatrix();
 		DirectX::XMMATRIX getPositionMatrix();
@@ -23,8 +20,8 @@ namespace Core {
 		float fov = 90;
 		float nearPlane = 0.1f;
 		float farPlane = 100.0f;
-		float viewWidth;
-		float viewHeight;
+		static float viewWidth;
+		static float viewHeight;
 
 	private:
 		static Camera* mainCamera;

@@ -36,12 +36,6 @@
     <ClCompile Include="src\objects\Script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\types\Managed.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\types\ManagedComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\types\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,13 +57,13 @@
     <ClCompile Include="src\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ManagedWindow.cpp">
+    <ClCompile Include="src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainTest.cpp">
+    <ClCompile Include="src\objects\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -105,12 +99,6 @@
     <ClInclude Include="include\objects\Script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\types\Managed.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\types\ManagedComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\types\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -132,10 +120,13 @@
     <ClInclude Include="include\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ManagedWindow.h">
+    <ClInclude Include="include\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\objects\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

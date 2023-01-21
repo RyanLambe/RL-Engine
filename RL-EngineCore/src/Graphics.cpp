@@ -21,14 +21,15 @@ Core::Graphics::Graphics() {
 //update
 void Core::Graphics::Start(HWND hwnd, int width, int height)
 {
+	this->hwnd = hwnd;
 
 	//create device, context, and swap chain
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferDesc.Width = width;
 	sd.BufferDesc.Height = height;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator = 0;
-	sd.BufferDesc.RefreshRate.Denominator = 0;
+	sd.BufferDesc.RefreshRate.Numerator = 1000;
+	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.SampleDesc.Count = 1;
@@ -76,7 +77,19 @@ void Core::Graphics::Start(HWND hwnd, int width, int height)
 	context->OMSetBlendState(blend, blendFactor, 0xffffffff);
 
 	//update size of window
+	windowedWidth = width;
+	windowedHeight = height;
 	updateDimensions(width, height);
+
+	//set viewport size
+	D3D11_VIEWPORT vp;
+	vp.Width = width;
+	vp.Height = height;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	context->RSSetViewports(1, &vp);
 
 	//set topology
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -99,7 +112,7 @@ void Core::Graphics::EndFrame()
 {
 	HRESULT hr;
 	//context->Flush();
-	if (FAILED(hr = swap->Present(0, 0))) {
+	if (FAILED(hr = swap->Present(1, 0))) {
 		if (hr == DXGI_ERROR_DEVICE_REMOVED)
 			checkError(Graphics::device->GetDeviceRemovedReason());
 		else
@@ -112,27 +125,9 @@ void Core::Graphics::EndFrame()
 
 void Core::Graphics::Draw() {
 
-	//update cameras
-	Camera* cam = Camera::getMainCamera();
-	bool updateMain = false;
-	for (int i = 0; i < cameras.size(); i++) {
-		if (!cameras[i].exists) {
-			if (cam == &cameras[i])
-				updateMain = true;
-			cameras.erase(cameras.begin() + i);
-		}
-	}
-
-	if (updateMain) {
-		if (cameras.size() > 0)
-			Camera::setMainCamera(&cameras[0]);
-		else
-			Camera::setMainCamera(nullptr);
-	}
-	
 	//get view matrix
-	cam = Camera::getMainCamera();
-	if (cam == nullptr)
+	Camera* cam = Camera::getMainCamera();
+	if (cam == nullptr || cam->entity == nullptr || (!cam->exists))
 		return;
 
 	DirectX::XMMATRIX viewMat = cam->getViewMatrix();
@@ -155,53 +150,43 @@ void Core::Graphics::Draw() {
 
 	//render mesh renderers
 	for (int i = 0; i < renderers.size(); i++) {
+		
+		if (renderers[i].entity == nullptr)
+			continue;
+
 		if(renderers[i].exists)
 			renderers[i].Draw(device, context);
 		else 
 			renderers.erase(renderers.begin() + i);
-		
 	}
 }
 
 //Componenet Management
 Core::MeshRenderer* Core::Graphics::createMesh(Entity* parent) {
-	if (parent == nullptr) {
-		Debug::logError("Cannot create mesh as Input is nullptr.");
-		return nullptr;
-	}
 	renderers.emplace_back(parent);
-	parent->addComponent(&renderers[renderers.size() - 1]);
+	if (parent)
+		parent->addComponent(&renderers[renderers.size() - 1]);
 	return &(renderers[renderers.size() - 1]);
 }
 
 Core::PointLight* Core::Graphics::createPointLight(Entity* parent) {
-	if (parent == nullptr) {
-		Debug::logError("Cannot create point light as Input is nullptr.");
-		return nullptr;
-	}
 	pointLights.emplace_back(parent);
-	parent->addComponent(&pointLights[pointLights.size() - 1]);
+	if (parent)
+		parent->addComponent(&pointLights[pointLights.size() - 1]);
 	return &pointLights[pointLights.size() - 1];
 }
 
 Core::Camera* Core::Graphics::createCamera(Entity* parent) {
-	if (parent == nullptr) {
-		Debug::logError("Cannot create camera as Input is nullptr.");
-		return nullptr;
-	}
-	cameras.push_back(Camera(parent, Graphics::getWidth(), Graphics::getHeight()));
-	parent->addComponent(&cameras[cameras.size() - 1]);
-	Camera::setMainCamera(&cameras[cameras.size() - 1]);
+	cameras.push_back(Camera(parent));
+	if (parent)
+		parent->addComponent(&cameras[cameras.size() - 1]);
 	return &cameras[cameras.size() - 1];
 }
 
 Core::DirectionalLight* Core::Graphics::createDirectionalLight(Entity* parent) {
-	if (parent == nullptr) {
-		Debug::logError("Cannot create directional light as Input is nullptr.");
-		return nullptr;
-	}
 	dirLights.emplace_back(parent);
-	parent->addComponent(&dirLights[dirLights.size() - 1]);
+	if (parent)
+		parent->addComponent(&dirLights[dirLights.size() - 1]);
 	setDirectionalLight(&dirLights[dirLights.size() - 1]);
 	return &dirLights[dirLights.size() - 1];
 }
@@ -213,9 +198,7 @@ void Core::Graphics::setDirectionalLight(DirectionalLight* light) {
 
 void Core::Graphics::setSkybox(std::string sides[6])
 {
-	//remove all components
-	//while (skybox.removeComponent<MeshRenderer>() != nullptr);
-
+	skybox.removeComponents("MeshRenderer");
 	float AverageColour[3] = { 0, 0, 0 };
 
 	//add sides
@@ -262,7 +245,7 @@ void Core::Graphics::setAmbientStrength(float strength)
 void Core::Graphics::setBackgroundColour(float colour[4])
 {
 	//get rid of skybox
-	while (skybox.removeComponent<MeshRenderer>() != nullptr);
+	skybox.removeComponents("MeshRenderer");
 	skyboxEnabled = false;
 
 	for (int i = 0; i < 4; i++)
@@ -285,12 +268,16 @@ void Core::Graphics::updateDimensions(int width, int height)
 	this->width = width;
 	this->height = height;
 
+	//update camera
+	Camera::viewWidth = width;
+	Camera::viewHeight = height;
+
 	DXGI_MODE_DESC dxgiDesc = {};
 	dxgiDesc.Width = width;
 	dxgiDesc.Height = height;
 	dxgiDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	dxgiDesc.RefreshRate.Numerator = 0;
-	dxgiDesc.RefreshRate.Denominator = 0;
+	dxgiDesc.RefreshRate.Numerator = 1000;
+	dxgiDesc.RefreshRate.Denominator = 1;
 	dxgiDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	dxgiDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	Debug::logErrorCode(swap->ResizeTarget(&dxgiDesc));
@@ -319,40 +306,63 @@ void Core::Graphics::updateDimensions(int width, int height)
 	Debug::logErrorCode(device->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, DSV.Create()));
 
 	context->OMSetRenderTargets(1, target.GetAddress(), DSV.Get());
-
-	//update viewport size
-	D3D11_VIEWPORT vp;
-	vp.Width = width;
-	vp.Height = height;
-	vp.MinDepth = 0;
-	vp.MaxDepth = 1;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	context->RSSetViewports(1, &vp);
-
-	
 }
 
 void Core::Graphics::setFullscreen(bool fullscreen)
 {
-	Debug::logErrorCode(swap->SetFullscreenState(fullscreen, nullptr));
+	if (fullscreen) {
+		windowedWidth = getWidth();
+		windowedHeight = getHeight();
+
+		HMONITOR hMonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+		MONITORINFO monitorInfo;
+		monitorInfo.cbSize = sizeof(MONITORINFO);
+		GetMonitorInfo(hMonitor, &monitorInfo);
+
+		swap->SetFullscreenState(true, nullptr);
+		updateDimensions(monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top);
+	}
+	else {
+		swap->SetFullscreenState(false, nullptr);
+		updateDimensions(windowedWidth, windowedHeight);
+	}
 }
 
 void Core::Graphics::updateLightData() {
-	
+
+	//destroy non existent components
+	for (int i = 0; i < dirLights.size(); i++)
+		if (!dirLights[i].exists)
+			dirLights.erase(dirLights.begin() + i);
+
+	for (int i = 0; i < pointLights.size(); i++)
+		if (!pointLights[i].exists)
+			pointLights.erase(pointLights.begin() + i);
+
+	//find closest valid point lights
 	int closest[MaxLights];
+	int skipped = 0;
 	Camera* cam = Camera::getMainCamera();
-	for (int i = 0; i < max(pointLights.size(), MaxLights); i++) {
+	for (int i = 0; i < max(pointLights.size(), MaxLights + skipped); i++) {
+		//for access spots in closest
 		if (i >= pointLights.size()) {
 			closest[i] = -1;
 			continue;
 		}
-		
-		if (i < MaxLights) {
-			closest[i] = i;
+
+		//skip if not attatched to entity
+		if (pointLights[i].entity == nullptr) {
+			skipped++;
 			continue;
 		}
 		
+		//fill closest with first in list
+		if (i < MaxLights + skipped) {
+			closest[i] = i;
+			continue;
+		}
+
+		//replace if closer
 		for (int j = 0; j < MaxLights; j++) {
 			if (Vec3::distance(pointLights[i].entity->transform.getPosition(), cam->entity->transform.getPosition()) < Vec3::distance(pointLights[closest[j]].entity->transform.getPosition(), cam->entity->transform.getPosition())) {
 				closest[j] = i;
@@ -361,20 +371,8 @@ void Core::Graphics::updateLightData() {
 		}
 	}
 
-	//destroy non existent components
-	for(int i = 0; i < dirLights.size(); i++)
-		if(!dirLights[i].exists)
-			dirLights.erase(dirLights.begin() + i);
-
-	for (int i = 0; i < pointLights.size(); i++)
-		if (!pointLights[i].exists)
-			pointLights.erase(pointLights.begin() + i);
-
-	//if (directionalLight == nullptr && dirLights.size() > 0)
-		//directionalLight = &dirLights[0];
-
 	// update directional light position
-	if (directionalLight == nullptr) {
+	if (directionalLight == nullptr || directionalLight->entity == nullptr) {
 		vsBufferData.lightPos[0] = DirectX::XMVectorSet(0, 0, 0, 0);
 	}
 	else {
@@ -395,7 +393,7 @@ void Core::Graphics::updateLightData() {
 	}
 
 	//update directional light properties
-	if (directionalLight == nullptr)
+	if (directionalLight == nullptr || directionalLight->entity == nullptr)
 		psBufferData.dirLightDetails = { 0, 0, 0 };
 	else
 		psBufferData.dirLightDetails = { directionalLight->Colour.x, directionalLight->Colour.y, directionalLight->Colour.z };

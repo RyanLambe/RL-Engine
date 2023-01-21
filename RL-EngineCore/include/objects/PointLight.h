@@ -7,9 +7,8 @@ namespace Core {
 	public:
 
 		PointLight(Entity* entity); 
-		std::string getType() override { return "PointLight"; }
 
-		Vec3 Colour;
+		Vec3 Colour = Vec3(1);
 
 		float power = 1;
 		float range = 10;

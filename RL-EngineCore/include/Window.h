@@ -10,7 +10,7 @@ namespace Core {
 	{
 	public:
 		
-		Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height);
+		Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height, bool debugMode);
 		Window(const Window&) = delete;
 		~Window();
 

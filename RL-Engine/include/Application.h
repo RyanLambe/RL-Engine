@@ -6,13 +6,15 @@
 #include "../../RL-EngineCore/include/Window.h"
 #endif
 
-#include "types/Managed.h"
 #include "objects/Script.h"
 
 namespace Engine {
-    public ref class ManagedWindow : public Managed<Core::Window> {
+    public ref class Application {
     public:
-        ManagedWindow(System::String^ name, int width, int height);
+        Application(System::String^ name, int width, int height, bool debugMode);
+        ~Application();
+        !Application();
+
         int Run(array<Script^>^ scripts);
         static void Close();
         static void SetFullscreen(bool fullscreen);
@@ -21,5 +23,7 @@ namespace Engine {
         bool WindowClosed(Core::Window::ExitCode exitCode);
         int exitCode = -1;
         static bool close;
+
+        Core::Window* instance;
     };
 }

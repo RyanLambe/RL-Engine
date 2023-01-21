@@ -120,10 +120,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="MainTest.cpp" />
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\Input.cpp" />
-    <ClCompile Include="src\ManagedWindow.cpp" />
+    <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\objects\Camera.cpp" />
     <ClCompile Include="src\objects\DirectionalLight.cpp" />
     <ClCompile Include="src\objects\Entity.cpp" />
@@ -131,10 +130,9 @@
     <ClCompile Include="src\objects\PointLight.cpp" />
     <ClCompile Include="src\objects\Script.cpp" />
     <ClCompile Include="src\Time.cpp" />
-    <ClCompile Include="src\types\Managed.cpp" />
-    <ClCompile Include="src\types\ManagedComponent.cpp" />
     <ClCompile Include="src\types\Material.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
+    <ClCompile Include="src\objects\Scene.cpp" />
     <ClCompile Include="src\types\Transform.cpp" />
     <ClCompile Include="src\types\Vec2.cpp" />
     <ClCompile Include="src\types\Vec3.cpp" />
@@ -153,16 +151,15 @@
   <ItemGroup>
     <ClInclude Include="include\Debug.h" />
     <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\ManagedWindow.h" />
+    <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\objects\Camera.h" />
     <ClInclude Include="include\objects\DirectionalLight.h" />
     <ClInclude Include="include\objects\Entity.h" />
     <ClInclude Include="include\objects\MeshRenderer.h" />
     <ClInclude Include="include\objects\PointLight.h" />
+    <ClInclude Include="include\objects\Scene.h" />
     <ClInclude Include="include\objects\Script.h" />
     <ClInclude Include="include\Time.h" />
-    <ClInclude Include="include\types\Managed.h" />
-    <ClInclude Include="include\types\ManagedComponent.h" />
     <ClInclude Include="include\types\Material.h" />
     <ClInclude Include="include\types\Mesh.h" />
     <ClInclude Include="include\types\Transform.h" />

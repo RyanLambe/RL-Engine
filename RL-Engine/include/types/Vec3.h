@@ -4,8 +4,6 @@
 #include "../../../RL-EngineCore/include/Window.h"
 #endif
 
-#include "Managed.h"
-
 namespace Engine {
 	public ref class Vec3 {
 	public:

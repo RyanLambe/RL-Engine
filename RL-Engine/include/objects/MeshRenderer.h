@@ -6,15 +6,20 @@
 #include "../../../RL-EngineCore/include/Window.h"
 #endif
 
-#include "../types/ManagedComponent.h"
+#include "Entity.h"
+
 #include "../types/Material.h"
 #include "../types/Mesh.h"
 
 namespace Engine {
-	public ref class MeshRenderer : public ManagedComponent<Core::MeshRenderer> {
+	public ref class MeshRenderer : public Entity::Component
+	{
 	public:
-
+		MeshRenderer();
 		MeshRenderer(Entity^ entity);
+		MeshRenderer(Core::MeshRenderer* mesh);
+
+		static MeshRenderer^ CastAs(Entity::Component^ component);
 
 		//setters
 		void setMaterial(Material^ mat);

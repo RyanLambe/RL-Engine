@@ -17,8 +17,55 @@ Core::Entity::~Entity()
 	}
 }
 
+/*Core::Entity& Core::Entity::operator=(const Entity& other) {
+	this->parent = other.parent;
+	this->children = other.children;
+	this->components = other.components;
+
+	this->transform = other.transform;
+}*/
+
 void Core::Entity::addComponent(Component* component) {
 	components.push_back(component);
+}
+
+Core::Entity::Component* Core::Entity::getComponent(std::string type) {
+	for (int i = 0; i < components.size(); i++)
+		if (components[i]->getType() == type)
+			return components[i];
+	return nullptr;
+}
+
+std::vector<Core::Entity::Component*> Core::Entity::getComponents(std::string type) {
+	std::vector<Component*> out = std::vector<Component*>();
+	for (int i = 0; i < components.size(); i++)
+		if (components[i]->getType() == type)
+			out.push_back(components[i]);
+	return out;
+}
+
+Core::Entity::Component* Core::Entity::removeComponent(std::string type) {
+	for (int i = 0; i < components.size(); i++) {
+		if (components[i]->getType() == type) {
+			Component* out = components[i];
+			components[i]->entity = nullptr;
+			components.erase(components.begin() + i);
+			return out;
+		}
+	}
+	return nullptr;
+}
+
+std::vector<Core::Entity::Component*> Core::Entity::removeComponents(std::string type) {
+	std::vector<Component*> out = std::vector<Component*>();
+	for (int i = 0; i < components.size(); i++) {
+		if (components[i]->getType() == type) {
+			out.push_back(components[i]);
+			components[i]->entity = nullptr;
+			components.erase(components.begin() + i);
+		}
+	}
+	return out;
 }
 
 Core::Entity* Core::Entity::getParent() {

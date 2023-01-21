@@ -1,9 +1,27 @@
 #include "../../include/objects/Camera.h"
 
+Engine::Camera::Camera() :
+	Entity::Component(Core::Graphics::createCamera(nullptr)) {
+	setMain();
+}
+
 Engine::Camera::Camera(Entity^ entity) : 
-	ManagedComponent(Core::Graphics::createCamera(entity->GetInstance()), entity)
+	Entity::Component(Core::Graphics::createCamera(entity->GetInstance()))
 {
 	setMain();
+}
+
+Engine::Camera::Camera(Core::Camera* cam) : Entity::Component(cam) 
+{ 
+
+}
+
+Engine::Camera^ Engine::Camera::CastAs(Entity::Component^ component) {
+	if (component == nullptr)
+		return nullptr;
+	if (component->GetInstance())
+		return gcnew Camera((Core::Camera*)component->GetInstance());
+	return nullptr;
 }
 
 Engine::Camera^ Engine::Camera::getMain() {
@@ -12,40 +30,40 @@ Engine::Camera^ Engine::Camera::getMain() {
 
 void Engine::Camera::setMain(Camera^ main) {
 	Camera::main = main;
-	Core::Camera::setMainCamera(main->GetInstance());
+	Core::Camera::setMainCamera(main->GetInstance<Core::Camera>());
 }
 
 void Engine::Camera::setMain() {
 	Camera::main = this;
-	Core::Camera::setMainCamera(instance);
+	Core::Camera::setMainCamera((Core::Camera*)instance);
 }
 
 void Engine::Camera::setFOV(float fov)
 {
-	instance->fov = fov;
+	GetInstance<Core::Camera>()->fov = fov;
 }
 
 void Engine::Camera::setNearPlane(float nearPlane)
 {
-	instance->nearPlane = nearPlane;
+	GetInstance<Core::Camera>()->nearPlane = nearPlane;
 }
 
 void Engine::Camera::setFarPlane(float farPlane)
 {
-	instance->farPlane = farPlane;
+	GetInstance<Core::Camera>()->farPlane = farPlane;
 }
 
 float Engine::Camera::getFOV()
 {
-	return instance->fov;
+	return GetInstance<Core::Camera>()->fov;
 }
 
 float Engine::Camera::getNearPlane()
 {
-	return instance->nearPlane;
+	return GetInstance<Core::Camera>()->nearPlane;
 }
 
 float Engine::Camera::getFarPlane()
 {
-	return instance->farPlane;
+	return GetInstance<Core::Camera>()->farPlane;
 }

@@ -12,17 +12,12 @@ namespace Engine {
 
 	public ref class Script : public Entity::Component
 	{
-	protected:
-		Entity^ entity;
-		Transform^ transform;
-
 	public:
+		Script();
 		Script(Entity^ entity);
-		
-		//virtual void Start();
 
+		virtual void Start();
 		virtual void Update();
-
 	};
 }
 #endif

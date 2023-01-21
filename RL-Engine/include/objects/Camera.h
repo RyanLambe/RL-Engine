@@ -5,14 +5,17 @@
 #include "../../../RL-EngineCore/include/Window.h"
 #endif
 
-#include "../types/ManagedComponent.h"
+#include "Entity.h"
 
 namespace Engine {
-	public ref class Camera : public ManagedComponent<Core::Camera>
+	public ref class Camera : public Entity::Component
 	{
 	public:
-
+		Camera();
 		Camera(Entity^ entity);
+		Camera(Core::Camera* cam);
+
+		static Camera^ CastAs(Entity::Component^ component);
 
 		static Camera^ getMain();
 		static void setMain(Camera^ main);

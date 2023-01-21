@@ -7,7 +7,7 @@
 #include "../types/Vec3.h"
 
 namespace Engine {
-	public ref class Transform/* : public Managed<Core::Transform> */{
+	public ref class Transform {
 	public:
 		//engine use
 		Transform(Core::Transform* transform);

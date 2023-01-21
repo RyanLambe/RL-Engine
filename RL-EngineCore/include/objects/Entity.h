@@ -16,19 +16,27 @@ namespace Core {
 			Entity* entity = nullptr;
 			bool exists = false;
 
-			virtual std::string getType() { return "Component"; }
+			std::string getType() { return type; }
+			void setType(std::string newType) { type = newType; }
+		protected:
+			std::string type = "Component";
 		};
 
 		//general
 		Entity();
-		Entity(const Entity&) = delete;
 		~Entity();
 		Transform transform;
 
+		//Entity& operator=(const Entity&);
+
 		//manage components
 		void addComponent(Component* component);
-		template<typename T> T* getComponent();
-		template<typename T> T* removeComponent();
+
+		Component* getComponent(std::string type);
+		std::vector<Component*> getComponents(std::string type);
+
+		Component* removeComponent(std::string type);
+		std::vector<Component*> removeComponents(std::string type);
 
 		//todo: fix tree
 		//manage tree
@@ -45,26 +53,4 @@ namespace Core {
 
 		std::vector<Component*> components;
 	};
-
-	//template function definitions
-	template<typename T>
-	inline T* Entity::getComponent() {
-		for (int i = 0; i < components.size(); i++) {
-			if (dynamic_cast<const T*>(components[i]) != nullptr)
-				return (T*)components[i];
-		}
-		return nullptr;
-	}
-
-	template<typename T>
-	inline T* Entity::removeComponent() {
-		for (int i = 0; i < components.size(); i++) {
-			if (dynamic_cast<T*>(components[i]) != nullptr) {
-				T* temp = dynamic_cast<T*>(components[i]);
-				components.erase(components.begin() + i);
-				return temp;
-			}
-		}
-		return nullptr;
-	}
 }

@@ -1,13 +1,23 @@
 #include "../../include/objects/Script.h"
 
 
+Engine::Script::Script() : Entity::Component((Entity^)nullptr) 
+{
+	GetInstance()->setType("Script");
+	Start();
+}
+
 Engine::Script::Script(Entity^ entity) : Entity::Component(entity)
 {
-	this->entity = entity;
-	this->transform = entity->transform;
+	GetInstance()->setType("Script");
+	Start();
+}
+
+void Engine::Script::Start() {
+
 }
 
 void Engine::Script::Update()
 {
-	//throw gcnew System::NotImplementedException();
+	
 }

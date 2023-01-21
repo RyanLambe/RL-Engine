@@ -4,40 +4,42 @@ class Runtime{
 
     static int Main()
     {
-        try
-        {
-            //create window
-            ManagedWindow window = new ManagedWindow("Name of window", 1280, 720);
+        //*** Create Application ***//
+        Application application = new Application("Name of window", 1280, 720, true);
 
-            //create and load
-            Entity cam = new Entity();
-            CameraController controller = new CameraController(cam);
-            cam.transform.setPosition(0, 2, 0);
-            Camera comp = new Camera(cam);
+        //*** Create & Load Section ***//
 
-            Camera.getMain();
+        //create scene
+        Scene scene = new Scene();
 
-            cam.addComponent(comp);
-            comp.setFOV(60);
+        //create player Entity
+        Entity player = scene.CreateEntity();
+        player.transform.setPosition(0, 2, 0);
 
-            Entity floor = new Entity();
-            MeshRenderer mesh = new MeshRenderer(floor);
-            mesh.ImportMeshObj("assets/plane.obj");
+        //add script to player
+        CameraController controller = new CameraController();
+        player.addComponent(controller);
 
-            Entity light = new Entity();
-            DirectionalLight dir = new DirectionalLight(light);
-            light.transform.setRotation(45, 45, 0);
+        //add camera component to player
+        Camera comp = new Camera(player);
+        comp.setFOV(60);
 
-            Script[] scripts = { controller };
+        //create floor Entity
+        Entity floor = scene.CreateEntity();
 
-            //run program
-            return window.Run(scripts);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+        //add mesh to floor
+        MeshRenderer mesh = new MeshRenderer(floor);
+        mesh.ImportMeshObj("assets/plane.obj");
 
-        return -1;
+        //create sun Entity
+        Entity sun = scene.CreateEntity();
+        sun.transform.setRotation(45, 45, 0);
+
+        //add directional light to sun
+        DirectionalLight light = new DirectionalLight(sun);
+
+        //*** Run Application ***//
+        Script[] scripts = { controller };
+        return application.Run(scripts);
     }
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include <typeinfo>
+#include <msclr\marshal_cppstd.h>
 
 #ifndef INCLUDE
 #define INCLUDE
@@ -7,46 +9,91 @@
 #include "../types/Transform.h"
 
 namespace Engine {
-	public ref class Entity : public Managed<Core::Entity>
+	public ref class Entity
 	{
-	public:
+	private:
+		Core::Entity* instance;
 
+	public:
 		//component
-		ref class Component : Managed<Core::Entity::Component> {
+		ref class Component {
 		public:
-			Component(Entity^ entity);
+			Component(Entity^ entity);//create new component
 			Component(Core::Entity::Component* comp);
-			Entity^ entity;
+			~Component();
+			!Component();
+
+			Entity^ entity = nullptr;
+			Transform^ transform = nullptr;
+
+			void SetEntity(Entity^ newEntity);
+
+			template<typename T>
+			T* GetInstance() { return (T*)instance; }
+			Core::Entity::Component* GetInstance();
+		private:
+			void CleanUp();
+		protected:
+			void* instance = nullptr;
+			bool instanceOnHeap;
 		};
 
 		//general
-		Entity();
 		Entity(Core::Entity* entity);
-		void Destroy();
 		Transform^ transform;
+		Core::Entity* GetInstance() { return instance; }
 
 		//component management
+		//add component
 		void addComponent(Component^ component) {
-			instance->addComponent(component->GetInstance());
+			component->SetEntity(this);
 		}
 
-		template<typename T> 
-		T^ getComponent() {
-			return instance->getComponent<T>();
+		//get components
+		generic<typename T>
+		Component^ getComponent() {
+			Core::Entity::Component* component = instance->getComponent(msclr::interop::marshal_as<std::string>(T::typeid->Name));
+			if (component == nullptr)
+				return nullptr;
+			return gcnew Component(component);
+		}
+		generic<typename T>
+		array<Component^>^ getComponents() {
+			std::vector<Core::Entity::Component*> in = instance->getComponents(msclr::interop::marshal_as<std::string>(T::typeid->Name));
+			if (in.size() == 0)
+				return nullptr;
+			array<Component^>^ out = gcnew array<Component^>(in.size());
+			for(int i = 0; i < in.size(); i++)
+				out[i] = gcnew Component(in[i]);
+			return out;
 		}
 
-		template<typename T> 
-		T^ removeComponent() {
-			return instance->removeComponent<T>();
+		//remove components
+		generic<typename T>
+		Component^ removeComponent() {
+			Core::Entity::Component* component = instance->removeComponent(msclr::interop::marshal_as<std::string>(T::typeid->Name));
+			if (component == nullptr)
+				return nullptr;
+			return gcnew Component(component);
+		}
+		generic<typename T>
+		array<Component^>^ removeComponents() {
+			std::vector<Core::Entity::Component*> in = instance->removeComponents(msclr::interop::marshal_as<std::string>(T::typeid->Name));
+			if (in.size() == 0)
+				return nullptr;
+			array<Component^>^ out = gcnew array<Component^>(in.size());
+			for (int i = 0; i < in.size(); i++)
+				out[i] = gcnew Component(in[i]);
+			return out;
 		}
 
 		//tree management
-		//Entity^ getParent();
-		//void setParent(Entity^* parent);
+		Entity^ getParent();
+		void setParent(Entity^ parent);
 
-		//std::vector<Entity^*> getChildren();//fix?
-		//Entity^* getChild(int index);
-		//int getChildCount();
+		int getChildCount();
+		Entity^ getChild(int index);
+		array<Entity^>^ getChildren();
 	};
 }
 

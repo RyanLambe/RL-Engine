@@ -8,9 +8,7 @@ namespace Core {
 
 		DirectionalLight(Entity* entity);
 
-		std::string getType() override { return "DirectionalLight"; }
-
-		Vec3 Colour;
+		Vec3 Colour = Vec3(1);
 
 	};
 }

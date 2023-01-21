@@ -4,13 +4,17 @@
 #include "../../../RL-EngineCore/include/Window.h"
 #endif
 
-#include "../types/ManagedComponent.h"
+#include "Entity.h"
 
 namespace Engine {
-	public ref class PointLight : public ManagedComponent<Core::PointLight> {
+	public ref class PointLight : public Entity::Component
+	{
 	public:
-
+		PointLight();
 		PointLight(Entity^ entity);
+		PointLight(Core::PointLight* light);
+
+		static PointLight^ CastAs(Entity::Component^ component);
 
 		void setColour(Vec3^ colour);
 		void setPower(float power);

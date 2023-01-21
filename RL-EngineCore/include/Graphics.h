@@ -43,7 +43,7 @@ namespace Core {
 		static int getHeight();
 
 		void updateDimensions(int width, int height);
-		static void setFullscreen(bool fullscreen);
+		void setFullscreen(bool fullscreen);
 
 	private:
 
@@ -55,6 +55,11 @@ namespace Core {
 
 		static int width;
 		static int height;
+
+		int windowedWidth = 0;
+		int windowedHeight = 0;
+
+		HWND hwnd;
 
 		//constant buffers
 		//vertex shader
@@ -101,7 +106,7 @@ namespace Core {
 		Shader shader;
 
 		//lights
-		float ambientStrength = 0.25f;
+		float ambientStrength = 0.5f;
 		bool skyboxEnabled = false;
 		float backgroundColour[4] = { 1, 155.0f / 255.0f, 0, 1 };
 
