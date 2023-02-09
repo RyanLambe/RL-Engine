@@ -14,18 +14,18 @@ namespace Core {
 	public:
 
 		struct Vertex {
-			struct position {
+			struct Position {
 				float x;
 				float y;
 				float z;
 			} position;
 
-			struct texCoords {
+			struct TexCoords {
 				float u;
 				float v;
 			} texCoords;
 
-			struct normal {
+			struct Normal {
 				float x;
 				float y;
 				float z;
@@ -74,7 +74,6 @@ namespace Core {
 		Mesh& operator=(const Mesh& other);
 
 	private:
-
 		void CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, SmartPtr<ID3D11Device> device);
 
 	private:

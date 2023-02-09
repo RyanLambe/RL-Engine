@@ -97,9 +97,9 @@ void Core::Graphics::Start(HWND hwnd, int width, int height)
 	//setup sampler
 	D3D11_SAMPLER_DESC sampleDesc = {};
 	sampleDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	sampleDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampleDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
 	checkError(device->CreateSamplerState(&sampleDesc, sampler.Create()));
 	context->PSSetSamplers(0, 1, sampler.GetAddress());
@@ -381,15 +381,13 @@ void Core::Graphics::updateLightData() {
 	}
 
 	//update point light positions
-	Vec3 temp;
 	for (int i = 0; i < MaxLights; i++) {
 		if (closest[i] == -1) {
 			vsBufferData.lightPos[i + 1] = DirectX::XMVectorSet(0, 0, 0, 0);
 			continue;
 		}
 
-		temp = pointLights[closest[i]].entity->transform.getPosition();
-		vsBufferData.lightPos[i + 1] = DirectX::XMVectorSet(temp.x, temp.y, temp.z, 1);
+		vsBufferData.lightPos[i + 1] = pointLights[closest[i]].entity->transform.getMatrix().r[3];
 	}
 
 	//update directional light properties
@@ -398,6 +396,7 @@ void Core::Graphics::updateLightData() {
 	else
 		psBufferData.dirLightDetails = { directionalLight->Colour.x, directionalLight->Colour.y, directionalLight->Colour.z };
 
+	Vec3 temp;
 	//update point light properties
 	for (int i = 0; i < MaxLights; i++) {
 		//if less lights than max

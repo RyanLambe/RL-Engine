@@ -89,6 +89,11 @@ void Vec3::operator-=(float other)
 	this->z -= other;
 }
 
+//negative
+Vec3^ Vec3::operator-() {
+	return gcnew Vec3(-x, -y, -z);
+}
+
 //multiplication
 Vec3^ Vec3::operator*(Vec3^ other)
 {

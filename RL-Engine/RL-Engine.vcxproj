@@ -130,6 +130,7 @@
     <ClCompile Include="src\objects\PointLight.cpp" />
     <ClCompile Include="src\objects\Script.cpp" />
     <ClCompile Include="src\Time.cpp" />
+    <ClCompile Include="src\types\Color.cpp" />
     <ClCompile Include="src\types\Material.cpp" />
     <ClCompile Include="src\types\Mesh.cpp" />
     <ClCompile Include="src\objects\Scene.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="include\objects\Scene.h" />
     <ClInclude Include="include\objects\Script.h" />
     <ClInclude Include="include\Time.h" />
+    <ClInclude Include="include\types\Color.h" />
     <ClInclude Include="include\types\Material.h" />
     <ClInclude Include="include\types\Mesh.h" />
     <ClInclude Include="include\types\Transform.h" />

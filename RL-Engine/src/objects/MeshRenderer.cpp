@@ -28,18 +28,20 @@ MeshRenderer^ MeshRenderer::CastAs(Entity::Component^ component) {
 }
 
 void MeshRenderer::setMaterial(Material^ mat) {
-	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.r = mat->color.r;
-	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.g = mat->color.g;
-	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.b = mat->color.b;
-	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.a = mat->color.a;
+	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.r = mat->color->r;
+	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.g = mat->color->g;
+	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.b = mat->color->b;
+	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.a = 1.0f;
 
 	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.smoothness = mat->smoothness;
 	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.reflectivity = mat->reflectivity;
 
 	GetInstance<Core::MeshRenderer>()->getMaterial()->settings.glow = mat->glow;
 
-	System::String^ test = mat->textureName;
-	GetInstance<Core::MeshRenderer>()->getMaterial()->SetTexture(marshal_as<std::string>(test));
+	if (!mat->textureName->Equals("")) {
+		System::String^ test = mat->textureName;
+		GetInstance<Core::MeshRenderer>()->getMaterial()->SetTexture(marshal_as<std::string>(test));
+	}
 }
 
 void MeshRenderer::setMesh(Mesh^ mesh) {
@@ -54,10 +56,9 @@ void MeshRenderer::ImportMeshObj(System::String^ fileName) {
 Material^ MeshRenderer::getMaterial() {
 	Material^ mat = gcnew Material();
 
-	mat->color.r = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.r;
-	mat->color.g = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.g;
-	mat->color.b = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.b;
-	mat->color.a = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.a;
+	mat->color->r = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.r;
+	mat->color->g = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.g;
+	mat->color->b = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.color.b;
 
 	mat->smoothness = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.smoothness;
 	mat->reflectivity = GetInstance<Core::MeshRenderer>()->getMaterial()->settings.reflectivity;

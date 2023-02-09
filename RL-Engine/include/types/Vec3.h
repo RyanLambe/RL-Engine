@@ -8,7 +8,7 @@ namespace Engine {
 	public ref class Vec3 {
 	public:
 
-		//conponents
+		//components
 		float x;
 		float y;
 		float z;
@@ -33,6 +33,8 @@ namespace Engine {
 		Vec3^ operator-(float other);
 		void operator-=(Vec3^ other);
 		void operator-=(float other);
+
+		Vec3^ operator-();
 
 		Vec3^ operator*(Vec3^ other);
 		Vec3^ operator*(float other);
