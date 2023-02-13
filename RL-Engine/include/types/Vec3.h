@@ -24,27 +24,30 @@ namespace Engine {
 		Core::Vec3 getCoreFormat();
 
 		//operators
-		Vec3^ operator+(Vec3^ other);
-		Vec3^ operator+(float other);
-		void operator+=(Vec3^ other);
-		void operator+=(float other);
+		static Vec3^ operator+(Vec3^ left, Vec3^ right);
+		static Vec3^ operator+(Vec3^ left, float right);
+		static Vec3^ operator+(float left, Vec3^ right);
+		static void operator+=(Vec3^ left, Vec3^ right);
+		static void operator+=(Vec3^ left, float right);
 
-		Vec3^ operator-(Vec3^ other);
-		Vec3^ operator-(float other);
-		void operator-=(Vec3^ other);
-		void operator-=(float other);
+		static Vec3^ operator-(Vec3^ left, Vec3^ right);
+		static Vec3^ operator-(Vec3^ left, float right);
+		static Vec3^ operator-(float left, Vec3^ right);
+		static Vec3^ operator-(Vec3^ vec);
+		static void operator-=(Vec3^ left, Vec3^ right);
+		static void operator-=(Vec3^ left, float right);
 
-		Vec3^ operator-();
+		static Vec3^ operator*(Vec3^ left, Vec3^ right);
+		static Vec3^ operator*(Vec3^ left, float right);
+		static Vec3^ operator*(float left, Vec3^ right);
+		static void operator*=(Vec3^ left, Vec3^ right);
+		static void operator*=(Vec3^ left, float right);
 
-		Vec3^ operator*(Vec3^ other);
-		Vec3^ operator*(float other);
-		void operator*=(Vec3^ other);
-		void operator*=(float other);
-
-		Vec3^ operator/(Vec3^ other);
-		Vec3^ operator/(float other);
-		void operator/=(Vec3^ other);
-		void operator/=(float other);
+		static Vec3^ operator/(Vec3^ left, Vec3^ right);
+		static Vec3^ operator/(Vec3^ left, float right);
+		static Vec3^ operator/(float left, Vec3^ right);
+		static void operator/=(Vec3^ left, Vec3^ right);
+		static void operator/=(Vec3^ left, float right);
 
 	};
 }

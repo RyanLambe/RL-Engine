@@ -40,106 +40,124 @@ Core::Vec3 Vec3::getCoreFormat() {
 }
 
 //addition
-Vec3^ Vec3::operator+(Vec3^ other)
-{
-	return gcnew Vec3(this->x + other->x, this->y + other->y, this->z + other->z);
+Vec3^ Vec3::operator+(Vec3^ left, Vec3^ right) {
+	return gcnew Vec3(left->x + right->x, left->y + right->y, left->z + right->z);
 }
 
-Vec3^ Vec3::operator+(float other)
+Vec3^ Vec3::operator+(Vec3^ left, float right)
 {
-	return gcnew Vec3(this->x + other, this->y + other, this->z + other);
+	return gcnew Vec3(left->x + right, left->y + right, left->z + right);
 }
 
-void Vec3::operator+=(Vec3^ other)
+Vec3^ Vec3::operator+(float left, Vec3^ right)
 {
-	this->x += other->x;
-	this->y += other->y;
-	this->z += other->z;
+	return gcnew Vec3(left + right->x, left + right->y, left + right->z);
 }
 
-void Vec3::operator+=(float other)
+void Vec3::operator+=(Vec3^ left, Vec3^ right)
 {
-	this->x += other;
-	this->y += other;
-	this->z += other;
+	left->x += right->x;
+	left->y += right->y;
+	left->z += right->z;
+}
+
+void Vec3::operator+=(Vec3^ left, float right)
+{
+	left->x += right;
+	left->y += right;
+	left->z += right;
 }
 
 //subtraction
-Vec3^ Vec3::operator-(Vec3^ other)
+Vec3^ Vec3::operator-(Vec3^ left, Vec3^ right)
 {
-	return gcnew Vec3(this->x - other->x, this->y - other->y, this->z - other->z);
+	return gcnew Vec3(left->x - right->x, left->y - right->y, left->z - right->z);
 }
 
-Vec3^ Vec3::operator-(float other)
+Vec3^ Vec3::operator-(Vec3^ left, float right)
 {
-	return gcnew Vec3(this->x - other, this->y - other, this->z - other);
+	return gcnew Vec3(left->x - right, left->y - right, left->z - right);
 }
 
-void Vec3::operator-=(Vec3^ other)
+Vec3^ Vec3::operator-(float left, Vec3^ right)
 {
-	this->x -= other->x;
-	this->y -= other->y;
-	this->z -= other->z;
+	return gcnew Vec3(left - right->x, left - right->y, left - right->z);
 }
 
-void Vec3::operator-=(float other)
-{
-	this->x -= other;
-	this->y -= other;
-	this->z -= other;
+Vec3^ Vec3::operator-(Vec3^ vec) {
+	return gcnew Vec3(-vec->x, -vec->y, -vec->z);
 }
 
-//negative
-Vec3^ Vec3::operator-() {
-	return gcnew Vec3(-x, -y, -z);
+void Vec3::operator-=(Vec3^ left, Vec3^ right)
+{
+	left->x -= right->x;
+	left->y -= right->y;
+	left->z -= right->z;
+}
+
+void Vec3::operator-=(Vec3^ left, float right)
+{
+	left->x -= right;
+	left->y -= right;
+	left->z -= right;
 }
 
 //multiplication
-Vec3^ Vec3::operator*(Vec3^ other)
+Vec3^ Vec3::operator*(Vec3^ left, Vec3^ right)
 {
-	return gcnew Vec3(this->x * other->x, this->y * other->y, this->z * other->z);
+	return gcnew Vec3(left->x * right->x, left->y * right->y, left->z * right->z);
 }
 
-Vec3^ Vec3::operator*(float other)
+Vec3^ Vec3::operator*(Vec3^ left, float right)
 {
-	return gcnew Vec3(this->x * other, this->y * other, this->z * other);
+	return gcnew Vec3(left->x * right, left->y * right, left->z * right);
 }
 
-void Vec3::operator*=(Vec3^ other)
+Vec3^ Vec3::operator*(float left, Vec3^ right)
 {
-	this->x *= other->x;
-	this->y *= other->y;
-	this->z *= other->z;
+	return gcnew Vec3(left * right->x, left * right->y, left * right->z);
 }
 
-void Vec3::operator*=(float other)
+void Vec3::operator*=(Vec3^ left, Vec3^ right)
 {
-	this->x *= other;
-	this->y *= other;
-	this->z *= other;
+	left->x *= right->x;
+	left->y *= right->y;
+	left->z *= right->z;
+}
+
+void Vec3::operator*=(Vec3^ left, float right)
+{
+	left->x *= right;
+	left->y *= right;
+	left->z *= right;
 }
 
 //division
-Vec3^ Vec3::operator/(Vec3^ other)
+Vec3^ Vec3::operator/(Vec3^ left, Vec3^ right)
 {
-	return gcnew Vec3(this->x / other->x, this->y / other->y, this->z / other->z);
+	return gcnew Vec3(left->x / right->x, left->y / right->y, left->z / right->z);
 }
 
-Vec3^ Vec3::operator/(float other)
+Vec3^ Vec3::operator/(Vec3^ left, float right)
 {
-	return gcnew Vec3(this->x / other, this->y / other, this->z / other);
+	return gcnew Vec3(left->x / right, left->y / right, left->z / right);
 }
 
-void Vec3::operator/=(Vec3^ other)
+Vec3^ Vec3::operator/(float left, Vec3^ right)
 {
-	this->x /= other->x;
-	this->y /= other->y;
-	this->z /= other->z;
+	return gcnew Vec3(left / right->x, left / right->y, left / right->z);
 }
 
-void Vec3::operator/=(float other)
+void Vec3::operator/=(Vec3^ left, Vec3^ right)
 {
-	this->x /= other;
-	this->y /= other;
-	this->z /= other;
+	left->x /= right->x;
+	left->y /= right->y;
+	left->z /= right->z;
+}
+
+void Vec3::operator/=(Vec3^ left, float right)
+{
+	left->x /= right;
+	left->y /= right;
+	left->z /= right;
 }

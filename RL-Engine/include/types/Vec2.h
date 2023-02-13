@@ -18,28 +18,34 @@ namespace Engine {
 		Vec2(Core::Vec2 vec2);
 
 		//functions
+		//test a
 		static float distance(Vec2^ a, Vec2^ b);
 		Core::Vec2 getCoreFormat();
 
 		//operators
-		Vec2^ operator+(Vec2^ other);
-		Vec2^ operator+(float other);
-		void operator+=(Vec2^ other);
-		void operator+=(float other);
+		static Vec2^ operator+(Vec2^ left, Vec2^ right);
+		static Vec2^ operator+(Vec2^ left, float right);
+		static Vec2^ operator+(float left, Vec2^ right);
+		static void operator+=(Vec2^ left, Vec2^ right);
+		static void operator+=(Vec2^ left, float right);
 
-		Vec2^ operator-(Vec2^ other);
-		Vec2^ operator-(float other);
-		void operator-=(Vec2^ other);
-		void operator-=(float other);
+		static Vec2^ operator-(Vec2^ left, Vec2^ right);
+		static Vec2^ operator-(Vec2^ left, float right);
+		static Vec2^ operator-(float left, Vec2^ right);
+		static Vec2^ operator-(Vec2^ vec);
+		static void operator-=(Vec2^ left, Vec2^ right);
+		static void operator-=(Vec2^ left, float right);
 
-		Vec2^ operator*(Vec2^ other);
-		Vec2^ operator*(float other);
-		void operator*=(Vec2^ other);
-		void operator*=(float other);
+		static Vec2^ operator*(Vec2^ left, Vec2^ right);
+		static Vec2^ operator*(Vec2^ left, float right);
+		static Vec2^ operator*(float left, Vec2^ right);
+		static void operator*=(Vec2^ left, Vec2^ right);
+		static void operator*=(Vec2^ left, float right);
 
-		Vec2^ operator/(Vec2^ other);
-		Vec2^ operator/(float other);
-		void operator/=(Vec2^ other);
-		void operator/=(float other);
+		static Vec2^ operator/(Vec2^ left, Vec2^ right);
+		static Vec2^ operator/(Vec2^ left, float right);
+		static Vec2^ operator/(float left, Vec2^ right);
+		static void operator/=(Vec2^ left, Vec2^ right);
+		static void operator/=(Vec2^ left, float right);
 	};
 }

@@ -4,11 +4,11 @@ using System.ComponentModel;
 
 class CameraController : Script
 {
-    //Start is called after construction
+    //Start is called after loaded
     public override void Start()
     {
-        Input.setCursorState(3);//locked and hidden
-        //Application.SetFullscreen(true);
+        //Input.setCursorState(3); //locked and hidden
+        //Application.SetFullscreen(true); //fullscreen
     }
 
     //Update is called every frame

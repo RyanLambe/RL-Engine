@@ -26,6 +26,12 @@ int Engine::Application::Run(array<Script^>^ scripts)
 {
 	if (instance == nullptr)
 		return -1;
+
+	//start
+	for (int i = 0; i < scripts->Length; i++)
+		scripts[i]->Start();
+
+	//every frame
 	while (!WindowClosed(instance->Run())) {
 		for (int i = 0; i < scripts->Length; i++)
 			scripts[i]->Update();

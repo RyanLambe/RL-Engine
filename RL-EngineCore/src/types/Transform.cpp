@@ -124,12 +124,12 @@ void Core::Transform::setPosition(float x, float y, float z) {
 
 void Core::Transform::Translate(Vec3 offset)
 {
-	this->position += offset;
+	this->position += right() * offset.x + up() * offset.y + foreward() * offset.z;
 }
 
 void Core::Transform::Translate(float x, float y, float z)
 {
-	this->position += new Vec3(x, y, z);
+	this->position += right() * x + up() * y + foreward() * z;
 }
 
 Core::Vec3 Core::Transform::getPosition() {
