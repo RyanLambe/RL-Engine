@@ -1,11 +1,9 @@
 # RL-Engine
-### ***-This Project is not yet functional, please star and come back later.***
 
+RL Engine is a 3D game engine built using C++ and Direct X, providing dynamic lighting, custom skyboxes, and more. RL Engine also provides a highly intuitive and easy-to-use ECS (Entity Component System) for game object management, making the development process smoother and more efficient. To further enhance the development experience, the RL Engine also comes with a custom error and logging system, allowing developers to efficiently diagnose and fix any issues that may arise during the development process.
 
-A Graphics Engine made using C++ and Direct X to be used in future projects.
-
-## Goals:
-- To be able to create objects that can move around the scene
-- to be able to create different types of lights
-- add a physics system to handle collisions and forces
-- add a UI system
+## Future Goals:
+- Physics System
+- Dynamic Sound System
+- Robust Animation System
+- Documentation
