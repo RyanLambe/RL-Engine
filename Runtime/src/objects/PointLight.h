@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Camera.h"
 
-namespace Core {
+namespace rl {
 	class PointLight : public Entity::Component {
 	public:
 

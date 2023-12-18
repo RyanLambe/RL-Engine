@@ -9,7 +9,7 @@
 #include "Vec2.h"
 #include "../Debug.h"
 
-namespace Core {
+namespace rl {
 	class Mesh {
 	public:
 

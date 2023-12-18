@@ -9,7 +9,7 @@
 
 #define pi 3.141592653589793238463f
 
-namespace Core {
+namespace rl {
 
 	class Entity;
 

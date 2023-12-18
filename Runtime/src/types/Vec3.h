@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-namespace Core {
+namespace rl {
 	class Vec3 {
 	public:
 
@@ -15,7 +15,7 @@ namespace Core {
 		Vec3();
 		Vec3(float value);
 		Vec3(float x, float y, float z);
-		Vec3(Core::Vec3* vec);
+		Vec3(Vec3* vec);
 
 		//functions
 		static float distance(Vec3 a, Vec3 b);

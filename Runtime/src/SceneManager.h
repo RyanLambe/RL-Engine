@@ -2,7 +2,7 @@
 #include <list>
 #include "objects/Entity.h"
 
-namespace Core {
+namespace rl {
 
 	static class SceneManager {
 	public:

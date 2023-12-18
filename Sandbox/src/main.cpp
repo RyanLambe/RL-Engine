@@ -1,16 +1,17 @@
+
 #include "../../Runtime/src/SceneManager.h"
 #include "../../Runtime/src/Window.h"
 
-using namespace Core;
+using namespace rl;
 
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
 	std::wstring test = L"name";
 	Window window(hInst, nullptr, test, WS_OVERLAPPEDWINDOW, 1280, 720, true);
 
-	SceneManager::Scene* scene = SceneManager::CreateScene();
+	//SceneManager::Scene* scene = SceneManager::CreateScene();
 
-	Entity* player = scene->CreateEntity();
+	/*Entity* player = scene->CreateEntity();
 	player->transform.setPosition(0, 2, -10);
 	Camera* camera = Graphics::createCamera(player);
 	Camera::setMainCamera(camera);
@@ -22,7 +23,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
 
 	Entity* sun = scene->CreateEntity();
 	sun->transform.setRotation(45, 45, 0);
-	DirectionalLight* light = Graphics::createDirectionalLight(sun);
+	DirectionalLight* light = Graphics::createDirectionalLight(sun);*/
 
 
 	//Input::setCursorState(CursorState::Hidden);
@@ -30,7 +31,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
 	Window::ExitCode exitCode = window.Run();
 	while(!exitCode.close)
 	{
-		float speed = Time::deltaTime() * 5;
+		/*float speed = Time::deltaTime() * 5;
 		if (Input::getKey('W'))
 			player->transform.Translate(0, 0, speed);
 		if (Input::getKey('A'))
@@ -48,7 +49,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
 
 		float sensitivity = 50 * Time::deltaTime();
 		Vec2 mouse = Input::getMouse();
-		player->transform.Rotate(mouse.y * sensitivity, mouse.x * sensitivity, 0);
+		player->transform.Rotate(mouse.y * sensitivity, mouse.x * sensitivity, 0);*/
 
 		exitCode = window.Run();
 	}

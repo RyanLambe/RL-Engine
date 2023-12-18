@@ -1,16 +1,18 @@
 #include "Texture.h"
 
-int Core::Texture::nextId = 0;
-std::map<std::string, int> Core::Texture::idMap;
+using namespace rl;
 
-Core::Texture::Texture() {
+int Texture::nextId = 0;
+std::map<std::string, int> Texture::idMap;
+
+Texture::Texture() {
 }
 
-void Core::Texture::Set(std::string fileName) {
+void Texture::Set(std::string fileName) {
 	name = fileName;
 }
 
-void Core::Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	
 	//if correct return
 	if (idMap.count(name) == 1) 
@@ -86,12 +88,12 @@ void Core::Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	context->PSSetShaderResources(idMap.at(name), 1, texView.GetAddressOf());
 }
 
-int Core::Texture::getId()
+int Texture::getId()
 {
 	return idMap.at(name);
 }
 
-float* Core::Texture::getAverage()
+float* Texture::getAverage()
 {
 	return avColour;
 }

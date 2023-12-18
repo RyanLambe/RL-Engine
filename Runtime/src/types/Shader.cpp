@@ -1,9 +1,11 @@
 #include "Shader.h"
 
-Core::Shader::Shader() {
+using namespace rl;
+
+Shader::Shader() {
 }
 
-void Core::Shader::Start(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Shader::Start(ID3D11Device* device, ID3D11DeviceContext* context) {
 	
 	//pixel shader
 	Debug::logErrorCode(D3DReadFileToBlob(L"PixelShader.cso", &blob));

@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 
-namespace Core {
+namespace rl {
 	class DirectionalLight : public Entity::Component {
 
 	public:

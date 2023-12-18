@@ -5,7 +5,7 @@
 
 #include "../types/Transform.h"
 
-namespace Core {
+namespace rl {
 	class Entity {
 	public:
 		//Component subclass

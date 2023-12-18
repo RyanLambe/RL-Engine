@@ -1,10 +1,12 @@
 #include "Material.h"
 
-Core::Material::Material() {
+using namespace rl;
+
+Material::Material() {
 	texture.Set(settings.textureName);
 }
 
-void Core::Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 
 	//if the material has already been setup dont do it again
 	if (set) {
@@ -38,17 +40,17 @@ void Core::Material::Update(ID3D11Device* device, ID3D11DeviceContext* context) 
 	set = true;
 }
 
-void Core::Material::SetTexture(std::string textureName)
+void Material::SetTexture(std::string textureName)
 {
 	settings.textureName = textureName;
 	Refresh();
 }
 
-void Core::Material::Refresh() {
+void Material::Refresh() {
 	set = false;
 }
 
-Core::Material& Core::Material::operator=(const Material& other) {
+Material& Material::operator=(const Material& other) {
 	this->settings = other.settings;
 	set = false;
 	return *this;

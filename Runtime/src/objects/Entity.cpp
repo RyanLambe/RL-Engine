@@ -1,10 +1,12 @@
 #include "Entity.h"
 
-Core::Entity::Entity() : transform(this) {
+using namespace rl;
+
+Entity::Entity() : transform(this) {
 
 }
 
-Core::Entity::~Entity()
+Entity::~Entity()
 {
 	//set children parents to this parent
 	for (int i = 0; i < getChildCount(); i++) {
@@ -17,7 +19,7 @@ Core::Entity::~Entity()
 	}
 }
 
-/*Core::Entity& Core::Entity::operator=(const Entity& other) {
+/*Entity& Entity::operator=(const Entity& other) {
 	this->parent = other.parent;
 	this->children = other.children;
 	this->components = other.components;
@@ -25,18 +27,18 @@ Core::Entity::~Entity()
 	this->transform = other.transform;
 }*/
 
-void Core::Entity::addComponent(Component* component) {
+void Entity::addComponent(Component* component) {
 	components.push_back(component);
 }
 
-Core::Entity::Component* Core::Entity::getComponent(std::string type) {
+Entity::Component* Entity::getComponent(std::string type) {
 	for (int i = 0; i < components.size(); i++)
 		if (components[i]->getType() == type)
 			return components[i];
 	return nullptr;
 }
 
-std::vector<Core::Entity::Component*> Core::Entity::getComponents(std::string type) {
+std::vector<Entity::Component*> Entity::getComponents(std::string type) {
 	std::vector<Component*> out = std::vector<Component*>();
 	for (int i = 0; i < components.size(); i++)
 		if (components[i]->getType() == type)
@@ -44,7 +46,7 @@ std::vector<Core::Entity::Component*> Core::Entity::getComponents(std::string ty
 	return out;
 }
 
-Core::Entity::Component* Core::Entity::removeComponent(std::string type) {
+Entity::Component* Entity::removeComponent(std::string type) {
 	for (int i = 0; i < components.size(); i++) {
 		if (components[i]->getType() == type) {
 			Component* out = components[i];
@@ -56,7 +58,7 @@ Core::Entity::Component* Core::Entity::removeComponent(std::string type) {
 	return nullptr;
 }
 
-std::vector<Core::Entity::Component*> Core::Entity::removeComponents(std::string type) {
+std::vector<Entity::Component*> Entity::removeComponents(std::string type) {
 	std::vector<Component*> out = std::vector<Component*>();
 	for (int i = 0; i < components.size(); i++) {
 		if (components[i]->getType() == type) {
@@ -68,11 +70,11 @@ std::vector<Core::Entity::Component*> Core::Entity::removeComponents(std::string
 	return out;
 }
 
-Core::Entity* Core::Entity::getParent() {
+Entity* Entity::getParent() {
 	return parent;
 }
 
-void Core::Entity::setParent(Entity* parent) {
+void Entity::setParent(Entity* parent) {
 	//remove this from previous parent
 	if (this->parent != nullptr) {
 		for (int i = 0; i < this->parent->children.size(); i++) {
@@ -89,14 +91,14 @@ void Core::Entity::setParent(Entity* parent) {
 	this->parent = parent;
 }
 
-std::vector<Core::Entity*> Core::Entity::getChildren() {
+std::vector<Entity*> Entity::getChildren() {
 	return children;
 }
 
-Core::Entity* Core::Entity::getChild(int index) {
+Entity* Entity::getChild(int index) {
 	return children[index];
 }
 
-int Core::Entity::getChildCount() {
+int Entity::getChildCount() {
 	return children.size();
 }

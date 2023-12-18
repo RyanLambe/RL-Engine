@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Graphics.h"
+#include "graphics/Renderer.h"
 #include "Input.h"
 
 #pragma comment(lib, "user32.lib")
 
-namespace Core {
+namespace rl {
 	class Window
 	{
 	public:
@@ -23,7 +23,7 @@ namespace Core {
 
 		ExitCode Run();
 
-		Graphics* getGraphics();
+		//Graphics* getGraphics();
 		static Window* main;
 
 	private:
@@ -34,7 +34,7 @@ namespace Core {
 	private:
 		HWND hwnd = nullptr;
 
-		Graphics gfx;
+		std::unique_ptr<impl::Renderer> renderer;
 		Input input;
 		Time time;
 		Debug debug;

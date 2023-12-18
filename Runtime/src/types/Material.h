@@ -5,7 +5,7 @@
 #include "../Debug.h"
 #include <wrl.h>
 
-namespace Core {
+namespace rl {
 	class Material {
 	public:
 		struct MaterialInfo {

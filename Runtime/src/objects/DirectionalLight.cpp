@@ -1,5 +1,7 @@
 #include "DirectionalLight.h"
 
-Core::DirectionalLight::DirectionalLight(Entity* entity) : Entity::Component(entity) {
+using namespace rl;
+
+DirectionalLight::DirectionalLight(Entity* entity) : Entity::Component(entity) {
 	setType("DirectionalLight");
 }

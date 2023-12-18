@@ -1,24 +1,26 @@
 #include "Time.h"
 
-DWORD Core::Time::startFrame;
-DWORD Core::Time::prevFrame;
+using namespace rl;
 
-std::vector<Core::Time::Timer*> Core::Time::timers;
+DWORD Time::startFrame;
+DWORD Time::prevFrame;
 
-Core::Time::Time()
+std::vector<Time::Timer*> Time::timers;
+
+Time::Time()
 {
 	//frames since start
 	startFrame = GetTickCount64();
 	update();
 }
 
-void Core::Time::update()
+void Time::update()
 {
 	//frames since previous update
 	prevFrame = GetTickCount64();
 }
 
-float Core::Time::getTime()
+float Time::getTime()
 {
 	//get current frame
 	DWORD curFrame = GetTickCount64();
@@ -27,7 +29,7 @@ float Core::Time::getTime()
 	return (float)(curFrame - startFrame) / 1000.0f;
 }
 
-float Core::Time::deltaTime()
+float Time::deltaTime()
 {
 	//get current frame
 	DWORD curFrame = GetTickCount64();
@@ -36,18 +38,18 @@ float Core::Time::deltaTime()
 	return (float)(curFrame - prevFrame) / 1000.0f;
 }
 
-void Core::Time::addTimer(Timer* timer)
+void Time::addTimer(Timer* timer)
 {
 	timers.push_back(timer);
 }
 
-void Core::Time::Timer::start()
+void Time::Timer::start()
 {
 	addTimer(this);
 	startFrame = GetTickCount64();
 }
 
-float Core::Time::Timer::getTime()
+float Time::Timer::getTime()
 {
 	//get current frame
 	DWORD curFrame = GetTickCount64();

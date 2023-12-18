@@ -12,7 +12,7 @@
 
 #include "../Debug.h"
 
-namespace Core {
+namespace rl {
 	class Texture {
 	public:
 		Texture();

@@ -9,7 +9,7 @@
 #include "types/Vec2.h"
 #include "types/Vec3.h"
 
-namespace Core {
+namespace rl {
 	class Debug
 	{
 	public:

@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-namespace Core {
+namespace rl {
 	class Vec2 {
 	public:
 

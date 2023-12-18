@@ -8,7 +8,7 @@
 #include "../types/Shader.h"
 #include "../types/Material.h"
 
-namespace Core {
+namespace rl {
 	class MeshRenderer : public Entity::Component {
 
 	public:

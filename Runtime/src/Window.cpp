@@ -1,8 +1,10 @@
 #include "Window.h"
 
-Core::Window* Core::Window::main = nullptr;
+using namespace rl;
 
-Core::Window::Window(HINSTANCE hInstance, HWND parent, std::wstring name, DWORD style, int width, int height, bool debugMode) {
+Window* Window::main = nullptr;
+
+Window::Window(HINSTANCE hInstance, HWND parent, std::wstring name, DWORD style, int width, int height, bool debugMode) {
 	main = this;
 	// Create class for window
 	WNDCLASS wClass = {};
@@ -28,7 +30,8 @@ Core::Window::Window(HINSTANCE hInstance, HWND parent, std::wstring name, DWORD 
 	//Debug::log("test25");
 
 	ShowWindow(hwnd, SW_SHOW);
-	gfx.Start(hwnd, width, height);
+	renderer = std::make_unique<impl::Renderer>(hwnd, width, height);
+	//gfx.Start(hwnd, width, height);
 
 	std::string skybox[6];
 	skybox[0] = "assets/skybox/top.png";
@@ -37,15 +40,15 @@ Core::Window::Window(HINSTANCE hInstance, HWND parent, std::wstring name, DWORD 
 	skybox[3] = "assets/skybox/right.png";
 	skybox[4] = "assets/skybox/front.png";
 	skybox[5] = "assets/skybox/back.png";
-	gfx.setSkybox(skybox);
+	// gfx.setSkybox(skybox);
 }
 
-Core::Window::~Window() {
+Window::~Window() {
 	if (hwnd != nullptr)
 		DestroyWindow(hwnd);
 }
 
-Core::Window::ExitCode Core::Window::Run()
+Window::ExitCode Window::Run()
 {
 	ExitCode out;
 	try {
@@ -53,8 +56,7 @@ Core::Window::ExitCode Core::Window::Run()
 
 			time.update();
 			input.update();
-			gfx.Draw();
-			gfx.EndFrame();
+			renderer->Render();
 
 			out.close = false;
 		}
@@ -76,7 +78,7 @@ Core::Window::ExitCode Core::Window::Run()
 	return out;
 }
 
-bool Core::Window::WindowClosed(int* quitMessage)
+bool Window::WindowClosed(int* quitMessage)
 {
 	// for all messages in queue
 	MSG msg = {};
@@ -89,18 +91,18 @@ bool Core::Window::WindowClosed(int* quitMessage)
 
 		//deal with messages
 		TranslateMessage(&msg);
-		Debug::logErrorCode(DispatchMessage(&msg));
+		Debug::logErrorCode((HRESULT)DispatchMessage(&msg));
 	}
 
 	// if not quitting, return false
 	return false;
 }
 
-Core::Graphics* Core::Window::getGraphics() {
+/*Graphics* Window::getGraphics() {
 	return &gfx;
-}
+}*/
 
-LRESULT Core::Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	// save pointer to window in hwnd from create method
 	if (uMsg == WM_CREATE) {
@@ -124,7 +126,7 @@ LRESULT Core::Window::WindowProcThunk(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 	return wnd->WindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT Core::Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
 	switch (uMsg)
@@ -133,12 +135,12 @@ LRESULT Core::Window::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	//keyboard
 	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
-		input.updateKey(wParam, true);
+		input.updateKey((UINT)wParam, true);
 		break;
 
 	case WM_SYSKEYUP:
 	case WM_KEYUP:
-		input.updateKey(wParam, false);
+		input.updateKey((UINT)wParam, false);
 		break;
 
 	//mouse buttons

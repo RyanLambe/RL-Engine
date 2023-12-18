@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <vector>
 
-namespace Core {
+namespace rl {
 	static class Time {
 	public:
 

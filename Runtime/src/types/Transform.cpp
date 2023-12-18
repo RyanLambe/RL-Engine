@@ -5,26 +5,26 @@
 #include "../objects/Entity.h"
 #endif
 
+using namespace rl;
 
-
-Core::Transform::~Transform() {
+Transform::~Transform() {
 	Debug::log("Deleting transform");
 
 }
 
-Core::Transform::Transform()
+Transform::Transform()
 {
 	entity = nullptr;
 	matrix = DirectX::XMMatrixIdentity();
 }
 
-Core::Transform::Transform(Entity* entity)
+Transform::Transform(Entity* entity)
 {
 	this->entity = entity;
 	matrix = DirectX::XMMatrixIdentity();
 }
 
-void Core::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context) {
 
 	DirectX::XMMATRIX mat = getMatrix();
 
@@ -63,7 +63,7 @@ void Core::Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* co
 	context->VSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
 }
 
-DirectX::XMMATRIX Core::Transform::getMatrix() {
+DirectX::XMMATRIX Transform::getMatrix() {
 
 	//reset matrix
 	matrix = DirectX::XMMatrixIdentity();
@@ -86,7 +86,7 @@ DirectX::XMMATRIX Core::Transform::getMatrix() {
 	return matrix;
 }
 
-Core::Vec3 Core::Transform::foreward()
+Vec3 Transform::foreward()
 {
 	DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationRollPitchYaw(rotation.x * pi / 180.0, rotation.y * pi / 180.0, rotation.z * pi / 180.0);
 
@@ -95,7 +95,7 @@ Core::Vec3 Core::Transform::foreward()
 	return Vec3(DirectX::XMVectorGetX(out), DirectX::XMVectorGetY(out), DirectX::XMVectorGetZ(out));
 }
 
-Core::Vec3 Core::Transform::right()
+Vec3 Transform::right()
 {
 	DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationRollPitchYaw(rotation.x * pi / 180.0, rotation.y * pi / 180.0, rotation.z * pi / 180.0);
 
@@ -104,7 +104,7 @@ Core::Vec3 Core::Transform::right()
 	return Vec3(DirectX::XMVectorGetX(out), DirectX::XMVectorGetY(out), DirectX::XMVectorGetZ(out));
 }
 
-Core::Vec3 Core::Transform::up()
+Vec3 Transform::up()
 {
 	DirectX::XMMATRIX rotMat = DirectX::XMMatrixRotationRollPitchYaw(rotation.x * pi / 180.0, rotation.y * pi / 180.0, rotation.z * pi / 180.0);
 
@@ -114,79 +114,79 @@ Core::Vec3 Core::Transform::up()
 }
 
 //position
-void Core::Transform::setPosition(Vec3 position) {
+void Transform::setPosition(Vec3 position) {
 	this->position = position;
 }
 
-void Core::Transform::setPosition(float x, float y, float z) {
+void Transform::setPosition(float x, float y, float z) {
 	this->position = Vec3(x, y, z);
 }
 
-void Core::Transform::Translate(Vec3 offset)
+void Transform::Translate(Vec3 offset)
 {
 	this->position += right() * offset.x + up() * offset.y + foreward() * offset.z;
 }
 
-void Core::Transform::Translate(float x, float y, float z)
+void Transform::Translate(float x, float y, float z)
 {
 	this->position += right() * x + up() * y + foreward() * z;
 }
 
-Core::Vec3 Core::Transform::getPosition() {
+Vec3 Transform::getPosition() {
 	return position;
 }
 
 //rotation
-void Core::Transform::setRotation(Vec3 rotation) {
+void Transform::setRotation(Vec3 rotation) {
 	this->rotation = rotation;
 }
 
-void Core::Transform::setRotation(float x, float y, float z) {
+void Transform::setRotation(float x, float y, float z) {
 	this->rotation = Vec3(x, y, z);
 }
 
-void Core::Transform::Rotate(Vec3 offset)
+void Transform::Rotate(Vec3 offset)
 {
 	this->rotation += offset;
 }
 
-void Core::Transform::Rotate(float x, float y, float z)
+void Transform::Rotate(float x, float y, float z)
 {
 	this->rotation += Vec3(x, y, z);
 }
 
-Core::Vec3 Core::Transform::getRotation() {
+Vec3 Transform::getRotation() {
 	return rotation;
 }
 
 //scale
-void Core::Transform::setScale(Vec3 scale) {
+void Transform::setScale(Vec3 scale) {
 	this->scale = scale;
 }
 
-void Core::Transform::setScale(float x, float y, float z) {
+void Transform::setScale(float x, float y, float z) {
 	this->scale = Vec3(x, y, z);
 }
 
-void Core::Transform::setScale(float scale) {
+void Transform::setScale(float scale) {
 	this->scale = Vec3(scale, scale, scale);
 }
 
-void Core::Transform::Scale(Vec3 scale)
+void Transform::Scale(Vec3 scale)
 {
 	this->scale *= scale;
 }
 
-void Core::Transform::Scale(float x, float y, float z)
+void Transform::Scale(float x, float y, float z)
 {
 	this->scale *= Vec3(x, y, z);
 }
 
-void Core::Transform::Scale(float scale)
+void Transform::Scale(float scale)
 {
 	this->scale *= scale;
 }
 
-Core::Vec3 Core::Transform::getScale() {
+Vec3 Transform::getScale() {
 	return scale;
 }

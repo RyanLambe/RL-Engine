@@ -10,7 +10,7 @@
 
 
 
-namespace Core {
+namespace rl {
 	enum CursorState {
 		Free = 0,
 		Confined = 1,

@@ -1,11 +1,13 @@
 #include "Debug.h"
 
-bool Core::Debug::debugMode;
-HANDLE Core::Debug::hOut;
+using namespace rl;
 
-std::ofstream Core::Debug::file;
+bool Debug::debugMode;
+HANDLE Debug::hOut;
 
-void Core::Debug::start(bool debug)
+std::ofstream Debug::file;
+
+void Debug::start(bool debug)
 {
     debugMode = debug;
     if (debugMode) {
@@ -26,7 +28,7 @@ void Core::Debug::start(bool debug)
     file.open("log.txt", std::ios::trunc);
 }
 
-Core::Debug::~Debug()
+Debug::~Debug()
 {
     if (debugMode)
         FreeConsole();
@@ -34,79 +36,79 @@ Core::Debug::~Debug()
 }
 
 //logs
-void Core::Debug::log(std::string out)
+void Debug::log(std::string out)
 {
     std::string line = "INFO " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(char out[])
+void Debug::log(char out[])
 {
     std::string line = "INFO " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(const char out[])
+void Debug::log(const char out[])
 {
     std::string line = "INFO " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(int out)
+void Debug::log(int out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(unsigned int out)
+void Debug::log(unsigned int out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(float out)
+void Debug::log(float out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(long out)
+void Debug::log(long out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(double out)
+void Debug::log(double out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(long long out)
+void Debug::log(long long out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(long double out)
+void Debug::log(long double out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(unsigned long out)
+void Debug::log(unsigned long out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(unsigned long long out)
+void Debug::log(unsigned long long out)
 {
     std::string line = "INFO " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(bool out)
+void Debug::log(bool out)
 {
     std::string line;
     if(out)
@@ -117,7 +119,7 @@ void Core::Debug::log(bool out)
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(Vec2 out)
+void Debug::log(Vec2 out)
 {
     std::string line = "INFO " + formatedTime();
     line += "x: " + std::to_string(out.x);
@@ -125,7 +127,7 @@ void Core::Debug::log(Vec2 out)
     print(line, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void Core::Debug::log(Vec3 out)
+void Debug::log(Vec3 out)
 {
     std::string line = "INFO " + formatedTime();
     line += "x: " + std::to_string(out.x);
@@ -135,79 +137,79 @@ void Core::Debug::log(Vec3 out)
 }
 
 //errors
-void Core::Debug::logError(std::string out)
+void Debug::logError(std::string out)
 {
     std::string line = "ERROR " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(char out[])
+void Debug::logError(char out[])
 {
     std::string line = "ERROR " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(const char out[])
+void Debug::logError(const char out[])
 {
     std::string line = "ERROR " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(int out)
+void Debug::logError(int out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(unsigned int out)
+void Debug::logError(unsigned int out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(float out)
+void Debug::logError(float out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(long out)
+void Debug::logError(long out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(double out)
+void Debug::logError(double out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(long long out)
+void Debug::logError(long long out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(long double out)
+void Debug::logError(long double out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(unsigned long out)
+void Debug::logError(unsigned long out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(unsigned long long out)
+void Debug::logError(unsigned long long out)
 {
     std::string line = "ERROR " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logError(bool out)
+void Debug::logError(bool out)
 {
     std::string line;
     if (out)
@@ -218,86 +220,86 @@ void Core::Debug::logError(bool out)
     print(line, FOREGROUND_RED);
 }
 
-void Core::Debug::logErrorCode(HRESULT code)
+void Debug::logErrorCode(HRESULT code)
 {
     if (FAILED(code))
         logError(TranslateHResult(code));
 }
 
 //warnings
-void Core::Debug::logWarning(std::string out)
+void Debug::logWarning(std::string out)
 {
     std::string line = "WARNING " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(char out[])
+void Debug::logWarning(char out[])
 {
     std::string line = "WARNING " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(const char out[])
+void Debug::logWarning(const char out[])
 {
     std::string line = "WARNING " + formatedTime() + out + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(int out)
+void Debug::logWarning(int out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(unsigned int out)
+void Debug::logWarning(unsigned int out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(float out)
+void Debug::logWarning(float out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(long out)
+void Debug::logWarning(long out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(double out)
+void Debug::logWarning(double out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(long long out)
+void Debug::logWarning(long long out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(long double out)
+void Debug::logWarning(long double out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(unsigned long out)
+void Debug::logWarning(unsigned long out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(unsigned long long out)
+void Debug::logWarning(unsigned long long out)
 {
     std::string line = "WARNING " + formatedTime() + std::to_string(out) + "\n";
     print(line, FOREGROUND_RED | FOREGROUND_GREEN);
 }
 
-void Core::Debug::logWarning(bool out)
+void Debug::logWarning(bool out)
 {
     std::string line;
     if (out)
@@ -310,7 +312,7 @@ void Core::Debug::logWarning(bool out)
 
 
 //helper functions
-std::string Core::Debug::TranslateHResult(HRESULT code)
+std::string Debug::TranslateHResult(HRESULT code)
 {
     //reformat message
     char* msgBuffer = nullptr;
@@ -326,7 +328,7 @@ std::string Core::Debug::TranslateHResult(HRESULT code)
     return out;
 }
 
-std::string Core::Debug::formatedTime()
+std::string Debug::formatedTime()
 {
     //get values
     int secs = Time::getTime();
@@ -349,7 +351,7 @@ std::string Core::Debug::formatedTime()
     return out;
 }
 
-void Core::Debug::print(std::string out, WORD colour)
+void Debug::print(std::string out, WORD colour)
 {
     //write to console
     if (true) {

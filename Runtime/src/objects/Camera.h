@@ -2,7 +2,7 @@
 #include <DirectXMath.h>
 #include "Entity.h"
 
-namespace Core {
+namespace rl {
 	class Camera : public Entity::Component {
 	public:
 

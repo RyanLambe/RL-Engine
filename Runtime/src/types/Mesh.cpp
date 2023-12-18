@@ -1,10 +1,12 @@
 #include "Mesh.h"
 
-Core::Mesh::Mesh() {
+using namespace rl;
+
+Mesh::Mesh() {
 
 }
 
-void Core::Mesh::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
+void Mesh::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 
 	if (refresh) {
 		CreateBuffer(vertices.data(), sizeof(Vertex) * vertices.size(), D3D11_BIND_VERTEX_BUFFER, &vertexBuffer, device);
@@ -19,12 +21,12 @@ void Core::Mesh::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 }
 
-void Core::Mesh::Refresh()
+void Mesh::Refresh()
 {
 	refresh = true;
 }
 
-void Core::Mesh::ImportObj(std::string fileName) {
+void Mesh::ImportObj(std::string fileName) {
 
 	std::ifstream file(fileName);
 	std::string line;
@@ -126,7 +128,7 @@ void Core::Mesh::ImportObj(std::string fileName) {
 	Refresh();
 }
 
-Core::Mesh& Core::Mesh::operator=(const Mesh& other) {
+Mesh& Mesh::operator=(const Mesh& other) {
 	this->vertices = other.vertices;
 	this->indices = other.indices;
 
@@ -136,23 +138,23 @@ Core::Mesh& Core::Mesh::operator=(const Mesh& other) {
 
 
 
-void Core::Mesh::setVertices(std::vector<Vertex> vertices) {
+void Mesh::setVertices(std::vector<Vertex> vertices) {
 	this->vertices = vertices;
 }
 
-std::vector<Core::Mesh::Vertex> Core::Mesh::getVertices() {
+std::vector<Mesh::Vertex> Mesh::getVertices() {
 	return vertices;
 }
 
-void Core::Mesh::setIndices(std::vector<unsigned int> indices) {
+void Mesh::setIndices(std::vector<unsigned int> indices) {
 	this->indices = indices;
 }
 
-std::vector<unsigned int> Core::Mesh::getIndices() {
+std::vector<unsigned int> Mesh::getIndices() {
 	return indices;
 }
 
-void Core::Mesh::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, ID3D11Device* device) {
+void Mesh::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** buffer, ID3D11Device* device) {
 
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
