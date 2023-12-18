@@ -6,7 +6,7 @@ using namespace Core;
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
 	std::wstring test = L"name";
-	Window window(hInst, test, WS_OVERLAPPEDWINDOW, 1280, 720, true);
+	Window window(hInst, nullptr, test, WS_OVERLAPPEDWINDOW, 1280, 720, true);
 
 	SceneManager::Scene* scene = SceneManager::CreateScene();
 
@@ -25,7 +25,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
 	DirectionalLight* light = Graphics::createDirectionalLight(sun);
 
 
-	Input::setCursorState(CursorState::Hidden);
+	//Input::setCursorState(CursorState::Hidden);
 
 	Window::ExitCode exitCode = window.Run();
 	while(!exitCode.close)

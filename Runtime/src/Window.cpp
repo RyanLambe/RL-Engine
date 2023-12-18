@@ -2,7 +2,7 @@
 
 Core::Window* Core::Window::main = nullptr;
 
-Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int width, int height, bool debugMode) {
+Core::Window::Window(HINSTANCE hInstance, HWND parent, std::wstring name, DWORD style, int width, int height, bool debugMode) {
 	main = this;
 	// Create class for window
 	WNDCLASS wClass = {};
@@ -14,7 +14,7 @@ Core::Window::Window(HINSTANCE hInstance, std::wstring name, DWORD style, int wi
 	RegisterClass(&wClass);
 
 	// Create window
-	hwnd = CreateWindow(name.c_str(), name.c_str(), style, CW_USEDEFAULT, CW_USEDEFAULT, width, height, NULL, NULL, hInstance, this);
+	hwnd = CreateWindow(name.c_str(), name.c_str(), style, CW_USEDEFAULT, CW_USEDEFAULT, width, height, parent, NULL, hInstance, this);
 
 	//check for error
 	if (hwnd == NULL) {

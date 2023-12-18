@@ -2,8 +2,8 @@
 The Sandbox is a way to test the low level functionalities of the Runtime without the Editor.
 
 ## Dependencies:
-**Runtime**
+- **Runtime**
 
 ## Notes:
-Built using C++
-Compiles to executable
+- Built using C++
+- Compiles to executable
