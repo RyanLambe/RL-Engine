@@ -66,8 +66,8 @@ void Mesh::ImportObj(std::string fileName) {
 				temp.position.y = verts[curVert[i] - 1].y;
 				temp.position.z = verts[curVert[i] - 1].z;
 
-				temp.texCoords.u = uvs[curUV[i] - 1].x;
-				temp.texCoords.v = 1 - uvs[curUV[i] - 1].y;
+				temp.texCoords.x = uvs[curUV[i] - 1].x;
+				temp.texCoords.y = 1 - uvs[curUV[i] - 1].y;
 
 				if (norms[curNorm[i] - 1].x < 0) {
 					int fst = 1;
@@ -142,7 +142,7 @@ void Mesh::setVertices(std::vector<Vertex> vertices) {
 	this->vertices = vertices;
 }
 
-std::vector<Mesh::Vertex> Mesh::getVertices() {
+std::vector<Vertex> Mesh::getVertices() {
 	return vertices;
 }
 

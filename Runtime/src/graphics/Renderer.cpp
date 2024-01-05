@@ -1,8 +1,24 @@
 #include "Renderer.h"
 
-void rl::impl::Renderer::Render()
+void rl::Renderer::Render()
 {
-	graphics->PrepFrame();
-	graphics->Draw();
-	graphics->Present();
+	target->Clear();
+	target->EnableDepthTest();
+
+	// view matrix
+
+	// materials
+
+	// lights
+
+	// draw
+	context->DrawIndexed(tempSize);
+
+	context->Present();
+}
+
+// todo: make interchangeable
+rl::GraphicsAPI rl::Renderer::GetAPI()
+{
+	return GraphicsAPI::DX11;
 }

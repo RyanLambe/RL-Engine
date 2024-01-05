@@ -30,7 +30,7 @@ Window::Window(HINSTANCE hInstance, HWND parent, std::wstring name, DWORD style,
 	//Debug::log("test25");
 
 	ShowWindow(hwnd, SW_SHOW);
-	renderer = std::make_unique<impl::Renderer>(hwnd, width, height);
+	renderer = std::make_unique<Renderer>(hwnd, width, height);
 	//gfx.Start(hwnd, width, height);
 
 	std::string skybox[6];

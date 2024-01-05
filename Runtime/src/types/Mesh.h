@@ -8,12 +8,13 @@
 #include "Vec3.h"
 #include "Vec2.h"
 #include "../Debug.h"
+#include "Vertex.h"
 
 namespace rl {
 	class Mesh {
-	public:
+	//public:
 
-		struct Vertex {
+		/*struct Vertex {
 			struct Position {
 				float x;
 				float y;
@@ -53,7 +54,7 @@ namespace rl {
 
 				return true;
 			}
-		};
+		};*/
 
 	public:
 

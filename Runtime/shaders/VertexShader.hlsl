@@ -1,16 +1,3 @@
-#define MaxLights 8
-
-//constant buffers
-cbuffer Object : register(b0) {
-	matrix transform;
-};
-
-cbuffer Scene : register(b1) {
-	matrix cam;
-	float3 lightPos[1 + MaxLights];
-};
-
-//input output
 struct VSIn {
 	float3 pos : Position;
 	float2 tex : TexCoord;
@@ -18,10 +5,6 @@ struct VSIn {
 };
 
 struct VSOut{
-	float2 tex: TexCoord;
-	float3 norm: Normal;
-	float3 toCam: toCamera;
-	float3 toLight[1 + MaxLights] : toLight;
 	float4 pos: SV_POSITION;
 };
 
@@ -30,19 +13,7 @@ VSOut main(VSIn In)
 {
 	VSOut Out;
 
-	float4 worldPos = mul(transform, float4(In.pos, 1.0f));
-
-	Out.pos = mul(cam, worldPos);
-	Out.tex = In.tex;
-	Out.toCam = normalize(-Out.pos);
-	Out.norm = (float3)mul(transform, float4(In.norm, 0.0f));
-	
-	//directional Light
-	Out.toLight[0] = lightPos[0];
-
-	for (int i = 0; i < MaxLights; i++) {
-		Out.toLight[i + 1] = lightPos[i + 1] - worldPos;
-	}
+	Out.pos = float4(In.pos.xy, 0, 1.0f);
 
 	return Out;
 }

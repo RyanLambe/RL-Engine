@@ -2,32 +2,46 @@
 
 #include <memory>
 
-#include "Graphics.h"
+#include "Context.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "RenderTarget.h"
 
-// allow for different APIs?
-#include "dx11.h"
+#include "../types/Mesh.h"
 
-// purpose:
-// - create/handle objects
-// - calculate light / other render data
-// - skybox? handled by camera?
 
-namespace rl::impl {
+namespace rl {
 	class Renderer
 	{
 	public:
 		Renderer() = delete;
 		Renderer(const Renderer&) = delete;
 
-		Renderer(HWND hwnd, int width, int height) {
-			graphics = std::make_unique<dx11>(hwnd, width, height);
+		Renderer(void* hwnd, int width, int height) {
+			context = Context::Create(hwnd, width, height);
+			target = RenderTarget::Create();
+			target->Enable();
+
+			Mesh mesh = Mesh();
+			mesh.ImportObj("test.obj");
+
+			std::shared_ptr<VertexBuffer> vb = VertexBuffer::Create(mesh.getVertices());
+			vb->Enable();
+
+			std::shared_ptr<IndexBuffer> ib = IndexBuffer::Create(mesh.getIndices());
+			ib->Enable();
+
+			tempSize = mesh.getIndices().size();
 		}
 
 		void Render();
 
-
+		static GraphicsAPI GetAPI();
 
 	private:
-		std::unique_ptr<Graphics> graphics;
+		uint32_t tempSize;
+
+		std::shared_ptr<rl::Context> context;
+		std::shared_ptr<rl::RenderTarget> target;
 	};
 }

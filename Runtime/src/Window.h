@@ -34,7 +34,7 @@ namespace rl {
 	private:
 		HWND hwnd = nullptr;
 
-		std::unique_ptr<impl::Renderer> renderer;
+		std::unique_ptr<Renderer> renderer;
 		Input input;
 		Time time;
 		Debug debug;
