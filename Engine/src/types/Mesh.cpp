@@ -168,5 +168,6 @@ void Mesh::CreateBuffer(void* data, UINT size, UINT bindFlags, ID3D11Buffer** bu
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
 
-	Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, buffer));
+    //todo: should not have directx code
+	//Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, buffer));
 }

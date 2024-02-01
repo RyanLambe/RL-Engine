@@ -1,14 +1,10 @@
 #pragma once
 
-#include <d3d11.h>
-#include <wrl.h>
-
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "D3DCompiler.lib")
+#include "dx11.h"
 
 #include "../../graphics/Context.h"
 
-namespace rl::impl {
+namespace rl {
 	class DX11Context : public Context
 	{
 	public:
@@ -19,10 +15,10 @@ namespace rl::impl {
 
 		void DrawIndexed(uint32_t size) const noexcept override;
 
-		void Present() const noexcept override;
+		void Present() const override;
 
 		void EnableTransparency(bool enable = true) const noexcept;
-		void EnableDepth(bool enable = true) const noexcept;
+		void EnableDepth(bool enable = true) const;
 
 		static ID3D11DeviceContext* GetContext();
 		static ID3D11Device* GetDevice();
@@ -44,5 +40,12 @@ namespace rl::impl {
 
 		// textures
 		Microsoft::WRL::ComPtr<ID3D11SamplerState> sampler = Microsoft::WRL::ComPtr<ID3D11SamplerState>();
+
+        //todo: move to separate shader class
+        void StartShader(ID3D11Device* device, ID3D11DeviceContext* context);
+        Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader = Microsoft::WRL::ComPtr<ID3D11VertexShader>();
+        Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader = Microsoft::WRL::ComPtr<ID3D11PixelShader>();
+        Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout = Microsoft::WRL::ComPtr<ID3D11InputLayout>();
+        Microsoft::WRL::ComPtr<ID3DBlob> blob = Microsoft::WRL::ComPtr<ID3DBlob>();
 	};
 }

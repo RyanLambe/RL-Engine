@@ -5,12 +5,13 @@
 #include "../objects/Entity.h"
 #endif
 
+#include "../core/Logger.h"
 #include "glm/gtc/matrix_transform.hpp"
 
 using namespace rl;
 
 Transform::~Transform() {
-	Debug::log("Deleting transform");
+	RL_LOG("Deleting transform");
 
 }
 
@@ -43,7 +44,8 @@ void Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context)
 		initData.SysMemPitch = 0;
 		initData.SysMemSlicePitch = 0;
 
-		Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, &constBuffer));
+        //todo: remove directx code
+		//Debug::logErrorCode(device->CreateBuffer(&bufferDesc, &initData, &constBuffer));
 
 		bufferCreated = true;
 	}
@@ -53,7 +55,8 @@ void Transform::UpdateBuffer(ID3D11Device* device, ID3D11DeviceContext* context)
 		D3D11_MAPPED_SUBRESOURCE mappedSubResource;
 		memset(&mappedSubResource, 0, sizeof(mappedSubResource));
 
-		Debug::logErrorCode(context->Map(constBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource));
+        //todo: remove directx code
+		//Debug::logErrorCode(context->Map(constBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource));
 
 		//copy new data
 		memcpy(mappedSubResource.pData, &mat, sizeof(mat));

@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 #include "Texture.h"
-#include "../Debug.h"
+//#include "../Debug.h"
 #include <wrl.h>
 
 namespace rl {

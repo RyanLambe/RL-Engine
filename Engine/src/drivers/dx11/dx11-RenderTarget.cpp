@@ -1,9 +1,10 @@
 #include "dx11-RenderTarget.h"
 
 #include "dx11-Context.h"
-#include "../../Debug.h"
 
-rl::impl::DX11RenderTarget::DX11RenderTarget()
+using namespace rl;
+
+DX11RenderTarget::DX11RenderTarget()
 {
 	windowSize = true;
 	depthEnabled = false;
@@ -17,7 +18,7 @@ rl::impl::DX11RenderTarget::DX11RenderTarget()
 	texture.Reset();
 }
 
-rl::impl::DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height)
+DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height)
 {
 	windowSize = true;
 	depthEnabled = false;
@@ -28,12 +29,12 @@ rl::impl::DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height)
 	// create render target???
 }
 
-void rl::impl::DX11RenderTarget::Enable() const noexcept
+void DX11RenderTarget::Enable() const noexcept
 {
 	DX11Context::GetContext()->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
 }
 
-void rl::impl::DX11RenderTarget::Clear() noexcept
+void DX11RenderTarget::Clear() noexcept
 {
 	if(windowSize)
 		if(width != DX11Context::GetWindowWidth() || height != DX11Context::GetWindowHeight())
@@ -43,18 +44,18 @@ void rl::impl::DX11RenderTarget::Clear() noexcept
 	DX11Context::GetContext()->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 }
 
-void rl::impl::DX11RenderTarget::SetClearColor(const glm::vec4& value) noexcept
+void DX11RenderTarget::SetClearColor(const glm::vec4& value) noexcept
 {
 	clearColor = value;
 }
 
-void rl::impl::DX11RenderTarget::EnableDepthTest(bool enable) noexcept
+void DX11RenderTarget::EnableDepthTest(bool enable) noexcept
 {
 	depthEnabled = enable;
 	Resize(width, height);
 }
 
-void rl::impl::DX11RenderTarget::Resize(uint32_t width, uint32_t height) noexcept
+void DX11RenderTarget::Resize(uint32_t width, uint32_t height) noexcept
 {
 	this->width = width;
 	this->height = height;
@@ -67,7 +68,7 @@ void rl::impl::DX11RenderTarget::Resize(uint32_t width, uint32_t height) noexcep
 	dxgiDesc.RefreshRate.Denominator = 1;
 	dxgiDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	dxgiDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	Debug::logErrorCode(DX11Context::GetSwap()->ResizeTarget(&dxgiDesc));
+    DX_LOG_ERROR(DX11Context::GetSwap()->ResizeTarget(&dxgiDesc));
 
 	// resize depth
 	if (depthEnabled)
@@ -84,14 +85,14 @@ void rl::impl::DX11RenderTarget::Resize(uint32_t width, uint32_t height) noexcep
 		depthDesc.SampleDesc.Quality = 0;
 		depthDesc.Usage = D3D11_USAGE_DEFAULT;
 		depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		Debug::logErrorCode(DX11Context::GetDevice()->CreateTexture2D(&depthDesc, nullptr, &depthTexture));
+        DX_LOG_ERROR(DX11Context::GetDevice()->CreateTexture2D(&depthDesc, nullptr, &depthTexture));
 
 		//set depth texture
 		D3D11_DEPTH_STENCIL_VIEW_DESC DSVdesc = {};
 		DSVdesc.Format = DXGI_FORMAT_D32_FLOAT;
 		DSVdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		DSVdesc.Texture2D.MipSlice = 0;
-		Debug::logErrorCode(DX11Context::GetDevice()->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, &DSV));
+        DX_LOG_ERROR(DX11Context::GetDevice()->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, &DSV));
 	}
 }
 

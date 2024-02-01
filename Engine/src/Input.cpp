@@ -1,4 +1,5 @@
 #include "Input.h"
+#include "core/RLResult.h"
 
 using namespace rl;
 
@@ -34,7 +35,7 @@ void Input::start(HWND window)
 	// register the raw input device
 	if (!RegisterRawInputDevices(&rawInputDevice, 1, sizeof(RAWINPUTDEVICE)))
 	{
-		throw std::runtime_error("Input not connected");
+		RL_THROW_EXCEPTION("Input not connected");
 	}
 }
 

@@ -2,13 +2,12 @@
 
 #include <cstdint>
 
-#include <d3d11.h>
-#include <wrl.h>
+#include "dx11.h"
 #include <glm/vec4.hpp>
 
 #include "../../graphics/RenderTarget.h"
 
-namespace rl::impl
+namespace rl
 {
 	class DX11RenderTarget : public rl::RenderTarget
 	{

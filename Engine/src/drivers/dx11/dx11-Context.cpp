@@ -1,15 +1,31 @@
 #include "dx11-Context.h"
 
-#include <exception>
+using namespace rl;
 
-#include "../../Debug.h"
-#include "../../types/Shader.h"
+DX11Context* rl::DX11Context::mainContext = nullptr;
 
-using namespace rl::impl;
+//todo move to seperate class
+void DX11Context::StartShader(ID3D11Device* device, ID3D11DeviceContext* context) {
 
-#define checkError(code) if(FAILED(code)) throw std::runtime_error(Debug::TranslateHResult(code).c_str())
+    //pixel shader
+    DX_LOG_ERROR(D3DReadFileToBlob(L"PixelShader.cso", &blob));
+    DX_LOG_ERROR(device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &pixelShader));
+    context->PSSetShader(pixelShader.Get(), 0, 0);
 
-DX11Context* rl::impl::DX11Context::mainContext = nullptr;
+    //vertex shader
+    DX_LOG_ERROR(D3DReadFileToBlob(L"VertexShader.cso", &blob));
+    DX_LOG_ERROR(device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vertexShader));
+    context->VSSetShader(vertexShader.Get(), 0, 0);
+
+    //input Layout
+    D3D11_INPUT_ELEMENT_DESC ied[] = {
+            {"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            {"TexCoord", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            {"NormalVS", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0}
+    };
+    DX_LOG_ERROR(device->CreateInputLayout(ied, sizeof(ied)/sizeof(D3D11_INPUT_ELEMENT_DESC), blob->GetBufferPointer(), blob->GetBufferSize(), &inputLayout));
+    context->IASetInputLayout(inputLayout.Get());
+}
 
 DX11Context::DX11Context(HWND hwnd, uint32_t width, uint32_t height) {
 	
@@ -39,7 +55,7 @@ DX11Context::DX11Context(HWND hwnd, uint32_t width, uint32_t height) {
 	sd.Windowed = TRUE;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	checkError(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
+	DX_THROW_ERROR(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
 
 	//set viewport size
 	D3D11_VIEWPORT vp;
@@ -61,11 +77,10 @@ DX11Context::DX11Context(HWND hwnd, uint32_t width, uint32_t height) {
 	sampleDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-	checkError(device->CreateSamplerState(&sampleDesc, &sampler));
+	DX_THROW_ERROR(device->CreateSamplerState(&sampleDesc, &sampler));
 	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
 
-	rl::Shader shader = rl::Shader();
-	shader.Start(device.Get(), context.Get());\
+	StartShader(device.Get(), context.Get());\
 }
 
 void DX11Context::DrawIndexed(uint32_t size) const noexcept
@@ -73,23 +88,23 @@ void DX11Context::DrawIndexed(uint32_t size) const noexcept
 	context->DrawIndexed((UINT)size, 0, 0);
 }
 
-void DX11Context::Present() const noexcept
+void DX11Context::Present() const
 {
 	HRESULT hr;
 	context->Flush();
 	if (FAILED(hr = swap->Present(vsync, 0))) {
 		if (hr == DXGI_ERROR_DEVICE_REMOVED)
 		{
-			checkError(device->GetDeviceRemovedReason());
+            DX_THROW_ERROR(device->GetDeviceRemovedReason());
 		}
 		else
 		{
-			Debug::logErrorCode(hr);
+			DX_LOG_ERROR(hr);
 		}
 	}
 }
 
-void rl::impl::DX11Context::EnableTransparency(bool enable) const noexcept
+void DX11Context::EnableTransparency(bool enable) const noexcept
 {
 	D3D11_BLEND_DESC BlendStateDescription = CD3D11_BLEND_DESC{ CD3D11_DEFAULT{} };
 	ID3D11BlendState* blend;
@@ -113,7 +128,7 @@ void rl::impl::DX11Context::EnableTransparency(bool enable) const noexcept
 	}
 }
 
-void rl::impl::DX11Context::EnableDepth(bool enable) const noexcept
+void DX11Context::EnableDepth(bool enable) const
 {
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
 
@@ -122,7 +137,7 @@ void rl::impl::DX11Context::EnableDepth(bool enable) const noexcept
 	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthState;
-	checkError(device->CreateDepthStencilState(&dsDesc, &depthState));
+    DX_THROW_ERROR(device->CreateDepthStencilState(&dsDesc, &depthState));
 	context->OMSetDepthStencilState(depthState.Get(), 1);
 	depthState.Reset();
 }
@@ -142,12 +157,12 @@ IDXGISwapChain* DX11Context::GetSwap()
 	return mainContext->swap.Get();
 }
 
-uint32_t rl::impl::DX11Context::GetWindowWidth()
+uint32_t DX11Context::GetWindowWidth()
 {
 	return mainContext->width;
 }
 
-uint32_t rl::impl::DX11Context::GetWindowHeight()
+uint32_t DX11Context::GetWindowHeight()
 {
 	return mainContext->height;
 }

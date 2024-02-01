@@ -69,7 +69,9 @@ void Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	data.SysMemPitch = width * 4;
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2D;
-	Debug::logErrorCode(device->CreateTexture2D(&imgDesc, &data, &texture2D));
+
+    // todo: should not be interfacing with DirectX directly
+	//Debug::logErrorCode(device->CreateTexture2D(&imgDesc, &data, &texture2D));
 
 	//create resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC resDesc = {};
@@ -78,7 +80,7 @@ void Texture::Update(ID3D11Device* device, ID3D11DeviceContext* context) {
 	resDesc.Texture2D.MostDetailedMip = 0;
 	resDesc.Texture2D.MipLevels = 1;
 
-	Debug::logErrorCode(device->CreateShaderResourceView(texture2D.Get(), &resDesc, &texView));
+	//Debug::logErrorCode(device->CreateShaderResourceView(texture2D.Get(), &resDesc, &texView));
 
 	if (idMap.count(name) != 1) {
 		idMap.insert(std::pair<std::string, int>(name, nextId));

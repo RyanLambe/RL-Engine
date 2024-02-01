@@ -2,6 +2,7 @@
 
 #include "graphics/Renderer.h"
 #include "Input.h"
+#include "Clock.h"
 
 #pragma comment(lib, "user32.lib")
 
@@ -37,6 +38,5 @@ namespace rl {
 		std::unique_ptr<Renderer> renderer;
 		Input input;
 		Clock time;
-		Debug debug;
 	};
 }

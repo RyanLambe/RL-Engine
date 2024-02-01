@@ -46,8 +46,6 @@ add_library(Engine STATIC
         src/types/Material.h
         src/types/Mesh.cpp
         src/types/Mesh.h
-        src/types/Shader.cpp
-        src/types/Shader.h
         src/types/Texture.cpp
         src/types/Texture.h
         src/types/Transform.cpp
@@ -59,8 +57,6 @@ add_library(Engine STATIC
         src/types/Vertex.h
 
         # general
-        src/Debug.cpp
-        src/Debug.h
         src/Input.cpp
         src/Input.h
         src/SceneManager.cpp
@@ -69,7 +65,16 @@ add_library(Engine STATIC
         src/Clock.h
         src/Window.cpp
         src/Window.h
-        )
+        src/ecs/SceneManager.cpp
+        src/ecs/SceneManager.h
+        src/ecs/ComponentList.h
+        src/ecs/Transform.cpp
+        src/ecs/Transform.h
+        src/core/RLResult.h
+        src/core/Logger.h
+        src/drivers/dx11/dx11.h
+        src/drivers/dx11/dx11.cpp
+)
 
 # include GLM
 target_include_directories(Engine PUBLIC ../External/glm)

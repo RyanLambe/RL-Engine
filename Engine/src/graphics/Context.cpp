@@ -10,7 +10,7 @@ std::shared_ptr<rl::Context> rl::Context::Create(void* hwnd, int width, int heig
 	switch (Renderer::GetAPI())
 	{
 	case GraphicsAPI::DX11:
-		return std::make_shared<impl::DX11Context>((HWND)hwnd, width, height);
+		return std::make_shared<DX11Context>((HWND)hwnd, width, height);
 	default: break;
 	}
 

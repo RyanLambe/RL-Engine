@@ -4,7 +4,6 @@
 #include <map>
 
 #include "types/Vec2.h"
-#include "Debug.h"
 
 #define lowPassAlpha 0.25f
 

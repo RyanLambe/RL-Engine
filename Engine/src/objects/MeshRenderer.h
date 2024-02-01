@@ -5,7 +5,6 @@
 #include "Entity.h"
 #include "Camera.h"
 #include "../types/Mesh.h"
-#include "../types/Shader.h"
 #include "../types/Material.h"
 
 namespace rl {

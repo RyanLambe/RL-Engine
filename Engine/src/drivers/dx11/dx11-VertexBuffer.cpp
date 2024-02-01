@@ -1,11 +1,10 @@
 #include "dx11-VertexBuffer.h"
 
 #include "dx11-Context.h"
-#include "../../Debug.h"
 
-using namespace rl::impl;
+using namespace rl;
 
-rl::impl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic)
+rl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic)
 {
 	isDynamic = dynamic;
 
@@ -27,7 +26,7 @@ rl::impl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bo
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
 	
-	Debug::logErrorCode(DX11Context::GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
+	DX_LOG_ERROR(DX11Context::GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
 }
 
 void DX11VertexBuffer::Enable()
@@ -53,13 +52,13 @@ void DX11VertexBuffer::Set(const std::vector<Vertex>& data)
 		initData.SysMemPitch = 0;
 		initData.SysMemSlicePitch = 0;
 
-		Debug::logErrorCode(DX11Context::GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
+        DX_LOG_ERROR(DX11Context::GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
 	}
 	else {
 		D3D11_MAPPED_SUBRESOURCE mappedSubResource;
 		memset(&mappedSubResource, 0, sizeof(mappedSubResource));
 
-		Debug::logErrorCode(DX11Context::GetContext()->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource));
+        DX_LOG_ERROR(DX11Context::GetContext()->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource));
 
 		//copy new data
 		memcpy(mappedSubResource.pData, data.data(), sizeof(Vertex) * data.size());

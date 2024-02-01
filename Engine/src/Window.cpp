@@ -1,5 +1,7 @@
 #include "Window.h"
 
+#include "core/RLResult.h"
+
 using namespace rl;
 
 Window* Window::main = nullptr;
@@ -20,12 +22,12 @@ Window::Window(HINSTANCE hInstance, HWND parent, std::wstring name, DWORD style,
 
 	//check for error
 	if (hwnd == NULL) {
-		throw std::runtime_error(Debug::TranslateHResult(GetLastError()).c_str());
+        RL_THROW_EXCEPTION("Could not create window.");
+        //throw std::runtime_error(Debug::TranslateHResult(GetLastError()).c_str());
 	}
 	
 	//setup input, debug, and graphics
 	input.start(hwnd);
-	debug.start(debugMode);
 
 	//Debug::log("test25");
 
@@ -91,7 +93,7 @@ bool Window::WindowClosed(int* quitMessage)
 
 		//deal with messages
 		TranslateMessage(&msg);
-		Debug::logErrorCode((HRESULT)DispatchMessage(&msg));
+        DispatchMessage(&msg);
 	}
 
 	// if not quitting, return false

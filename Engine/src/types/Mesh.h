@@ -3,11 +3,11 @@
 #include <d3d11.h>
 #include <vector>
 #include <sstream>
+#include <fstream>
 #include <wrl.h>
 
 #include "Vec3.h"
 #include "Vec2.h"
-#include "../Debug.h"
 #include "Vertex.h"
 
 namespace rl {

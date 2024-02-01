@@ -2,12 +2,11 @@
 
 #include <vector>
 
-#include <d3d11.h>
-#include <wrl.h>
+#include "dx11.h"
 
 #include "../../graphics/IndexBuffer.h"
 
-namespace rl::impl {
+namespace rl {
 	class DX11IndexBuffer : public rl::IndexBuffer {
 	public:
 		DX11IndexBuffer() = delete;

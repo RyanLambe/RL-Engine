@@ -1,5 +1,10 @@
 #include "Renderer.h"
 
+#include "../core/Logger.h"
+#include <glm/gtx/string_cast.hpp>
+
+#include "../core/RLResult.h"
+
 void rl::Renderer::Render()
 {
 	target->Clear();

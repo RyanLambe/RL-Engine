@@ -20,6 +20,6 @@ namespace rl {
 		
 		virtual void DrawIndexed(uint32_t size) const noexcept = 0;
 		
-		virtual void Present() const noexcept = 0;
+		virtual void Present() const = 0;
 	};
 }

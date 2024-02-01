@@ -2,13 +2,12 @@
 
 #include <vector>
 
-#include <d3d11.h>
-#include <wrl.h>
+#include "dx11.h"
 
 #include "../../graphics/VertexBuffer.h"
 #include "../../types/Vertex.h"
 
-namespace rl::impl {
+namespace rl {
 	class DX11VertexBuffer : public rl::VertexBuffer
 	{
 	public:

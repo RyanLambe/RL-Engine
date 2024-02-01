@@ -9,7 +9,7 @@ std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create()
 	switch (Renderer::GetAPI())
 	{
 	case GraphicsAPI::DX11:
-		return std::make_shared<impl::DX11RenderTarget>();
+		return std::make_shared<DX11RenderTarget>();
 	default: break;
 	}
 
@@ -22,7 +22,7 @@ std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create(uint32_t width, uint3
 	switch (Renderer::GetAPI())
 	{
 	case GraphicsAPI::DX11:
-		return std::make_shared<impl::DX11RenderTarget>(width, height);
+		return std::make_shared<DX11RenderTarget>(width, height);
 	default: break;
 	}
 

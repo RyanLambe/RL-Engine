@@ -6,7 +6,6 @@
 
 #include <glm/glm.hpp>
 
-#include "../Debug.h"
 #include "Vec3.h"
 
 namespace rl {
