@@ -1,9 +1,7 @@
 #pragma once
 
-#include <string>
 #include <iostream>
-
-#include "../Clock.h"
+#include "Clock.h"
 
 namespace rl::Logger {
 
@@ -21,21 +19,21 @@ namespace rl::Logger {
     // prints beginning of log
     template<typename... Args>
     void LogMessage(const std::string& file, int line, const Args&... args){
-        std::cout << "[LOG] [" << Clock::getTime() << "] [" << file << ":" << line << "] - ";
+        std::cout << "[LOG] [" << Clock::getFormattedTime() << "] [" << file << ":" << line << "] - ";
         Log(file, line, args...);
     }
 
     // prints beginning of log warning
     template<typename... Args>
     void LogWarning(const std::string& file, int line, const Args&... args){
-        std::cout << "[WARNING] [" << Clock::getTime() << "] [" << file << ":" << line << "] - ";
+    std::cout << "[WARNING] [" << Clock::getFormattedTime() << "] [" << file << ":" << line << "] - ";
         Log(file, line, args...);
     }
 
     // prints beginning of log error
     template<typename... Args>
     void LogError(const std::string& file, int line, const Args&... args){
-        std::cout << "[ERROR] [" << Clock::getTime() << "] [" << file << ":" << line << "] - ";
+        std::cout << "[ERROR] [" << Clock::getFormattedTime() << "] [" << file << ":" << line << "] - ";
         Log(file, line, args...);
     }
 

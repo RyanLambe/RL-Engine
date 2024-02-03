@@ -1,6 +1,6 @@
-#include "dx11-RenderTarget.h"
+#include "dx11RenderTarget.h"
 
-#include "dx11-Context.h"
+#include "dx11Context.h"
 
 using namespace rl;
 
@@ -16,17 +16,6 @@ DX11RenderTarget::DX11RenderTarget()
 	DX11Context::GetSwap()->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&texture);
 	DX11Context::GetDevice()->CreateRenderTargetView(texture.Get(), 0, &target);
 	texture.Reset();
-}
-
-DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height)
-{
-	windowSize = true;
-	depthEnabled = false;
-
-	this->width = width;
-	this->height = height;
-
-	// create render target???
 }
 
 void DX11RenderTarget::Enable() const noexcept

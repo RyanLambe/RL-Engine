@@ -11,7 +11,7 @@ namespace rl {
 
 		DX11Context(const Context&) = delete;
 		DX11Context() = delete;
-		DX11Context(HWND hwnd, uint32_t width, uint32_t height);
+		explicit DX11Context(std::shared_ptr<Window> window);
 
 		void DrawIndexed(uint32_t size) const noexcept override;
 
@@ -30,8 +30,8 @@ namespace rl {
 	private:
 
 		static DX11Context* mainContext;
+        std::shared_ptr<Window> window;
 
-		uint32_t width, height;
 		uint32_t vsync = 0;
 
 		Microsoft::WRL::ComPtr<IDXGISwapChain> swap = Microsoft::WRL::ComPtr<IDXGISwapChain>();

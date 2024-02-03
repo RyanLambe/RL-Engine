@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "../core/Window.h"
 
 namespace rl {
 
@@ -16,7 +17,7 @@ namespace rl {
 	public:
 
 		//todo change HWND to generic?
-		static std::shared_ptr<Context> Create(void* hwnd, int width, int height);
+		static std::shared_ptr<Context> Create(std::shared_ptr<Window> window);
 		
 		virtual void DrawIndexed(uint32_t size) const noexcept = 0;
 		

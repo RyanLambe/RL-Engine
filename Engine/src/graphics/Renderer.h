@@ -17,8 +17,8 @@ namespace rl {
 		Renderer() = delete;
 		Renderer(const Renderer&) = delete;
 
-		Renderer(void* hwnd, int width, int height) {
-			context = Context::Create(hwnd, width, height);
+		Renderer(std::shared_ptr<Window> window) {
+			context = Context::Create(window);
 			target = RenderTarget::Create();
 			target->Enable();
 
@@ -35,6 +35,7 @@ namespace rl {
 		}
 
 		void Render();
+        void Resize(int width, int height);
 
 		static GraphicsAPI GetAPI();
 

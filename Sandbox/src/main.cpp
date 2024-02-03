@@ -1,10 +1,15 @@
 
-#include <SceneManager.h>
-#include <Window.h>
+//#include <SceneManager.h>
+#include <core/Application.h>
 
 using namespace rl;
 
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
+int main(){
+    Application application;
+    application.Run();
+}
+
+/*int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 {
 	std::wstring test = L"name";
 	Window window(hInstance, nullptr, test, WS_OVERLAPPEDWINDOW, 1280, 720, true);
@@ -17,4 +22,4 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nC
 	}
 
     return exitCode.exitCode;
-}
+}*/

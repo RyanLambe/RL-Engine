@@ -1,6 +1,6 @@
-#include "dx11-VertexBuffer.h"
+#include "dx11VertexBuffer.h"
 
-#include "dx11-Context.h"
+#include "dx11Context.h"
 
 using namespace rl;
 

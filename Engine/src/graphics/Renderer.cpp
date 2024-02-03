@@ -27,3 +27,7 @@ rl::GraphicsAPI rl::Renderer::GetAPI()
 {
 	return GraphicsAPI::DX11;
 }
+
+void rl::Renderer::Resize(int width, int height) {
+    target->Resize(width, height);
+}

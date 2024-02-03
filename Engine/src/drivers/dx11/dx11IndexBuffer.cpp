@@ -1,6 +1,6 @@
-#include "dx11-IndexBuffer.h"
+#include "dx11IndexBuffer.h"
 
-#include "dx11-Context.h"
+#include "dx11Context.h"
 
 using namespace rl;
 

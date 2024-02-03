@@ -5,5 +5,7 @@ project(RL-Engine)
 set(BUILD_SHARED_LIBS yes)
 set(CMAKE_CXX_STANDARD 20)
 
+add_subdirectory(External/glfw)
+
 add_subdirectory(Engine)
 add_subdirectory(Sandbox)

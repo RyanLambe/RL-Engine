@@ -2,7 +2,7 @@
 
 #include "Renderer.h"
 
-#include "../drivers/dx11/dx11-VertexBuffer.h"
+#include "../drivers/dx11/dx11VertexBuffer.h"
 
 std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Vertex>& data, bool dynamic)
 {

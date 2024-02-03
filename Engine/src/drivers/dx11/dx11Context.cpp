@@ -1,4 +1,4 @@
-#include "dx11-Context.h"
+#include "dx11Context.h"
 
 using namespace rl;
 
@@ -27,16 +27,21 @@ void DX11Context::StartShader(ID3D11Device* device, ID3D11DeviceContext* context
     context->IASetInputLayout(inputLayout.Get());
 }
 
-DX11Context::DX11Context(HWND hwnd, uint32_t width, uint32_t height) {
+DX11Context::DX11Context(std::shared_ptr<Window> window) {
 	
 	if (mainContext) {
-		// critical error
-		return;
+        RL_THROW_EXCEPTION("Cannot create multiple DirectX 11 Contexts");
 	}
-	mainContext = this;
 
-	this->width = width;
-	this->height = height;
+    if(window->getHWND() == nullptr){
+        RL_THROW_EXCEPTION("Unable to access HWND for DirectX use");
+    }
+
+	mainContext = this;
+    this->window = window;
+
+    int width = window->getWidth();
+    int height = window->getHeight();
 
 	//create device, context, and swap chain
 	DXGI_SWAP_CHAIN_DESC sd = {};
@@ -51,11 +56,22 @@ DX11Context::DX11Context(HWND hwnd, uint32_t width, uint32_t height) {
 	sd.SampleDesc.Quality = 0;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount = 1;
-	sd.OutputWindow = hwnd;
+	sd.OutputWindow = (HWND)window->getHWND();
 	sd.Windowed = TRUE;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	DX_THROW_ERROR(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
+    DX_THROW_ERROR(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
+
+    // disable alt + enter to toggle fullscreen
+    IDXGIDevice* dxgiDevice;
+    DX_THROW_ERROR(device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice));
+
+    IDXGIAdapter* adapter;
+    DX_THROW_ERROR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&adapter));
+
+    IDXGIFactory* factory;
+    adapter->GetParent(__uuidof(IDXGIFactory), (void**)&factory);
+    factory->MakeWindowAssociation((HWND)window->getHWND(), DXGI_MWA_NO_ALT_ENTER);
 
 	//set viewport size
 	D3D11_VIEWPORT vp;
@@ -80,7 +96,7 @@ DX11Context::DX11Context(HWND hwnd, uint32_t width, uint32_t height) {
 	DX_THROW_ERROR(device->CreateSamplerState(&sampleDesc, &sampler));
 	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
 
-	StartShader(device.Get(), context.Get());\
+	StartShader(device.Get(), context.Get());
 }
 
 void DX11Context::DrawIndexed(uint32_t size) const noexcept
@@ -159,10 +175,10 @@ IDXGISwapChain* DX11Context::GetSwap()
 
 uint32_t DX11Context::GetWindowWidth()
 {
-	return mainContext->width;
+	return mainContext->window->getWidth();
 }
 
 uint32_t DX11Context::GetWindowHeight()
 {
-	return mainContext->height;
+	return mainContext->window->getHeight();
 }

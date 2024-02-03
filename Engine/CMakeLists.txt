@@ -8,14 +8,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE})
 
 add_library(Engine STATIC
         # dx11 implementation
-        src/drivers/dx11/dx11-Context.cpp
-        src/drivers/dx11/dx11-Context.h
-        src/drivers/dx11/dx11-IndexBuffer.cpp
-        src/drivers/dx11/dx11-IndexBuffer.h
-        src/drivers/dx11/dx11-RenderTarget.cpp
-        src/drivers/dx11/dx11-RenderTarget.h
-        src/drivers/dx11/dx11-VertexBuffer.cpp
-        src/drivers/dx11/dx11-VertexBuffer.h
+        src/drivers/dx11/dx11Context.cpp
+        src/drivers/dx11/dx11Context.h
+        src/drivers/dx11/dx11IndexBuffer.cpp
+        src/drivers/dx11/dx11IndexBuffer.h
+        src/drivers/dx11/dx11RenderTarget.cpp
+        src/drivers/dx11/dx11RenderTarget.h
+        src/drivers/dx11/dx11VertexBuffer.cpp
+        src/drivers/dx11/dx11VertexBuffer.h
 
         # graphics
         src/graphics/Context.cpp
@@ -61,10 +61,7 @@ add_library(Engine STATIC
         src/Input.h
         src/SceneManager.cpp
         src/SceneManager.h
-        src/Clock.cpp
-        src/Clock.h
-        src/Window.cpp
-        src/Window.h
+        src/core/Timer.h
         src/ecs/SceneManager.cpp
         src/ecs/SceneManager.h
         src/ecs/ComponentList.h
@@ -74,10 +71,24 @@ add_library(Engine STATIC
         src/core/Logger.h
         src/drivers/dx11/dx11.h
         src/drivers/dx11/dx11.cpp
+        src/core/Window.cpp
+        src/core/Window.h
+        src/drivers/glfw/glfwWindow.cpp
+        src/drivers/glfw/glfwWindow.h
+        src/core/Application.cpp
+        src/core/Application.h
+        src/core/Clock.cpp
+        src/core/Clock.h
 )
 
 # include GLM
 target_include_directories(Engine PUBLIC ../External/glm)
+
+# include GLFW
+target_compile_definitions(Engine PUBLIC GLFW_EXPOSE_NATIVE_WIN32) # should be defined if using GLFW + DirectX
+
+target_include_directories(Engine PUBLIC ../External/glfw/include)
+target_link_libraries(Engine glfw)
 
 # include DirectX 11
 set(LIBS d3d11 D3DCompiler user32.lib)
