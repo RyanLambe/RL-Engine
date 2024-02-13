@@ -16,7 +16,6 @@ namespace rl {
 	{
 	public:
 
-		//todo change HWND to generic?
 		static std::shared_ptr<Context> Create(std::shared_ptr<Window> window);
 		
 		virtual void DrawIndexed(uint32_t size) const noexcept = 0;

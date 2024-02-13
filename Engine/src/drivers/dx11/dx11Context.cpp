@@ -4,29 +4,6 @@ using namespace rl;
 
 DX11Context* rl::DX11Context::mainContext = nullptr;
 
-//todo move to seperate class
-void DX11Context::StartShader(ID3D11Device* device, ID3D11DeviceContext* context) {
-
-    //pixel shader
-    DX_LOG_ERROR(D3DReadFileToBlob(L"PixelShader.cso", &blob));
-    DX_LOG_ERROR(device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &pixelShader));
-    context->PSSetShader(pixelShader.Get(), 0, 0);
-
-    //vertex shader
-    DX_LOG_ERROR(D3DReadFileToBlob(L"VertexShader.cso", &blob));
-    DX_LOG_ERROR(device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vertexShader));
-    context->VSSetShader(vertexShader.Get(), 0, 0);
-
-    //input Layout
-    D3D11_INPUT_ELEMENT_DESC ied[] = {
-            {"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-            {"TexCoord", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-            {"NormalVS", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0}
-    };
-    DX_LOG_ERROR(device->CreateInputLayout(ied, sizeof(ied)/sizeof(D3D11_INPUT_ELEMENT_DESC), blob->GetBufferPointer(), blob->GetBufferSize(), &inputLayout));
-    context->IASetInputLayout(inputLayout.Get());
-}
-
 DX11Context::DX11Context(std::shared_ptr<Window> window) {
 	
 	if (mainContext) {
@@ -95,8 +72,6 @@ DX11Context::DX11Context(std::shared_ptr<Window> window) {
 
 	DX_THROW_ERROR(device->CreateSamplerState(&sampleDesc, &sampler));
 	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
-
-	StartShader(device.Get(), context.Get());
 }
 
 void DX11Context::DrawIndexed(uint32_t size) const noexcept

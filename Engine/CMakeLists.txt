@@ -79,6 +79,14 @@ add_library(Engine STATIC
         src/core/Application.h
         src/core/Clock.cpp
         src/core/Clock.h
+        src/graphics/UniformBuffer.cpp
+        src/graphics/UniformBuffer.h
+        src/drivers/dx11/dx11UniformBuffer.cpp
+        src/drivers/dx11/dx11UniformBuffer.h
+        src/graphics/Shader.cpp
+        src/graphics/Shader.h
+        src/drivers/dx11/dx11Shader.cpp
+        src/drivers/dx11/dx11Shader.h
 )
 
 # include GLM
