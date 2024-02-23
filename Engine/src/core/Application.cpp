@@ -1,4 +1,6 @@
 #include "Application.h"
+#include "Input.h"
+#include "Logger.h"
 
 using namespace rl;
 
@@ -15,6 +17,15 @@ void Application::Run() {
     // run window
     while (window->Update()){
         renderer->Render();
+
+        if(Input::GetKey(Key::W))
+            RL_LOG("Forward");
+
+        if(Input::GetMouseButton(MouseButton::Left))
+            RL_LOG("Click");
+
+        if(Input::GetKey(Key::P))
+            RL_LOG(Input::GetRawMousePos().x, ", ", Input::GetRawMousePos().y);
     }
 }
 

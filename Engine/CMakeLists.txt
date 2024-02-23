@@ -57,8 +57,6 @@ add_library(Engine STATIC
         src/types/Vertex.h
 
         # general
-        src/Input.cpp
-        src/Input.h
         src/SceneManager.cpp
         src/SceneManager.h
         src/core/Timer.h
@@ -87,6 +85,9 @@ add_library(Engine STATIC
         src/graphics/Shader.h
         src/drivers/dx11/dx11Shader.cpp
         src/drivers/dx11/dx11Shader.h
+        src/core/Input.h
+        src/drivers/glfw/glfwInput.cpp
+        src/core/Key.h
 )
 
 # include GLM

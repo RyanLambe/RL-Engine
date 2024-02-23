@@ -108,3 +108,11 @@ void glfwWindow::setFullscreen(bool fullscreen) noexcept {
     }
 }
 
+GLFWwindow *glfwWindow::GetActiveGLFWWindow() noexcept {
+    return RLWindow->window;
+}
+
+glfwWindow *glfwWindow::GetActiveRLWindow() noexcept {
+    return RLWindow;
+}
+

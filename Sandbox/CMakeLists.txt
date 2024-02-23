@@ -20,8 +20,6 @@ foreach(FILE ${HLSL_SHADER_FILES})
     get_filename_component(FILE_WE ${FILE} NAME_WE)
     get_source_file_property(shadertype ${FILE} ShaderType)
 
-    message(PROJECT_SOURCE_DIR="${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-
     add_custom_command(
             TARGET shaders
             COMMAND fxc.exe /nologo /Emain /T${shadertype} $<IF:$<CONFIG:DEBUG>,/Od,/O1> /Zi /Fo ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${FILE_WE}.cso /Fd ${CMAKE_BINARY_DIR}/${FILE_WE}.pdb ${FILE}
