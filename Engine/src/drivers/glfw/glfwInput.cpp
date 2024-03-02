@@ -17,7 +17,7 @@ extern bool rl::Input::GetMouseButton(MouseButton button) {
     return glfwGetMouseButton(glfwWindow::GetActiveGLFWWindow(), (int)button) == GLFW_PRESS;
 }
 
-extern glm::vec2 rl::Input::GetRawMousePos() {
+extern glm::vec2 rl::Input::GetMousePos() {
     if(!glfwWindow::GetActiveGLFWWindow())
         RL_THROW_EXCEPTION("Cannot access input. No window has been created");
 

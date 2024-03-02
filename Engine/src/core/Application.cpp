@@ -1,34 +1,44 @@
 #include "Application.h"
 #include "Input.h"
-#include "Logger.h"
+
+#include "../ecs/SystemManager.h"
+
+#include "../components/Transform.h"
+#include "../components/MeshComponent.h"
 
 using namespace rl;
-
-std::unique_ptr<Renderer> Application::renderer;
 
 void Application::Run() {
 
     // create window
-    auto window = Window::Create(1280, 720, "RL Engine 2.0", false);
+    const auto window = Window::Create(1280, 720, "RL Engine 2.0", false);
     window->setResizeCallback(OnWindowResize);
 
-    renderer = std::make_unique<Renderer>(window);
+    // setup renderer
+    Renderer::Start(window);
+    System renderSystem;
+    renderSystem.Update = Renderer::Render;
+
+    SystemManager::AddSystem(renderSystem);
+
+    // create test entity
+    Entity test = 0;
+    Transform::Create(test);
+    MeshComponent::Create(test);
+    MeshComponent::GetComponent(test)->LoadMesh("test.obj");
+
+    // create camera entity
+    Entity cam = 1;
+    Transform::Create(cam);
+    //Camera::Create(test);
 
     // run window
+    SystemManager::StartSystems();
     while (window->Update()){
-        renderer->Render();
-
-        if(Input::GetKey(Key::W))
-            RL_LOG("Forward");
-
-        if(Input::GetMouseButton(MouseButton::Left))
-            RL_LOG("Click");
-
-        if(Input::GetKey(Key::P))
-            RL_LOG(Input::GetRawMousePos().x, ", ", Input::GetRawMousePos().y);
+        SystemManager::UpdateSystems();
     }
 }
 
 void Application::OnWindowResize(Window* window, int width, int height){
-    renderer->Resize(width, height);
+    Renderer::Resize(width, height);
 }

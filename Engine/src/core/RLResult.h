@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <utility>
 
+#include "Logger.h"
+
 namespace rl{
 
     // error code is the type of errors that can happen regular use
@@ -65,4 +67,5 @@ namespace rl{
 #define RL_THROW_EXCEPTION(msg) throw RLException(msg, __FILE__, __LINE__)
 #define RL_THROW_RESULT(res) throw RLException(res.toString(), __FILE__, __LINE__)
 #define RL_CHECK_RESULT(res) if(res.Failed()) throw RLException(res.toString(), __FILE__, __LINE__)
+#define RL_PRINT_RESULT(res) if(res.Failed()) RL_LOG_ERROR("Error: ", res.toString())
 

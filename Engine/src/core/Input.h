@@ -11,7 +11,7 @@ namespace rl::Input {
 
     extern bool GetMouseButton(MouseButton button);
 
-    extern glm::vec2 GetRawMousePos();
+    extern glm::vec2 GetMousePos();
 
 }
 

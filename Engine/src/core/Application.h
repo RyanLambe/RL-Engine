@@ -10,8 +10,5 @@ namespace rl {
 
     private:
         static void OnWindowResize(Window* window, int width, int height);
-
-        static std::unique_ptr<Renderer> renderer;
-
     };
 }

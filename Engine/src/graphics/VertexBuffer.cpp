@@ -8,7 +8,7 @@ std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Ver
 {
 	switch (Renderer::GetAPI())
 	{
-		case GraphicsAPI::DX11: 
+        case GraphicsAPI::DX11:
 			return std::make_shared<DX11VertexBuffer>(data, dynamic);
 		default: break;
 	}

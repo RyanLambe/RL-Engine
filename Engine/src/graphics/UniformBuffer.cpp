@@ -1,13 +1,18 @@
-//
-// Created by ryanl on 2024-02-11.
-//
-
 #include "UniformBuffer.h"
+
+#include "Renderer.h"
 
 #include "../drivers/dx11/dx11UniformBuffer.h"
 
-using namespace rl;
+std::shared_ptr<rl::UniformBuffer> rl::UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding)
+{
+    switch (Renderer::GetAPI())
+    {
+        case GraphicsAPI::DX11:
+            return std::make_shared<DX11UniformBuffer>(size, shaderType, binding);
+        default: break;
+    }
 
-std::shared_ptr<UniformBuffer> UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding) {
-    return std::make_shared<DX11UniformBuffer>(size, shaderType, binding);
+    //throw error
+    return nullptr;
 }
