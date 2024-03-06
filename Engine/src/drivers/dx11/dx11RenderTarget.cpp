@@ -20,7 +20,7 @@ DX11RenderTarget::DX11RenderTarget()
 
 void DX11RenderTarget::Enable() const noexcept
 {
-	DX11Context::GetContext()->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
+	
 }
 
 void DX11RenderTarget::Clear() noexcept
@@ -82,6 +82,8 @@ void DX11RenderTarget::Resize(uint32_t width, uint32_t height) noexcept
 		DSVdesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		DSVdesc.Texture2D.MipSlice = 0;
         DX_LOG_ERROR(DX11Context::GetDevice()->CreateDepthStencilView(depthTexture.Get(), &DSVdesc, &DSV));
+
+		DX11Context::GetContext()->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
 	}
 }
 

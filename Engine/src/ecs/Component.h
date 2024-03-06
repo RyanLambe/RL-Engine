@@ -15,11 +15,10 @@ namespace rl {
 
         Component() = default;
 
-        static void Create(Entity entity)
+        static T& Create(Entity entity)
     	{
             if(entityToIndex.contains(entity)){
-                RL_LOG_ERROR("Multiple components cannot be added to the same entity.");
-                return;
+                RL_THROW_EXCEPTION("Multiple components cannot be added to the same entity.");
             }
 
             for (size_t i = 0; i < components.size(); i++) {
@@ -27,13 +26,16 @@ namespace rl {
                     entityToIndex[entity] = i;
                     components[i] = T();
                     components[i].value().entity = entity;
-                    return;
+                    return components[i].value();
                 }
             }
 
             components.push_back(T());
-            components[components.size() - 1].value().entity = entity;
-            entityToIndex[entity] = components.size() - 1;
+            size_t index = components.size() - 1;
+
+            components[index].value().entity = entity;
+            entityToIndex[entity] = index;
+            return components[index].value();
         }
 
         static RLResult Delete(Entity entity)
@@ -49,9 +51,9 @@ namespace rl {
             return RLResult(ErrorCode::Success);
         }
 
-        inline static std::optional<T>& GetComponent(Entity entity)
+        inline static T& GetComponent(Entity entity)
     	{
-            return components[entityToIndex[entity]];
+            return components[entityToIndex[entity]].value();
         }
 
         inline static bool HasComponent(Entity entity)

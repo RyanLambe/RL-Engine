@@ -5,7 +5,16 @@ struct VSIn {
 };
 
 struct VSOut{
-	float4 pos: SV_POSITION;
+    float3 norm : Normal;
+    float4 pos : SV_POSITION;
+};
+
+cbuffer Object : register(b0) {
+	matrix transform;
+};
+
+cbuffer Scene : register(b1) {
+    matrix cam;
 };
 
 //program
@@ -13,7 +22,10 @@ VSOut main(VSIn In)
 {
 	VSOut Out;
 
-	Out.pos = float4(In.pos.xy, 0, 1.0f);
+    float4 worldPos = mul(transform, float4(In.pos, 1.0f));
+    Out.pos = mul(cam, worldPos);
+	
+    Out.norm = In.norm;
 
 	return Out;
 }

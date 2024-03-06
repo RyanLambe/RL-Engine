@@ -3,20 +3,35 @@
 #include "../core/Logger.h"
 #include <glm/gtx/string_cast.hpp>
 
+#include "../components/Camera.h"
 #include "../core/RLResult.h"
 #include "../components/MeshComponent.h"
 #include "../components/Transform.h"
 
+int rl::Renderer::width;
+int rl::Renderer::height;
 
 std::shared_ptr<rl::Context> rl::Renderer::context;
 std::shared_ptr<rl::RenderTarget> rl::Renderer::target;
 
+std::shared_ptr<rl::UniformBuffer> rl::Renderer::ObjectUniformBuffer;
+std::shared_ptr<rl::UniformBuffer> rl::Renderer::SceneUniformBuffer;
+
 void rl::Renderer::Start(std::shared_ptr<Window> window)
 {
-    context = Context::Create(std::move(window));
+    width = window->getWidth();
+    height = window->getHeight();
+
+    context = Context::Create(window);
+
     target = RenderTarget::Create();
+    target->EnableDepthTest();
     target->Enable();
 
+    ObjectUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), ShaderType::VertexShader, 0);
+    SceneUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), ShaderType::VertexShader, 1);
+
+    // todo: create shader/material system
     std::shared_ptr<Shader> shader = Shader::Create("VertexShader.cso", "PixelShader.cso");
     shader->Enable();
 
@@ -31,6 +46,14 @@ void rl::Renderer::Render()
 	target->EnableDepthTest();
 
 	// view matrix
+    const Camera* cam = Camera::GetMain();
+    if (!Transform::HasComponent(cam->getEntity())) {
+        RL_LOG_WARNING("Camera Components require Transform Components to Render.");
+        return;
+    }
+
+    const glm::mat4 viewMatrix = cam->GetViewMatrix((float)width, (float)height) * Transform::GetComponent(cam->getEntity()).GetInverseTransformationMatrix();
+    SceneUniformBuffer->SetData(&viewMatrix, sizeof(glm::mat4), 0);
 
 	// materials
 
@@ -39,9 +62,11 @@ void rl::Renderer::Render()
 	// draw
     for(auto& mesh : MeshComponent::GetAllComponents()){
         if(!Transform::HasComponent(mesh.getEntity())){
-            RL_LOG_WARNING("Mesh Components require Transform components to render.");
+            RL_LOG_WARNING("Mesh Components require Transform Components to Render.");
             continue;
         }
+
+        ObjectUniformBuffer->SetData(&Transform::GetComponent(mesh.getEntity()).GetTransformationMatrix(), sizeof(glm::mat4), 0);
 
         mesh.Enable();
         context->DrawIndexed(mesh.GetIndexCount());
@@ -57,5 +82,7 @@ rl::GraphicsAPI rl::Renderer::GetAPI()
 }
 
 void rl::Renderer::Resize(int width, int height) {
+    Renderer::width = width;
+    Renderer::height = height;
     target->Resize(width, height);
 }

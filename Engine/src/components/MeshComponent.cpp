@@ -1,12 +1,12 @@
 #include "MeshComponent.h"
 #include <fstream>
 
-void rl::MeshComponent::Enable() {
+void rl::MeshComponent::Enable() const {
     vertexBuffer->Enable();
     indexBuffer->Enable();
 }
 
-size_t rl::MeshComponent::GetIndexCount() {
+uint32_t rl::MeshComponent::GetIndexCount() const {
     return indexCount;
 }
 
@@ -109,5 +109,5 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
     // save data
     vertexBuffer = VertexBuffer::Create(out);
     indexBuffer = IndexBuffer::Create(inds);
-    indexCount = inds.size();
+    indexCount = (uint32_t)inds.size();
 }

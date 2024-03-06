@@ -8,8 +8,8 @@ namespace rl {
     class MeshComponent : public Component<MeshComponent> {
     public:
 
-        void Enable();
-        size_t GetIndexCount();
+        void Enable() const;
+        uint32_t GetIndexCount() const;
 
         // todo: replace with some sort of asset system
         void LoadMesh(const std::string& fileName);
@@ -17,6 +17,6 @@ namespace rl {
     private:
         std::shared_ptr<VertexBuffer> vertexBuffer = nullptr;
         std::shared_ptr<IndexBuffer> indexBuffer = nullptr;
-        size_t indexCount = 0;
+        uint32_t indexCount = 0;
     };
 }

@@ -3,7 +3,13 @@ cbuffer Test : register(b0) {
 	float3 color;
 };
 
-float4 main() : SV_TARGET
+struct PSIn
 {
-    return float4(color, 0);
+    float3 norm : Normal;
+};
+
+float4 main(PSIn In) : SV_TARGET
+{
+    float shading = max(dot(normalize(In.norm), normalize(float3(0.44, 0.22, 0.87))), 0.2);
+    return float4(color * shading, 0);
 }

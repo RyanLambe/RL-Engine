@@ -14,17 +14,21 @@ namespace rl {
 	class Renderer
 	{
 	public:
-
         static void Start(std::shared_ptr<Window> window);
 		static void Render();
+
         static void Resize(int width, int height);
 
 		static GraphicsAPI GetAPI();
 
 	private:
-		static uint32_t tempSize;
+        static int width;
+        static int height;
 
-		static std::shared_ptr<rl::Context> context;
-		static std::shared_ptr<rl::RenderTarget> target;
+		static std::shared_ptr<Context> context;
+		static std::shared_ptr<RenderTarget> target;
+
+        static std::shared_ptr<UniformBuffer> ObjectUniformBuffer;
+        static std::shared_ptr<UniformBuffer> SceneUniformBuffer;
 	};
 }

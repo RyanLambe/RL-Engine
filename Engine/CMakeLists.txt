@@ -105,6 +105,8 @@ add_library(Engine STATIC
         src/ecs/SystemManager.h
 
         # components
+        src/components/Camera.cpp
+        src/components/Camera.h
         src/components/MeshComponent.cpp
         src/components/MeshComponent.h
         src/components/Transform.cpp

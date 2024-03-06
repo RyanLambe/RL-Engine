@@ -72,6 +72,8 @@ DX11Context::DX11Context(std::shared_ptr<Window> window) {
 
 	DX_THROW_ERROR(device->CreateSamplerState(&sampleDesc, &sampler));
 	context->PSSetSamplers(0, 1, sampler.GetAddressOf());
+
+	EnableDepth(true);
 }
 
 void DX11Context::DrawIndexed(uint32_t size) const noexcept
