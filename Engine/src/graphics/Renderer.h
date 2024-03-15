@@ -1,47 +1,34 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 #include "Context.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
 #include "RenderTarget.h"
 
-#include "../types/Mesh.h"
+#include "UniformBuffer.h"
+#include "Shader.h"
 
 
 namespace rl {
 	class Renderer
 	{
 	public:
-		Renderer() = delete;
-		Renderer(const Renderer&) = delete;
+        static void Start(std::shared_ptr<Window> window);
+		static void Render();
 
-		Renderer(void* hwnd, int width, int height) {
-			context = Context::Create(hwnd, width, height);
-			target = RenderTarget::Create();
-			target->Enable();
-
-			Mesh mesh = Mesh();
-			mesh.ImportObj("test.obj");
-
-			std::shared_ptr<VertexBuffer> vb = VertexBuffer::Create(mesh.getVertices());
-			vb->Enable();
-
-			std::shared_ptr<IndexBuffer> ib = IndexBuffer::Create(mesh.getIndices());
-			ib->Enable();
-
-			tempSize = (uint32_t)mesh.getIndices().size();
-		}
-
-		void Render();
+        static void Resize(int width, int height);
 
 		static GraphicsAPI GetAPI();
 
 	private:
-		uint32_t tempSize;
+        static int width;
+        static int height;
 
-		std::shared_ptr<rl::Context> context;
-		std::shared_ptr<rl::RenderTarget> target;
+		static std::shared_ptr<Context> context;
+		static std::shared_ptr<RenderTarget> target;
+
+        static std::shared_ptr<UniformBuffer> ObjectUniformBuffer;
+        static std::shared_ptr<UniformBuffer> SceneUniformBuffer;
 	};
 }

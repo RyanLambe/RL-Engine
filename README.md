@@ -10,4 +10,7 @@ RL Engine is a 3D game engine built using C++ and Direct X, providing dynamic li
 - Entity Component System
 - Debugging system
 
+## Build Notes:
+- Ensure "C:\Program Files (x86)\Windows Kits\10\bin\10.0.xxx\x86" is included in your system Path environment variable, as fxc.exe is needed to compile shaders.
+
 ### Watch a Demo: https://www.youtube.com/watch?v=tbqvOOzDph0
