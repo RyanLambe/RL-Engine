@@ -1,87 +1,55 @@
+#include <algorithm>
 #include "Transform.h"
-
-#include "glm/gtc/matrix_transform.hpp"
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
 
 using namespace rl;
 
-
-void Transform::Translate(float x, float y, float z)
+glm::mat4 Transform::GetTransformationMatrix() const noexcept
 {
-    Translate(glm::vec3(x, y, z));
-}
-
-void Transform::Translate(glm::vec3 offset)
-{
-    this->position += right() * offset.x + up() * offset.y + forward() * offset.z;
-}
-
-void Transform::Rotate(float x, float y, float z)
-{
-    Rotate(glm::vec3(x, y, z));
-}
-
-void Transform::Rotate(glm::vec3 offset)
-{
-    rotation += offset;
-}
-
-void Transform::Scale(float x)
-{
-    Scale(glm::vec3(x));
-}
-
-void Transform::Scale(float x, float y, float z)
-{
-    Scale(glm::vec3(x, y, z));
-}
-
-void Transform::Scale(glm::vec3 amount)
-{
-    scale *= amount;
-}
-
-glm::vec3 Transform::forward() const noexcept
-{
-    return glm::vec3(0, 0, 1);
-}
-
-glm::vec3 Transform::right() const noexcept
-{
-    return glm::vec3(1, 0, 0);
-}
-
-glm::vec3 Transform::up() const noexcept
-{
-    return glm::vec3(0, 1, 0);
-}
-
-const glm::mat4& Transform::GetTransformationMatrix() noexcept {
-
-    RecalculateMatrix();
-    return matrix;
+    const glm::mat4 pos = glm::translate(glm::mat4(1.0f), position);
+    const glm::mat4 rot = glm::mat4_cast(rotation);
+    const glm::mat4 sca = glm::scale(glm::mat4(1.0f), scale);
+    return pos * rot * sca;
 }
 
 glm::mat4 Transform::GetInverseTransformationMatrix() const noexcept
 {
-    if (scale.x == 0.0f || scale.y == 0.0f || scale.z == 0.0f)
-        return glm::mat4(0);
+    const glm::vec3 invScaleVec = glm::vec3(1.0f / (scale.x != 0.00f ? scale.x : 1.0f),
+                                            1.0f / (scale.y != 0.00f ? scale.y : 1.0f),
+                                            1.0f / (scale.z != 0.00f ? scale.z : 1.0f));
 
-    glm::mat4 rotationMatrix = glm::mat4(1.0f);
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-    return glm::scale(glm::mat4(1.0f), glm::vec3(1/scale.x, 1/scale.y, 1/scale.z)) * glm::transpose(rotationMatrix) * glm::translate(glm::mat4(1.0f), -position);
+    const glm::mat4 invPos = glm::translate(glm::mat4(1.0f), -position);
+    const glm::mat4 invRot = glm::mat4_cast(glm::conjugate(rotation));
+    const glm::mat4 invScale = glm::scale(glm::mat4(1.0f), invScaleVec);
+    return invScale * invRot * invPos;
 }
 
-void Transform::RecalculateMatrix() {
+glm::quat Transform::EulerToQuat(const glm::vec3& euler) noexcept
+{
+    const glm::quat xQ = glm::angleAxis(glm::radians(euler.x), glm::vec3(1, 0, 0));
+    const glm::quat yQ = glm::angleAxis(glm::radians(euler.y), glm::vec3(0, 1, 0));
+    const glm::quat zQ = glm::angleAxis(glm::radians(euler.z), glm::vec3(0, 0, 1));
+    return yQ * xQ * zQ;
+}
 
-	glm::mat4 rotationMatrix = glm::mat4(1.0f);
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+// todo: check if works properly
+glm::vec3 Transform::QuatToEuler(const glm::quat &quat) noexcept
+{
+    glm::quat q = glm::normalize(quat);
+    const float z = ExtractAngleFromQuat(q, glm::vec3(0, 0, 1));
+    const float x = ExtractAngleFromQuat(q, glm::vec3(1, 0, 0));
+    const float y = ExtractAngleFromQuat(q, glm::vec3(0, 1, 0));
+    return {x, y, z};
+}
 
-    matrix = glm::translate(glm::mat4(1.0f), position) * rotationMatrix * glm::scale(glm::mat4(1.0f), scale);
+float Transform::ExtractAngleFromQuat(glm::quat &quat, const glm::vec3 &axis) noexcept
+{
+    const float quatAngle = 2.0f * acosf(quat.w);
+    const float div = sinf(quatAngle / 2);
+    const glm::vec3 quatAxis = glm::vec3(quat.x, quat.y, quat.z) / glm::vec3(div == 0.000000f ? 0.000001f : div);
+
+    const float f = glm::dot(glm::normalize(quatAxis), axis);
+    const float finalAngle = glm::degrees(quatAngle * f);
+    quat = glm::normalize(quat * glm::angleAxis(-finalAngle, glm::vec3(0, 0, 1)));
+
+    return finalAngle;
 }
