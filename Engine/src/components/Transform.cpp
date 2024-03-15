@@ -3,12 +3,13 @@
 
 using namespace rl;
 
-glm::mat4 Transform::GetTransformationMatrix() const noexcept
+const glm::mat4& Transform::GetTransformationMatrix() noexcept
 {
     const glm::mat4 pos = glm::translate(glm::mat4(1.0f), position);
     const glm::mat4 rot = glm::mat4_cast(rotation);
     const glm::mat4 sca = glm::scale(glm::mat4(1.0f), scale);
-    return pos * rot * sca;
+    matrix = pos * rot * sca;
+    return matrix;
 }
 
 glm::mat4 Transform::GetInverseTransformationMatrix() const noexcept

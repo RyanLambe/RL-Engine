@@ -84,11 +84,14 @@ namespace rl {
         }
 
         // get matrices
-        [[nodiscard]] glm::mat4 GetTransformationMatrix() const noexcept;
+        [[nodiscard]] const glm::mat4& GetTransformationMatrix() noexcept;
         [[nodiscard]] glm::mat4 GetInverseTransformationMatrix() const noexcept;
 
         static glm::quat EulerToQuat(const glm::vec3& euler) noexcept;
         static glm::vec3 QuatToEuler(const glm::quat& quat) noexcept;
         static float ExtractAngleFromQuat(glm::quat& quat, const glm::vec3& axis) noexcept;
+
+    private:
+        glm::mat4 matrix;
     };
 }
