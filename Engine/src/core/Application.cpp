@@ -11,7 +11,7 @@ Application::Application() {
     window->setResizeCallback(OnWindowResize);
 
     // setup renderer
-    Renderer::Start(window);
+    Renderer::Start(window, true);
     System renderSystem;
     renderSystem.Update = Renderer::Render;
 

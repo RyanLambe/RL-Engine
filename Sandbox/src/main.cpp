@@ -63,21 +63,18 @@ void Update() {
     if(Input::GetKey(Key::S)){
         Transform::GetComponent(cam).Translate(0, 0, -0.01f);
     }
-
     if(Input::GetKey(Key::A)){
         Transform::GetComponent(cam).Translate(-0.01f, 0, 0);
     }
     if(Input::GetKey(Key::D)){
         Transform::GetComponent(cam).Translate(0.01f, 0, 0);
     }
-
     if (Input::GetKey(Key::E)) {
         Transform::GetComponent(cam).Translate(0, 0.01f, 0);
     }
     if (Input::GetKey(Key::Q)) {
         Transform::GetComponent(cam).Translate(0, -0.01f, 0);
     }
-
     if (Input::GetKey(Key::I)) {
         Transform::GetComponent(cam).Rotate(-0.1f, 0, 0);
         //rot.x -= 0.1f;
@@ -86,14 +83,12 @@ void Update() {
         Transform::GetComponent(cam).Rotate(0.1f, 0, 0);
         //rot.x += 0.1f;
     }
-
     if (Input::GetKey(Key::J)) {
         Transform::GetComponent(cam).Rotate(0, -0.1f, 0);
     }
     if (Input::GetKey(Key::L)) {
         Transform::GetComponent(cam).Rotate(0, 0.1f, 0);
     }
-
     if (Input::GetKey(Key::O)) {
         Transform::GetComponent(cam).Rotate(0, 0, -0.1f);
     }

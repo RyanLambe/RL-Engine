@@ -17,6 +17,9 @@ namespace rl {
 
 		void Present() const override;
 
+        [[nodiscard]] void* GetDXDevice() const override;
+        [[nodiscard]] void* GetDXContext() const override;
+
 		void EnableTransparency(bool enable = true) const noexcept;
 		void EnableDepth(bool enable = true) const;
 

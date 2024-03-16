@@ -63,6 +63,10 @@ void* glfwWindow::getHWND() const noexcept {
     return nullptr;
 }
 
+void *glfwWindow::getGLFWwindow() const noexcept {
+    return window;
+}
+
 int glfwWindow::getWidth() const noexcept {
     if(isFullscreen)
         return maxWidth;
@@ -115,4 +119,3 @@ GLFWwindow *glfwWindow::GetActiveGLFWWindow() noexcept {
 glfwWindow *glfwWindow::GetActiveRLWindow() noexcept {
     return RLWindow;
 }
-

@@ -18,6 +18,9 @@ namespace rl {
         [[nodiscard]]
         virtual void* getHWND() const noexcept = 0;
         [[nodiscard]]
+        virtual void* getGLFWwindow() const noexcept = 0;
+
+        [[nodiscard]]
         virtual int getWidth() const noexcept = 0;
         [[nodiscard]]
         virtual int getHeight() const noexcept = 0;

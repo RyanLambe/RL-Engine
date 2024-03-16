@@ -14,12 +14,18 @@ namespace rl {
 	class Renderer
 	{
 	public:
-        static void Start(std::shared_ptr<Window> window);
+        static void Start(std::shared_ptr<Window> window, bool renderToWindow);
 		static void Render();
+        static void Present();
 
         static void Resize(int width, int height);
+        static int getWidth() noexcept;
+        static int getHeight() noexcept;
 
 		static GraphicsAPI GetAPI();
+        static void* GetDXDevice();
+        static void* GetDXContext();
+        static void* GetRenderTexture();
 
 	private:
         static int width;

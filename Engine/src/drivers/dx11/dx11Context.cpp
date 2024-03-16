@@ -31,13 +31,13 @@ DX11Context::DX11Context(std::shared_ptr<Window> window) {
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.SampleDesc.Count = 1;
 	sd.SampleDesc.Quality = 0;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
 	sd.BufferCount = 1;
 	sd.OutputWindow = (HWND)window->getHWND();
 	sd.Windowed = TRUE;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-    DX_THROW_ERROR(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
+    DX_THROW_ERROR(D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG, nullptr, 0, D3D11_SDK_VERSION, &sd, &swap, &device, nullptr, &context));
 
     // disable alt + enter to toggle fullscreen
     IDXGIDevice* dxgiDevice;
@@ -158,4 +158,12 @@ uint32_t DX11Context::GetWindowWidth()
 uint32_t DX11Context::GetWindowHeight()
 {
 	return mainContext->window->getHeight();
+}
+
+void *DX11Context::GetDXDevice() const {
+    return device.Get();
+}
+
+void *DX11Context::GetDXContext() const {
+    return context.Get();
 }

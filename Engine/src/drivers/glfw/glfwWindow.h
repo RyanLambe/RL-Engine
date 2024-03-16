@@ -16,6 +16,9 @@ namespace rl {
         [[nodiscard]]
         void* getHWND() const noexcept override;
         [[nodiscard]]
+        void* getGLFWwindow() const noexcept override;
+
+        [[nodiscard]]
         int getWidth() const noexcept override;
         [[nodiscard]]
         int getHeight() const noexcept override;

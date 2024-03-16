@@ -1,7 +1,6 @@
 #include "Renderer.h"
 
 #include "../core/Logger.h"
-#include <glm/gtx/string_cast.hpp>
 
 #include "../components/Camera.h"
 #include "../core/RLResult.h"
@@ -17,16 +16,14 @@ std::shared_ptr<rl::RenderTarget> rl::Renderer::target;
 std::shared_ptr<rl::UniformBuffer> rl::Renderer::ObjectUniformBuffer;
 std::shared_ptr<rl::UniformBuffer> rl::Renderer::SceneUniformBuffer;
 
-void rl::Renderer::Start(std::shared_ptr<Window> window)
+void rl::Renderer::Start(std::shared_ptr<Window> window, bool renderToWindow)
 {
     width = window->getWidth();
     height = window->getHeight();
 
     context = Context::Create(window);
 
-    target = RenderTarget::Create();
-    target->EnableDepthTest();
-    target->Enable();
+    target = RenderTarget::Create(renderToWindow);
 
     ObjectUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), ShaderType::VertexShader, 0);
     SceneUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), ShaderType::VertexShader, 1);
@@ -42,11 +39,14 @@ void rl::Renderer::Start(std::shared_ptr<Window> window)
 
 void rl::Renderer::Render()
 {
-	target->Clear();
-	target->EnableDepthTest();
+    target->Enable();
 
 	// view matrix
     const Camera* cam = Camera::GetMain();
+    if(cam == nullptr){
+        RL_LOG_ERROR("Camera Required for Rendering.");
+        return;
+    }
     if (!Transform::HasComponent(cam->getEntity())) {
         RL_LOG_WARNING("Camera Components require Transform Components to Render.");
         return;
@@ -71,18 +71,43 @@ void rl::Renderer::Render()
         mesh.Enable();
         context->DrawIndexed(mesh.GetIndexCount());
     }
+}
 
-	context->Present();
+void rl::Renderer::Present() {
+    context->Present();
+    target->Clear();
+}
+
+void rl::Renderer::Resize(int width, int height) {
+    if(width == Renderer::width && height == Renderer::height)
+        return;
+    Renderer::width = width;
+    Renderer::height = height;
+    target->Resize(width, height);
+}
+
+int rl::Renderer::getWidth() noexcept {
+    return width;
+}
+
+int rl::Renderer::getHeight() noexcept {
+    return height;
 }
 
 // todo: make interchangeable
 rl::GraphicsAPI rl::Renderer::GetAPI()
 {
-	return GraphicsAPI::DX11;
+    return GraphicsAPI::DX11;
 }
 
-void rl::Renderer::Resize(int width, int height) {
-    Renderer::width = width;
-    Renderer::height = height;
-    target->Resize(width, height);
+void *rl::Renderer::GetDXDevice() {
+    return context->GetDXDevice();
+}
+
+void *rl::Renderer::GetDXContext() {
+    return context->GetDXContext();
+}
+
+void *rl::Renderer::GetRenderTexture() {
+    return target->GetTexture();
 }
