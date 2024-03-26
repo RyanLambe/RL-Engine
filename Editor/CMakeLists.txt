@@ -7,7 +7,21 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE})
 
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 
-add_executable(Editor src/main.cpp)
+add_executable(Editor src/main.cpp
+        src/GuiElement.h
+        src/windows/Viewport.cpp
+        src/windows/Viewport.h
+        src/Editor.cpp
+        src/Editor.h
+        src/ToolBar.cpp
+        src/ToolBar.h
+        src/project/ProjectManager.cpp
+        src/project/ProjectManager.h
+        src/popups/NewProject.cpp
+        src/popups/NewProject.h
+        src/popups/OpenProject.cpp
+        src/popups/OpenProject.h
+)
 
 # build shaders
 add_custom_target(shaders)
@@ -32,10 +46,18 @@ endforeach(FILE)
 
 add_dependencies(Editor shaders)
 
+# copy dependencies to build path
+file(COPY fonts DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file(COPY template DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
 # add Engine
 include_directories(Editor ../Engine/src)
-target_link_libraries(Editor Engine)
+target_link_libraries(Editor PRIVATE Engine)
 
 # include imgui
 include_directories(Editor ../External/imgui)
-target_link_libraries(Editor ImGui)
+target_link_libraries(Editor PRIVATE ImGui)
+
+# set c++ defines
+target_compile_definitions(Editor PRIVATE RL_BUILD_FLAGS="${RL_BUILD_FLAGS}")
+target_compile_definitions(Editor PRIVATE RL_BUILD_CONFIG_FLAGS="${RL_BUILD_CONFIG_FLAGS}")

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.5)
 
 # *********************
 # *** Project Setup ***
@@ -8,6 +8,7 @@ project(Engine)
 # cmake settings
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE})
 
 # rl engine settings
 set(RL_PLATFORM RL_WINDOWS)
@@ -67,6 +68,7 @@ endif()
 add_library(Engine STATIC
 
         ${RL_DRIVERS}
+        src/Engine.h
 
         # core
         src/core/Application.cpp
@@ -118,7 +120,6 @@ add_library(Engine STATIC
 
 )
 
-
 # *************************
 # *** Include Libraries ***
 # *************************
@@ -128,13 +129,38 @@ target_include_directories(Engine PUBLIC ../External/glm)
 
 # include Platform
 if(RL_PLATFORM STREQUAL RL_WINDOWS)
-    target_include_directories(Engine PUBLIC ../External/glfw/include)
-    target_link_libraries(Engine glfw)
+    target_include_directories(Engine PRIVATE ../External/glfw/include)
+    target_link_libraries(Engine PRIVATE glfw)
 endif()
 
 # include API
 if(RL_API STREQUAL RL_DX11)
-    target_compile_definitions(Engine PUBLIC GLFW_EXPOSE_NATIVE_WIN32)
+    target_compile_definitions(Engine PRIVATE GLFW_EXPOSE_NATIVE_WIN32)
     set(LIBS d3d11 D3DCompiler user32.lib)
-    target_link_libraries(Engine ${LIBS})
+    target_link_libraries(Engine PRIVATE ${LIBS})
 endif()
+
+# *****************************
+# *** Create Include Folder ***
+# *****************************
+set(ENGINE_HEADER_DIRS
+        /components
+        /core
+        /drivers/glfw
+        /drivers/dx11
+        /ecs
+        /graphics
+        /types
+        /
+)
+
+foreach(DIR ${ENGINE_HEADER_DIRS})
+    file(GLOB ENGINE_HEADERS src${DIR}/*.h)
+    file(COPY ${ENGINE_HEADERS} DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/include/${DIR})
+endforeach(DIR)
+
+# include glm in output
+file(COPY ${CMAKE_SOURCE_DIR}/External/glm/glm DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/ThirdParty/glm)
+file(COPY ${CMAKE_SOURCE_DIR}/External/glm/copying.txt DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/ThirdParty/glm)
+
+
