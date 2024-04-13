@@ -16,7 +16,7 @@ namespace rl {
 	{
 	public:
 
-		static std::shared_ptr<Context> Create(std::shared_ptr<Window> window);
+		static std::shared_ptr<Context> Create(Window* window);
 		
 		virtual void DrawIndexed(uint32_t size) const noexcept = 0;
 		

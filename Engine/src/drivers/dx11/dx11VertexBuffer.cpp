@@ -1,10 +1,9 @@
 #include "dx11VertexBuffer.h"
 
-#include "dx11Context.h"
 
 using namespace rl;
 
-rl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic)
+rl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<DX11Context>& contextPtr) : contextPtr(contextPtr)
 {
 	isDynamic = dynamic;
 
@@ -25,15 +24,25 @@ rl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bool dyn
 	initData.pSysMem = data.data();
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
-	
-	DX_LOG_ERROR(DX11Context::GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
+
+    if(auto context = contextPtr.lock()){
+        DX_LOG_ERROR(context->GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
+    }
+    else{
+        RL_THROW_EXCEPTION("Cannot access Context");
+    }
 }
 
 void DX11VertexBuffer::Enable()
 {
 	UINT offset = 0;
 	UINT stride = sizeof(Vertex);
-	DX11Context::GetContext()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+    if(auto context = contextPtr.lock()){
+        context->GetContext()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+    }
+    else{
+        RL_THROW_EXCEPTION("Cannot access Context");
+    }
 }
 
 void DX11VertexBuffer::Set(const std::vector<Vertex>& data)
@@ -52,19 +61,34 @@ void DX11VertexBuffer::Set(const std::vector<Vertex>& data)
 		initData.SysMemPitch = 0;
 		initData.SysMemSlicePitch = 0;
 
-        DX_LOG_ERROR(DX11Context::GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
+        if(auto context = contextPtr.lock()){
+            DX_LOG_ERROR(context->GetDevice()->CreateBuffer(&bufferDesc, &initData, &vertexBuffer));
+        }
+        else{
+            RL_THROW_EXCEPTION("Cannot access Context");
+        }
 	}
 	else {
 		D3D11_MAPPED_SUBRESOURCE mappedSubResource;
 		memset(&mappedSubResource, 0, sizeof(mappedSubResource));
 
-        DX_LOG_ERROR(DX11Context::GetContext()->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource));
+        if(auto context = contextPtr.lock()){
+            DX_LOG_ERROR(context->GetContext()->Map(vertexBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource));
+        }
+        else{
+            RL_THROW_EXCEPTION("Cannot access Context");
+        }
 
 		//copy new data
 		memcpy(mappedSubResource.pData, data.data(), sizeof(Vertex) * data.size());
 
 		//cleanup
-		DX11Context::GetContext()->Unmap(vertexBuffer.Get(), 0);
+        if(auto context = contextPtr.lock()){
+            context->GetContext()->Unmap(vertexBuffer.Get(), 0);
+        }
+        else{
+            RL_THROW_EXCEPTION("Cannot access Context");
+        }
 	}
 }
 

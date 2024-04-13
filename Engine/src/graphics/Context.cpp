@@ -4,7 +4,7 @@
 
 #include "../drivers/dx11/dx11Context.h"
 
-std::shared_ptr<rl::Context> rl::Context::Create(std::shared_ptr<Window> window)
+std::shared_ptr<rl::Context> rl::Context::Create(Window* window)
 {
 	switch (Renderer::GetAPI())
 	{

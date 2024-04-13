@@ -4,12 +4,12 @@
 
 #include "../drivers/dx11/dx11UniformBuffer.h"
 
-std::shared_ptr<rl::UniformBuffer> rl::UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding)
+std::shared_ptr<rl::UniformBuffer> rl::UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding, const std::weak_ptr<Context>& context)
 {
     switch (Renderer::GetAPI())
     {
         case GraphicsAPI::DX11:
-            return std::make_shared<DX11UniformBuffer>(size, shaderType, binding);
+            return std::make_shared<DX11UniformBuffer>(size, shaderType, binding, std::static_pointer_cast<rl::DX11Context>(context.lock()));
         default: break;
     }
 

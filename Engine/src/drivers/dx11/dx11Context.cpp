@@ -2,20 +2,14 @@
 
 using namespace rl;
 
-DX11Context* rl::DX11Context::mainContext = nullptr;
+DX11Context::DX11Context(Window* window) {
 
-DX11Context::DX11Context(std::shared_ptr<Window> window) {
-	
-	if (mainContext) {
-        RL_THROW_EXCEPTION("Cannot create multiple DirectX 11 Contexts");
-	}
-
-    if(window->getHWND() == nullptr){
+    if(window == nullptr){
+        RL_THROW_EXCEPTION("Must provide window when creating DirectX Context");
+    }
+	if(window->getHWND() == nullptr){
         RL_THROW_EXCEPTION("Unable to access HWND for DirectX use");
     }
-
-	mainContext = this;
-    this->window = window;
 
     int width = window->getWidth();
     int height = window->getHeight();
@@ -137,27 +131,17 @@ void DX11Context::EnableDepth(bool enable) const
 
 ID3D11DeviceContext* DX11Context::GetContext()
 {
-	return mainContext->context.Get();
+	return context.Get();
 }
 
 ID3D11Device* DX11Context::GetDevice()
 {
-	return mainContext->device.Get();
+	return device.Get();
 }
 
 IDXGISwapChain* DX11Context::GetSwap()
 {
-	return mainContext->swap.Get();
-}
-
-uint32_t DX11Context::GetWindowWidth()
-{
-	return mainContext->window->getWidth();
-}
-
-uint32_t DX11Context::GetWindowHeight()
-{
-	return mainContext->window->getHeight();
+	return swap.Get();
 }
 
 void *DX11Context::GetDXDevice() const {

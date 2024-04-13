@@ -12,6 +12,7 @@ namespace rl {
 
         [[nodiscard]]
         bool Update() const noexcept override;
+        void Setup() override;
 
         [[nodiscard]]
         void* getHWND() const noexcept override;

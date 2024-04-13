@@ -15,13 +15,15 @@ bool Editor::open = true;
 bool Editor::playing = false;
 
 std::vector<std::weak_ptr<GuiElement>> Editor::guiElements = std::vector<std::weak_ptr<GuiElement>>();
+std::unique_ptr<rl::Renderer> Editor::renderer = nullptr;
 
 Editor::Editor() {
 
     // rl setup
     window = Window::Create(1280, 720, "RL Engine 2.0", false);
     window->setResizeCallback(OnWindowResize);
-    Renderer::Start(window, false);
+
+    renderer = std::make_unique<Renderer>(window);
 
     // ImGui setup
     IMGUI_CHECKVERSION();
@@ -34,8 +36,7 @@ Editor::Editor() {
     SetImGuiStyle();
 
     ImGui_ImplGlfw_InitForOther((GLFWwindow*)window->getGLFWwindow(), true);
-    ImGui_ImplDX11_Init((ID3D11Device*)Renderer::GetDXDevice(), (ID3D11DeviceContext*)Renderer::GetDXContext());
-    imGuiRenderTarget = RenderTarget::Create(true);
+    ImGui_ImplDX11_Init((ID3D11Device*)renderer->GetDXDevice(), (ID3D11DeviceContext*)renderer->GetDXContext());
 }
 
 Editor::~Editor() {
@@ -47,16 +48,12 @@ Editor::~Editor() {
 void Editor::Render() {
 
     if(resized){
-        Renderer::Resize(Renderer::getWidth(), Renderer::getHeight());
-        imGuiRenderTarget->Resize(newWidth, newHeight);
-        io->DisplayFramebufferScale = ImVec2(newWidth, newHeight);
+        renderer->ResizeTarget(newWidth, newHeight);
+        io->DisplayFramebufferScale = ImVec2((float)newWidth, (float)newHeight);
         resized = false;
     }
 
-    if (Camera::GetMain() != nullptr)
-        Renderer::Render();
-
-    imGuiRenderTarget->Enable();
+    renderer->EnableTarget();
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -85,7 +82,7 @@ void Editor::Render() {
         ImGui::RenderPlatformWindowsDefault();
     }
 
-    Renderer::Present();
+    renderer->Present();
 }
 
 bool Editor::Update() {
@@ -126,4 +123,8 @@ void Editor::Play() {
 
 void Editor::Pause() {
     playing = false;
+}
+
+rl::Renderer* Editor::GetRenderer() {
+    return renderer.get();
 }

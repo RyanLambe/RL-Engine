@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "GuiElement.h"
 #include "types/OptionalVector.h"
+#include "graphics/Renderer.h"
 
 namespace rl::editor {
     class Editor {
@@ -25,6 +26,8 @@ namespace rl::editor {
             guiElements.push_back(element);
         }
 
+        static Renderer* GetRenderer();
+
     private:
 
         static void OnWindowResize(Window* window, int width, int height);
@@ -38,10 +41,8 @@ namespace rl::editor {
         static bool playing;
 
         std::shared_ptr<Window> window;
+        static std::unique_ptr<Renderer> renderer;
         static std::vector<std::weak_ptr<GuiElement>> guiElements;
-
-        std::shared_ptr<RenderTarget> imGuiRenderTarget;
         ImGuiIO* io;
-
     };
 }

@@ -16,7 +16,7 @@ Entity test = 0;
 void CreateEntities(){
     Transform::Create(test);
     MeshComponent::Create(test);
-    MeshComponent::GetComponent(test).LoadMesh("test.obj");
+    MeshComponent::GetComponent(test).LoadMesh("test.obj", editor::Editor::GetRenderer());
     Transform::GetComponent(test).position = glm::vec3(0, 0, 5);
     Transform::GetComponent(test).SetRotation(0, 180, 0);
 
@@ -75,10 +75,10 @@ int main() {
     editor::Editor::CreateGuiElement(toolbar);
 
     // test system
-    /*System camera;
+    System camera;
     camera.Start = CreateEntities;
     camera.Update = CameraController;
-    SystemManager::AddSystem(camera);*/
+    SystemManager::AddSystem(camera);
 
     // main loop
     while (editor.Update()){

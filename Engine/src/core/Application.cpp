@@ -11,11 +11,7 @@ Application::Application() {
     window->setResizeCallback(OnWindowResize);
 
     // setup renderer
-    Renderer::Start(window, true);
-    System renderSystem;
-    renderSystem.Update = Renderer::Render;
-
-    SystemManager::AddSystem(renderSystem);
+    renderer = std::make_unique<Renderer>(window);
 }
 
 void Application::Run() {
@@ -27,5 +23,5 @@ void Application::Run() {
 }
 
 void Application::OnWindowResize(Window* window, int width, int height){
-    Renderer::Resize(width, height);
+    //Renderer::Resize(width, height);
 }

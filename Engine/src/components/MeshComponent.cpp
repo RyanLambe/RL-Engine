@@ -10,7 +10,7 @@ uint32_t rl::MeshComponent::GetIndexCount() const {
     return indexCount;
 }
 
-void rl::MeshComponent::LoadMesh(const std::string& fileName) {
+void rl::MeshComponent::LoadMesh(const std::string& fileName, Renderer* renderer) {
     std::ifstream file(fileName);
     std::string line;
 
@@ -27,7 +27,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
         if (line.at(0) == 'f') {
 
             //f a1/a2/a3 b1/b2/b3 c1/c2/c3
-            //remove slashs and replace with spaces so it is readable by iss
+            //remove slashes and replace with spaces, so it is readable by iss
             for (int i = 0; i < line.length(); i++) {
                 if (line.at(i) == '/')
                     line.at(i) = ' ';
@@ -45,7 +45,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
             //move vertex data into vertex struct
             for (int i = 0; i < 3; i++) {
 
-                Vertex temp;
+                Vertex temp{};
                 temp.position.x = verts[curVert[i] - 1].x;
                 temp.position.y = verts[curVert[i] - 1].y;
                 temp.position.z = verts[curVert[i] - 1].z;
@@ -107,7 +107,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
     }
 
     // save data
-    vertexBuffer = VertexBuffer::Create(out);
-    indexBuffer = IndexBuffer::Create(inds);
+    vertexBuffer = VertexBuffer::Create(out, false, renderer->GetContext());
+    indexBuffer = IndexBuffer::Create(inds, false, renderer->GetContext());
     indexCount = (uint32_t)inds.size();
 }
