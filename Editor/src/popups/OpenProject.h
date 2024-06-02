@@ -16,6 +16,6 @@ namespace rl::editor {
         bool open = true;
 
         std::string name;
-        std::string path;
+        std::string path = "C:\\Users\\ryanl\\OneDrive\\Documents\\RL-EngineTest"; // todo: remove
     };
 }

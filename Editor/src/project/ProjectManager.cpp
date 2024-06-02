@@ -1,11 +1,12 @@
 #include "ProjectManager.h"
 #include <core/Logger.h>
+#include <core/Application.h>
 
 #include <filesystem>
 
-typedef void (*SetupFunc)(void);
-
 using namespace rl::editor;
+
+typedef void (*SetupFunc)(void* mainApp);
 
 ProjectManager* ProjectManager::projectManager = nullptr;
 
@@ -141,5 +142,11 @@ void ProjectManager::Run(){
         return;
     }
 
-    func();
+    try{
+        //func((void*)Application::GetSharedPtr());
+    }
+    catch(...){
+        RL_LOG_ERROR("THSI IASDJFKLASJDF");
+        // do nothing? todo: should probably recompile after code fixes are made
+    }
 }

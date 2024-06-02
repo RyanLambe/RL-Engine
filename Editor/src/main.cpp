@@ -8,15 +8,15 @@
 #include <components/MeshComponent.h>
 #include <components/Camera.h>
 
-
 using namespace rl;
 
 Entity cam = 1;
 Entity test = 0;
 void CreateEntities(){
+
     Transform::Create(test);
     MeshComponent::Create(test);
-    MeshComponent::GetComponent(test).LoadMesh("test.obj", editor::Editor::GetRenderer());
+    MeshComponent::GetComponent(test).LoadMesh("test.obj");
     Transform::GetComponent(test).position = glm::vec3(0, 0, 5);
     Transform::GetComponent(test).SetRotation(0, 180, 0);
 
@@ -78,12 +78,12 @@ int main() {
     System camera;
     camera.Start = CreateEntities;
     camera.Update = CameraController;
-    SystemManager::AddSystem(camera);
+    Application::GetSystemManager().AddSystem(camera);
 
     // main loop
     while (editor.Update()){
         if(editor::Editor::Playing())
-            SystemManager::UpdateSystems();
+            Application::GetSystemManager().UpdateSystems();
         editor.Render();
     }
     return 0;

@@ -12,15 +12,17 @@ namespace rl{
 
     class SystemManager {
     public:
-        inline static void AddSystem(const System& system) noexcept
+        SystemManager() = default;
+
+        inline void AddSystem(const System& system) noexcept
         {
             systems.push_back(system);
         }
 
-        static void StartSystems();
-        static void UpdateSystems();
+        void StartSystems();
+        void UpdateSystems();
 
     private:
-        static std::vector<System> systems;
+        std::vector<System> systems = std::vector<rl::System>();
     };
 }

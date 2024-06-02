@@ -4,6 +4,7 @@
 #include "components/MeshComponent.h"
 #include "components/Camera.h"
 
+#include "core/Application.h"
 #include "core/Input.h"
 #include "core/Clock.h"
 #include "core/Logger.h"

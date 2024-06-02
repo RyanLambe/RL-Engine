@@ -15,15 +15,11 @@ bool Editor::open = true;
 bool Editor::playing = false;
 
 std::vector<std::weak_ptr<GuiElement>> Editor::guiElements = std::vector<std::weak_ptr<GuiElement>>();
-std::unique_ptr<rl::Renderer> Editor::renderer = nullptr;
 
 Editor::Editor() {
 
     // rl setup
-    window = Window::Create(1280, 720, "RL Engine 2.0", false);
-    window->setResizeCallback(OnWindowResize);
-
-    renderer = std::make_unique<Renderer>(window);
+    Application::Setup(1280, 720, "RL Engine 2.0", false, OnWindowResize);
 
     // ImGui setup
     IMGUI_CHECKVERSION();
@@ -35,8 +31,8 @@ Editor::Editor() {
     io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     SetImGuiStyle();
 
-    ImGui_ImplGlfw_InitForOther((GLFWwindow*)window->getGLFWwindow(), true);
-    ImGui_ImplDX11_Init((ID3D11Device*)renderer->GetDXDevice(), (ID3D11DeviceContext*)renderer->GetDXContext());
+    ImGui_ImplGlfw_InitForOther((GLFWwindow*)Application::GetWindow().getGLFWwindow(), true);
+    ImGui_ImplDX11_Init((ID3D11Device*)Application::GetRenderer().GetDXDevice(), (ID3D11DeviceContext*)Application::GetRenderer().GetDXContext());
 }
 
 Editor::~Editor() {
@@ -48,12 +44,12 @@ Editor::~Editor() {
 void Editor::Render() {
 
     if(resized){
-        renderer->ResizeTarget(newWidth, newHeight);
+        Application::GetRenderer().ResizeTarget(newWidth, newHeight);
         io->DisplayFramebufferScale = ImVec2((float)newWidth, (float)newHeight);
         resized = false;
     }
 
-    renderer->EnableTarget();
+    Application::GetRenderer().EnableTarget();
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -82,11 +78,11 @@ void Editor::Render() {
         ImGui::RenderPlatformWindowsDefault();
     }
 
-    renderer->Present();
+    Application::GetRenderer().Present();
 }
 
 bool Editor::Update() {
-    return window->Update() && open;
+    return Application::GetWindow().Update() && open;
 }
 
 void Editor::Exit() {
@@ -117,14 +113,10 @@ bool Editor::Playing() {
 void Editor::Play() {
     //ProjectManager::Compile();
     ProjectManager::Run();
-    SystemManager::StartSystems();
+    Application::GetSystemManager().StartSystems();
     playing = true;
 }
 
 void Editor::Pause() {
     playing = false;
-}
-
-rl::Renderer* Editor::GetRenderer() {
-    return renderer.get();
 }

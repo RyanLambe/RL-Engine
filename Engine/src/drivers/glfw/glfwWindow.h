@@ -27,14 +27,11 @@ namespace rl {
         void setResizeCallback(rl::RLWindowResizeCallback callback) noexcept override;
         void setFullscreen(bool fullscreen) noexcept override;
 
-        static GLFWwindow* GetActiveGLFWWindow() noexcept;
-        static glfwWindow* GetActiveRLWindow() noexcept;
-
     private:
 
         static void internalResizeCallback(GLFWwindow* window, int width, int height);
 
-        static glfwWindow* RLWindow;
+        glfwWindow* RLWindow = nullptr;
         GLFWwindow* window = nullptr;
 
         RLWindowResizeCallback externalResizeCallback = nullptr;

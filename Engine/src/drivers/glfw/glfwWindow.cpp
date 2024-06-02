@@ -3,16 +3,11 @@
 #include <GLFW/glfw3native.h>
 
 #include "../../core/RLResult.h"
+#include "../../core/Application.h"
 
 using namespace rl;
 
-glfwWindow* glfwWindow::RLWindow = nullptr;
-
 glfwWindow::glfwWindow(int width, int height, const std::string& title, bool fullscreen) {
-
-    if(RLWindow != nullptr){
-        RL_THROW_EXCEPTION("Only one window can exist at a time.");
-    }
 
     if(!glfwInit()){
         RL_THROW_EXCEPTION("Failed to initialize glfw.");
@@ -94,13 +89,15 @@ void glfwWindow::setResizeCallback(RLWindowResizeCallback callback) noexcept {
 }
 
 void glfwWindow::internalResizeCallback(GLFWwindow *window, int width, int height) {
-    if(!RLWindow){
-        RL_LOG_ERROR("Window has not been created. Have you Setup the window?");
+    if(!Application::IsSetup()){
+        RL_LOG_ERROR("Window has not been created. Have you Setup the application?");
         return;
     }
 
     if(width == 0 && height == 0)
         return;
+
+    glfwWindow* RLWindow = (glfwWindow*)Application::GetWindowUnsafe();
 
     if(RLWindow->isFullscreen){
         RLWindow->maxWidth = width;
@@ -122,16 +119,4 @@ void glfwWindow::setFullscreen(bool fullscreen) noexcept {
     else{
         glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, minWidth, minHeight, GLFW_DONT_CARE);
     }
-}
-
-glfwWindow *glfwWindow::GetActiveRLWindow() noexcept {
-    if(!RLWindow)
-        RL_LOG_ERROR("Window has not been created. Have you Setup the window?");
-    return RLWindow;
-}
-
-GLFWwindow *glfwWindow::GetActiveGLFWWindow() noexcept {
-    if(!RLWindow)
-        RL_LOG_ERROR("Window has not been created. Have you Setup the window?");
-    return RLWindow->window;
 }

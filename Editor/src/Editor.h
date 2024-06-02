@@ -1,11 +1,10 @@
 #pragma once
 
-#include "core/Window.h"
+#include "core/Application.h"
 #include "graphics/RenderTarget.h"
 #include "imgui.h"
 #include "GuiElement.h"
 #include "types/OptionalVector.h"
-#include "graphics/Renderer.h"
 
 namespace rl::editor {
     class Editor {
@@ -26,8 +25,6 @@ namespace rl::editor {
             guiElements.push_back(element);
         }
 
-        static Renderer* GetRenderer();
-
     private:
 
         static void OnWindowResize(Window* window, int width, int height);
@@ -40,8 +37,6 @@ namespace rl::editor {
         static bool open;
         static bool playing;
 
-        std::shared_ptr<Window> window;
-        static std::unique_ptr<Renderer> renderer;
         static std::vector<std::weak_ptr<GuiElement>> guiElements;
         ImGuiIO* io;
     };

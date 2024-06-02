@@ -1,27 +1,72 @@
 #include "Application.h"
 
-#include "../graphics/Renderer.h"
 #include "../ecs/SystemManager.h"
+#include "RLResult.h"
 
 using namespace rl;
 
+std::shared_ptr<Application> Application::app = nullptr;
+
+// don't allow application to be constructed unless allowApplicationCreation set to true
+bool allowApplicationCreation = false;
 Application::Application() {
-    // create window
-    window = Window::Create(1280, 720, "RL Engine 2.0", false);
-    window->setResizeCallback(OnWindowResize);
-
-    // setup renderer
-    renderer = std::make_unique<Renderer>(window);
-}
-
-void Application::Run() {
-
-    SystemManager::StartSystems();
-    while (window->Update()){
-        SystemManager::UpdateSystems();
+    if(!allowApplicationCreation){
+        RL_THROW_EXCEPTION("Application is a singleton, use GetApplication() to access the singleton.");
     }
 }
 
-void Application::OnWindowResize(Window* window, int width, int height){
-    //Renderer::Resize(width, height);
+// create app if it doesn't exist, get app
+Application &Application::GetApplication() {
+    if(app == nullptr){
+        allowApplicationCreation = true;
+        app = std::make_shared<Application>();
+        allowApplicationCreation = false;
+    }
+    return *app;
+}
+
+std::shared_ptr<Application>* Application::GetSharedPtr() {
+    return &app;
+}
+
+void Application::ConnectToApp(std::shared_ptr<Application>* mainApp) {
+    app = *mainApp;
+}
+
+void Application::Setup(int width, int height, const std::string& title, bool fullscreen, RLWindowResizeCallback callback) {
+    if (app == nullptr){
+        GetApplication(); // creates app, can ignore result since it's saved in app
+    }
+
+    // create window
+    app->window = Window::Create(width, height, title, fullscreen);
+    app->window->setResizeCallback(callback);
+
+    // setup renderer
+    app->renderer = std::make_unique<Renderer>(app->window);
+
+    // setup system manager
+    app->systemManager = std::make_unique<SystemManager>();
+
+    app->isSetup = true;
+}
+
+bool Application::IsSetup() {
+    return app->isSetup;
+}
+
+Window &Application::GetWindow() {
+    return *app->window;
+}
+
+Renderer &Application::GetRenderer() {
+    return *app->renderer;
+}
+
+SystemManager &Application::GetSystemManager() {
+    return *app->systemManager;
+}
+
+Window *Application::GetWindowUnsafe() {
+    return app->window.get();
 }

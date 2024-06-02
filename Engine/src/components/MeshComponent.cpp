@@ -1,8 +1,15 @@
 #include "MeshComponent.h"
+
+#include <filesystem>
+
+#include "../core/Application.h"
 #include <fstream>
 
 void rl::MeshComponent::Enable() const {
-    vertexBuffer->Enable();
+    if (vertexBuffer == nullptr || indexBuffer == nullptr)
+        return;
+
+	vertexBuffer->Enable();
     indexBuffer->Enable();
 }
 
@@ -10,8 +17,15 @@ uint32_t rl::MeshComponent::GetIndexCount() const {
     return indexCount;
 }
 
-void rl::MeshComponent::LoadMesh(const std::string& fileName, Renderer* renderer) {
-    std::ifstream file(fileName);
+void rl::MeshComponent::LoadMesh(const std::string& fileName) {
+
+	std::ifstream file(fileName);
+    if(!file.is_open())
+    {
+        RL_LOG_ERROR("Cannot open mesh file.");
+        return;
+    }
+
     std::string line;
 
     std::vector<glm::vec3> verts;
@@ -107,7 +121,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName, Renderer* renderer
     }
 
     // save data
-    vertexBuffer = VertexBuffer::Create(out, false, renderer->GetContext());
-    indexBuffer = IndexBuffer::Create(inds, false, renderer->GetContext());
-    indexCount = (uint32_t)inds.size();
+    vertexBuffer = VertexBuffer::Create(out, false, Application::GetRenderer().GetContext());
+    indexBuffer = IndexBuffer::Create(inds, false, Application::GetRenderer().GetContext());
+	indexCount = (uint32_t)inds.size();
 }

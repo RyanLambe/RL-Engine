@@ -8,7 +8,7 @@
 using namespace rl::editor;
 
 Viewport::Viewport() {
-    target = RenderTarget::Create(1, 1, Editor::GetRenderer()->GetContext());
+    target = RenderTarget::Create(1, 1, Application::GetRenderer().GetContext());
 }
 
 void Viewport::Render() {
@@ -23,6 +23,7 @@ void Viewport::Render() {
         target->Resize((int)ImGui::GetContentRegionAvail().x, (int)ImGui::GetContentRegionAvail().y);
         ImGui::Image( target->GetTexture(), ImGui::GetContentRegionAvail());
         ImGui::End();
+        target->Clear();
     }
     else{
         open = false;
@@ -30,8 +31,8 @@ void Viewport::Render() {
     }
 
     target->Enable();
-    Editor::GetRenderer()->Render();
-    Editor::GetRenderer()->EnableTarget();
+    Application::GetRenderer().Render();
+    Application::GetRenderer().EnableTarget();
 }
 
 bool Viewport::IsOpen() {
