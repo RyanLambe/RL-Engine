@@ -143,7 +143,7 @@ void ProjectManager::Run(){
     }
 
     try{
-        //func((void*)Application::GetSharedPtr());
+        func((void*)Application::GetSharedPtr());
     }
     catch(...){
         RL_LOG_ERROR("THSI IASDJFKLASJDF");

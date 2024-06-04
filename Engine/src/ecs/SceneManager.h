@@ -1,15 +1,18 @@
 #pragma once
 
+#include "ComponentCollection.h"
+
 namespace rl {
-    class SceneManager {
-
-    };
-
-    class ComponentType{
-
-    };
 
     class Scene {
+    public:
+        // systems
+        ComponentCollection components;
+
+        static Scene& MainScene();
+    };
+
+    class SceneManager {
 
     };
 }

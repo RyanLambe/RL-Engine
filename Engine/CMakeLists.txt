@@ -117,6 +117,8 @@ add_library(Engine STATIC
         # types
         src/types/Vertex.h
         src/types/OptionalVector.h
+        src/ecs/ComponentType.h
+        src/ecs/ComponentCollection.h
 
 )
 

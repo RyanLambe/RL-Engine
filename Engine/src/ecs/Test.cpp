@@ -27,11 +27,27 @@ struct Mesh : rl::Component<Mesh> {
 };
 
 // needs to be added to list of functions to call
-void RenderSystem(){
+void RenderSystemV1(){
     for(Mesh& mesh : Mesh::GetAllComponents()){
         if(!Transform::HasComponent(mesh.getEntity()))
             continue;
 
         // do stuff
     }
+}
+
+void RenderSystemV2(){
+    for(Entity entity : Scene::GetEntitiesWithComponents<Mesh, Transform>()){
+        // do stuff
+    }
+}
+
+// script
+void Update(){
+
+    this.GetComponent<Mesh>();
+
+    transform.Translate();
+
+
 }

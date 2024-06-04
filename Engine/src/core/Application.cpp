@@ -47,6 +47,7 @@ void Application::Setup(int width, int height, const std::string& title, bool fu
 
     // setup system manager
     app->systemManager = std::make_unique<SystemManager>();
+    app->scene = std::make_unique<Scene>();
 
     app->isSetup = true;
 }
@@ -67,6 +68,18 @@ SystemManager &Application::GetSystemManager() {
     return *app->systemManager;
 }
 
+Scene &Application::GetScene() {
+    return *app->scene;
+}
+
 Window *Application::GetWindowUnsafe() {
     return app->window.get();
+}
+
+Camera *Application::GetMainCamera() {
+    return app->mainCamera;
+}
+
+void Application::SetMainCamera(Camera* cam) {
+    app->mainCamera = cam;
 }
