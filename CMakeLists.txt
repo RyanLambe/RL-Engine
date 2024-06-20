@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
-
 project(RLEngine)
 
 set(CMAKE_CXX_STANDARD 20)
+
+# settings
+set(RL_USE_GLFW 1)
+#set(RL_USE_WIN32 1)
+
+#set(RL_USE_DX11 1)
+set(RL_USE_VULKAN 1)
 
 # include dependencies
 add_subdirectory(External)
