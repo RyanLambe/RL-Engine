@@ -9,7 +9,8 @@ namespace rl {
 	{
 		None = 0,
 		DX11 = 1,
-		OpenGL = 2
+		OpenGL = 2,
+		Vulkan = 3,
 	};
 
 	class Context

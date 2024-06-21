@@ -2,14 +2,18 @@
 
 #include "Renderer.h"
 
+#ifdef RL_USE_DX11
 #include "../drivers/dx11/dx11RenderTarget.h"
+#endif
 
-std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create(const std::weak_ptr<Window>& window, const std::weak_ptr<Context>& context)
+std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create()
 {
 	switch (Renderer::GetAPI())
 	{
-	    case GraphicsAPI::DX11:
-		    return std::make_shared<DX11RenderTarget>(window, std::static_pointer_cast<DX11Context>(context.lock()));
+		#ifdef RL_USE_DX11
+	    case GraphicsAPI::DX11: return std::make_shared<DX11RenderTarget>(window, std::static_pointer_cast<DX11Context>(context.lock()));
+		#endif
+
 	    default: break;
 	}
 
