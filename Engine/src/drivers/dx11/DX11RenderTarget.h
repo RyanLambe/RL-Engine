@@ -2,12 +2,12 @@
 
 #include <cstdint>
 
-#include "dx11.h"
+#include "DX11.h"
 #include <glm/vec4.hpp>
 #include <optional>
 
 #include "../../graphics/RenderTarget.h"
-#include "dx11Context.h"
+#include "DX11Context.h"
 
 namespace rl
 {

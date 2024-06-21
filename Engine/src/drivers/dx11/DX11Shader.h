@@ -1,9 +1,9 @@
 #pragma once
 
-#include "dx11.h"
+#include "DX11.h"
 
 #include "../../graphics/Shader.h"
-#include "dx11Context.h"
+#include "DX11Context.h"
 
 namespace rl {
     class DX11Shader : public Shader {

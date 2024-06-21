@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dx11.h"
+#include "DX11.h"
 
 #include "../../graphics/Context.h"
 

@@ -62,6 +62,16 @@ if (DEFINED RL_USE_VULKAN)
     set(RL_DRIVERS ${RL_DRIVERS}
             src/drivers/vk/VKContext.cpp
             src/drivers/vk/VKContext.h
+            src/drivers/vk/VKIndexBuffer.cpp
+            src/drivers/vk/VKIndexBuffer.h
+            src/drivers/vk/VKRenderTarget.cpp
+            src/drivers/vk/VKRenderTarget.h
+            src/drivers/vk/VKShader.cpp
+            src/drivers/vk/VKShader.h
+            src/drivers/vk/VKUniformBuffer.cpp
+            src/drivers/vk/VKUniformBuffer.h
+            src/drivers/vk/VKVertexBuffer.cpp
+            src/drivers/vk/VKVertexBuffer.h
     )
     add_compile_definitions(RL_USE_VULKAN)
     set(RL_USING_GRAPHICS_DRIVER 1)

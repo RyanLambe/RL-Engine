@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "dx11.h"
+#include "DX11.h"
 
 #include "../../graphics/VertexBuffer.h"
 #include "../../types/Vertex.h"
-#include "dx11Context.h"
+#include "DX11Context.h"
 
 namespace rl {
 	class DX11VertexBuffer : public rl::VertexBuffer
