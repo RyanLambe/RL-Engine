@@ -1,6 +1,0 @@
-Pixel and Vertex shader are temporarily compiled separately
-Make sure to copy both .cso files to build path
-
-I will create a separate library to compile to the correct file type.
-
-The library should then be called by either Sandbox or the Editor

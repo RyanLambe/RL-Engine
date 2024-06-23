@@ -63,21 +63,18 @@ void Update() {
     if(Input::GetKey(Key::S)){
         Transform::GetComponent(cam).Translate(0, 0, -0.01f);
     }
-
     if(Input::GetKey(Key::A)){
         Transform::GetComponent(cam).Translate(-0.01f, 0, 0);
     }
     if(Input::GetKey(Key::D)){
         Transform::GetComponent(cam).Translate(0.01f, 0, 0);
     }
-
     if (Input::GetKey(Key::E)) {
         Transform::GetComponent(cam).Translate(0, 0.01f, 0);
     }
     if (Input::GetKey(Key::Q)) {
         Transform::GetComponent(cam).Translate(0, -0.01f, 0);
     }
-
     if (Input::GetKey(Key::I)) {
         Transform::GetComponent(cam).Rotate(-0.1f, 0, 0);
         //rot.x -= 0.1f;
@@ -86,14 +83,12 @@ void Update() {
         Transform::GetComponent(cam).Rotate(0.1f, 0, 0);
         //rot.x += 0.1f;
     }
-
     if (Input::GetKey(Key::J)) {
         Transform::GetComponent(cam).Rotate(0, -0.1f, 0);
     }
     if (Input::GetKey(Key::L)) {
         Transform::GetComponent(cam).Rotate(0, 0.1f, 0);
     }
-
     if (Input::GetKey(Key::O)) {
         Transform::GetComponent(cam).Rotate(0, 0, -0.1f);
     }
@@ -108,18 +103,26 @@ void Update() {
         Transform::GetComponent(test1).Scale(1.0001f);
     }
 
-    glm::vec3 rot = Transform::GetComponent(cam).EulerAngles();
+    auto temp = Transform::GetComponent(cam);
+    glm::vec3 rot = Transform::GetComponent(cam).GetPosition();
     RL_LOG(rot.x, ", ", rot.y, ", ", rot.z);
 }
 
 int main() {
-    Application application;
+    Application::Setup(1280, 720, "RL Engine 2.0", false);
 
     System test;
     test.Start = Start;
     test.Update = Update;
 
-    SystemManager::AddSystem(test);
+    Application::GetSystemManager().AddSystem(test);
 
-    application.Run();
+    //Application::GetRenderer().RenderToWindow();
+
+    Application::GetSystemManager().StartSystems();
+    while (Application::GetWindow().Update()){
+        Application::GetSystemManager().UpdateSystems();
+        Application::GetRenderer().RenderToWindow();
+        Application::GetRenderer().Present();
+    }
 }

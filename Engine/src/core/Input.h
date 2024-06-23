@@ -7,6 +7,8 @@
 
 namespace rl::Input {
 
+    extern void Setup();
+
     extern bool GetKey(Key key);
 
     extern bool GetMouseButton(MouseButton button);

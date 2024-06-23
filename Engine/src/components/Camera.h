@@ -21,8 +21,5 @@ namespace rl {
         {
             return glm::perspectiveLH(glm::radians(fov), screenWidth / screenHeight, nearPlane, farPlane);
         }
-
-    private:
-        static Camera* main;
     };
 }

@@ -1,19 +1,18 @@
 #include "Camera.h"
 
-rl::Camera* rl::Camera::main = nullptr;
-
+#include "../core/Application.h"
 
 rl::Camera* rl::Camera::GetMain()
 {
-	return main;
+	return Application::GetMainCamera();
 }
 
 void rl::Camera::SetMain(Camera* cam)
 {
-	main = cam;
+    Application::SetMainCamera(cam);
 }
 
 void rl::Camera::SetMain()
 {
-	main = this;
+    Application::SetMainCamera(this);
 }

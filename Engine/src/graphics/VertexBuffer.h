@@ -3,12 +3,13 @@
 #include <memory>
 #include <vector>
 #include "../types/Vertex.h"
+#include "Context.h"
 
 namespace rl {
 	class VertexBuffer {
 	public:
 
-		static std::shared_ptr<VertexBuffer> Create(const std::vector<Vertex>& data, bool dynamic = false);
+		static std::shared_ptr<VertexBuffer> Create(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<Context>& context);
 
 		virtual void Enable() = 0;
 

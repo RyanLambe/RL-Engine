@@ -1,8 +1,15 @@
 #include "MeshComponent.h"
+
+#include <filesystem>
+
+#include "../core/Application.h"
 #include <fstream>
 
 void rl::MeshComponent::Enable() const {
-    vertexBuffer->Enable();
+    if (vertexBuffer == nullptr || indexBuffer == nullptr)
+        return;
+
+	vertexBuffer->Enable();
     indexBuffer->Enable();
 }
 
@@ -11,7 +18,14 @@ uint32_t rl::MeshComponent::GetIndexCount() const {
 }
 
 void rl::MeshComponent::LoadMesh(const std::string& fileName) {
-    std::ifstream file(fileName);
+
+	std::ifstream file(fileName);
+    if(!file.is_open())
+    {
+        RL_LOG_ERROR("Cannot open mesh file.");
+        return;
+    }
+
     std::string line;
 
     std::vector<glm::vec3> verts;
@@ -27,7 +41,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
         if (line.at(0) == 'f') {
 
             //f a1/a2/a3 b1/b2/b3 c1/c2/c3
-            //remove slashs and replace with spaces so it is readable by iss
+            //remove slashes and replace with spaces, so it is readable by iss
             for (int i = 0; i < line.length(); i++) {
                 if (line.at(i) == '/')
                     line.at(i) = ' ';
@@ -45,7 +59,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
             //move vertex data into vertex struct
             for (int i = 0; i < 3; i++) {
 
-                Vertex temp;
+                Vertex temp{};
                 temp.position.x = verts[curVert[i] - 1].x;
                 temp.position.y = verts[curVert[i] - 1].y;
                 temp.position.z = verts[curVert[i] - 1].z;
@@ -107,7 +121,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
     }
 
     // save data
-    vertexBuffer = VertexBuffer::Create(out);
-    indexBuffer = IndexBuffer::Create(inds);
-    indexCount = (uint32_t)inds.size();
+    vertexBuffer = VertexBuffer::Create(out, false, Application::GetRenderer().GetContext());
+    indexBuffer = IndexBuffer::Create(inds, false, Application::GetRenderer().GetContext());
+	indexCount = (uint32_t)inds.size();
 }

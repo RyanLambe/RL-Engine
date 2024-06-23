@@ -14,9 +14,13 @@ namespace rl {
         // polls events and returns if window should close
         [[nodiscard]]
         virtual bool Update() const noexcept = 0;
+        virtual void Setup() = 0;
 
         [[nodiscard]]
         virtual void* getHWND() const noexcept = 0;
+        [[nodiscard]]
+        virtual void* getGLFWwindow() const noexcept = 0;
+
         [[nodiscard]]
         virtual int getWidth() const noexcept = 0;
         [[nodiscard]]

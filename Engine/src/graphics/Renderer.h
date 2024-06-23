@@ -14,21 +14,33 @@ namespace rl {
 	class Renderer
 	{
 	public:
-        static void Start(std::shared_ptr<Window> window);
-		static void Render();
 
-        static void Resize(int width, int height);
+        Renderer() = delete;
+        explicit Renderer(const std::shared_ptr<Window>& window);
 
-		static GraphicsAPI GetAPI();
+        void Render();
+        void RenderToWindow();
+        void Present();
+
+        void ResizeTarget(int width, int height);
+        void EnableTarget();
+
+        std::weak_ptr<Context> GetContext();
+        void* GetRenderTexture();
+
+        void* GetDXDevice();
+        void* GetDXContext();
+
+        static GraphicsAPI GetAPI();
 
 	private:
-        static int width;
-        static int height;
+        int width;
+        int height;
 
-		static std::shared_ptr<Context> context;
-		static std::shared_ptr<RenderTarget> target;
+		std::shared_ptr<Context> context;
+		std::shared_ptr<RenderTarget> target;
 
-        static std::shared_ptr<UniformBuffer> ObjectUniformBuffer;
-        static std::shared_ptr<UniformBuffer> SceneUniformBuffer;
+        std::shared_ptr<UniformBuffer> ObjectUniformBuffer;
+        std::shared_ptr<UniformBuffer> SceneUniformBuffer;
 	};
 }

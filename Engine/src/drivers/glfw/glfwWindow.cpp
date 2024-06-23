@@ -3,17 +3,11 @@
 #include <GLFW/glfw3native.h>
 
 #include "../../core/RLResult.h"
+#include "../../core/Application.h"
 
 using namespace rl;
 
-glfwWindow* glfwWindow::RLWindow = nullptr;
-
 glfwWindow::glfwWindow(int width, int height, const std::string& title, bool fullscreen) {
-
-    if(RLWindow != nullptr){
-        RL_THROW_EXCEPTION("Cannot have multiple glfw instances at once");
-    }
-    RLWindow = this;
 
     if(!glfwInit()){
         RL_THROW_EXCEPTION("Failed to initialize glfw.");
@@ -31,24 +25,28 @@ glfwWindow::glfwWindow(int width, int height, const std::string& title, bool ful
 
     glfwMakeContextCurrent(window);
     glfwSetWindowSizeCallback(window, internalResizeCallback);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
-    RLWindow->minWidth = width;
-    RLWindow->minHeight = height;
+    minWidth = width;
+    minHeight = height;
     if(fullscreen){
-        RLWindow->maxWidth = width;
-        RLWindow->maxHeight = height;
+        maxWidth = width;
+        maxHeight = height;
     }
     else{
         const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        RLWindow->maxWidth = mode->width;
-        RLWindow->maxHeight = mode->height;
+        maxWidth = mode->width;
+        maxHeight = mode->height;
     }
 
     isFullscreen = fullscreen;
 }
 
 glfwWindow::~glfwWindow() {
-    glfwTerminate();
+    if(RLWindow == this){
+        RLWindow = nullptr;
+        glfwTerminate();
+    }
 }
 
 bool glfwWindow::Update() const noexcept {
@@ -56,11 +54,22 @@ bool glfwWindow::Update() const noexcept {
     return !glfwWindowShouldClose(window);
 }
 
+void glfwWindow::Setup() {
+    if(RLWindow != nullptr && RLWindow != this){
+        RL_THROW_EXCEPTION("Too many Windows have been created.");
+    }
+    RLWindow = this;
+}
+
 void* glfwWindow::getHWND() const noexcept {
     #ifdef GLFW_EXPOSE_NATIVE_WIN32
         return glfwGetWin32Window(window);
     #endif
     return nullptr;
+}
+
+void *glfwWindow::getGLFWwindow() const noexcept {
+    return window;
 }
 
 int glfwWindow::getWidth() const noexcept {
@@ -80,11 +89,15 @@ void glfwWindow::setResizeCallback(RLWindowResizeCallback callback) noexcept {
 }
 
 void glfwWindow::internalResizeCallback(GLFWwindow *window, int width, int height) {
-    if(!RLWindow)
+    if(!Application::IsSetup()){
+        RL_LOG_ERROR("Window has not been created. Have you Setup the application?");
         return;
+    }
 
     if(width == 0 && height == 0)
         return;
+
+    glfwWindow* RLWindow = (glfwWindow*)Application::GetWindowUnsafe();
 
     if(RLWindow->isFullscreen){
         RLWindow->maxWidth = width;
@@ -107,12 +120,3 @@ void glfwWindow::setFullscreen(bool fullscreen) noexcept {
         glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, minWidth, minHeight, GLFW_DONT_CARE);
     }
 }
-
-GLFWwindow *glfwWindow::GetActiveGLFWWindow() noexcept {
-    return RLWindow->window;
-}
-
-glfwWindow *glfwWindow::GetActiveRLWindow() noexcept {
-    return RLWindow;
-}
-

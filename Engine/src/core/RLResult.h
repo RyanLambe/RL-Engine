@@ -15,6 +15,7 @@ namespace rl{
         InvalidArguments = 2,
         Unimplemented = 3,
         FileNotFound = 4,
+        SingletonAlreadyCreated = 5,
     };
 
     // RLResult will be returned by functions that have a chance of failure
@@ -37,6 +38,7 @@ namespace rl{
                 case InvalidArguments: return "Invalid Arguments";
                 case Unimplemented: return "Unimplemented";
                 case FileNotFound: return "File Not Found";
+                case SingletonAlreadyCreated: return "Singleton Already Created";
                 default: return "Invalid Error Type";
             }
         }

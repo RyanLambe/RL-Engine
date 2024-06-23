@@ -9,17 +9,21 @@ namespace rl {
 	{
 		None = 0,
 		DX11 = 1,
-		OpenGL = 2
+		OpenGL = 2,
+		Vulkan = 3,
 	};
 
 	class Context
 	{
 	public:
 
-		static std::shared_ptr<Context> Create(std::shared_ptr<Window> window);
+		static std::shared_ptr<Context> Create(Window* window);
 		
 		virtual void DrawIndexed(uint32_t size) const noexcept = 0;
 		
 		virtual void Present() const = 0;
+
+        [[nodiscard]] virtual void* GetDXDevice() const = 0;
+        [[nodiscard]] virtual void* GetDXContext() const = 0;
 	};
 }
