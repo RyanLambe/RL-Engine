@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(RL_USE_GLFW 1)
 #set(RL_USE_WIN32 1)
 
-#set(RL_USE_DX11 1)
-set(RL_USE_VULKAN 1)
+set(RL_USE_DX11 1)
+#set(RL_USE_VULKAN 1)
 
 # include dependencies
 add_subdirectory(External)
@@ -25,5 +25,5 @@ endif()
 
 # include project
 add_subdirectory(Engine)
-#add_subdirectory(Editor)
-add_subdirectory(Sandbox)
+add_subdirectory(Editor)
+#add_subdirectory(Sandbox)

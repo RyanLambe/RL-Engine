@@ -20,7 +20,7 @@ std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Ver
 	switch (Renderer::GetAPI())
 	{
 		#ifdef RL_USE_DX11
-        case GraphicsAPI::DX11: return std::make_shared<DX11VertexBuffer>(data, dynamic, std::static_pointer_cast<VKContext>(context.lock()));
+        case GraphicsAPI::DX11: return std::make_shared<DX11VertexBuffer>(data, dynamic, std::static_pointer_cast<DX11Context>(context.lock()));
 		#endif
 
 		#ifdef RL_USE_VULKAN
