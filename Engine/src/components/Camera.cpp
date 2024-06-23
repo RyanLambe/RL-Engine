@@ -4,15 +4,15 @@
 
 rl::Camera* rl::Camera::GetMain()
 {
-	return Application::GetMainCamera();
+	return Application::GetScene().mainCamera;
 }
 
 void rl::Camera::SetMain(Camera* cam)
 {
-    Application::SetMainCamera(cam);
+    Application::GetScene().mainCamera = cam;
 }
 
 void rl::Camera::SetMain()
 {
-    Application::SetMainCamera(this);
+    Application::GetScene().mainCamera = this;
 }

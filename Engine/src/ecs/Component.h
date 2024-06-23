@@ -2,12 +2,16 @@
 
 #include <unordered_map>
 
-#include "../core/RLResult.h"
+#include "ComponentCollection.h"
 #include "../types/OptionalVector.h"
-
-#include "SceneManager.h"
+#include "../core/RLResult.h"
 
 namespace rl {
+
+    class ComponentHelper {
+    public:
+        static ComponentCollection FindActiveComponentCollection();
+    };
 
     template <typename T>
     class Component {
@@ -17,27 +21,27 @@ namespace rl {
 
         static inline T& Create(Entity entity)
     	{
-            return Scene::MainScene().components.GetComponentType<T>()->Create(entity);
+            return ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->Create(entity);
         }
 
         static RLResult Delete(Entity entity)
     	{
-            return Scene::MainScene().components.GetComponentType<T>()->Delete(entity);
+            return ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->Delete(entity);
         }
 
         inline static T& GetComponent(Entity entity)
     	{
-            return Scene::MainScene().components.GetComponentType<T>()->GetComponent(entity);
+            return ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->GetComponent(entity);
         }
 
         inline static bool HasComponent(Entity entity)
         {
-            return Scene::MainScene().components.GetComponentType<T>()->HasComponent(entity);
+            return ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->HasComponent(entity);
         }
 
         inline static OptionalVector<T>& GetAllComponents() noexcept
     	{
-            return Scene::MainScene().components.GetComponentType<T>()->GetAllComponents();
+            return ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->GetAllComponents();
         }
 
         [[nodiscard]]
@@ -53,5 +57,4 @@ namespace rl {
     protected:
         Entity entity;
     };
-
 }

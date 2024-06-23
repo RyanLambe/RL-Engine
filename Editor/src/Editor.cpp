@@ -113,7 +113,7 @@ bool Editor::Playing() {
 void Editor::Play() {
     //ProjectManager::Compile();
     ProjectManager::Run();
-    Application::GetSystemManager().StartSystems();
+    Application::GetScene().systemManager.StartSystems();
     playing = true;
 }
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.25)
 
 # *********************
 # *** Project Setup ***
@@ -120,7 +120,10 @@ add_library(Engine STATIC
         src/graphics/VertexBuffer.h
 
         # ecs
+        src/ecs/Component.cpp
         src/ecs/Component.h
+        src/ecs/ComponentCollection.h
+        src/ecs/ComponentType.h
         src/ecs/SceneManager.cpp
         src/ecs/SceneManager.h
         src/ecs/SystemManager.cpp
@@ -134,12 +137,13 @@ add_library(Engine STATIC
         src/components/Transform.cpp
         src/components/Transform.h
 
+        # systems
+        src/systems/Renderer.cpp
+        src/systems/Renderer.h
+
         # types
         src/types/Vertex.h
         src/types/OptionalVector.h
-        src/ecs/ComponentType.h
-        src/ecs/ComponentCollection.h
-
 )
 
 # *************************

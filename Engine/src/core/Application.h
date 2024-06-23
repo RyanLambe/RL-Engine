@@ -22,13 +22,9 @@ namespace rl {
 
         static Window& GetWindow();
         static Renderer& GetRenderer();
-        static SystemManager& GetSystemManager();
         static Scene& GetScene();
 
         static Window* GetWindowUnsafe();
-        static Camera* GetMainCamera();
-
-        static void SetMainCamera(Camera* cam);
 
     private:
         static std::shared_ptr<Application> app;
@@ -36,10 +32,6 @@ namespace rl {
 
         std::shared_ptr<Window> window = nullptr;
         std::unique_ptr<Renderer> renderer = nullptr;
-
         std::unique_ptr<Scene> scene = nullptr;
-        Camera* mainCamera = nullptr;
-
-        std::unique_ptr<SystemManager> systemManager = nullptr; // todo: move to Scene?
     };
 }

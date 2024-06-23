@@ -9,13 +9,13 @@ namespace rl {
 
     using Entity = size_t;
 
-    class ComponentGroup {
+    class IComponentType {
     public:
-        virtual ~ComponentGroup() = default;
+        virtual ~IComponentType() = default;
     };
 
     template <typename T>
-    class ComponentType : public ComponentGroup {
+    class ComponentType : public IComponentType {
     public:
 
         ComponentType() = default;
