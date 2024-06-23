@@ -10,6 +10,11 @@
 #include "../drivers/vk/VKRenderTarget.h"
 #endif
 
+rl::RenderTarget::~RenderTarget()
+{
+
+}
+
 std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create(const std::weak_ptr<Window>& window, const std::weak_ptr<Context>& context)
 {
 	switch (Renderer::GetAPI())

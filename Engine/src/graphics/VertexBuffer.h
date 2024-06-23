@@ -8,6 +8,7 @@
 namespace rl {
 	class VertexBuffer {
 	public:
+		virtual ~VertexBuffer();
 
 		static std::shared_ptr<VertexBuffer> Create(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<Context>& context);
 

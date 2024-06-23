@@ -9,6 +9,11 @@
 #include "../drivers/vk/VKContext.h"
 #endif
 
+rl::Context::~Context()
+{
+
+}
+
 std::shared_ptr<rl::Context> rl::Context::Create(Window* window)
 {
 	switch (Renderer::GetAPI())

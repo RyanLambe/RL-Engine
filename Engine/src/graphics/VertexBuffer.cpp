@@ -10,6 +10,11 @@
 #include "../drivers/vk/VKVertexBuffer.h"
 #endif
 
+rl::VertexBuffer::~VertexBuffer()
+{
+
+}
+
 std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<Context>& context)
 {
 	switch (Renderer::GetAPI())

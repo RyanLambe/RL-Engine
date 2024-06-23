@@ -16,6 +16,7 @@ namespace rl {
 	class Context
 	{
 	public:
+		virtual ~Context();
 
 		static std::shared_ptr<Context> Create(Window* window);
 		

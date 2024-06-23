@@ -1,13 +1,12 @@
 [submodule "External/glm"]
 	path = External/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "External/glfw"]
-	path = External/glfw
-	url = https://github.com/glfw/glfw
 [submodule "External/imgui"]
 	path = External/imgui
-	url = https://github.com/ocornut/imgui
-	branch = docking
+	url = https://github.com/ocornut/imgui.git
 [submodule "External/vulkan"]
 	path = External/vulkan
 	url = https://github.com/KhronosGroup/Vulkan-Headers.git
+[submodule "External/glfw"]
+	path = External/glfw
+	url = https://github.com/glfw/glfw.git
