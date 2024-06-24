@@ -1,28 +1,33 @@
 #pragma once
 
-#include <functional>
-#include <optional>
+#include <vector>
+#include <memory>
 
 namespace rl{
 
-    struct System {
-        std::optional<std::function<void()>> Start;
-        std::optional<std::function<void()>> Update;
+    class System
+    {
+    public:
+        virtual ~System() = default;
+        virtual void Start() = 0;
+        virtual void Update() = 0;
     };
 
     class SystemManager {
     public:
         SystemManager() = default;
 
-        inline void AddSystem(const System& system) noexcept
+        template <typename T>
+        void AddSystem() noexcept
         {
-            systems.push_back(system);
+            static_assert(std::is_base_of<System, T>::value, "T must inherit from System");
+            systems.push_back(std::make_unique<T>());
         }
 
         void StartSystems();
         void UpdateSystems();
 
     private:
-        std::vector<System> systems = std::vector<rl::System>();
+        std::vector<std::unique_ptr<System>> systems = std::vector<std::unique_ptr<System>>();
     };
 }
