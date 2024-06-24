@@ -10,7 +10,7 @@ namespace rl {
 
     class ComponentHelper {
     public:
-        static ComponentCollection FindActiveComponentCollection();
+        static ComponentCollection& FindActiveComponentCollection();
     };
 
     template <typename T>
