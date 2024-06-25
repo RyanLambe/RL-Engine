@@ -33,6 +33,9 @@ namespace rl {
         }
 
         void ResizeTarget(uint32_t w, uint32_t h);
+        [[nodiscard]] uint32_t GetWidth() const;
+        [[nodiscard]] uint32_t GetHeight() const;
+
         void EnableTarget();
         [[nodiscard]] void* GetTexture() const;
 

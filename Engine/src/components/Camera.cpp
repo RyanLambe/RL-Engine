@@ -52,3 +52,11 @@ void rl::Camera::EnableTarget() {
 void* rl::Camera::GetTexture() const {
     return renderTarget->GetTexture();
 }
+
+uint32_t rl::Camera::GetWidth() const {
+    return width;
+}
+
+uint32_t rl::Camera::GetHeight() const {
+    return height;
+}

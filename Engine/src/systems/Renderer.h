@@ -13,10 +13,7 @@ namespace rl {
         void Update() override;
 
     private:
-        int width = 0;
-        int height = 0;
-
-        std::shared_ptr<UniformBuffer> ObjectUniformBuffer;
-        std::shared_ptr<UniformBuffer> SceneUniformBuffer;
+        std::shared_ptr<UniformBuffer> ObjectUniformBuffer = nullptr;
+        std::shared_ptr<UniformBuffer> SceneUniformBuffer = nullptr;
     };
 }

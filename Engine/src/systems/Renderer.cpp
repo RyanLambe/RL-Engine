@@ -10,10 +10,6 @@
 namespace rl
 {
     void Renderer::Start() {
-        width = Application::GetWindow().getWidth();
-        height = Application::GetWindow().getHeight();
-
-
         // temp
         ObjectUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), ShaderType::VertexShader, 0, Application::GetGraphicsContextPtr());
         SceneUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), ShaderType::VertexShader, 1, Application::GetGraphicsContextPtr());
@@ -44,7 +40,7 @@ namespace rl
             cam.GetRenderTarget()->Clear();
 
             // get view matrix
-            viewMatrix = cam.GetViewMatrix((float)width, (float)height) * Transform::GetComponent(cam.GetEntity()).GetInverseTransformationMatrix();
+            viewMatrix = cam.GetViewMatrix((float)cam.GetWidth(), (float)cam.GetHeight()) * Transform::GetComponent(cam.GetEntity()).GetInverseTransformationMatrix();
             SceneUniformBuffer->SetData(&viewMatrix, sizeof(glm::mat4), 0);
 
             // materials
