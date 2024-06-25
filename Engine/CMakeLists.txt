@@ -104,7 +104,7 @@ add_library(Engine STATIC
         src/core/Window.h
 
         # graphics
-        src/graphics/Context.cpp
+        src/graphics/GraphicsContext.cpp
         src/graphics/GraphicsContext.h
         src/graphics/IndexBuffer.cpp
         src/graphics/IndexBuffer.h

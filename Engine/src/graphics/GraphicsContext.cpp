@@ -35,6 +35,12 @@ std::shared_ptr<rl::GraphicsContext> rl::GraphicsContext::Create(Window* window)
 }
 
 GraphicsAPI GraphicsContext::GetAPI() {
+    #ifdef RL_USE_DX11
     return GraphicsAPI::DX11;
+    #endif
+
+    #ifdef RL_USE_VULKAN
+    return GraphicsAPI::Vulkan;
+    #endif
 }
 
