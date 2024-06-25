@@ -48,15 +48,3 @@ void rl::Camera::ResizeTarget(uint32_t width, uint32_t height) {
 void rl::Camera::EnableTarget() {
     renderTarget->Enable();
 }
-
-void* rl::Camera::GetTexture() const {
-    return renderTarget->GetTexture();
-}
-
-uint32_t rl::Camera::GetWidth() const {
-    return width;
-}
-
-uint32_t rl::Camera::GetHeight() const {
-    return height;
-}

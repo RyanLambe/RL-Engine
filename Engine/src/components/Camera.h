@@ -16,28 +16,38 @@ namespace rl {
         static Camera* GetMain();
         static void SetMain(Camera* cam);
         void SetMain();
-        bool IsMain() const;
-
-        inline glm::mat4 GetViewMatrix(float screenWidth, float screenHeight) const noexcept
-        {
-            return glm::perspectiveLH(glm::radians(fov), screenWidth / screenHeight, nearPlane, farPlane);
-        }
+        [[nodiscard]] bool IsMain() const;
 
         void RenderToWindow();
-
         void RenderToTarget(uint32_t width, uint32_t height);
+
+        void EnableTarget();
+        void ResizeTarget(uint32_t w, uint32_t h);
 
         [[nodiscard]] inline std::shared_ptr<RenderTarget> GetRenderTarget() const
         {
             return renderTarget;
         }
 
-        void ResizeTarget(uint32_t w, uint32_t h);
-        [[nodiscard]] uint32_t GetWidth() const;
-        [[nodiscard]] uint32_t GetHeight() const;
+        [[nodiscard]] void* GetTexture() const
+        {
+            return renderTarget->GetTexture();
+        }
 
-        void EnableTarget();
-        [[nodiscard]] void* GetTexture() const;
+        [[nodiscard]] inline uint32_t GetWidth() const
+        {
+            return width;
+        }
+
+        [[nodiscard]] inline uint32_t GetHeight() const
+        {
+            return height;
+        }
+
+        inline glm::mat4 GetViewMatrix(float screenWidth, float screenHeight) const noexcept
+        {
+            return glm::perspectiveLH(glm::radians(fov), screenWidth / screenHeight, nearPlane, farPlane);
+        }
 
     private:
         std::shared_ptr<RenderTarget> renderTarget = nullptr;
