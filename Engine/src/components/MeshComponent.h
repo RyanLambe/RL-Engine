@@ -3,7 +3,6 @@
 #include "../ecs/Component.h"
 #include "../graphics/VertexBuffer.h"
 #include "../graphics/IndexBuffer.h"
-#include "../graphics/Renderer.h"
 
 namespace rl {
     class MeshComponent : public Component<MeshComponent> {

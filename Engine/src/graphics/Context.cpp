@@ -1,6 +1,4 @@
-#include "Context.h"
-
-#include "Renderer.h"
+#include "GraphicsContext.h"
 
 #ifdef RL_USE_DX11
 #include "../drivers/dx11/DX11Context.h"
@@ -9,14 +7,16 @@
 #include "../drivers/vk/VKContext.h"
 #endif
 
-rl::Context::~Context()
+using namespace rl;
+
+GraphicsContext::~GraphicsContext()
 {
 
 }
 
-std::shared_ptr<rl::Context> rl::Context::Create(Window* window)
+std::shared_ptr<rl::GraphicsContext> rl::GraphicsContext::Create(Window* window)
 {
-	switch (Renderer::GetAPI())
+	switch (GraphicsContext::GetAPI())
 	{
 		#ifdef RL_USE_DX11
         case GraphicsAPI::DX11: return std::make_shared<DX11Context>(window);
@@ -32,5 +32,9 @@ std::shared_ptr<rl::Context> rl::Context::Create(Window* window)
 	//throw error
 	return nullptr;
 
+}
+
+GraphicsAPI GraphicsContext::GetAPI() {
+    return GraphicsAPI::DX11;
 }
 

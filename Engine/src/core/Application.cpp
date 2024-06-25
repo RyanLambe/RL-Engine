@@ -3,6 +3,8 @@
 #include "../ecs/SystemManager.h"
 #include "RLResult.h"
 
+#include "../systems/Renderer.h" // todo: remove
+
 using namespace rl;
 
 std::shared_ptr<Application> Application::app = nullptr;
@@ -42,11 +44,14 @@ void Application::Setup(int width, int height, const std::string& title, bool fu
     app->window = Window::Create(width, height, title, fullscreen);
     app->window->setResizeCallback(callback);
 
-    // setup renderer
-    app->renderer = std::make_unique<Renderer>(app->window);
+    // create graphics context
+    app->graphicsContext = GraphicsContext::Create(app->window.get());
 
     // setup scene
     app->scene = std::make_unique<Scene>();
+
+    // setup renderer todo: move?
+    app->scene->systemManager.AddSystem<Renderer>();
 
     app->isSetup = true;
 }
@@ -59,14 +64,22 @@ Window &Application::GetWindow() {
     return *app->window;
 }
 
-Renderer &Application::GetRenderer() {
-    return *app->renderer;
+Window *Application::GetWindowUnsafe() {
+    return app->window.get();
+}
+
+std::weak_ptr<Window> Application::GetWindowPtr() {
+    return app->window;
 }
 
 Scene &Application::GetScene() {
     return *app->scene;
 }
 
-Window *Application::GetWindowUnsafe() {
-    return app->window.get();
+std::weak_ptr<GraphicsContext> Application::GetGraphicsContextPtr() {
+    return app->graphicsContext;
+}
+
+GraphicsContext *Application::GetGraphicsContextUnsafe() {
+    return app->graphicsContext.get();
 }

@@ -39,5 +39,7 @@ namespace rl::editor {
 
         static std::vector<std::weak_ptr<GuiElement>> guiElements;
         ImGuiIO* io;
+
+        std::shared_ptr<RenderTarget> renderTarget = nullptr;
     };
 }

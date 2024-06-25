@@ -2,14 +2,14 @@
 
 #include <vector>
 #include <memory>
-#include "Context.h"
+#include "GraphicsContext.h"
 
 namespace rl {
 	class IndexBuffer {
 	public:
 		virtual ~IndexBuffer();
 
-		static std::shared_ptr<IndexBuffer> Create(const std::vector<uint32_t>& data, bool dynamic, const std::weak_ptr<Context>& context);
+		static std::shared_ptr<IndexBuffer> Create(const std::vector<uint32_t>& data, bool dynamic, const std::weak_ptr<GraphicsContext>& context);
 
 		virtual void Enable() = 0;
 

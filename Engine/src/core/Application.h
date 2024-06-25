@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Window.h"
-#include "../graphics/Renderer.h"
 #include "../ecs/SystemManager.h"
 #include "../ecs/SceneManager.h"
 #include "../components/Camera.h"
+#include "../graphics/GraphicsContext.h"
 
 namespace rl {
     class Application {
@@ -21,17 +21,20 @@ namespace rl {
         static bool IsSetup();
 
         static Window& GetWindow();
-        static Renderer& GetRenderer();
+        static Window* GetWindowUnsafe();
+        static std::weak_ptr<Window> GetWindowPtr();
+
         static Scene& GetScene();
 
-        static Window* GetWindowUnsafe();
+        static GraphicsContext* GetGraphicsContextUnsafe();
+        static std::weak_ptr<GraphicsContext> GetGraphicsContextPtr();
 
     private:
         static std::shared_ptr<Application> app;
         bool isSetup = false;
 
         std::shared_ptr<Window> window = nullptr;
-        std::unique_ptr<Renderer> renderer = nullptr;
         std::unique_ptr<Scene> scene = nullptr;
+        std::shared_ptr<GraphicsContext> graphicsContext = nullptr;
     };
 }

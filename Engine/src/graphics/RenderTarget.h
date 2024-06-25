@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <glm/vec4.hpp>
-#include "Context.h"
+#include "GraphicsContext.h"
 
 namespace rl
 {
@@ -10,8 +10,8 @@ namespace rl
 	public:
 		virtual ~RenderTarget();
 
-		static std::shared_ptr<RenderTarget> Create(const std::weak_ptr<Window>& window, const std::weak_ptr<Context>& context);
-        static std::shared_ptr<RenderTarget> Create(uint32_t width, uint32_t height, const std::weak_ptr<Context>& context);
+		static std::shared_ptr<RenderTarget> Create(const std::weak_ptr<Window>& window, const std::weak_ptr<GraphicsContext>& context);
+        static std::shared_ptr<RenderTarget> Create(uint32_t width, uint32_t height, const std::weak_ptr<GraphicsContext>& context);
 
 		virtual void Enable() = 0;
 		virtual void Clear() = 0;

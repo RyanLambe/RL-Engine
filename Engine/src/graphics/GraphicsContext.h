@@ -13,12 +13,13 @@ namespace rl {
 		Vulkan = 3,
 	};
 
-	class Context
+	class GraphicsContext
 	{
 	public:
-		virtual ~Context();
+		virtual ~GraphicsContext();
 
-		static std::shared_ptr<Context> Create(Window* window);
+		static std::shared_ptr<GraphicsContext> Create(Window* window);
+        static GraphicsAPI GetAPI();
 		
 		virtual void DrawIndexed(uint32_t size) const noexcept = 0;
 		

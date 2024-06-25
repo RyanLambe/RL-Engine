@@ -2,3 +2,4 @@
 .vs
 cmake-build-*
 out
+CMakeSettings.json

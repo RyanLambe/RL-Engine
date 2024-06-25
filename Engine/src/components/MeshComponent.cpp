@@ -121,7 +121,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName) {
     }
 
     // save data
-    vertexBuffer = VertexBuffer::Create(out, false, Application::GetRenderer().GetContext());
-    indexBuffer = IndexBuffer::Create(inds, false, Application::GetRenderer().GetContext());
+    vertexBuffer = VertexBuffer::Create(out, false, Application::GetGraphicsContextPtr());
+    indexBuffer = IndexBuffer::Create(inds, false, Application::GetGraphicsContextPtr());
 	indexCount = (uint32_t)inds.size();
 }

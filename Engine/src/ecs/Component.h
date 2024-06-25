@@ -45,7 +45,7 @@ namespace rl {
         }
 
         [[nodiscard]]
-        inline Entity getEntity() const noexcept
+        inline Entity GetEntity() const noexcept
         {
             return entity;
         }

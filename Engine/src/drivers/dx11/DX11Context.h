@@ -2,14 +2,14 @@
 
 #include "DX11.h"
 
-#include "../../graphics/Context.h"
+#include "../../graphics/GraphicsContext.h"
 
 namespace rl {
-	class DX11Context : public Context
+	class DX11Context : public GraphicsContext
 	{
 	public:
 
-		DX11Context(const Context&) = delete;
+		DX11Context(const GraphicsContext&) = delete;
 		DX11Context() = delete;
 		explicit DX11Context(Window* window);
 

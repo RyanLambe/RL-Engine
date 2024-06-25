@@ -56,6 +56,7 @@ public:
         // create camera entity
         Transform::Create(cam);
         Camera::Create(cam).SetMain();
+        Camera::GetComponent(cam).RenderToWindow();
     }
 
     void Update() {
@@ -105,9 +106,9 @@ public:
             Transform::GetComponent(test1).Scale(1.0001f);
         }
 
-        auto temp = Transform::GetComponent(cam);
+        Transform temp = Transform::GetComponent(cam);
         glm::vec3 rot = Transform::GetComponent(cam).GetPosition();
-        RL_LOG(rot.x, ", ", rot.y, ", ", rot.z);
+        //RL_LOG(rot.x, ", ", rot.y, ", ", rot.z);
     }
 };
 
@@ -121,7 +122,6 @@ int main() {
     Application::GetScene().systemManager.StartSystems();
     while (Application::GetWindow().Update()){
         Application::GetScene().systemManager.UpdateSystems();
-        Application::GetRenderer().RenderToWindow();
-        Application::GetRenderer().Present();
+        Application::GetGraphicsContextUnsafe()->Present();
     }
 }

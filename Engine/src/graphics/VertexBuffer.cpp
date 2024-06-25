@@ -1,6 +1,6 @@
 #include "VertexBuffer.h"
 
-#include "Renderer.h"
+#include "GraphicsContext.h"
 
 #ifdef RL_USE_DX11
 #include "../drivers/dx11/DX11VertexBuffer.h"
@@ -15,9 +15,9 @@ rl::VertexBuffer::~VertexBuffer()
 
 }
 
-std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<Context>& context)
+std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<GraphicsContext>& context)
 {
-	switch (Renderer::GetAPI())
+	switch (GraphicsContext::GetAPI())
 	{
 		#ifdef RL_USE_DX11
         case GraphicsAPI::DX11: return std::make_shared<DX11VertexBuffer>(data, dynamic, std::static_pointer_cast<DX11Context>(context.lock()));

@@ -1,6 +1,6 @@
 #include "UniformBuffer.h"
 
-#include "Renderer.h"
+#include "GraphicsContext.h"
 
 #ifdef RL_USE_DX11
 #include "../drivers/dx11/DX11UniformBuffer.h"
@@ -15,9 +15,9 @@ rl::UniformBuffer::~UniformBuffer()
 
 }
 
-std::shared_ptr<rl::UniformBuffer> rl::UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding, const std::weak_ptr<Context>& context)
+std::shared_ptr<rl::UniformBuffer> rl::UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding, const std::weak_ptr<GraphicsContext>& context)
 {
-    switch (Renderer::GetAPI())
+    switch (GraphicsContext::GetAPI())
     {
         #ifdef RL_USE_DX11
         case GraphicsAPI::DX11: return std::make_shared<DX11UniformBuffer>(size, shaderType, binding, std::static_pointer_cast<rl::DX11Context>(context.lock()));

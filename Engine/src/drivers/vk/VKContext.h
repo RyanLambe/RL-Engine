@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../graphics/Context.h"
+#include "../../graphics/GraphicsContext.h"
 
 namespace rl {
     class VKContext : public Context {

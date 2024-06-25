@@ -92,6 +92,6 @@ namespace rl {
         static float ExtractAngleFromQuat(glm::quat& quat, const glm::vec3& axis) noexcept;
 
     private:
-        glm::mat4 matrix;
+        glm::mat4 matrix = glm::mat4(1);
     };
 }

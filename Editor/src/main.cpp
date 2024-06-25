@@ -16,9 +16,10 @@ int main() {
 
     // main loop
     while (editor.Update()){
-        if(editor::Editor::Playing())
-            Application::GetScene().systemManager.UpdateSystems();
         editor.Render();
+        if(editor::Editor::Playing()){
+            Application::GetScene().systemManager.UpdateSystems();
+        }
     }
     return 0;
 }

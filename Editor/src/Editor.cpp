@@ -1,5 +1,4 @@
 #include "Editor.h"
-#include "graphics/Renderer.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_dx11.h"
 #include "components/Camera.h"
@@ -20,6 +19,7 @@ Editor::Editor() {
 
     // rl setup
     Application::Setup(1280, 720, "RL Engine 2.0", false, OnWindowResize);
+    renderTarget = RenderTarget::Create(Application::GetWindowPtr(), Application::GetGraphicsContextPtr());
 
     // ImGui setup
     IMGUI_CHECKVERSION();
@@ -32,7 +32,14 @@ Editor::Editor() {
     SetImGuiStyle();
 
     ImGui_ImplGlfw_InitForOther((GLFWwindow*)Application::GetWindow().getGLFWwindow(), true);
-    ImGui_ImplDX11_Init((ID3D11Device*)Application::GetRenderer().GetDXDevice(), (ID3D11DeviceContext*)Application::GetRenderer().GetDXContext());
+    if(auto context = Application::GetGraphicsContextPtr().lock()){
+        ImGui_ImplDX11_Init((ID3D11Device*)context->GetDXDevice(), (ID3D11DeviceContext*)context->GetDXContext());
+    }
+    else{
+        RL_LOG_ERROR("Cannot access Graphics Context");
+        RL_THROW_EXCEPTION("Cannot access Graphics Context");
+    }
+
 }
 
 Editor::~Editor() {
@@ -44,12 +51,12 @@ Editor::~Editor() {
 void Editor::Render() {
 
     if(resized){
-        Application::GetRenderer().ResizeTarget(newWidth, newHeight);
+        renderTarget->Resize(newWidth, newHeight);
         io->DisplayFramebufferScale = ImVec2((float)newWidth, (float)newHeight);
         resized = false;
     }
 
-    Application::GetRenderer().EnableTarget();
+    renderTarget->Enable();
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -78,7 +85,7 @@ void Editor::Render() {
         ImGui::RenderPlatformWindowsDefault();
     }
 
-    Application::GetRenderer().Present();
+    Application::GetGraphicsContextUnsafe()->Present();
 }
 
 bool Editor::Update() {
