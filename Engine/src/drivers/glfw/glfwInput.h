@@ -7,6 +7,8 @@ namespace rl {
     public:
         ~glfwInput() override = default;
 
+        void Update();
+
         [[nodiscard]] float GetKey(Key key) const override;
         [[nodiscard]] float GetAxis(const std::string& axis) const override;
         [[nodiscard]] glm::vec2 GetMousePos() const override;

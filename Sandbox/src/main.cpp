@@ -80,11 +80,9 @@ public:
         }
         if (Input::GetKey(Key::Keyboard::I) > 0) {
             Transform::GetComponent(cam).Rotate(-0.1f, 0, 0);
-            //rot.x -= 0.1f;
         }
         if (Input::GetKey(Key::Keyboard::K) > 0) {
             Transform::GetComponent(cam).Rotate(0.1f, 0, 0);
-            //rot.x += 0.1f;
         }
         if (Input::GetKey(Key::Keyboard::J) > 0) {
             Transform::GetComponent(cam).Rotate(0, -0.1f, 0);

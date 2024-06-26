@@ -1,9 +1,33 @@
 #include "glfwInput.h"
 
+#include <GLFW/glfw3.h>
+#include "../../core/Application.h"
+
 namespace rl {
 
+    void glfwInput::Update() {
+        glfwPollEvents();
+        // update deltas?
+    }
+
     float glfwInput::GetKey(rl::Key key) const {
-        return 0;
+        if(key.GetMethod() == Key::Method::None)
+            return 0;
+
+        auto window = (GLFWwindow*)Application::GetWindow().GetGLFWwindow();
+        if(!window)
+            RL_LOG_ERROR("Cannot access input. No glfw window has been created");
+
+        switch (key.GetMethod()) {
+            case Key::Method::Keyboard:
+                return glfwGetKey(window, (int)key.GetValue().keyboard) == GLFW_PRESS;
+
+            case Key::Method::Mouse:
+                return (float)glfwGetMouseButton(window, (int)key.GetValue().mouse) == GLFW_PRESS;
+
+            default:
+                return 0;
+        }
     }
 
     float glfwInput::GetAxis(const std::string &axis) const {

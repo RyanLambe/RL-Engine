@@ -31,7 +31,7 @@ Editor::Editor() {
     io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     SetImGuiStyle();
 
-    ImGui_ImplGlfw_InitForOther((GLFWwindow*)Application::GetWindow().getGLFWwindow(), true);
+    ImGui_ImplGlfw_InitForOther((GLFWwindow*)Application::GetWindow().GetGLFWwindow(), true);
     if(auto context = Application::GetGraphicsContextPtr().lock()){
         ImGui_ImplDX11_Init((ID3D11Device*)context->GetDXDevice(), (ID3D11DeviceContext*)context->GetDXContext());
     }

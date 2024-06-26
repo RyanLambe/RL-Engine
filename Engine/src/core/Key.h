@@ -141,24 +141,39 @@ namespace rl {
             Scroll = 7,
         };
 
-        Key(Keyboard keyboard) : keyboard(keyboard) {
-            method = Method::Keyboard;
-        }
-
-        Key(Mouse mouse) : mouse(mouse) {
-            method = Method::Mouse;
-        }
-
-    private:
-        union {
-            Keyboard keyboard;
-            Mouse mouse;
-        };
-
         enum class Method {
             None = 0,
             Keyboard = 1,
             Mouse = 2,
-        } method;
+        };
+
+        union Value {
+            Keyboard keyboard;
+            Mouse mouse;
+        };
+
+        // should not be explicit as the keyboard enum should be treated as a type of key
+        inline Key(Keyboard keyboard) {
+            val.keyboard = keyboard;
+            method = Method::Keyboard;
+        }
+
+        // should not be explicit as the mouse enum should be treated as a type of key
+        inline Key(Mouse mouse) {
+            val.mouse = mouse;
+            method = Method::Mouse;
+        }
+
+        [[nodiscard]] inline Method GetMethod() const {
+            return method;
+        };
+
+        [[nodiscard]] inline Value GetValue() const {
+            return val;
+        };
+
+    private:
+        Method method;
+        Value val;
     };
 }

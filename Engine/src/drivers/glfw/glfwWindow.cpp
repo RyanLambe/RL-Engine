@@ -49,16 +49,20 @@ glfwWindow::~glfwWindow() {
     }
 }
 
-bool glfwWindow::Update() const {
-    glfwPollEvents();
-    return !glfwWindowShouldClose(window);
-}
-
 void glfwWindow::Setup() {
     if(RLWindow != nullptr && RLWindow != this){
         RL_THROW_EXCEPTION("Too many Windows have been created.");
     }
     RLWindow = this;
+}
+
+void glfwWindow::EnableContext() {
+    glfwMakeContextCurrent(window);
+}
+
+bool glfwWindow::Update() {
+    input.Update();
+    return !glfwWindowShouldClose(window);
 }
 
 internal::Input* glfwWindow::GetInput() const {

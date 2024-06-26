@@ -13,22 +13,17 @@ namespace rl {
         glfwWindow(int width, int height, const std::string& title, bool fullscreen);
         ~glfwWindow();
 
-        [[nodiscard]]
-        bool Update() const override;
         void Setup() override;
+        void EnableContext() override;
+        [[nodiscard]] bool Update() override;
 
-        [[nodiscard]]
-        internal::Input* GetInput() const override;
+        [[nodiscard]] internal::Input* GetInput() const override;
 
-        [[nodiscard]]
-        void* GetHWND() const override;
-        [[nodiscard]]
-        void* GetGLFWwindow() const override;
+        [[nodiscard]] void* GetHWND() const override;
+        [[nodiscard]] void* GetGLFWwindow() const override;
 
-        [[nodiscard]]
-        int GetWidth() const override;
-        [[nodiscard]]
-        int GetHeight() const override;
+        [[nodiscard]] int GetWidth() const override;
+        [[nodiscard]] int GetHeight() const override;
 
         void SetResizeCallback(rl::RLWindowResizeCallback callback) override;
         void SetFullscreen(bool fullscreen) override;

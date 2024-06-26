@@ -33,6 +33,7 @@ std::shared_ptr<Application>* Application::GetSharedPtr() {
 
 void Application::ConnectToApp(std::shared_ptr<Application>* mainApp) {
     app = *mainApp;
+    app->window->EnableContext();
 }
 
 void Application::Setup(int width, int height, const std::string& title, bool fullscreen, RLWindowResizeCallback callback) {
