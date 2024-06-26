@@ -10,10 +10,6 @@
 #include "../drivers/vk/VKUniformBuffer.h"
 #endif
 
-rl::UniformBuffer::~UniformBuffer()
-{
-
-}
 
 std::shared_ptr<rl::UniformBuffer> rl::UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding, const std::weak_ptr<GraphicsContext>& context)
 {

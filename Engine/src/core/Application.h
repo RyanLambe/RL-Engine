@@ -16,7 +16,6 @@ namespace rl {
         static void ConnectToApp(std::shared_ptr<Application>* mainApp);
 
         static void Setup(int width, int height, const std::string& title, bool fullscreen = false, RLWindowResizeCallback callback = nullptr);
-        void Run();
 
         static bool IsSetup();
 
@@ -33,8 +32,8 @@ namespace rl {
         static std::shared_ptr<Application> app;
         bool isSetup = false;
 
-        std::shared_ptr<Window> window = nullptr;
         std::unique_ptr<Scene> scene = nullptr;
+        std::shared_ptr<Window> window = nullptr;
         std::shared_ptr<GraphicsContext> graphicsContext = nullptr;
     };
 }

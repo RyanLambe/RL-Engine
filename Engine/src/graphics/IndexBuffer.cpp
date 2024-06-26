@@ -10,10 +10,6 @@
 #include "../drivers/vk/VKIndexBuffer.h"
 #endif
 
-rl::IndexBuffer::~IndexBuffer()
-{
-
-}
 
 std::shared_ptr<rl::IndexBuffer> rl::IndexBuffer::Create(const std::vector<uint32_t>& data, bool dynamic, const std::weak_ptr<GraphicsContext>& context)
 {

@@ -12,7 +12,7 @@ namespace rl{
 
     class UniformBuffer {
     public:
-        virtual ~UniformBuffer();
+        virtual ~UniformBuffer() = default;
 
         static std::shared_ptr<UniformBuffer> Create(uint32_t size, ShaderType shaderType, uint32_t binding, const std::weak_ptr<GraphicsContext>& context);
 

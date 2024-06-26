@@ -108,8 +108,6 @@ add_library(Engine STATIC
         src/graphics/GraphicsContext.h
         src/graphics/IndexBuffer.cpp
         src/graphics/IndexBuffer.h
-        #src/graphics/Renderer.cpp
-        #src/graphics/Renderer.h
         src/graphics/RenderTarget.cpp
         src/graphics/RenderTarget.h
         src/graphics/Shader.cpp

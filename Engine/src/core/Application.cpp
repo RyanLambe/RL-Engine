@@ -19,7 +19,7 @@ Application::Application() {
 
 // create app if it doesn't exist, get app
 Application &Application::GetApplication() {
-    if(app == nullptr){
+    if(app == nullptr) {
         allowApplicationCreation = true;
         app = std::make_shared<Application>();
         allowApplicationCreation = false;

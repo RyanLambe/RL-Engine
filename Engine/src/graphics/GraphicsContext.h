@@ -16,7 +16,7 @@ namespace rl {
 	class GraphicsContext
 	{
 	public:
-		virtual ~GraphicsContext();
+		virtual ~GraphicsContext() = default;
 
 		static std::shared_ptr<GraphicsContext> Create(Window* window);
         static GraphicsAPI GetAPI();

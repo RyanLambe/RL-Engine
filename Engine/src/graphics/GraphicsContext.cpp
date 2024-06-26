@@ -9,11 +9,6 @@
 
 using namespace rl;
 
-GraphicsContext::~GraphicsContext()
-{
-
-}
-
 std::shared_ptr<rl::GraphicsContext> rl::GraphicsContext::Create(Window* window)
 {
 	switch (GraphicsContext::GetAPI())

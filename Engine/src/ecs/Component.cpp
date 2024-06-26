@@ -2,7 +2,7 @@
 
 #include "../core/Application.h"
 
-namespace rl
+namespace rl::internal
 {
     ComponentCollection& ComponentHelper::FindActiveComponentCollection() {
         return Application::GetScene().components;
