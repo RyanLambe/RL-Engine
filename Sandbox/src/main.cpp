@@ -60,49 +60,49 @@ public:
     }
 
     void Update() {
-        if(Input::GetKey(Key::W)){
+        if(Input::GetKey(Key::Keyboard::W) > 0){
             Transform::GetComponent(cam).Translate(0, 0, 0.01f);
         }
-        if(Input::GetKey(Key::S)){
+        if(Input::GetKey(Key::Keyboard::S) > 0){
             Transform::GetComponent(cam).Translate(0, 0, -0.01f);
         }
-        if(Input::GetKey(Key::A)){
+        if(Input::GetKey(Key::Keyboard::A) > 0){
             Transform::GetComponent(cam).Translate(-0.01f, 0, 0);
         }
-        if(Input::GetKey(Key::D)){
+        if(Input::GetKey(Key::Keyboard::D) > 0){
             Transform::GetComponent(cam).Translate(0.01f, 0, 0);
         }
-        if (Input::GetKey(Key::E)) {
+        if (Input::GetKey(Key::Keyboard::E) > 0) {
             Transform::GetComponent(cam).Translate(0, 0.01f, 0);
         }
-        if (Input::GetKey(Key::Q)) {
+        if (Input::GetKey(Key::Keyboard::Q) > 0) {
             Transform::GetComponent(cam).Translate(0, -0.01f, 0);
         }
-        if (Input::GetKey(Key::I)) {
+        if (Input::GetKey(Key::Keyboard::I) > 0) {
             Transform::GetComponent(cam).Rotate(-0.1f, 0, 0);
             //rot.x -= 0.1f;
         }
-        if (Input::GetKey(Key::K)) {
+        if (Input::GetKey(Key::Keyboard::K) > 0) {
             Transform::GetComponent(cam).Rotate(0.1f, 0, 0);
             //rot.x += 0.1f;
         }
-        if (Input::GetKey(Key::J)) {
+        if (Input::GetKey(Key::Keyboard::J) > 0) {
             Transform::GetComponent(cam).Rotate(0, -0.1f, 0);
         }
-        if (Input::GetKey(Key::L)) {
+        if (Input::GetKey(Key::Keyboard::L) > 0) {
             Transform::GetComponent(cam).Rotate(0, 0.1f, 0);
         }
-        if (Input::GetKey(Key::O)) {
+        if (Input::GetKey(Key::Keyboard::O) > 0) {
             Transform::GetComponent(cam).Rotate(0, 0, -0.1f);
         }
-        if (Input::GetKey(Key::U)) {
+        if (Input::GetKey(Key::Keyboard::U) > 0) {
             Transform::GetComponent(cam).Rotate(0, 0, 0.1f);
         }
 
-        if (Input::GetKey(Key::N)) {
+        if (Input::GetKey(Key::Keyboard::N) > 0) {
             Transform::GetComponent(test1).Scale(0.9999f);
         }
-        if (Input::GetKey(Key::M)) {
+        if (Input::GetKey(Key::Keyboard::M) > 0) {
             Transform::GetComponent(test1).Scale(1.0001f);
         }
 

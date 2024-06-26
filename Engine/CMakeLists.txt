@@ -20,6 +20,7 @@ set(RL_USING_WINDOW_DRIVER 0)
 if (DEFINED RL_USE_GLFW)
     set(RL_DRIVERS ${RL_DRIVERS}
             src/drivers/glfw/glfwInput.cpp
+            src/drivers/glfw/glfwInput.h
             src/drivers/glfw/glfwWindow.cpp
             src/drivers/glfw/glfwWindow.h
     )
@@ -93,8 +94,10 @@ add_library(Engine STATIC
         # core
         src/core/Application.cpp
         src/core/Application.h
+        src/core/Axis.h
         src/core/Clock.cpp
         src/core/Clock.h
+        src/core/Input.cpp
         src/core/Input.h
         src/core/Key.h
         src/core/Logger.h

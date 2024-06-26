@@ -7,12 +7,12 @@ DX11Context::DX11Context(Window* window) {
     if(window == nullptr){
         RL_THROW_EXCEPTION("Must provide window when creating DirectX Context");
     }
-	if(window->getHWND() == nullptr){
+	if(window->GetHWND() == nullptr){
         RL_THROW_EXCEPTION("Unable to access HWND for DirectX use");
     }
 
-    int width = window->getWidth();
-    int height = window->getHeight();
+    int width = window->GetWidth();
+    int height = window->GetHeight();
 
 	//create device, context, and swap chain
 	DXGI_SWAP_CHAIN_DESC sd = {};
@@ -27,7 +27,7 @@ DX11Context::DX11Context(Window* window) {
 	sd.SampleDesc.Quality = 0;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
 	sd.BufferCount = 1;
-	sd.OutputWindow = (HWND)window->getHWND();
+	sd.OutputWindow = (HWND)window->GetHWND();
 	sd.Windowed = TRUE;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -42,7 +42,7 @@ DX11Context::DX11Context(Window* window) {
 
     IDXGIFactory* factory;
     adapter->GetParent(__uuidof(IDXGIFactory), (void**)&factory);
-    factory->MakeWindowAssociation((HWND)window->getHWND(), DXGI_MWA_NO_ALT_ENTER);
+    factory->MakeWindowAssociation((HWND)window->GetHWND(), DXGI_MWA_NO_ALT_ENTER);
 
 	//set viewport size
 	D3D11_VIEWPORT vp;

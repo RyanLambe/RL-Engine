@@ -42,7 +42,7 @@ void Application::Setup(int width, int height, const std::string& title, bool fu
 
     // create window
     app->window = Window::Create(width, height, title, fullscreen);
-    app->window->setResizeCallback(callback);
+    app->window->SetResizeCallback(callback);
 
     // create graphics context
     app->graphicsContext = GraphicsContext::Create(app->window.get());

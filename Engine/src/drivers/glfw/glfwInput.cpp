@@ -1,31 +1,21 @@
-#include "../../core/Input.h"
+#include "glfwInput.h"
 
-#include "glfwWindow.h"
-#include "../../core/RLResult.h"
-#include "../../core/Application.h"
+namespace rl {
 
-bool rl::Input::GetKey(Key key) {
+    float glfwInput::GetKey(rl::Key key) const {
+        return 0;
+    }
 
-    if(!Application::GetWindow().getGLFWwindow())
-        RL_THROW_EXCEPTION("Cannot access input. No glfw window has been created");
+    float glfwInput::GetAxis(const std::string &axis) const {
+        return 0;
+    }
 
-    return glfwGetKey((GLFWwindow*)Application::GetWindow().getGLFWwindow(), (int)key) == GLFW_PRESS;
+    glm::vec2 glfwInput::GetMousePos() const {
+        return glm::vec2(0);
+    }
+
+    void glfwInput::CreateAxis(const std::string &key, Axis axis) {
+
+    }
 }
 
-extern bool rl::Input::GetMouseButton(MouseButton button) {
-    if(!Application::GetWindow().getGLFWwindow())
-        RL_THROW_EXCEPTION("Cannot access input. No glfw window has been created");
-
-    return glfwGetMouseButton((GLFWwindow*)Application::GetWindow().getGLFWwindow(), (int)button) == GLFW_PRESS;
-}
-
-extern glm::vec2 rl::Input::GetMousePos() {
-    if(!Application::GetWindow().getGLFWwindow())
-        RL_THROW_EXCEPTION("Cannot access input. No glfw window has been created");
-
-    double x, y;
-    glfwGetCursorPos((GLFWwindow*)Application::GetWindow().getGLFWwindow(), &x, &y);
-    x /= Application::GetWindow().getWidth();
-    y /= Application::GetWindow().getHeight();
-    return glm::vec2((float)x, (float)y);
-}

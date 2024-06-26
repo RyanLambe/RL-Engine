@@ -1,7 +1,10 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+
 #include "../../core/Window.h"
+
+#include "glfwInput.h"
 
 namespace rl {
     class glfwWindow : public Window {
@@ -11,21 +14,24 @@ namespace rl {
         ~glfwWindow();
 
         [[nodiscard]]
-        bool Update() const noexcept override;
+        bool Update() const override;
         void Setup() override;
 
         [[nodiscard]]
-        void* getHWND() const noexcept override;
-        [[nodiscard]]
-        void* getGLFWwindow() const noexcept override;
+        internal::Input* GetInput() const override;
 
         [[nodiscard]]
-        int getWidth() const noexcept override;
+        void* GetHWND() const override;
         [[nodiscard]]
-        int getHeight() const noexcept override;
+        void* GetGLFWwindow() const override;
 
-        void setResizeCallback(rl::RLWindowResizeCallback callback) noexcept override;
-        void setFullscreen(bool fullscreen) noexcept override;
+        [[nodiscard]]
+        int GetWidth() const override;
+        [[nodiscard]]
+        int GetHeight() const override;
+
+        void SetResizeCallback(rl::RLWindowResizeCallback callback) override;
+        void SetFullscreen(bool fullscreen) override;
 
     private:
 
@@ -33,6 +39,8 @@ namespace rl {
 
         glfwWindow* RLWindow = nullptr;
         GLFWwindow* window = nullptr;
+
+        glfwInput input;
 
         RLWindowResizeCallback externalResizeCallback = nullptr;
         bool isFullscreen;

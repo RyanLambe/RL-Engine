@@ -14,8 +14,8 @@ DX11RenderTarget::DX11RenderTarget(const std::weak_ptr<Window>& windowPtr, const
     }
 
     if(auto window = windowPtr.lock()){
-        width = window->getWidth();
-        height = window->getHeight();
+        width = window->GetWidth();
+        height = window->GetHeight();
         Refresh();
     }
     else{
@@ -60,9 +60,9 @@ void DX11RenderTarget::Clear()
         if(!window)
             RL_THROW_EXCEPTION("Cannot access Window");
 
-        if(width != window->getWidth() || height != window->getHeight()){
-            width = window->getWidth();
-            height = window->getHeight();
+        if(width != window->GetWidth() || height != window->GetHeight()){
+            width = window->GetWidth();
+            height = window->GetHeight();
             Refresh();
         }
     }

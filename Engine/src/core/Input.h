@@ -1,19 +1,36 @@
 #pragma once
 
 #include <memory>
+#include <string>
+
+#include "glm/glm.hpp"
 
 #include "Key.h"
-#include "glm/vec2.hpp"
+#include "Axis.h"
 
-namespace rl::Input {
+namespace rl {
 
-    extern void Setup();
+    namespace internal {
+        class Input {
+        public:
+            virtual ~Input() = default;
 
-    extern bool GetKey(Key key);
+            [[nodiscard]] virtual float GetKey(Key key) const = 0;
+            [[nodiscard]] virtual float GetAxis(const std::string& axis) const = 0;
+            [[nodiscard]] virtual glm::vec2 GetMousePos() const = 0;
 
-    extern bool GetMouseButton(MouseButton button);
+            virtual void CreateAxis(const std::string& key, Axis axis) = 0;
+        };
+    }
 
-    extern glm::vec2 GetMousePos();
+    class Input {
+    public:
 
+        [[nodiscard]] static float GetKey(Key key);
+        [[nodiscard]] static float GetAxis(const std::string& axis);
+        [[nodiscard]] static glm::vec2 GetMousePos();
+
+        static void CreateAxis(const std::string& key, Axis axis);
+    };
 }
 

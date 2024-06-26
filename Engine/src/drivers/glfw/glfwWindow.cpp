@@ -49,7 +49,7 @@ glfwWindow::~glfwWindow() {
     }
 }
 
-bool glfwWindow::Update() const noexcept {
+bool glfwWindow::Update() const {
     glfwPollEvents();
     return !glfwWindowShouldClose(window);
 }
@@ -61,30 +61,34 @@ void glfwWindow::Setup() {
     RLWindow = this;
 }
 
-void* glfwWindow::getHWND() const noexcept {
+internal::Input* glfwWindow::GetInput() const {
+    return (internal::Input*)&input;
+}
+
+void* glfwWindow::GetHWND() const {
     #ifdef GLFW_EXPOSE_NATIVE_WIN32
         return glfwGetWin32Window(window);
     #endif
     return nullptr;
 }
 
-void *glfwWindow::getGLFWwindow() const noexcept {
+void *glfwWindow::GetGLFWwindow() const {
     return window;
 }
 
-int glfwWindow::getWidth() const noexcept {
+int glfwWindow::GetWidth() const {
     if(isFullscreen)
         return maxWidth;
     return minWidth;
 }
 
-int glfwWindow::getHeight() const noexcept {
+int glfwWindow::GetHeight() const {
     if(isFullscreen)
         return maxHeight;
     return minHeight;
 }
 
-void glfwWindow::setResizeCallback(RLWindowResizeCallback callback) noexcept {
+void glfwWindow::SetResizeCallback(RLWindowResizeCallback callback) {
     externalResizeCallback = callback;
 }
 
@@ -111,7 +115,7 @@ void glfwWindow::internalResizeCallback(GLFWwindow *window, int width, int heigh
     RLWindow->externalResizeCallback(RLWindow, width, height);
 }
 
-void glfwWindow::setFullscreen(bool fullscreen) noexcept {
+void glfwWindow::SetFullscreen(bool fullscreen) {
     isFullscreen = fullscreen;
     if(fullscreen){
         glfwSetWindowMonitor(window, glfwGetPrimaryMonitor(), 0, 0, maxWidth, maxHeight, GLFW_DONT_CARE);

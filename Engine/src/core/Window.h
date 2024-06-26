@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include "Input.h"
 
 namespace rl {
     class Window;
@@ -13,20 +14,23 @@ namespace rl {
 
         // polls events and returns if window should close
         [[nodiscard]]
-        virtual bool Update() const noexcept = 0;
+        virtual bool Update() const = 0;
         virtual void Setup() = 0;
 
         [[nodiscard]]
-        virtual void* getHWND() const noexcept = 0;
-        [[nodiscard]]
-        virtual void* getGLFWwindow() const noexcept = 0;
+        virtual internal::Input* GetInput() const = 0;
 
         [[nodiscard]]
-        virtual int getWidth() const noexcept = 0;
+        virtual void* GetHWND() const = 0;
         [[nodiscard]]
-        virtual int getHeight() const noexcept = 0;
+        virtual void* GetGLFWwindow() const = 0;
 
-        virtual void setFullscreen(bool fullscreen) noexcept = 0;
-        virtual void setResizeCallback(RLWindowResizeCallback callback) noexcept = 0;
+        [[nodiscard]]
+        virtual int GetWidth() const = 0;
+        [[nodiscard]]
+        virtual int GetHeight() const = 0;
+
+        virtual void SetFullscreen(bool fullscreen) = 0;
+        virtual void SetResizeCallback(RLWindowResizeCallback callback) = 0;
     };
 }

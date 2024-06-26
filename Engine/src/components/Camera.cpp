@@ -24,8 +24,8 @@ bool rl::Camera::IsMain() const {
 void rl::Camera::RenderToWindow()
 {
     renderTarget = RenderTarget::Create(Application::GetWindowPtr(), Application::GetGraphicsContextPtr());
-    width = Application::GetWindow().getWidth();
-    height = Application::GetWindow().getHeight();
+    width = Application::GetWindow().GetWidth();
+    height = Application::GetWindow().GetHeight();
 }
 
 void rl::Camera::RenderToTarget(uint32_t width, uint32_t height)
