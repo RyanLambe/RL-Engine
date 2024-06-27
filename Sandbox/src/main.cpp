@@ -119,7 +119,7 @@ int main() {
 
     Application::GetScene().systemManager.StartSystems();
     while (Application::GetWindow().Update()){
-        Application::GetScene().systemManager.UpdateSystems();
+        Application::Update();
         Application::GetGraphicsContextUnsafe()->Present();
     }
 }

@@ -57,6 +57,14 @@ void Application::Setup(int width, int height, const std::string& title, bool fu
     app->isSetup = true;
 }
 
+void Application::Update() {
+    app->scene->systemManager.UpdateSystems();
+}
+
+void Application::Reset() {
+    // reset between runs ???
+}
+
 bool Application::IsSetup() {
     return app->isSetup;
 }

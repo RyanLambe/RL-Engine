@@ -18,7 +18,7 @@ int main() {
     while (editor.Update()){
         editor.Render();
         if(editor::Editor::Playing()){
-            Application::GetScene().systemManager.UpdateSystems();
+            Application::Update();
         }
     }
     return 0;
