@@ -19,6 +19,6 @@ namespace rl {
 
     private:
         /// array of pointers to ComponentType's stored on the heap
-        std::unordered_map<size_t, std::unique_ptr<internal::ComponentType>> typeToComponentType;
+        std::unordered_map<size_t, std::unique_ptr<internal::ComponentType>> typeToComponentType = {};
     };
 }

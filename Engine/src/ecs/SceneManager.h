@@ -13,6 +13,10 @@ namespace rl {
         Camera* mainCamera = nullptr;
 
         static Scene& MainScene();
+        void Reset() {
+            systemManager = SystemManager();
+            components = ComponentCollection();
+        }
     };
 
     class SceneManager {

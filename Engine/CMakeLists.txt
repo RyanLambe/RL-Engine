@@ -181,8 +181,10 @@ set(ENGINE_HEADER_DIRS
         /core
         /drivers/glfw
         /drivers/dx11
+        /drivers/vk
         /ecs
         /graphics
+        /systems
         /types
         /
 )

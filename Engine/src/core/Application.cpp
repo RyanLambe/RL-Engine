@@ -3,8 +3,6 @@
 #include "../ecs/SystemManager.h"
 #include "RLResult.h"
 
-#include "../systems/Renderer.h" // todo: remove
-
 using namespace rl;
 
 std::shared_ptr<Application> Application::app = nullptr;
@@ -51,9 +49,6 @@ void Application::Setup(int width, int height, const std::string& title, bool fu
     // setup scene
     app->scene = std::make_unique<Scene>();
 
-    // setup renderer todo: move?
-    app->scene->systemManager.AddSystem<Renderer>();
-
     app->isSetup = true;
 }
 
@@ -62,7 +57,7 @@ void Application::Update() {
 }
 
 void Application::Reset() {
-    // reset between runs ???
+    app->scene->Reset();
 }
 
 bool Application::IsSetup() {

@@ -14,3 +14,5 @@
 #include "ecs/Component.h"
 #include "ecs/SceneManager.h"
 #include "ecs/SystemManager.h"
+
+#include "systems/Renderer.h"
