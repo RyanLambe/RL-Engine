@@ -10,7 +10,7 @@ void Viewport::Render() {
 
     if(ImGui::Begin("Renderer", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse)){
 
-        if(Camera::GetMain() == nullptr || Camera::GetMain()->GetRenderTarget() == nullptr){
+        if(!Editor::Playing() || Camera::GetMain() == nullptr || Camera::GetMain()->GetRenderTarget() == nullptr) {
             ImGui::End();
             return;
         }

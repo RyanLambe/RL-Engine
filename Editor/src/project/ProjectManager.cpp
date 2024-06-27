@@ -1,4 +1,5 @@
 #include "ProjectManager.h"
+#include "../Editor.h"
 #include <core/Logger.h>
 #include <core/Application.h>
 
@@ -88,6 +89,9 @@ void ProjectManager::Compile(){
         RL_LOG_ERROR("No Project Open.");
         return;
     }
+
+    Editor::Pause();
+    Application::Reset();
 
     int debugLevel = 0;
 #ifdef _ITERATOR_DEBUG_LEVEL
