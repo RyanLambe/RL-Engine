@@ -10,12 +10,12 @@ namespace rl {
         void Update();
 
         [[nodiscard]] float GetKey(Key key) const override;
-        [[nodiscard]] float GetAxis(const std::string& axis) const override;
+        [[nodiscard]] float GetAxis(const std::string& axis) override;
         [[nodiscard]] glm::vec2 GetMousePos() const override;
 
         void CreateAxis(const std::string& key, Axis axis) override;
 
     private:
-        // ???
+        std::unordered_map<std::string, Axis> axes = std::unordered_map<std::string, Axis>();
     };
 }

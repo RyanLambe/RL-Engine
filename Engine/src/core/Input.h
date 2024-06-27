@@ -16,7 +16,7 @@ namespace rl {
             virtual ~Input() = default;
 
             [[nodiscard]] virtual float GetKey(Key key) const = 0;
-            [[nodiscard]] virtual float GetAxis(const std::string& axis) const = 0;
+            [[nodiscard]] virtual float GetAxis(const std::string& axis) = 0;
             [[nodiscard]] virtual glm::vec2 GetMousePos() const = 0;
 
             virtual void CreateAxis(const std::string& key, Axis axis) = 0;
