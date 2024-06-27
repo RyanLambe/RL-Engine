@@ -1,25 +1,27 @@
 #pragma once
 
+#include "../components/Camera.h"
 #include "ComponentCollection.h"
 #include "SystemManager.h"
-#include "../components/Camera.h"
 
-namespace rl {
+namespace rl
+{
 
-    class Scene {
+    class Scene
+    {
     public:
         SystemManager systemManager;
         ComponentCollection components;
-        Camera* mainCamera = nullptr;
+        Camera *mainCamera = nullptr;
 
-        static Scene& MainScene();
-        void Reset() {
+        static Scene &MainScene();
+        void Reset()
+        {
             systemManager = SystemManager();
             components = ComponentCollection();
         }
     };
 
-    class SceneManager {
-
-    };
-}
+    class SceneManager
+    {};
+} // namespace rl

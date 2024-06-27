@@ -1,15 +1,12 @@
 #include "VKUniformBuffer.h"
 
-namespace rl {
+namespace rl
+{
 
-    VKUniformBuffer::VKUniformBuffer(uint32_t size, ShaderType shaderType, uint32_t binding, const std::weak_ptr<VKContext>& contextPtr)
-    {
+    VKUniformBuffer::VKUniformBuffer(uint32_t size, ShaderType shaderType, uint32_t binding,
+                                     const std::weak_ptr<VKContext> &contextPtr)
+    {}
 
-    }
+    void VKUniformBuffer::SetData(const void *data, uint32_t size, uint32_t offset) {}
 
-    void VKUniformBuffer::SetData(const void* data, uint32_t size, uint32_t offset)
-    {
-
-    }
-
-}
+} // namespace rl

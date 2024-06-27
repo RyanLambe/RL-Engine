@@ -9,33 +9,35 @@
 
 using namespace rl;
 
-std::shared_ptr<rl::GraphicsContext> rl::GraphicsContext::Create(Window* window)
+std::shared_ptr<rl::GraphicsContext> rl::GraphicsContext::Create(Window *window)
 {
-	switch (GraphicsContext::GetAPI())
-	{
-		#ifdef RL_USE_DX11
-        case GraphicsAPI::DX11: return std::make_shared<DX11Context>(window);
-		#endif
+    switch (GraphicsContext::GetAPI())
+    {
+#ifdef RL_USE_DX11
+        case GraphicsAPI::DX11:
+            return std::make_shared<DX11Context>(window);
+#endif
 
-		#ifdef RL_USE_VULKAN
-			case GraphicsAPI::Vulkan: return std::make_shared<VKContext>(window);
-		#endif
+#ifdef RL_USE_VULKAN
+        case GraphicsAPI::Vulkan:
+            return std::make_shared<VKContext>(window);
+#endif
 
-		default: break;
-	}
+        default:
+            break;
+    }
 
-	//throw error
-	return nullptr;
-
+    // throw error
+    return nullptr;
 }
 
-GraphicsAPI GraphicsContext::GetAPI() {
-    #ifdef RL_USE_DX11
+GraphicsAPI GraphicsContext::GetAPI()
+{
+#ifdef RL_USE_DX11
     return GraphicsAPI::DX11;
-    #endif
+#endif
 
-    #ifdef RL_USE_VULKAN
+#ifdef RL_USE_VULKAN
     return GraphicsAPI::Vulkan;
-    #endif
+#endif
 }
-

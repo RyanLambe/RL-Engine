@@ -6,10 +6,12 @@
 
 #include "Logger.h"
 
-namespace rl{
+namespace rl
+{
 
     // error code is the type of errors that can happen regular use
-    enum ErrorCode {
+    enum ErrorCode
+    {
         Success = 0,
         UnknownError = 1,
         InvalidArguments = 2,
@@ -19,35 +21,46 @@ namespace rl{
     };
 
     // RLResult will be returned by functions that have a chance of failure
-    struct RLResult{
+    struct RLResult
+    {
         ErrorCode code;
 
         RLResult() = delete;
-        explicit RLResult(ErrorCode code): code(code) {}
+        explicit RLResult(ErrorCode code) : code(code) {}
 
-        [[nodiscard]]
-        inline bool Failed() const noexcept{
+        [[nodiscard]] inline bool Failed() const noexcept
+        {
             return code != Success;
         }
 
-        [[nodiscard]]
-        inline std::string toString() const noexcept{
-            switch (code) {
-                case Success: return "Success";
-                case UnknownError: return "Unknown Error";
-                case InvalidArguments: return "Invalid Arguments";
-                case Unimplemented: return "Unimplemented";
-                case FileNotFound: return "File Not Found";
-                case SingletonAlreadyCreated: return "Singleton Already Created";
-                default: return "Invalid Error Type";
+        [[nodiscard]] inline std::string toString() const noexcept
+        {
+            switch (code)
+            {
+                case Success:
+                    return "Success";
+                case UnknownError:
+                    return "Unknown Error";
+                case InvalidArguments:
+                    return "Invalid Arguments";
+                case Unimplemented:
+                    return "Unimplemented";
+                case FileNotFound:
+                    return "File Not Found";
+                case SingletonAlreadyCreated:
+                    return "Singleton Already Created";
+                default:
+                    return "Invalid Error Type";
             }
         }
     };
 
     // when a critical error occurs the RLException will be thrown
-    class RLException : public std::exception{
+    class RLException : public std::exception
+    {
     public:
-        RLException(std::string  msg, std::string  file, int line) {
+        RLException(std::string msg, std::string file, int line)
+        {
             std::ostringstream oss;
 
             oss << "Program Exited with Error: \n" << msg << "\n\n";
@@ -56,18 +69,21 @@ namespace rl{
             message = oss.str();
         }
 
-        [[nodiscard]]
-        const char* what() const noexcept override {
+        [[nodiscard]] const char *what() const noexcept override
+        {
             return message.c_str();
         }
 
     private:
         std::string message;
     };
-}
+} // namespace rl
 
 #define RL_THROW_EXCEPTION(msg) throw RLException(msg, __FILE__, __LINE__)
 #define RL_THROW_RESULT(res) throw RLException(res.toString(), __FILE__, __LINE__)
-#define RL_CHECK_RESULT(res) if(res.Failed()) throw RLException(res.toString(), __FILE__, __LINE__)
-#define RL_PRINT_RESULT(res) if(res.Failed()) RL_LOG_ERROR("Error: ", res.toString())
-
+#define RL_CHECK_RESULT(res) \
+    if (res.Failed())        \
+    throw RLException(res.toString(), __FILE__, __LINE__)
+#define RL_PRINT_RESULT(res) \
+    if (res.Failed())        \
+    RL_LOG_ERROR("Error: ", res.toString())

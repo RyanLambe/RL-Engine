@@ -1,4 +1,5 @@
 #include "NewProject.h"
+
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 
@@ -6,10 +7,10 @@
 
 using namespace rl::editor;
 
-void NewProject::Render() {
-
-    if(ImGui::Begin("New Project", &open, ImGuiWindowFlags_NoDocking)){
-
+void NewProject::Render()
+{
+    if (ImGui::Begin("New Project", &open, ImGuiWindowFlags_NoDocking))
+    {
         ImGui::SetWindowSize(ImVec2(600, 300));
 
         ImGui::Text("Project Name: ");
@@ -20,7 +21,8 @@ void NewProject::Render() {
         ImGui::SameLine();
         ImGui::InputText("  ", &path);
 
-        if(ImGui::Button("Create")){
+        if (ImGui::Button("Create"))
+        {
             ProjectManager::New(name, path);
             open = false;
         }
@@ -29,6 +31,7 @@ void NewProject::Render() {
     }
 }
 
-bool NewProject::IsOpen() {
+bool NewProject::IsOpen()
+{
     return open;
 }

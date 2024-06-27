@@ -1,13 +1,15 @@
 #pragma once
 
-#include <vector>
 #include <utility>
+#include <vector>
 
-namespace rl {
+namespace rl
+{
 
-    struct Axis {
+    struct Axis
+    {
         // array of keys with their weights
         std::vector<std::pair<Key, float>> keys;
     };
 
-}
+} // namespace rl

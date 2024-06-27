@@ -1,13 +1,13 @@
 #include "Editor.h"
-#include "project/ProjectManager.h"
 #include "ToolBar.h"
+#include "project/ProjectManager.h"
 
 using namespace rl;
 
 std::shared_ptr<editor::ToolBar> toolbar;
 
-int main() {
-
+int main()
+{
     editor::Editor editor = editor::Editor();
     editor::ProjectManager projectManager = editor::ProjectManager();
 
@@ -15,9 +15,11 @@ int main() {
     editor::Editor::CreateGuiElement(toolbar);
 
     // main loop
-    while (editor.Update()){
+    while (editor.Update())
+    {
         editor.Render();
-        if(editor::Editor::Playing()){
+        if (editor::Editor::Playing())
+        {
             Application::Update();
         }
     }

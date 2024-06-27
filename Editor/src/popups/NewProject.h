@@ -4,8 +4,10 @@
 
 #include "../GuiElement.h"
 
-namespace rl::editor {
-    class NewProject : public GuiElement {
+namespace rl::editor
+{
+    class NewProject : public GuiElement
+    {
     public:
         NewProject() = default;
 
@@ -18,4 +20,4 @@ namespace rl::editor {
         std::string name;
         std::string path;
     };
-}
+} // namespace rl::editor

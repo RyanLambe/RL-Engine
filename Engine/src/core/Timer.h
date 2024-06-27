@@ -2,14 +2,18 @@
 
 #include <chrono>
 
-namespace rl {
-    class Timer {
+namespace rl
+{
+    class Timer
+    {
     public:
-        void Start() {
+        void Start()
+        {
             start = std::chrono::high_resolution_clock::now();
         }
 
-        uint64_t getTime() {
+        uint64_t getTime()
+        {
             auto now = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
             return duration.count();
@@ -18,4 +22,4 @@ namespace rl {
     private:
         std::chrono::high_resolution_clock::time_point start;
     };
-}
+} // namespace rl

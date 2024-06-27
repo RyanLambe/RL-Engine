@@ -1,9 +1,10 @@
-#include <algorithm>
 #include "Transform.h"
+
+#include <algorithm>
 
 using namespace rl;
 
-const glm::mat4& Transform::GetTransformationMatrix() noexcept
+const glm::mat4 &Transform::GetTransformationMatrix() noexcept
 {
     const glm::mat4 pos = glm::translate(glm::mat4(1.0f), position);
     const glm::mat4 rot = glm::mat4_cast(rotation);
@@ -14,9 +15,9 @@ const glm::mat4& Transform::GetTransformationMatrix() noexcept
 
 glm::mat4 Transform::GetInverseTransformationMatrix() const noexcept
 {
-    const glm::vec3 invScaleVec = glm::vec3(1.0f / (scale.x != 0.00f ? scale.x : 1.0f),
-                                            1.0f / (scale.y != 0.00f ? scale.y : 1.0f),
-                                            1.0f / (scale.z != 0.00f ? scale.z : 1.0f));
+    const glm::vec3 invScaleVec
+        = glm::vec3(1.0f / (scale.x != 0.00f ? scale.x : 1.0f), 1.0f / (scale.y != 0.00f ? scale.y : 1.0f),
+                    1.0f / (scale.z != 0.00f ? scale.z : 1.0f));
 
     const glm::mat4 invPos = glm::translate(glm::mat4(1.0f), -position);
     const glm::mat4 invRot = glm::mat4_cast(glm::conjugate(rotation));
@@ -24,7 +25,7 @@ glm::mat4 Transform::GetInverseTransformationMatrix() const noexcept
     return invScale * invRot * invPos;
 }
 
-glm::quat Transform::EulerToQuat(const glm::vec3& euler) noexcept
+glm::quat Transform::EulerToQuat(const glm::vec3 &euler) noexcept
 {
     const glm::quat xQ = glm::angleAxis(glm::radians(euler.x), glm::vec3(1, 0, 0));
     const glm::quat yQ = glm::angleAxis(glm::radians(euler.y), glm::vec3(0, 1, 0));

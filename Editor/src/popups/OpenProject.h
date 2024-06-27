@@ -4,8 +4,10 @@
 
 #include "../GuiElement.h"
 
-namespace rl::editor {
-    class OpenProject : public GuiElement {
+namespace rl::editor
+{
+    class OpenProject : public GuiElement
+    {
     public:
         OpenProject() = default;
 
@@ -18,4 +20,4 @@ namespace rl::editor {
         std::string name;
         std::string path = "C:\\Users\\ryanl\\OneDrive\\Documents\\RL-EngineTest"; // todo: remove
     };
-}
+} // namespace rl::editor

@@ -2,27 +2,27 @@
 
 #include <vector>
 
-#include "DX11.h"
-
 #include "../../graphics/VertexBuffer.h"
 #include "../../types/Vertex.h"
+#include "DX11.h"
 #include "DX11Context.h"
 
-namespace rl {
-	class DX11VertexBuffer : public rl::VertexBuffer
-	{
-	public:
-		DX11VertexBuffer() = delete;
-		DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<DX11Context>& contextPtr);
+namespace rl
+{
+    class DX11VertexBuffer : public rl::VertexBuffer
+    {
+    public:
+        DX11VertexBuffer() = delete;
+        DX11VertexBuffer(const std::vector<Vertex> &data, bool dynamic, const std::weak_ptr<DX11Context> &contextPtr);
 
-		void Enable() override;
+        void Enable() override;
 
-		void Set(const std::vector<Vertex>& data) override;
+        void Set(const std::vector<Vertex> &data) override;
 
-	private:
+    private:
         std::weak_ptr<DX11Context> contextPtr;
-		bool isDynamic;
+        bool isDynamic;
 
-		Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = Microsoft::WRL::ComPtr<ID3D11Buffer>();
-	};
-}
+        Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = Microsoft::WRL::ComPtr<ID3D11Buffer>();
+    };
+} // namespace rl

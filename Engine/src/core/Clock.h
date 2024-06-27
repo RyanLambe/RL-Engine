@@ -2,12 +2,11 @@
 
 #include <string>
 
-namespace rl {
-    class Clock {
+namespace rl
+{
+    class Clock
+    {
     public:
-
         static std::string getFormattedTime();
-
-
     };
-}
+} // namespace rl

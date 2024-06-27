@@ -3,8 +3,10 @@
 #include "../GuiElement.h"
 #include "Engine.h"
 
-namespace rl::editor {
-    class Viewport : public GuiElement {
+namespace rl::editor
+{
+    class Viewport : public GuiElement
+    {
     public:
         void Render() override;
         bool IsOpen() override;
@@ -12,4 +14,4 @@ namespace rl::editor {
     private:
         bool open = true;
     };
-}
+} // namespace rl::editor

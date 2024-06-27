@@ -1,20 +1,21 @@
 #pragma once
 
+#include "../ecs/Component.h"
+#include "../graphics/RenderTarget.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "../ecs/Component.h"
-#include "../graphics/RenderTarget.h"
-
-namespace rl {
-    class Camera : public Component<Camera> {
+namespace rl
+{
+    class Camera : public Component<Camera>
+    {
     public:
         float fov = 90;
         float nearPlane = 0.01f;
         float farPlane = 1000;
 
-        static Camera* GetMain();
-        static void SetMain(Camera* cam);
+        static Camera *GetMain();
+        static void SetMain(Camera *cam);
         void SetMain();
         [[nodiscard]] bool IsMain() const;
 
@@ -29,7 +30,7 @@ namespace rl {
             return renderTarget;
         }
 
-        [[nodiscard]] void* GetTexture() const
+        [[nodiscard]] void *GetTexture() const
         {
             return renderTarget->GetTexture();
         }
@@ -55,4 +56,4 @@ namespace rl {
         uint32_t width = 0;
         uint32_t height = 0;
     };
-}
+} // namespace rl

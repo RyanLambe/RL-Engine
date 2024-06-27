@@ -9,12 +9,17 @@
 
 #include <string>
 
-#include "../../core/RLResult.h"
 #include "../../core/Logger.h"
+#include "../../core/RLResult.h"
 
-namespace rl {
+namespace rl
+{
     std::string TranslateHResult(HRESULT code);
 }
 
-#define DX_THROW_ERROR(code) if(FAILED(code)) RL_THROW_EXCEPTION(rl::TranslateHResult(code).c_str())
-#define DX_LOG_ERROR(code) if(FAILED(code)) RL_LOG_ERROR(rl::TranslateHResult(code).c_str())
+#define DX_THROW_ERROR(code) \
+    if (FAILED(code))        \
+    RL_THROW_EXCEPTION(rl::TranslateHResult(code).c_str())
+#define DX_LOG_ERROR(code) \
+    if (FAILED(code))      \
+    RL_LOG_ERROR(rl::TranslateHResult(code).c_str())

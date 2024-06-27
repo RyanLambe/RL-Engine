@@ -1,11 +1,14 @@
 #pragma once
 
-namespace rl {
+namespace rl
+{
 
-    class Key {
+    class Key
+    {
     public:
         // based on GLFW Keys
-        enum class Keyboard {
+        enum class Keyboard
+        {
             Unknown = -1,
             Space = 32,
             Apostrophe = 39,
@@ -130,7 +133,8 @@ namespace rl {
             Last = 348,
         };
 
-        enum class Mouse {
+        enum class Mouse
+        {
             Left = 0,
             Right = 1,
             Middle = 2,
@@ -141,7 +145,8 @@ namespace rl {
             Scroll = 7,
         };
 
-        enum class Method {
+        enum class Method
+        {
             None = 0,
             Keyboard = 1,
             Mouse = 2,
@@ -152,23 +157,28 @@ namespace rl {
             Mouse mouse;
         };
 
-        // should not be explicit as the keyboard enum should be treated as a type of key
-        inline Key(Keyboard keyboard) {
+        // should not be explicit as the keyboard enum should be treated as a type of
+        // key
+        inline Key(Keyboard keyboard)
+        {
             val.keyboard = keyboard;
             method = Method::Keyboard;
         }
 
         // should not be explicit as the mouse enum should be treated as a type of key
-        inline Key(Mouse mouse) {
+        inline Key(Mouse mouse)
+        {
             val.mouse = mouse;
             method = Method::Mouse;
         }
 
-        [[nodiscard]] inline Method GetMethod() const {
+        [[nodiscard]] inline Method GetMethod() const
+        {
             return method;
         };
 
-        [[nodiscard]] inline Value GetValue() const {
+        [[nodiscard]] inline Value GetValue() const
+        {
             return val;
         };
 
@@ -176,4 +186,4 @@ namespace rl {
         Method method;
         Value val;
     };
-}
+} // namespace rl

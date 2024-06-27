@@ -4,7 +4,8 @@
 
 namespace rl::internal
 {
-    ComponentCollection& ComponentHelper::FindActiveComponentCollection() {
+    ComponentCollection &ComponentHelper::FindActiveComponentCollection()
+    {
         return Application::GetScene().components;
     }
-}
+} // namespace rl::internal

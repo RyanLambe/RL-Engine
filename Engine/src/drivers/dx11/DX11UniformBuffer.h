@@ -1,15 +1,16 @@
 #pragma once
 
-#include "DX11.h"
-
 #include "../../graphics/UniformBuffer.h"
+#include "DX11.h"
 #include "DX11Context.h"
 
-namespace rl{
-    class DX11UniformBuffer : public UniformBuffer {
+namespace rl
+{
+    class DX11UniformBuffer : public UniformBuffer
+    {
     public:
-
-        DX11UniformBuffer(uint32_t size, ShaderType shaderType, uint32_t binding, const std::weak_ptr<DX11Context>& contextPtr);
+        DX11UniformBuffer(uint32_t size, ShaderType shaderType, uint32_t binding,
+                          const std::weak_ptr<DX11Context> &contextPtr);
 
         void SetData(const void *data, uint32_t size, uint32_t offset) override;
 
@@ -19,4 +20,4 @@ namespace rl{
         ShaderType shaderType;
         uint32_t binding;
     };
-}
+} // namespace rl

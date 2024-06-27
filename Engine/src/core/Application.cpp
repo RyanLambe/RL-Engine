@@ -7,17 +7,23 @@ using namespace rl;
 
 std::shared_ptr<Application> Application::app = nullptr;
 
-// don't allow application to be constructed unless allowApplicationCreation set to true
+// don't allow application to be constructed unless allowApplicationCreation set
+// to true
 bool allowApplicationCreation = false;
-Application::Application() {
-    if(!allowApplicationCreation){
-        RL_THROW_EXCEPTION("Application is a singleton, use GetApplication() to access the singleton.");
+Application::Application()
+{
+    if (!allowApplicationCreation)
+    {
+        RL_THROW_EXCEPTION("Application is a singleton, use GetApplication() to "
+                           "access the singleton.");
     }
 }
 
 // create app if it doesn't exist, get app
-Application &Application::GetApplication() {
-    if(app == nullptr) {
+Application &Application::GetApplication()
+{
+    if (app == nullptr)
+    {
         allowApplicationCreation = true;
         app = std::make_shared<Application>();
         allowApplicationCreation = false;
@@ -25,17 +31,22 @@ Application &Application::GetApplication() {
     return *app;
 }
 
-std::shared_ptr<Application>* Application::GetSharedPtr() {
+std::shared_ptr<Application> *Application::GetSharedPtr()
+{
     return &app;
 }
 
-void Application::ConnectToApp(std::shared_ptr<Application>* mainApp) {
+void Application::ConnectToApp(std::shared_ptr<Application> *mainApp)
+{
     app = *mainApp;
     app->window->EnableContext();
 }
 
-void Application::Setup(int width, int height, const std::string& title, bool fullscreen, RLWindowResizeCallback callback) {
-    if (app == nullptr){
+void Application::Setup(int width, int height, const std::string &title, bool fullscreen,
+                        RLWindowResizeCallback callback)
+{
+    if (app == nullptr)
+    {
         GetApplication(); // creates app, can ignore result since it's saved in app
     }
 
@@ -52,38 +63,47 @@ void Application::Setup(int width, int height, const std::string& title, bool fu
     app->isSetup = true;
 }
 
-void Application::Update() {
+void Application::Update()
+{
     app->scene->systemManager.UpdateSystems();
 }
 
-void Application::Reset() {
+void Application::Reset()
+{
     app->scene->Reset();
 }
 
-bool Application::IsSetup() {
+bool Application::IsSetup()
+{
     return app->isSetup;
 }
 
-Window &Application::GetWindow() {
+Window &Application::GetWindow()
+{
     return *app->window;
 }
 
-Window *Application::GetWindowUnsafe() {
+Window *Application::GetWindowUnsafe()
+{
     return app->window.get();
 }
 
-std::weak_ptr<Window> Application::GetWindowPtr() {
+std::weak_ptr<Window> Application::GetWindowPtr()
+{
     return app->window;
 }
 
-Scene &Application::GetScene() {
+Scene &Application::GetScene()
+{
     return *app->scene;
 }
 
-std::weak_ptr<GraphicsContext> Application::GetGraphicsContextPtr() {
+std::weak_ptr<GraphicsContext> Application::GetGraphicsContextPtr()
+{
     return app->graphicsContext;
 }
 
-GraphicsContext *Application::GetGraphicsContextUnsafe() {
+GraphicsContext *Application::GetGraphicsContextUnsafe()
+{
     return app->graphicsContext.get();
 }

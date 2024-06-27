@@ -10,22 +10,27 @@
 #include "../drivers/vk/VKShader.h"
 #endif
 
-
-std::shared_ptr<rl::Shader> rl::Shader::Create(const std::string &vertexShaderPath, const std::string &pixelShaderPath, const std::weak_ptr<GraphicsContext>& context)
+std::shared_ptr<rl::Shader> rl::Shader::Create(const std::string &vertexShaderPath, const std::string &pixelShaderPath,
+                                               const std::weak_ptr<GraphicsContext> &context)
 {
     switch (GraphicsContext::GetAPI())
     {
-        #ifdef RL_USE_DX11
-        case GraphicsAPI::DX11: return std::make_shared<DX11Shader>(vertexShaderPath, pixelShaderPath, std::static_pointer_cast<DX11Context>(context.lock()));
-        #endif
+#ifdef RL_USE_DX11
+        case GraphicsAPI::DX11:
+            return std::make_shared<DX11Shader>(vertexShaderPath, pixelShaderPath,
+                                                std::static_pointer_cast<DX11Context>(context.lock()));
+#endif
 
-        #ifdef RL_USE_VULKAN
-        case GraphicsAPI::Vulkan: return std::make_shared<VKShader>(vertexShaderPath, pixelShaderPath, std::static_pointer_cast<VKContext>(context.lock()));
-        #endif
+#ifdef RL_USE_VULKAN
+        case GraphicsAPI::Vulkan:
+            return std::make_shared<VKShader>(vertexShaderPath, pixelShaderPath,
+                                              std::static_pointer_cast<VKContext>(context.lock()));
+#endif
 
-        default: break;
+        default:
+            break;
     }
 
-    //throw error
+    // throw error
     return nullptr;
 }

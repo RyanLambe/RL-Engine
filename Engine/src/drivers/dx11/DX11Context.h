@@ -1,40 +1,39 @@
 #pragma once
 
+#include "../../graphics/GraphicsContext.h"
 #include "DX11.h"
 
-#include "../../graphics/GraphicsContext.h"
+namespace rl
+{
+    class DX11Context : public GraphicsContext
+    {
+    public:
+        DX11Context(const GraphicsContext &) = delete;
+        DX11Context() = delete;
+        explicit DX11Context(Window *window);
 
-namespace rl {
-	class DX11Context : public GraphicsContext
-	{
-	public:
+        void DrawIndexed(uint32_t size) const noexcept override;
 
-		DX11Context(const GraphicsContext&) = delete;
-		DX11Context() = delete;
-		explicit DX11Context(Window* window);
+        void Present() const override;
 
-		void DrawIndexed(uint32_t size) const noexcept override;
+        [[nodiscard]] void *GetDXDevice() const override;
+        [[nodiscard]] void *GetDXContext() const override;
 
-		void Present() const override;
+        void EnableTransparency(bool enable = true) const noexcept;
+        void EnableDepth(bool enable = true) const;
 
-        [[nodiscard]] void* GetDXDevice() const override;
-        [[nodiscard]] void* GetDXContext() const override;
+        ID3D11DeviceContext *GetContext();
+        ID3D11Device *GetDevice();
+        IDXGISwapChain *GetSwap();
 
-		void EnableTransparency(bool enable = true) const noexcept;
-		void EnableDepth(bool enable = true) const;
+    private:
+        uint32_t vsync = 0;
 
-		ID3D11DeviceContext* GetContext();
-		ID3D11Device* GetDevice();
-		IDXGISwapChain* GetSwap();
+        Microsoft::WRL::ComPtr<IDXGISwapChain> swap = Microsoft::WRL::ComPtr<IDXGISwapChain>();
+        Microsoft::WRL::ComPtr<ID3D11DeviceContext> context = Microsoft::WRL::ComPtr<ID3D11DeviceContext>();
+        Microsoft::WRL::ComPtr<ID3D11Device> device = Microsoft::WRL::ComPtr<ID3D11Device>();
 
-	private:
-		uint32_t vsync = 0;
-
-		Microsoft::WRL::ComPtr<IDXGISwapChain> swap = Microsoft::WRL::ComPtr<IDXGISwapChain>();
-		Microsoft::WRL::ComPtr<ID3D11DeviceContext> context = Microsoft::WRL::ComPtr<ID3D11DeviceContext>();
-		Microsoft::WRL::ComPtr<ID3D11Device> device = Microsoft::WRL::ComPtr<ID3D11Device>();
-
-		// textures
-		Microsoft::WRL::ComPtr<ID3D11SamplerState> sampler = Microsoft::WRL::ComPtr<ID3D11SamplerState>();
-	};
-}
+        // textures
+        Microsoft::WRL::ComPtr<ID3D11SamplerState> sampler = Microsoft::WRL::ComPtr<ID3D11SamplerState>();
+    };
+} // namespace rl

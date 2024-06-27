@@ -6,26 +6,32 @@ using namespace rl;
 
 unsigned long long data = -1;
 
-DX11RenderTarget::DX11RenderTarget(const std::weak_ptr<Window>& windowPtr, const std::weak_ptr<DX11Context>& contextPtr)
-: contextPtr(contextPtr), windowPtr(windowPtr)
+DX11RenderTarget::DX11RenderTarget(const std::weak_ptr<Window> &windowPtr,
+                                   const std::weak_ptr<DX11Context> &contextPtr) :
+    contextPtr(contextPtr), windowPtr(windowPtr)
 {
-    if(contextPtr.expired()){
+    if (contextPtr.expired())
+    {
         RL_THROW_EXCEPTION("Cannot access Context");
     }
 
-    if(auto window = windowPtr.lock()){
+    if (auto window = windowPtr.lock())
+    {
         width = window->GetWidth();
         height = window->GetHeight();
         Refresh();
     }
-    else{
+    else
+    {
         RL_THROW_EXCEPTION("Cannot access Window");
     }
 }
 
-DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height, const std::weak_ptr<DX11Context> &contextPtr)
-: width(width), height(height), contextPtr(contextPtr) {
-    if(contextPtr.expired()){
+DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height, const std::weak_ptr<DX11Context> &contextPtr) :
+    width(width), height(height), contextPtr(contextPtr)
+{
+    if (contextPtr.expired())
+    {
         RL_THROW_EXCEPTION("Cannot access Context");
     }
     Refresh();
@@ -34,7 +40,7 @@ DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height, const std::w
 void DX11RenderTarget::Enable()
 {
     auto context = contextPtr.lock();
-    if(!context)
+    if (!context)
         RL_THROW_EXCEPTION("Cannot access Context");
 
     context->GetContext()->OMSetRenderTargets(1, target.GetAddressOf(), DSV.Get());
@@ -52,49 +58,53 @@ void DX11RenderTarget::Enable()
 void DX11RenderTarget::Clear()
 {
     auto context = contextPtr.lock();
-    if(!context)
+    if (!context)
         RL_THROW_EXCEPTION("Cannot access Context");
 
-	if(windowPtr.has_value()){
+    if (windowPtr.has_value())
+    {
         auto window = windowPtr.value().lock();
-        if(!window)
+        if (!window)
             RL_THROW_EXCEPTION("Cannot access Window");
 
-        if(width != window->GetWidth() || height != window->GetHeight()){
+        if (width != window->GetWidth() || height != window->GetHeight())
+        {
             width = window->GetWidth();
             height = window->GetHeight();
             Refresh();
         }
     }
 
-	context->GetContext()->ClearRenderTargetView(target.Get(), &clearColor[0]);
-	context->GetContext()->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
+    context->GetContext()->ClearRenderTargetView(target.Get(), &clearColor[0]);
+    context->GetContext()->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 }
 
-void DX11RenderTarget::SetClearColor(const glm::vec4& value) noexcept
+void DX11RenderTarget::SetClearColor(const glm::vec4 &value) noexcept
 {
-	clearColor = value;
+    clearColor = value;
 }
 
 void DX11RenderTarget::Resize(uint32_t w, uint32_t h)
 {
-	width = w;
-	height = h;
+    width = w;
+    height = h;
 
     Refresh();
 }
 
-void *DX11RenderTarget::GetTexture() noexcept {
+void *DX11RenderTarget::GetTexture() noexcept
+{
     return resView.Get();
 }
 
-void DX11RenderTarget::Refresh() {
-
+void DX11RenderTarget::Refresh()
+{
     auto context = contextPtr.lock();
-    if(!context)
+    if (!context)
         RL_THROW_EXCEPTION("Cannot access Context");
 
-    if(windowPtr.has_value()){
+    if (windowPtr.has_value())
+    {
         context->GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
         target.Reset();
         resView.Reset();
@@ -102,7 +112,8 @@ void DX11RenderTarget::Refresh() {
         DX_LOG_ERROR(context->GetSwap()->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0));
         DX_LOG_ERROR(context->GetSwap()->GetBuffer(0, __uuidof(ID3D11Texture2D), &renderTexture));
     }
-    else{
+    else
+    {
         context->GetContext()->OMSetRenderTargets(0, nullptr, nullptr);
         target.Reset();
         resView.Reset();
@@ -139,7 +150,7 @@ void DX11RenderTarget::Refresh() {
     depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     DX_LOG_ERROR(context->GetDevice()->CreateTexture2D(&depthDesc, nullptr, &depthTexture));
 
-    //set depth texture
+    // set depth texture
     D3D11_DEPTH_STENCIL_VIEW_DESC DSVDesc = {};
     DSVDesc.Format = DXGI_FORMAT_D32_FLOAT;
     DSVDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;

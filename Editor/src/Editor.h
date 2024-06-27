@@ -1,15 +1,16 @@
 #pragma once
 
+#include "GuiElement.h"
 #include "core/Application.h"
 #include "graphics/RenderTarget.h"
 #include "imgui.h"
-#include "GuiElement.h"
 #include "types/OptionalVector.h"
 
-namespace rl::editor {
-    class Editor {
+namespace rl::editor
+{
+    class Editor
+    {
     public:
-
         Editor();
         ~Editor();
 
@@ -21,13 +22,13 @@ namespace rl::editor {
         static void Play();
         static void Pause();
 
-        static inline void CreateGuiElement(const std::weak_ptr<GuiElement>& element) {
+        static inline void CreateGuiElement(const std::weak_ptr<GuiElement> &element)
+        {
             guiElements.push_back(element);
         }
 
     private:
-
-        static void OnWindowResize(Window* window, int width, int height);
+        static void OnWindowResize(Window *window, int width, int height);
 
         void SetImGuiStyle();
 
@@ -38,8 +39,8 @@ namespace rl::editor {
         static bool playing;
 
         static std::vector<std::weak_ptr<GuiElement>> guiElements;
-        ImGuiIO* io;
+        ImGuiIO *io;
 
         std::shared_ptr<RenderTarget> renderTarget = nullptr;
     };
-}
+} // namespace rl::editor

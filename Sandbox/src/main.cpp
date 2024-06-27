@@ -1,13 +1,11 @@
 
+#include <components/Camera.h>
+#include <components/MeshComponent.h>
+#include <components/Transform.h>
 #include <core/Application.h>
 #include <core/Input.h>
-
-#include <ecs/SystemManager.h>
 #include <ecs/Component.h>
-
-#include <components/Transform.h>
-#include <components/MeshComponent.h>
-#include <components/Camera.h>
+#include <ecs/SystemManager.h>
 
 using namespace rl;
 
@@ -19,9 +17,11 @@ Entity test4 = 5;
 Entity test5 = 6;
 Entity cam = 1;
 
-class Demo : public System {
+class Demo : public System
+{
 public:
-    void Start() {
+    void Start()
+    {
         // create test entities
         Transform::Create(test);
         MeshComponent::Create(test);
@@ -59,66 +59,83 @@ public:
         Camera::GetComponent(cam).RenderToWindow();
     }
 
-    void Update() {
-        if(Input::GetKey(Key::Keyboard::W) > 0){
+    void Update()
+    {
+        if (Input::GetKey(Key::Keyboard::W) > 0)
+        {
             Transform::GetComponent(cam).Translate(0, 0, 0.01f);
         }
-        if(Input::GetKey(Key::Keyboard::S) > 0){
+        if (Input::GetKey(Key::Keyboard::S) > 0)
+        {
             Transform::GetComponent(cam).Translate(0, 0, -0.01f);
         }
-        if(Input::GetKey(Key::Keyboard::A) > 0){
+        if (Input::GetKey(Key::Keyboard::A) > 0)
+        {
             Transform::GetComponent(cam).Translate(-0.01f, 0, 0);
         }
-        if(Input::GetKey(Key::Keyboard::D) > 0){
+        if (Input::GetKey(Key::Keyboard::D) > 0)
+        {
             Transform::GetComponent(cam).Translate(0.01f, 0, 0);
         }
-        if (Input::GetKey(Key::Keyboard::E) > 0) {
+        if (Input::GetKey(Key::Keyboard::E) > 0)
+        {
             Transform::GetComponent(cam).Translate(0, 0.01f, 0);
         }
-        if (Input::GetKey(Key::Keyboard::Q) > 0) {
+        if (Input::GetKey(Key::Keyboard::Q) > 0)
+        {
             Transform::GetComponent(cam).Translate(0, -0.01f, 0);
         }
-        if (Input::GetKey(Key::Keyboard::I) > 0) {
+        if (Input::GetKey(Key::Keyboard::I) > 0)
+        {
             Transform::GetComponent(cam).Rotate(-0.1f, 0, 0);
         }
-        if (Input::GetKey(Key::Keyboard::K) > 0) {
+        if (Input::GetKey(Key::Keyboard::K) > 0)
+        {
             Transform::GetComponent(cam).Rotate(0.1f, 0, 0);
         }
-        if (Input::GetKey(Key::Keyboard::J) > 0) {
+        if (Input::GetKey(Key::Keyboard::J) > 0)
+        {
             Transform::GetComponent(cam).Rotate(0, -0.1f, 0);
         }
-        if (Input::GetKey(Key::Keyboard::L) > 0) {
+        if (Input::GetKey(Key::Keyboard::L) > 0)
+        {
             Transform::GetComponent(cam).Rotate(0, 0.1f, 0);
         }
-        if (Input::GetKey(Key::Keyboard::O) > 0) {
+        if (Input::GetKey(Key::Keyboard::O) > 0)
+        {
             Transform::GetComponent(cam).Rotate(0, 0, -0.1f);
         }
-        if (Input::GetKey(Key::Keyboard::U) > 0) {
+        if (Input::GetKey(Key::Keyboard::U) > 0)
+        {
             Transform::GetComponent(cam).Rotate(0, 0, 0.1f);
         }
 
-        if (Input::GetKey(Key::Keyboard::N) > 0) {
+        if (Input::GetKey(Key::Keyboard::N) > 0)
+        {
             Transform::GetComponent(test1).Scale(0.9999f);
         }
-        if (Input::GetKey(Key::Keyboard::M) > 0) {
+        if (Input::GetKey(Key::Keyboard::M) > 0)
+        {
             Transform::GetComponent(test1).Scale(1.0001f);
         }
 
         Transform temp = Transform::GetComponent(cam);
         glm::vec3 rot = Transform::GetComponent(cam).GetPosition();
-        //RL_LOG(rot.x, ", ", rot.y, ", ", rot.z);
+        // RL_LOG(rot.x, ", ", rot.y, ", ", rot.z);
     }
 };
 
-int main() {
+int main()
+{
     Application::Setup(1280, 720, "RL Engine 2.0", false);
 
     Application::GetScene().systemManager.AddSystem<Demo>();
 
-    //Application::GetRenderer().RenderToWindow();
+    // Application::GetRenderer().RenderToWindow();
 
     Application::GetScene().systemManager.StartSystems();
-    while (Application::GetWindow().Update()){
+    while (Application::GetWindow().Update())
+    {
         Application::Update();
         Application::GetGraphicsContextUnsafe()->Present();
     }

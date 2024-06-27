@@ -5,31 +5,36 @@
 #include "../core/RLResult.h"
 #include "../types/OptionalVector.h"
 
-namespace rl {
+namespace rl
+{
 
     using Entity = size_t;
 
-    namespace internal {
-        class ComponentType {
+    namespace internal
+    {
+        class ComponentType
+        {
         public:
             virtual ~ComponentType() = default;
         };
-    }
+    } // namespace internal
 
-    template <typename T>
-    class ComponentType : public internal::ComponentType {
+    template <typename T> class ComponentType : public internal::ComponentType
+    {
     public:
-
         ComponentType() = default;
 
-        T& Create(Entity entity)
+        T &Create(Entity entity)
         {
-            if(entityToIndex.contains(entity)){
+            if (entityToIndex.contains(entity))
+            {
                 RL_THROW_EXCEPTION("Multiple components cannot be added to the same entity.");
             }
 
-            for (size_t i = 0; i < components.size(); i++) {
-                if (components[i] == std::nullopt) {
+            for (size_t i = 0; i < components.size(); i++)
+            {
+                if (components[i] == std::nullopt)
+                {
                     entityToIndex[entity] = i;
                     components[i] = T();
                     components[i].value().setEntity(entity);
@@ -47,9 +52,9 @@ namespace rl {
 
         RLResult Delete(Entity entity)
         {
-            if(!entityToIndex.contains(entity))
+            if (!entityToIndex.contains(entity))
                 return RLResult(ErrorCode::InvalidArguments);
-            if(!components[entityToIndex[entity]].has_value())
+            if (!components[entityToIndex[entity]].has_value())
                 return RLResult(ErrorCode::InvalidArguments);
 
             components[entityToIndex[entity]].reset();
@@ -58,7 +63,7 @@ namespace rl {
             return RLResult(ErrorCode::Success);
         }
 
-        T& GetComponent(Entity entity)
+        T &GetComponent(Entity entity)
         {
             return components[entityToIndex[entity]].value();
         }
@@ -68,7 +73,7 @@ namespace rl {
             return entityToIndex.contains(entity);
         }
 
-        OptionalVector<T>& GetAllComponents() noexcept
+        OptionalVector<T> &GetAllComponents() noexcept
         {
             return components;
         }
@@ -77,4 +82,4 @@ namespace rl {
         std::unordered_map<Entity, size_t> entityToIndex = {};
         OptionalVector<T> components = OptionalVector<T>();
     };
-}
+} // namespace rl

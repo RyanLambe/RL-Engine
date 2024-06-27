@@ -1,9 +1,10 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
-namespace rl{
+namespace rl
+{
 
     class System
     {
@@ -13,12 +14,12 @@ namespace rl{
         virtual void Update() = 0;
     };
 
-    class SystemManager {
+    class SystemManager
+    {
     public:
         SystemManager() = default;
 
-        template <typename T>
-        void AddSystem() noexcept
+        template <typename T> void AddSystem() noexcept
         {
             static_assert(std::is_base_of<System, T>::value, "T must inherit from System");
             systems.push_back(std::make_unique<T>());
@@ -30,4 +31,4 @@ namespace rl{
     private:
         std::vector<std::unique_ptr<System>> systems = std::vector<std::unique_ptr<System>>();
     };
-}
+} // namespace rl
