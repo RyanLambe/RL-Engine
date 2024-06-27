@@ -29,7 +29,7 @@ namespace rl
     void Renderer::Update()
     {
         glm::mat4 viewMatrix;
-        for (const auto &cam : Camera::GetAllComponents())
+        for (const auto& cam : Camera::GetAllComponents())
         {
             if (cam.GetRenderTarget() == nullptr)
             {
@@ -57,7 +57,7 @@ namespace rl
             // lights
 
             // draw
-            for (auto &mesh : MeshComponent::GetAllComponents())
+            for (auto& mesh : MeshComponent::GetAllComponents())
             {
                 if (!Transform::HasComponent(mesh.GetEntity()))
                 {

@@ -9,8 +9,8 @@ namespace rl
     class DX11Shader : public Shader
     {
     public:
-        DX11Shader(const std::string &vertexShaderPath, const std::string &pixelShaderPath,
-                   const std::weak_ptr<DX11Context> &contextPtr);
+        DX11Shader(const std::string& vertexShaderPath, const std::string& pixelShaderPath,
+                   const std::weak_ptr<DX11Context>& contextPtr);
 
         void Enable() override;
 

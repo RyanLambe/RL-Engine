@@ -9,9 +9,9 @@
 
 using namespace rl::editor;
 
-typedef void (*SetupFunc)(void *mainApp);
+typedef void (*SetupFunc)(void* mainApp);
 
-ProjectManager *ProjectManager::projectManager = nullptr;
+ProjectManager* ProjectManager::projectManager = nullptr;
 
 ProjectManager::ProjectManager()
 {
@@ -29,7 +29,7 @@ ProjectManager::~ProjectManager()
         FreeLibrary(projectManager->library);
 }
 
-bool ProjectManager::New(const std::string &name, const std::string &path)
+bool ProjectManager::New(const std::string& name, const std::string& path)
 {
     projectManager->projectName = name;
     projectManager->projectDir = path + "/" + name + "/";
@@ -63,7 +63,7 @@ bool ProjectManager::New(const std::string &name, const std::string &path)
     return true;
 }
 
-bool ProjectManager::Open(const std::string &name, const std::string &path)
+bool ProjectManager::Open(const std::string& name, const std::string& path)
 {
     projectManager->projectName = name;
     projectManager->projectDir = path + "/" + name + "/";
@@ -163,7 +163,7 @@ void ProjectManager::Run()
 
     try
     {
-        func((void *)Application::GetSharedPtr());
+        func((void*)Application::GetSharedPtr());
     }
     catch (...)
     {

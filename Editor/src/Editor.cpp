@@ -33,10 +33,10 @@ Editor::Editor()
     io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     SetImGuiStyle();
 
-    ImGui_ImplGlfw_InitForOther((GLFWwindow *)Application::GetWindow().GetGLFWwindow(), true);
+    ImGui_ImplGlfw_InitForOther((GLFWwindow*)Application::GetWindow().GetGLFWwindow(), true);
     if (auto context = Application::GetGraphicsContextPtr().lock())
     {
-        ImGui_ImplDX11_Init((ID3D11Device *)context->GetDXDevice(), (ID3D11DeviceContext *)context->GetDXContext());
+        ImGui_ImplDX11_Init((ID3D11Device*)context->GetDXDevice(), (ID3D11DeviceContext*)context->GetDXContext());
     }
     else
     {
@@ -72,7 +72,7 @@ void Editor::Render()
 
     for (int i = 0; i < guiElements.size(); i++)
     {
-        if (const auto &elementValue = guiElements[i].lock())
+        if (const auto& elementValue = guiElements[i].lock())
         {
             if (elementValue->IsOpen())
             {
@@ -104,7 +104,7 @@ void Editor::Exit()
     open = false;
 }
 
-void Editor::OnWindowResize(Window *window, int width, int height)
+void Editor::OnWindowResize(Window* window, int width, int height)
 {
     newWidth = width;
     newHeight = height;
@@ -115,7 +115,7 @@ void Editor::SetImGuiStyle()
 {
     ImGui::StyleColorsDark();
     io->Fonts->AddFontFromFileTTF("fonts/Tauri/Tauri-Regular.ttf", 18.0f);
-    ImGuiStyle &style = ImGui::GetStyle();
+    ImGuiStyle& style = ImGui::GetStyle();
     if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
         style.WindowRounding = 1.0f;

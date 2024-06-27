@@ -19,7 +19,7 @@ namespace rl
         {
             position = glm::vec3(x, y, z);
         }
-        inline void SetPosition(const glm::vec3 &pos) noexcept
+        inline void SetPosition(const glm::vec3& pos) noexcept
         {
             position = pos;
         }
@@ -28,11 +28,11 @@ namespace rl
         {
             rotation = EulerToQuat(glm::vec3(x, y, z));
         }
-        inline void SetRotation(const glm::vec3 &rot) noexcept
+        inline void SetRotation(const glm::vec3& rot) noexcept
         {
             rotation = EulerToQuat(rot);
         }
-        inline void SetRotation(float angle, const glm::vec3 &axis) noexcept
+        inline void SetRotation(float angle, const glm::vec3& axis) noexcept
         {
             rotation = glm::angleAxis(glm::radians(angle), axis);
         }
@@ -45,21 +45,21 @@ namespace rl
         {
             scale = glm::vec3(x, y, z);
         }
-        inline void SetScale(const glm::vec3 &newScale) noexcept
+        inline void SetScale(const glm::vec3& newScale) noexcept
         {
             scale = newScale;
         }
 
         // get values
-        [[nodiscard]] inline const glm::vec3 &GetPosition() const noexcept
+        [[nodiscard]] inline const glm::vec3& GetPosition() const noexcept
         {
             return position;
         }
-        [[nodiscard]] inline const glm::quat &GetRotation() const noexcept
+        [[nodiscard]] inline const glm::quat& GetRotation() const noexcept
         {
             return rotation;
         }
-        [[nodiscard]] inline const glm::vec3 &GetScale() const noexcept
+        [[nodiscard]] inline const glm::vec3& GetScale() const noexcept
         {
             return scale;
         }
@@ -73,7 +73,7 @@ namespace rl
         {
             position += rotation * glm::vec3(x, y, z);
         }
-        inline void Translate(const glm::vec3 &offset) noexcept
+        inline void Translate(const glm::vec3& offset) noexcept
         {
             position += rotation * offset;
         }
@@ -82,11 +82,11 @@ namespace rl
         {
             rotation *= EulerToQuat(glm::vec3(x, y, z));
         }
-        inline void Rotate(const glm::vec3 &offset) noexcept
+        inline void Rotate(const glm::vec3& offset) noexcept
         {
             rotation *= EulerToQuat(offset);
         }
-        inline void Rotate(float angle, const glm::vec3 &axis) noexcept
+        inline void Rotate(float angle, const glm::vec3& axis) noexcept
         {
             rotation *= glm::angleAxis(glm::radians(angle), axis);
         }
@@ -99,18 +99,18 @@ namespace rl
         {
             scale *= glm::vec3(x, y, z);
         }
-        inline void Scale(const glm::vec3 &amount) noexcept
+        inline void Scale(const glm::vec3& amount) noexcept
         {
             scale *= amount;
         }
 
         // get matrices
-        [[nodiscard]] const glm::mat4 &GetTransformationMatrix() noexcept;
+        [[nodiscard]] const glm::mat4& GetTransformationMatrix() noexcept;
         [[nodiscard]] glm::mat4 GetInverseTransformationMatrix() const noexcept;
 
-        static glm::quat EulerToQuat(const glm::vec3 &euler) noexcept;
-        static glm::vec3 QuatToEuler(const glm::quat &quat) noexcept;
-        static float ExtractAngleFromQuat(glm::quat &quat, const glm::vec3 &axis) noexcept;
+        static glm::quat EulerToQuat(const glm::vec3& euler) noexcept;
+        static glm::vec3 QuatToEuler(const glm::quat& quat) noexcept;
+        static float ExtractAngleFromQuat(glm::quat& quat, const glm::vec3& axis) noexcept;
 
     private:
         glm::mat4 matrix = glm::mat4(1);

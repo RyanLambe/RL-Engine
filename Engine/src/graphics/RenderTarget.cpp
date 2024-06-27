@@ -10,8 +10,8 @@
 #include "../drivers/vk/VKRenderTarget.h"
 #endif
 
-std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create(const std::weak_ptr<Window> &window,
-                                                           const std::weak_ptr<GraphicsContext> &context)
+std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create(const std::weak_ptr<Window>& window,
+                                                           const std::weak_ptr<GraphicsContext>& context)
 {
     switch (GraphicsContext::GetAPI())
     {
@@ -34,7 +34,7 @@ std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create(const std::weak_ptr<W
 }
 
 std::shared_ptr<rl::RenderTarget> rl::RenderTarget::Create(uint32_t width, uint32_t height,
-                                                           const std::weak_ptr<GraphicsContext> &context)
+                                                           const std::weak_ptr<GraphicsContext>& context)
 {
     switch (GraphicsContext::GetAPI())
     {

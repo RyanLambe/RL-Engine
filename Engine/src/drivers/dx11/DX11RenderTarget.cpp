@@ -6,8 +6,8 @@ using namespace rl;
 
 unsigned long long data = -1;
 
-DX11RenderTarget::DX11RenderTarget(const std::weak_ptr<Window> &windowPtr,
-                                   const std::weak_ptr<DX11Context> &contextPtr) :
+DX11RenderTarget::DX11RenderTarget(const std::weak_ptr<Window>& windowPtr,
+                                   const std::weak_ptr<DX11Context>& contextPtr) :
     contextPtr(contextPtr), windowPtr(windowPtr)
 {
     if (contextPtr.expired())
@@ -27,7 +27,7 @@ DX11RenderTarget::DX11RenderTarget(const std::weak_ptr<Window> &windowPtr,
     }
 }
 
-DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height, const std::weak_ptr<DX11Context> &contextPtr) :
+DX11RenderTarget::DX11RenderTarget(uint32_t width, uint32_t height, const std::weak_ptr<DX11Context>& contextPtr) :
     width(width), height(height), contextPtr(contextPtr)
 {
     if (contextPtr.expired())
@@ -79,7 +79,7 @@ void DX11RenderTarget::Clear()
     context->GetContext()->ClearDepthStencilView(DSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 }
 
-void DX11RenderTarget::SetClearColor(const glm::vec4 &value) noexcept
+void DX11RenderTarget::SetClearColor(const glm::vec4& value) noexcept
 {
     clearColor = value;
 }
@@ -92,7 +92,7 @@ void DX11RenderTarget::Resize(uint32_t w, uint32_t h)
     Refresh();
 }
 
-void *DX11RenderTarget::GetTexture() noexcept
+void* DX11RenderTarget::GetTexture() noexcept
 {
     return resView.Get();
 }

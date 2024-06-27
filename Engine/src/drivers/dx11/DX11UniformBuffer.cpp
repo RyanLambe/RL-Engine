@@ -1,7 +1,7 @@
 #include "dx11UniformBuffer.h"
 
 rl::DX11UniformBuffer::DX11UniformBuffer(uint32_t size, ShaderType shaderType, uint32_t binding,
-                                         const std::weak_ptr<DX11Context> &contextPtr) :
+                                         const std::weak_ptr<DX11Context>& contextPtr) :
     shaderType(shaderType), binding(binding), contextPtr(contextPtr)
 {
     if (size == 0)
@@ -27,7 +27,7 @@ rl::DX11UniformBuffer::DX11UniformBuffer(uint32_t size, ShaderType shaderType, u
     }
 }
 
-void rl::DX11UniformBuffer::SetData(const void *data, uint32_t size, uint32_t offset)
+void rl::DX11UniformBuffer::SetData(const void* data, uint32_t size, uint32_t offset)
 {
     auto context = contextPtr.lock();
     if (!context)
@@ -40,7 +40,7 @@ void rl::DX11UniformBuffer::SetData(const void *data, uint32_t size, uint32_t of
 
     DX_LOG_ERROR(context->GetContext()->Map(buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource));
 
-    memcpy((char *)mappedSubResource.pData + offset, data, size);
+    memcpy((char*)mappedSubResource.pData + offset, data, size);
 
     context->GetContext()->Unmap(buffer.Get(), 0);
 

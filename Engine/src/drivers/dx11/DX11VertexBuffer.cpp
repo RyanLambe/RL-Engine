@@ -2,8 +2,8 @@
 
 using namespace rl;
 
-rl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex> &data, bool dynamic,
-                                       const std::weak_ptr<DX11Context> &contextPtr) :
+rl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic,
+                                       const std::weak_ptr<DX11Context>& contextPtr) :
     contextPtr(contextPtr)
 {
     isDynamic = dynamic;
@@ -51,7 +51,7 @@ void DX11VertexBuffer::Enable()
     }
 }
 
-void DX11VertexBuffer::Set(const std::vector<Vertex> &data)
+void DX11VertexBuffer::Set(const std::vector<Vertex>& data)
 {
     if (!isDynamic)
     {

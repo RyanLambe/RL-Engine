@@ -2,8 +2,8 @@
 
 using namespace rl;
 
-DX11IndexBuffer::DX11IndexBuffer(const std::vector<uint32_t> &data, bool dynamic,
-                                 const std::weak_ptr<DX11Context> &contextPtr) :
+DX11IndexBuffer::DX11IndexBuffer(const std::vector<uint32_t>& data, bool dynamic,
+                                 const std::weak_ptr<DX11Context>& contextPtr) :
     contextPtr(contextPtr)
 {
     isDynamic = dynamic;
@@ -49,7 +49,7 @@ void DX11IndexBuffer::Enable()
     }
 }
 
-void DX11IndexBuffer::Set(const std::vector<uint32_t> &data)
+void DX11IndexBuffer::Set(const std::vector<uint32_t>& data)
 {
     if (!isDynamic)
     {

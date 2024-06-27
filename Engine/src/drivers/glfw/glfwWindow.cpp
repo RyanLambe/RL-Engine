@@ -7,7 +7,7 @@
 
 using namespace rl;
 
-glfwWindow::glfwWindow(int width, int height, const std::string &title, bool fullscreen)
+glfwWindow::glfwWindow(int width, int height, const std::string& title, bool fullscreen)
 {
     if (!glfwInit())
     {
@@ -17,7 +17,7 @@ glfwWindow::glfwWindow(int width, int height, const std::string &title, bool ful
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_TRUE);
 
-    GLFWmonitor *monitor = fullscreen ? glfwGetPrimaryMonitor() : nullptr;
+    GLFWmonitor* monitor = fullscreen ? glfwGetPrimaryMonitor() : nullptr;
     window = glfwCreateWindow(width, height, title.c_str(), monitor, nullptr);
     if (!window)
     {
@@ -38,7 +38,7 @@ glfwWindow::glfwWindow(int width, int height, const std::string &title, bool ful
     }
     else
     {
-        const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         maxWidth = mode->width;
         maxHeight = mode->height;
     }
@@ -75,12 +75,12 @@ bool glfwWindow::Update()
     return !glfwWindowShouldClose(window);
 }
 
-internal::Input *glfwWindow::GetInput() const
+internal::Input* glfwWindow::GetInput() const
 {
-    return (internal::Input *)&input;
+    return (internal::Input*)&input;
 }
 
-void *glfwWindow::GetHWND() const
+void* glfwWindow::GetHWND() const
 {
 #ifdef GLFW_EXPOSE_NATIVE_WIN32
     return glfwGetWin32Window(window);
@@ -88,7 +88,7 @@ void *glfwWindow::GetHWND() const
     return nullptr;
 }
 
-void *glfwWindow::GetGLFWwindow() const
+void* glfwWindow::GetGLFWwindow() const
 {
     return window;
 }
@@ -112,7 +112,7 @@ void glfwWindow::SetResizeCallback(RLWindowResizeCallback callback)
     externalResizeCallback = callback;
 }
 
-void glfwWindow::internalResizeCallback(GLFWwindow *window, int width, int height)
+void glfwWindow::internalResizeCallback(GLFWwindow* window, int width, int height)
 {
     if (!Application::IsSetup())
     {
@@ -123,7 +123,7 @@ void glfwWindow::internalResizeCallback(GLFWwindow *window, int width, int heigh
     if (width == 0 && height == 0)
         return;
 
-    glfwWindow *RLWindow = (glfwWindow *)Application::GetWindowUnsafe();
+    glfwWindow* RLWindow = (glfwWindow*)Application::GetWindowUnsafe();
 
     if (RLWindow->isFullscreen)
     {

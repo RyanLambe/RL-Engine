@@ -4,7 +4,7 @@
 
 using namespace rl;
 
-const glm::mat4 &Transform::GetTransformationMatrix() noexcept
+const glm::mat4& Transform::GetTransformationMatrix() noexcept
 {
     const glm::mat4 pos = glm::translate(glm::mat4(1.0f), position);
     const glm::mat4 rot = glm::mat4_cast(rotation);
@@ -25,7 +25,7 @@ glm::mat4 Transform::GetInverseTransformationMatrix() const noexcept
     return invScale * invRot * invPos;
 }
 
-glm::quat Transform::EulerToQuat(const glm::vec3 &euler) noexcept
+glm::quat Transform::EulerToQuat(const glm::vec3& euler) noexcept
 {
     const glm::quat xQ = glm::angleAxis(glm::radians(euler.x), glm::vec3(1, 0, 0));
     const glm::quat yQ = glm::angleAxis(glm::radians(euler.y), glm::vec3(0, 1, 0));
@@ -34,7 +34,7 @@ glm::quat Transform::EulerToQuat(const glm::vec3 &euler) noexcept
 }
 
 // todo: check if works properly
-glm::vec3 Transform::QuatToEuler(const glm::quat &quat) noexcept
+glm::vec3 Transform::QuatToEuler(const glm::quat& quat) noexcept
 {
     glm::quat q = glm::normalize(quat);
     const float z = ExtractAngleFromQuat(q, glm::vec3(0, 0, 1));
@@ -43,7 +43,7 @@ glm::vec3 Transform::QuatToEuler(const glm::quat &quat) noexcept
     return {x, y, z};
 }
 
-float Transform::ExtractAngleFromQuat(glm::quat &quat, const glm::vec3 &axis) noexcept
+float Transform::ExtractAngleFromQuat(glm::quat& quat, const glm::vec3& axis) noexcept
 {
     const float quatAngle = 2.0f * acosf(quat.w);
     const float div = sinf(quatAngle / 2);

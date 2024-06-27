@@ -12,9 +12,9 @@ namespace rl
     public:
         SystemManager systemManager;
         ComponentCollection components;
-        Camera *mainCamera = nullptr;
+        Camera* mainCamera = nullptr;
 
-        static Scene &MainScene();
+        static Scene& MainScene();
         void Reset()
         {
             systemManager = SystemManager();

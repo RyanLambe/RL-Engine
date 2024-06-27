@@ -12,11 +12,11 @@ namespace rl
     {
     public:
         DX11IndexBuffer() = delete;
-        DX11IndexBuffer(const std::vector<uint32_t> &data, bool dynamic, const std::weak_ptr<DX11Context> &contextPtr);
+        DX11IndexBuffer(const std::vector<uint32_t>& data, bool dynamic, const std::weak_ptr<DX11Context>& contextPtr);
 
         void Enable() override;
 
-        void Set(const std::vector<uint32_t> &data) override;
+        void Set(const std::vector<uint32_t>& data) override;
 
     private:
         std::weak_ptr<DX11Context> contextPtr;

@@ -19,7 +19,7 @@ uint32_t rl::MeshComponent::GetIndexCount() const
     return indexCount;
 }
 
-void rl::MeshComponent::LoadMesh(const std::string &fileName)
+void rl::MeshComponent::LoadMesh(const std::string& fileName)
 {
     std::ifstream file(fileName);
     if (!file.is_open())
@@ -62,7 +62,7 @@ void rl::MeshComponent::LoadMesh(const std::string &fileName)
             // move vertex data into vertex struct
             for (int i = 0; i < 3; i++)
             {
-                Vertex temp{};
+                Vertex temp {};
                 temp.position.x = verts[curVert[i] - 1].x;
                 temp.position.y = verts[curVert[i] - 1].y;
                 temp.position.z = verts[curVert[i] - 1].z;

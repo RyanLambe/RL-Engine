@@ -2,7 +2,7 @@
 
 void rl::SystemManager::StartSystems()
 {
-    for (auto &system : systems)
+    for (auto& system : systems)
     {
         system->Start();
     }
@@ -10,7 +10,7 @@ void rl::SystemManager::StartSystems()
 
 void rl::SystemManager::UpdateSystems()
 {
-    for (auto &system : systems)
+    for (auto& system : systems)
     {
         system->Update();
     }

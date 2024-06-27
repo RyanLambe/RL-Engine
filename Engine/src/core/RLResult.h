@@ -69,7 +69,7 @@ namespace rl
             message = oss.str();
         }
 
-        [[nodiscard]] const char *what() const noexcept override
+        [[nodiscard]] const char* what() const noexcept override
         {
             return message.c_str();
         }

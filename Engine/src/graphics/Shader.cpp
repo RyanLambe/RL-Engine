@@ -10,8 +10,8 @@
 #include "../drivers/vk/VKShader.h"
 #endif
 
-std::shared_ptr<rl::Shader> rl::Shader::Create(const std::string &vertexShaderPath, const std::string &pixelShaderPath,
-                                               const std::weak_ptr<GraphicsContext> &context)
+std::shared_ptr<rl::Shader> rl::Shader::Create(const std::string& vertexShaderPath, const std::string& pixelShaderPath,
+                                               const std::weak_ptr<GraphicsContext>& context)
 {
     switch (GraphicsContext::GetAPI())
     {

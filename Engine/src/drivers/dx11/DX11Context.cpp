@@ -2,7 +2,7 @@
 
 using namespace rl;
 
-DX11Context::DX11Context(Window *window)
+DX11Context::DX11Context(Window* window)
 {
     if (window == nullptr)
     {
@@ -38,14 +38,14 @@ DX11Context::DX11Context(Window *window)
                                                  &context));
 
     // disable alt + enter to toggle fullscreen
-    IDXGIDevice *dxgiDevice;
-    DX_THROW_ERROR(device->QueryInterface(__uuidof(IDXGIDevice), (void **)&dxgiDevice));
+    IDXGIDevice* dxgiDevice;
+    DX_THROW_ERROR(device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice));
 
-    IDXGIAdapter *adapter;
-    DX_THROW_ERROR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void **)&adapter));
+    IDXGIAdapter* adapter;
+    DX_THROW_ERROR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&adapter));
 
-    IDXGIFactory *factory;
-    adapter->GetParent(__uuidof(IDXGIFactory), (void **)&factory);
+    IDXGIFactory* factory;
+    adapter->GetParent(__uuidof(IDXGIFactory), (void**)&factory);
     factory->MakeWindowAssociation((HWND)window->GetHWND(), DXGI_MWA_NO_ALT_ENTER);
 
     // set viewport size
@@ -98,8 +98,8 @@ void DX11Context::Present() const
 
 void DX11Context::EnableTransparency(bool enable) const noexcept
 {
-    D3D11_BLEND_DESC BlendStateDescription = CD3D11_BLEND_DESC{CD3D11_DEFAULT{}};
-    ID3D11BlendState *blend;
+    D3D11_BLEND_DESC BlendStateDescription = CD3D11_BLEND_DESC {CD3D11_DEFAULT {}};
+    ID3D11BlendState* blend;
 
     BlendStateDescription.RenderTarget[0].BlendEnable = TRUE;
     BlendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -134,27 +134,27 @@ void DX11Context::EnableDepth(bool enable) const
     depthState.Reset();
 }
 
-ID3D11DeviceContext *DX11Context::GetContext()
+ID3D11DeviceContext* DX11Context::GetContext()
 {
     return context.Get();
 }
 
-ID3D11Device *DX11Context::GetDevice()
+ID3D11Device* DX11Context::GetDevice()
 {
     return device.Get();
 }
 
-IDXGISwapChain *DX11Context::GetSwap()
+IDXGISwapChain* DX11Context::GetSwap()
 {
     return swap.Get();
 }
 
-void *DX11Context::GetDXDevice() const
+void* DX11Context::GetDXDevice() const
 {
     return device.Get();
 }
 
-void *DX11Context::GetDXContext() const
+void* DX11Context::GetDXContext() const
 {
     return context.Get();
 }

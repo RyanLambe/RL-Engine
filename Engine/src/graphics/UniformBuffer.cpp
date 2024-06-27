@@ -11,7 +11,7 @@
 #endif
 
 std::shared_ptr<rl::UniformBuffer> rl::UniformBuffer::Create(uint32_t size, ShaderType shaderType, uint32_t binding,
-                                                             const std::weak_ptr<GraphicsContext> &context)
+                                                             const std::weak_ptr<GraphicsContext>& context)
 {
     switch (GraphicsContext::GetAPI())
     {

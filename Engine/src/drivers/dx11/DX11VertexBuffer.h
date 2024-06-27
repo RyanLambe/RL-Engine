@@ -13,11 +13,11 @@ namespace rl
     {
     public:
         DX11VertexBuffer() = delete;
-        DX11VertexBuffer(const std::vector<Vertex> &data, bool dynamic, const std::weak_ptr<DX11Context> &contextPtr);
+        DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<DX11Context>& contextPtr);
 
         void Enable() override;
 
-        void Set(const std::vector<Vertex> &data) override;
+        void Set(const std::vector<Vertex>& data) override;
 
     private:
         std::weak_ptr<DX11Context> contextPtr;

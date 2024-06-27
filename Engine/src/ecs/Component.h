@@ -14,16 +14,16 @@ namespace rl
         class ComponentHelper
         {
         public:
-            static ComponentCollection &FindActiveComponentCollection();
+            static ComponentCollection& FindActiveComponentCollection();
         };
     } // namespace internal
 
-    template <typename T> class Component
+    template<typename T> class Component
     {
     public:
         Component() = default;
 
-        static inline T &Create(Entity entity)
+        static inline T& Create(Entity entity)
         {
             return internal::ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->Create(entity);
         }
@@ -33,7 +33,7 @@ namespace rl
             return internal::ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->Delete(entity);
         }
 
-        inline static T &GetComponent(Entity entity)
+        inline static T& GetComponent(Entity entity)
         {
             return internal::ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->GetComponent(
                 entity);
@@ -45,7 +45,7 @@ namespace rl
                 entity);
         }
 
-        inline static OptionalVector<T> &GetAllComponents() noexcept
+        inline static OptionalVector<T>& GetAllComponents() noexcept
         {
             return internal::ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->GetAllComponents();
         }

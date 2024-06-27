@@ -2,12 +2,12 @@
 
 #include "../core/Application.h"
 
-rl::Camera *rl::Camera::GetMain()
+rl::Camera* rl::Camera::GetMain()
 {
     return Application::GetScene().mainCamera;
 }
 
-void rl::Camera::SetMain(Camera *cam)
+void rl::Camera::SetMain(Camera* cam)
 {
     Application::GetScene().mainCamera = cam;
 }

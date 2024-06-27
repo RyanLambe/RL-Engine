@@ -19,12 +19,12 @@ namespace rl
         };
     } // namespace internal
 
-    template <typename T> class ComponentType : public internal::ComponentType
+    template<typename T> class ComponentType : public internal::ComponentType
     {
     public:
         ComponentType() = default;
 
-        T &Create(Entity entity)
+        T& Create(Entity entity)
         {
             if (entityToIndex.contains(entity))
             {
@@ -63,7 +63,7 @@ namespace rl
             return RLResult(ErrorCode::Success);
         }
 
-        T &GetComponent(Entity entity)
+        T& GetComponent(Entity entity)
         {
             return components[entityToIndex[entity]].value();
         }
@@ -73,7 +73,7 @@ namespace rl
             return entityToIndex.contains(entity);
         }
 
-        OptionalVector<T> &GetAllComponents() noexcept
+        OptionalVector<T>& GetAllComponents() noexcept
         {
             return components;
         }

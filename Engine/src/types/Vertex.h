@@ -10,7 +10,7 @@ namespace rl
         glm::vec2 texCoords;
         glm::vec3 normal;
 
-        bool operator==(const Vertex &other) const
+        bool operator==(const Vertex& other) const
         {
             if (position != other.position)
                 return false;

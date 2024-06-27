@@ -9,7 +9,7 @@ namespace rl
         return Application::GetWindow().GetInput()->GetKey(key);
     }
 
-    float Input::GetAxis(const std::string &axis)
+    float Input::GetAxis(const std::string& axis)
     {
         return Application::GetWindow().GetInput()->GetAxis(axis);
     }
@@ -19,7 +19,7 @@ namespace rl
         return Application::GetWindow().GetInput()->GetMousePos();
     }
 
-    void Input::CreateAxis(const std::string &key, Axis axis)
+    void Input::CreateAxis(const std::string& key, Axis axis)
     {
         Application::GetWindow().GetInput()->CreateAxis(key, axis);
     }

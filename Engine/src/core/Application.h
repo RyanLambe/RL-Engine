@@ -13,24 +13,24 @@ namespace rl
     public:
         Application();
 
-        static Application &GetApplication();
-        static std::shared_ptr<Application> *GetSharedPtr();
-        static void ConnectToApp(std::shared_ptr<Application> *mainApp);
+        static Application& GetApplication();
+        static std::shared_ptr<Application>* GetSharedPtr();
+        static void ConnectToApp(std::shared_ptr<Application>* mainApp);
 
-        static void Setup(int width, int height, const std::string &title, bool fullscreen = false,
+        static void Setup(int width, int height, const std::string& title, bool fullscreen = false,
                           RLWindowResizeCallback callback = nullptr);
         static void Update();
         static void Reset();
 
         static bool IsSetup();
 
-        static Window &GetWindow();
-        static Window *GetWindowUnsafe();
+        static Window& GetWindow();
+        static Window* GetWindowUnsafe();
         static std::weak_ptr<Window> GetWindowPtr();
 
-        static Scene &GetScene();
+        static Scene& GetScene();
 
-        static GraphicsContext *GetGraphicsContextUnsafe();
+        static GraphicsContext* GetGraphicsContextUnsafe();
         static std::weak_ptr<GraphicsContext> GetGraphicsContextPtr();
 
     private:

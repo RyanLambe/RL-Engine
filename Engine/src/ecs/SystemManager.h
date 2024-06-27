@@ -19,7 +19,7 @@ namespace rl
     public:
         SystemManager() = default;
 
-        template <typename T> void AddSystem() noexcept
+        template<typename T> void AddSystem() noexcept
         {
             static_assert(std::is_base_of<System, T>::value, "T must inherit from System");
             systems.push_back(std::make_unique<T>());

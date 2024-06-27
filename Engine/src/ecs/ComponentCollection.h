@@ -11,13 +11,13 @@ namespace rl
     class ComponentCollection
     {
     public:
-        template <typename T> ComponentType<T> *GetComponentType()
+        template<typename T> ComponentType<T>* GetComponentType()
         {
             if (!typeToComponentType.contains(typeid(T).hash_code()))
             {
                 typeToComponentType[typeid(T).hash_code()] = std::make_unique<ComponentType<T>>();
             }
-            return (ComponentType<T> *)typeToComponentType[typeid(T).hash_code()].get();
+            return (ComponentType<T>*)typeToComponentType[typeid(T).hash_code()].get();
         }
 
     private:

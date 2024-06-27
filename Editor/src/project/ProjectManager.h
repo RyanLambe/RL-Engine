@@ -13,14 +13,14 @@ namespace rl::editor
         ProjectManager();
         ~ProjectManager();
 
-        static bool New(const std::string &name, const std::string &path);
-        static bool Open(const std::string &name, const std::string &path);
+        static bool New(const std::string& name, const std::string& path);
+        static bool Open(const std::string& name, const std::string& path);
         static void Compile();
 
         static void Run();
 
     private:
-        static ProjectManager *projectManager;
+        static ProjectManager* projectManager;
 
         bool projectOpen = false;
         std::string projectName;

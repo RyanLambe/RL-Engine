@@ -14,8 +14,8 @@ namespace rl
         float nearPlane = 0.01f;
         float farPlane = 1000;
 
-        static Camera *GetMain();
-        static void SetMain(Camera *cam);
+        static Camera* GetMain();
+        static void SetMain(Camera* cam);
         void SetMain();
         [[nodiscard]] bool IsMain() const;
 
@@ -30,7 +30,7 @@ namespace rl
             return renderTarget;
         }
 
-        [[nodiscard]] void *GetTexture() const
+        [[nodiscard]] void* GetTexture() const
         {
             return renderTarget->GetTexture();
         }

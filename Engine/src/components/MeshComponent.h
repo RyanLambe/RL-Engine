@@ -13,7 +13,7 @@ namespace rl
         uint32_t GetIndexCount() const;
 
         // todo: replace with some sort of asset system
-        void LoadMesh(const std::string &fileName);
+        void LoadMesh(const std::string& fileName);
 
     private:
         std::shared_ptr<VertexBuffer> vertexBuffer = nullptr;

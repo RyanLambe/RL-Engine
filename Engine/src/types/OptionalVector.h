@@ -10,12 +10,12 @@
 namespace rl
 {
 
-    template <typename Vec> class OptionalVectorIterator
+    template<typename Vec> class OptionalVectorIterator
     {
     public:
         using ValueType = typename Vec::ValueType;
 
-        OptionalVectorIterator(std::optional<ValueType> *p, std::optional<ValueType> *e) : ptr(p), end(e)
+        OptionalVectorIterator(std::optional<ValueType>* p, std::optional<ValueType>* e) : ptr(p), end(e)
         {
             if (ptr == nullptr)
             {
@@ -34,7 +34,7 @@ namespace rl
             }
         }
 
-        OptionalVectorIterator &operator++()
+        OptionalVectorIterator& operator++()
         {
             do
             {
@@ -45,32 +45,32 @@ namespace rl
             return *this;
         }
 
-        inline ValueType *operator->() const
+        inline ValueType* operator->() const
         {
             return &(*ptr).value();
         }
 
-        inline ValueType &operator*() const
+        inline ValueType& operator*() const
         {
             return (*ptr).value();
         }
 
-        inline bool operator==(const OptionalVectorIterator &other) const
+        inline bool operator==(const OptionalVectorIterator& other) const
         {
             return ptr == other.ptr;
         }
 
-        inline bool operator!=(const OptionalVectorIterator &other) const
+        inline bool operator!=(const OptionalVectorIterator& other) const
         {
             return !(*this == other);
         }
 
     private:
-        std::optional<ValueType> *ptr;
-        std::optional<ValueType> *end;
+        std::optional<ValueType>* ptr;
+        std::optional<ValueType>* end;
     };
 
-    template <typename T> class OptionalVector
+    template<typename T> class OptionalVector
     {
     public:
         using ValueType = T;
@@ -78,17 +78,17 @@ namespace rl
 
         std::vector<std::optional<T>> vec = std::vector<std::optional<T>>();
 
-        inline std::optional<T> &operator[](size_t index)
+        inline std::optional<T>& operator[](size_t index)
         {
             return vec[index];
         }
 
-        inline void push_back(const std::optional<T> &value)
+        inline void push_back(const std::optional<T>& value)
         {
             vec.push_back(value);
         }
 
-        template <typename... Args> inline void emplace_back(Args &&...args)
+        template<typename... Args> inline void emplace_back(Args&&... args)
         {
             vec.emplace_back(std::forward<Args>(args)...);
         }

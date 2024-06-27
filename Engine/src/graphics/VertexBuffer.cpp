@@ -10,8 +10,8 @@
 #include "../drivers/vk/VKVertexBuffer.h"
 #endif
 
-std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Vertex> &data, bool dynamic,
-                                                           const std::weak_ptr<GraphicsContext> &context)
+std::shared_ptr<rl::VertexBuffer> rl::VertexBuffer::Create(const std::vector<Vertex>& data, bool dynamic,
+                                                           const std::weak_ptr<GraphicsContext>& context)
 {
     switch (GraphicsContext::GetAPI())
     {

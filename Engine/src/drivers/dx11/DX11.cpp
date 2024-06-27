@@ -3,7 +3,7 @@
 std::string rl::TranslateHResult(HRESULT code)
 {
     // reformat message
-    char *msgBuffer = nullptr;
+    char* msgBuffer = nullptr;
     DWORD msgLength = FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, code,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPSTR>(&msgBuffer), 0, nullptr);

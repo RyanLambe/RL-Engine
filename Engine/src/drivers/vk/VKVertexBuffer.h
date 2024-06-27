@@ -9,11 +9,11 @@ namespace rl
     {
     public:
         VKVertexBuffer() = delete;
-        VKVertexBuffer(const std::vector<Vertex> &data, bool dynamic, const std::weak_ptr<VKContext> &contextPtr);
+        VKVertexBuffer(const std::vector<Vertex>& data, bool dynamic, const std::weak_ptr<VKContext>& contextPtr);
 
         void Enable() override;
 
-        void Set(const std::vector<Vertex> &data) override;
+        void Set(const std::vector<Vertex>& data) override;
 
     private:
     };

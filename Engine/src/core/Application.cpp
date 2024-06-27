@@ -20,7 +20,7 @@ Application::Application()
 }
 
 // create app if it doesn't exist, get app
-Application &Application::GetApplication()
+Application& Application::GetApplication()
 {
     if (app == nullptr)
     {
@@ -31,18 +31,18 @@ Application &Application::GetApplication()
     return *app;
 }
 
-std::shared_ptr<Application> *Application::GetSharedPtr()
+std::shared_ptr<Application>* Application::GetSharedPtr()
 {
     return &app;
 }
 
-void Application::ConnectToApp(std::shared_ptr<Application> *mainApp)
+void Application::ConnectToApp(std::shared_ptr<Application>* mainApp)
 {
     app = *mainApp;
     app->window->EnableContext();
 }
 
-void Application::Setup(int width, int height, const std::string &title, bool fullscreen,
+void Application::Setup(int width, int height, const std::string& title, bool fullscreen,
                         RLWindowResizeCallback callback)
 {
     if (app == nullptr)
@@ -78,12 +78,12 @@ bool Application::IsSetup()
     return app->isSetup;
 }
 
-Window &Application::GetWindow()
+Window& Application::GetWindow()
 {
     return *app->window;
 }
 
-Window *Application::GetWindowUnsafe()
+Window* Application::GetWindowUnsafe()
 {
     return app->window.get();
 }
@@ -93,7 +93,7 @@ std::weak_ptr<Window> Application::GetWindowPtr()
     return app->window;
 }
 
-Scene &Application::GetScene()
+Scene& Application::GetScene()
 {
     return *app->scene;
 }
@@ -103,7 +103,7 @@ std::weak_ptr<GraphicsContext> Application::GetGraphicsContextPtr()
     return app->graphicsContext;
 }
 
-GraphicsContext *Application::GetGraphicsContextUnsafe()
+GraphicsContext* Application::GetGraphicsContextUnsafe()
 {
     return app->graphicsContext.get();
 }

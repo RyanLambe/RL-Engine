@@ -4,7 +4,7 @@
 
 using namespace rl;
 
-Scene &Scene::MainScene()
+Scene& Scene::MainScene()
 {
     return Application::GetScene();
 }

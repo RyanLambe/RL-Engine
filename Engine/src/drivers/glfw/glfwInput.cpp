@@ -18,7 +18,7 @@ namespace rl
         if (key.GetMethod() == Key::Method::None)
             return 0;
 
-        const auto window = (GLFWwindow *)Application::GetWindow().GetGLFWwindow();
+        const auto window = (GLFWwindow*)Application::GetWindow().GetGLFWwindow();
         if (!window)
             RL_LOG_ERROR("Cannot access input. No glfw window has been created");
 
@@ -35,7 +35,7 @@ namespace rl
         }
     }
 
-    float glfwInput::GetAxis(const std::string &axis)
+    float glfwInput::GetAxis(const std::string& axis)
     {
         if (!axes.contains(axis))
         {
@@ -60,13 +60,13 @@ namespace rl
         }
 
         double x, y;
-        glfwGetCursorPos((GLFWwindow *)Application::GetWindow().GetGLFWwindow(), &x, &y);
+        glfwGetCursorPos((GLFWwindow*)Application::GetWindow().GetGLFWwindow(), &x, &y);
         x /= Application::GetWindow().GetWidth();
         y /= Application::GetWindow().GetHeight();
         return {(float)x, (float)y};
     }
 
-    void glfwInput::CreateAxis(const std::string &key, Axis axis)
+    void glfwInput::CreateAxis(const std::string& key, Axis axis)
     {
         if (axes.contains(key))
         {

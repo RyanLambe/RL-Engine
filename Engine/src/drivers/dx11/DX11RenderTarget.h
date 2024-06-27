@@ -13,17 +13,17 @@ namespace rl
     class DX11RenderTarget : public rl::RenderTarget
     {
     public:
-        DX11RenderTarget(const std::weak_ptr<Window> &windowPtr, const std::weak_ptr<DX11Context> &contextPtr);
-        DX11RenderTarget(uint32_t width, uint32_t height, const std::weak_ptr<DX11Context> &contextPtr);
+        DX11RenderTarget(const std::weak_ptr<Window>& windowPtr, const std::weak_ptr<DX11Context>& contextPtr);
+        DX11RenderTarget(uint32_t width, uint32_t height, const std::weak_ptr<DX11Context>& contextPtr);
 
         void Enable() override;
         void Clear() override;
 
         void Resize(uint32_t width, uint32_t height) override;
 
-        void SetClearColor(const glm::vec4 &value) noexcept override;
+        void SetClearColor(const glm::vec4& value) noexcept override;
 
-        [[nodiscard]] void *GetTexture() noexcept override;
+        [[nodiscard]] void* GetTexture() noexcept override;
 
     private:
         void Refresh();

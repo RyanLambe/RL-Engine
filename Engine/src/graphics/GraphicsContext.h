@@ -20,14 +20,14 @@ namespace rl
     public:
         virtual ~GraphicsContext() = default;
 
-        static std::shared_ptr<GraphicsContext> Create(Window *window);
+        static std::shared_ptr<GraphicsContext> Create(Window* window);
         static GraphicsAPI GetAPI();
 
         virtual void DrawIndexed(uint32_t size) const noexcept = 0;
 
         virtual void Present() const = 0;
 
-        [[nodiscard]] virtual void *GetDXDevice() const = 0;
-        [[nodiscard]] virtual void *GetDXContext() const = 0;
+        [[nodiscard]] virtual void* GetDXDevice() const = 0;
+        [[nodiscard]] virtual void* GetDXContext() const = 0;
     };
 } // namespace rl

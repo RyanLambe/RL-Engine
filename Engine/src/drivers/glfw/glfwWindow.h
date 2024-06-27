@@ -11,17 +11,17 @@ namespace rl
     {
     public:
         glfwWindow() = delete;
-        glfwWindow(int width, int height, const std::string &title, bool fullscreen);
+        glfwWindow(int width, int height, const std::string& title, bool fullscreen);
         ~glfwWindow();
 
         void Setup() override;
         void EnableContext() override;
         [[nodiscard]] bool Update() override;
 
-        [[nodiscard]] internal::Input *GetInput() const override;
+        [[nodiscard]] internal::Input* GetInput() const override;
 
-        [[nodiscard]] void *GetHWND() const override;
-        [[nodiscard]] void *GetGLFWwindow() const override;
+        [[nodiscard]] void* GetHWND() const override;
+        [[nodiscard]] void* GetGLFWwindow() const override;
 
         [[nodiscard]] int GetWidth() const override;
         [[nodiscard]] int GetHeight() const override;
@@ -30,10 +30,10 @@ namespace rl
         void SetFullscreen(bool fullscreen) override;
 
     private:
-        static void internalResizeCallback(GLFWwindow *window, int width, int height);
+        static void internalResizeCallback(GLFWwindow* window, int width, int height);
 
-        glfwWindow *RLWindow = nullptr;
-        GLFWwindow *window = nullptr;
+        glfwWindow* RLWindow = nullptr;
+        GLFWwindow* window = nullptr;
 
         glfwInput input;
 

@@ -2,8 +2,8 @@
 
 using namespace rl;
 
-DX11Shader::DX11Shader(const std::string &vertexShaderPath, const std::string &pixelShaderPath,
-                       const std::weak_ptr<DX11Context> &contextPtr) :
+DX11Shader::DX11Shader(const std::string& vertexShaderPath, const std::string& pixelShaderPath,
+                       const std::weak_ptr<DX11Context>& contextPtr) :
     contextPtr(contextPtr)
 {
     const std::wstring pixelPath(pixelShaderPath.begin(), pixelShaderPath.end());

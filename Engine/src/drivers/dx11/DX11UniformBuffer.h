@@ -10,9 +10,9 @@ namespace rl
     {
     public:
         DX11UniformBuffer(uint32_t size, ShaderType shaderType, uint32_t binding,
-                          const std::weak_ptr<DX11Context> &contextPtr);
+                          const std::weak_ptr<DX11Context>& contextPtr);
 
-        void SetData(const void *data, uint32_t size, uint32_t offset) override;
+        void SetData(const void* data, uint32_t size, uint32_t offset) override;
 
     private:
         std::weak_ptr<DX11Context> contextPtr;
