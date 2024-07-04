@@ -9,7 +9,7 @@ using namespace rl::editor;
 
 void Viewport::Render()
 {
-    if (ImGui::Begin("Renderer", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
+    if (ImGui::Begin("Viewport", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
     {
         if (!Editor::Playing() || Camera::GetMain() == nullptr || Camera::GetMain()->GetRenderTarget() == nullptr)
         {

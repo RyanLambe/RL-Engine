@@ -12,7 +12,7 @@ int main()
     editor::ProjectManager projectManager = editor::ProjectManager();
 
     toolbar = std::make_shared<editor::ToolBar>();
-    editor::Editor::CreateGuiElement(toolbar);
+    editor::Editor::AddGuiElement(toolbar);
 
     // main loop
     while (editor.Update())

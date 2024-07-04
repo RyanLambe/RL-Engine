@@ -22,7 +22,7 @@ namespace rl::editor
         static void Play();
         static void Pause();
 
-        static inline void CreateGuiElement(const std::weak_ptr<GuiElement>& element)
+        static inline void AddGuiElement(const std::weak_ptr<GuiElement>& element)
         {
             guiElements.push_back(element);
         }

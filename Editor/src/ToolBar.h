@@ -18,10 +18,5 @@ namespace rl::editor
     private:
         void ShowViewport();
         std::shared_ptr<Viewport> viewport;
-
-        void NewProject();
-        std::shared_ptr<editor::NewProject> newProject;
-        void OpenProject();
-        std::shared_ptr<editor::OpenProject> openProject;
     };
 }

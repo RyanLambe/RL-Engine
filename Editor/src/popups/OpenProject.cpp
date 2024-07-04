@@ -3,9 +3,29 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 
+#include "../Editor.h"
 #include "../project/ProjectManager.h"
 
 using namespace rl::editor;
+
+using namespace rl::editor;
+
+std::shared_ptr<OpenProject> OpenProject::popup = nullptr;
+
+void OpenProject::OpenPopup()
+{
+    if (!popup)
+    {
+        popup = std::make_shared<OpenProject>();
+    }
+    popup->open = true;
+    Editor::AddGuiElement(popup);
+}
+
+void OpenProject::ClosePopup()
+{
+    popup->open = false;
+}
 
 void OpenProject::Render()
 {
