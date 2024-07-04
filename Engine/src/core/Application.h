@@ -4,6 +4,7 @@
 #include "../ecs/SceneManager.h"
 #include "../ecs/SystemManager.h"
 #include "../graphics/GraphicsContext.h"
+#include "Logger.h"
 #include "Window.h"
 
 namespace rl
@@ -24,11 +25,13 @@ namespace rl
 
         static bool IsSetup();
 
+        static Scene& GetScene();
+
+        static Logger& GetLogger();
+
         static Window& GetWindow();
         static Window* GetWindowUnsafe();
         static std::weak_ptr<Window> GetWindowPtr();
-
-        static Scene& GetScene();
 
         static GraphicsContext* GetGraphicsContextUnsafe();
         static std::weak_ptr<GraphicsContext> GetGraphicsContextPtr();
@@ -39,6 +42,7 @@ namespace rl
         bool isSetup = false;
 
         std::unique_ptr<Scene> scene = nullptr;
+        std::unique_ptr<Logger> logger = nullptr;
         std::shared_ptr<Window> window = nullptr;
         std::shared_ptr<GraphicsContext> graphicsContext = nullptr;
     };

@@ -25,6 +25,9 @@ namespace rl::editor
     {
         if (ImGui::Begin("Console", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
+            for (const auto message : Application::GetLogger().GetMessages())
+                ImGui::Text("%s", message.GetFormatted().c_str());
+
             ImGui::End();
         }
         else

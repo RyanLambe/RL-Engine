@@ -60,6 +60,9 @@ namespace rl
         // setup scene
         app->scene = std::make_unique<Scene>();
 
+        // setup logger
+        app->logger = std::make_unique<Logger>();
+
         app->isSetup = true;
     }
 
@@ -96,6 +99,11 @@ namespace rl
     Scene& Application::GetScene()
     {
         return *app->scene;
+    }
+
+    Logger& Application::GetLogger()
+    {
+        return *app->logger;
     }
 
     std::weak_ptr<GraphicsContext> Application::GetGraphicsContextPtr()

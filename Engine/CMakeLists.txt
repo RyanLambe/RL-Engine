@@ -100,6 +100,7 @@ add_library(Engine STATIC
         src/core/Input.cpp
         src/core/Input.h
         src/core/Key.h
+        src/core/Logger.cpp
         src/core/Logger.h
         src/core/RLResult.h
         src/core/Timer.h
