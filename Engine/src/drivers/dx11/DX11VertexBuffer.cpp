@@ -4,10 +4,8 @@ using namespace rl;
 
 rl::DX11VertexBuffer::DX11VertexBuffer(const std::vector<Vertex>& data, bool dynamic,
                                        const std::weak_ptr<DX11Context>& contextPtr) :
-    contextPtr(contextPtr)
+    contextPtr(contextPtr), isDynamic(dynamic)
 {
-    isDynamic = dynamic;
-
     D3D11_BUFFER_DESC bufferDesc;
     bufferDesc.Usage = D3D11_USAGE_DEFAULT;
     bufferDesc.ByteWidth = sizeof(Vertex) * data.size();

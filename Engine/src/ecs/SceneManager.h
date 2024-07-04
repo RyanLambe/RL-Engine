@@ -24,4 +24,4 @@ namespace rl
 
     class SceneManager
     {};
-} // namespace rl
+}

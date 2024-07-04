@@ -1,5 +1,7 @@
 #include "Input.h"
 
+#include <utility>
+
 #include "Application.h"
 
 namespace rl
@@ -21,6 +23,6 @@ namespace rl
 
     void Input::CreateAxis(const std::string& key, Axis axis)
     {
-        Application::GetWindow().GetInput()->CreateAxis(key, axis);
+        Application::GetWindow().GetInput()->CreateAxis(key, std::move(axis));
     }
-} // namespace rl
+}

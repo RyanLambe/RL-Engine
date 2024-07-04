@@ -25,4 +25,4 @@ namespace rl
 
         Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer = Microsoft::WRL::ComPtr<ID3D11Buffer>();
     };
-} // namespace rl
+}

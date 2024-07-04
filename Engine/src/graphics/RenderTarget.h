@@ -25,4 +25,4 @@ namespace rl
 
         [[nodiscard]] virtual void* GetTexture() noexcept = 0;
     };
-} // namespace rl
+}

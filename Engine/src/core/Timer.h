@@ -22,4 +22,4 @@ namespace rl
     private:
         std::chrono::high_resolution_clock::time_point start;
     };
-} // namespace rl
+}

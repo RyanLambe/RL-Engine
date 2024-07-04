@@ -38,13 +38,13 @@ DX11Context::DX11Context(Window* window)
                                                  &context));
 
     // disable alt + enter to toggle fullscreen
-    IDXGIDevice* dxgiDevice;
+    IDXGIDevice* dxgiDevice = nullptr;
     DX_THROW_ERROR(device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice));
 
-    IDXGIAdapter* adapter;
+    IDXGIAdapter* adapter = nullptr;
     DX_THROW_ERROR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&adapter));
 
-    IDXGIFactory* factory;
+    IDXGIFactory* factory = nullptr;
     adapter->GetParent(__uuidof(IDXGIFactory), (void**)&factory);
     factory->MakeWindowAssociation((HWND)window->GetHWND(), DXGI_MWA_NO_ALT_ENTER);
 
@@ -112,11 +112,11 @@ void DX11Context::EnableTransparency(bool enable) const noexcept
     constexpr float blendFactor[] = {1, 1, 1, 1};
     if (enable)
     {
-        context->OMSetBlendState(blend, blendFactor, 0xffffffff);
+        context->OMSetBlendState(blend, (float*)blendFactor, 0xffffffff);
     }
     else
     {
-        context->OMSetBlendState(blend, blendFactor, 0); // does this work???
+        context->OMSetBlendState(blend, (float*)blendFactor, 0); // does this work???
     }
 }
 

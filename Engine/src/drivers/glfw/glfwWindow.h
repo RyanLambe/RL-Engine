@@ -41,4 +41,4 @@ namespace rl
         bool isFullscreen;
         int minWidth, minHeight, maxWidth, maxHeight;
     };
-} // namespace rl
+}

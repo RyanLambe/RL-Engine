@@ -39,4 +39,4 @@ namespace rl
         Microsoft::WRL::ComPtr<ID3D11DepthStencilView> DSV = Microsoft::WRL::ComPtr<ID3D11DepthStencilView>();
         Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> resView = Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>();
     };
-} // namespace rl
+}

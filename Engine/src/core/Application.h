@@ -35,10 +35,11 @@ namespace rl
 
     private:
         static std::shared_ptr<Application> app;
+        static bool allowApplicationCreation;
         bool isSetup = false;
 
         std::unique_ptr<Scene> scene = nullptr;
         std::shared_ptr<Window> window = nullptr;
         std::shared_ptr<GraphicsContext> graphicsContext = nullptr;
     };
-} // namespace rl
+}

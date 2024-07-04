@@ -19,4 +19,4 @@ namespace rl
         return nullptr;
     }
 
-} // namespace rl
+}

@@ -24,4 +24,4 @@ namespace rl::editor
         void OpenProject();
         std::shared_ptr<editor::OpenProject> openProject;
     };
-} // namespace rl::editor
+}

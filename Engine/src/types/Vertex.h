@@ -22,4 +22,4 @@ namespace rl
             return true;
         }
     };
-} // namespace rl
+}

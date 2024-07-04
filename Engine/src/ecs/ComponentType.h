@@ -13,11 +13,8 @@ namespace rl
     namespace internal
     {
         class ComponentType
-        {
-        public:
-            virtual ~ComponentType() = default;
-        };
-    } // namespace internal
+        {};
+    }
 
     template<typename T> class ComponentType : public internal::ComponentType
     {
@@ -82,4 +79,4 @@ namespace rl
         std::unordered_map<Entity, size_t> entityToIndex = {};
         OptionalVector<T> components = OptionalVector<T>();
     };
-} // namespace rl
+}

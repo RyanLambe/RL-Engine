@@ -8,11 +8,13 @@
 namespace rl
 {
     class Window;
-    typedef void (*RLWindowResizeCallback)(Window* window, int width, int height);
+    using RLWindowResizeCallback = void(*)(Window *, int, int);
 
     class Window
     {
     public:
+        virtual ~Window() = default;
+
         static std::shared_ptr<Window> Create(int width, int height, const std::string& title, bool fullscreen);
 
         // polls events and returns if window should close
@@ -31,4 +33,4 @@ namespace rl
         virtual void SetFullscreen(bool fullscreen) = 0;
         virtual void SetResizeCallback(RLWindowResizeCallback callback) = 0;
     };
-} // namespace rl
+}

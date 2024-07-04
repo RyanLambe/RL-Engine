@@ -4,8 +4,6 @@
 
 using namespace rl;
 
-unsigned long long data = -1;
-
 DX11RenderTarget::DX11RenderTarget(const std::weak_ptr<Window>& windowPtr,
                                    const std::weak_ptr<DX11Context>& contextPtr) :
     contextPtr(contextPtr), windowPtr(windowPtr)

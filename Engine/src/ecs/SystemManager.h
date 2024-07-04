@@ -31,4 +31,4 @@ namespace rl
     private:
         std::vector<std::unique_ptr<System>> systems = std::vector<std::unique_ptr<System>>();
     };
-} // namespace rl
+}

@@ -11,4 +11,4 @@ namespace rl
 
     void VKIndexBuffer::Set(const std::vector<uint32_t>& data) {}
 
-} // namespace rl
+}

@@ -9,7 +9,7 @@
 
 using namespace rl::editor;
 
-typedef void (*SetupFunc)(void* mainApp);
+using SetupFunc = void (*)(void *);
 
 ProjectManager* ProjectManager::projectManager = nullptr;
 
@@ -154,7 +154,7 @@ void ProjectManager::Run()
         return;
     }
 
-    SetupFunc func = (SetupFunc)GetProcAddress(projectManager->library, "GameSetup");
+    auto func = (SetupFunc)GetProcAddress(projectManager->library, "GameSetup");
     if (!func)
     {
         RL_LOG_ERROR("GameSetup function not found: ", GetLastError());

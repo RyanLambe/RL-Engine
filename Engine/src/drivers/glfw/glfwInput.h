@@ -20,4 +20,4 @@ namespace rl
     private:
         std::unordered_map<std::string, Axis> axes = std::unordered_map<std::string, Axis>();
     };
-} // namespace rl
+}

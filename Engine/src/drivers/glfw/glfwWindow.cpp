@@ -123,7 +123,7 @@ void glfwWindow::internalResizeCallback(GLFWwindow* window, int width, int heigh
     if (width == 0 && height == 0)
         return;
 
-    glfwWindow* RLWindow = (glfwWindow*)Application::GetWindowUnsafe();
+    auto* RLWindow = (glfwWindow*)Application::GetWindowUnsafe();
 
     if (RLWindow->isFullscreen)
     {

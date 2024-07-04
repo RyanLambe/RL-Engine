@@ -7,9 +7,9 @@ namespace rl
     {
     public:
         // based on GLFW Keys
-        enum class Keyboard
+        enum class Keyboard : uint16_t
         {
-            Unknown = -1,
+            Unknown = 0,
             Space = 32,
             Apostrophe = 39,
             Comma = 44,
@@ -133,7 +133,7 @@ namespace rl
             Last = 348,
         };
 
-        enum class Mouse
+        enum class Mouse : uint8_t
         {
             Left = 0,
             Right = 1,
@@ -145,7 +145,7 @@ namespace rl
             Scroll = 7,
         };
 
-        enum class Method
+        enum class Method : uint8_t
         {
             None = 0,
             Keyboard = 1,
@@ -153,23 +153,22 @@ namespace rl
         };
 
         union Value {
+            bool none;
             Keyboard keyboard;
             Mouse mouse;
         };
 
         // should not be explicit as the keyboard enum should be treated as a type of
         // key
-        inline Key(Keyboard keyboard)
+        inline Key(Keyboard keyboard) : method(Method::Keyboard), val(false)
         {
             val.keyboard = keyboard;
-            method = Method::Keyboard;
         }
 
         // should not be explicit as the mouse enum should be treated as a type of key
-        inline Key(Mouse mouse)
+        inline Key(Mouse mouse) : method(Method::Mouse), val(false)
         {
             val.mouse = mouse;
-            method = Method::Mouse;
         }
 
         [[nodiscard]] inline Method GetMethod() const
@@ -186,4 +185,4 @@ namespace rl
         Method method;
         Value val;
     };
-} // namespace rl
+}

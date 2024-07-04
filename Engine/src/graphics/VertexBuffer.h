@@ -20,4 +20,4 @@ namespace rl
 
         virtual void Set(const std::vector<Vertex>& data) = 0;
     };
-} // namespace rl
+}

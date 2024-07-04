@@ -19,4 +19,4 @@ namespace rl
 
         virtual void Set(const std::vector<uint32_t>& data) = 0;
     };
-} // namespace rl
+}

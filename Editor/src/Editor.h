@@ -43,4 +43,4 @@ namespace rl::editor
 
         std::shared_ptr<RenderTarget> renderTarget = nullptr;
     };
-} // namespace rl::editor
+}

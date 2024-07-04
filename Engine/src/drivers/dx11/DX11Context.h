@@ -36,4 +36,4 @@ namespace rl
         // textures
         Microsoft::WRL::ComPtr<ID3D11SamplerState> sampler = Microsoft::WRL::ComPtr<ID3D11SamplerState>();
     };
-} // namespace rl
+}

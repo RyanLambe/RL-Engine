@@ -70,12 +70,6 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName)
                 temp.texCoords.x = uvs[curUV[i] - 1].x;
                 temp.texCoords.y = 1 - uvs[curUV[i] - 1].y;
 
-                if (norms[curNorm[i] - 1].x < 0)
-                {
-                    int fst = 1;
-                    fst++;
-                }
-
                 temp.normal.x = norms[curNorm[i] - 1].x;
                 temp.normal.y = norms[curNorm[i] - 1].y;
                 temp.normal.z = norms[curNorm[i] - 1].z;
@@ -105,7 +99,7 @@ void rl::MeshComponent::LoadMesh(const std::string& fileName)
             continue;
 
         std::istringstream iss(line.substr(2, line.length()));
-        float x, y, z;
+        float x = 0, y = 0, z = 0;
 
         // uv coords
         if (line.at(1) == 't')

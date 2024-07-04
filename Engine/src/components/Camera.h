@@ -45,7 +45,7 @@ namespace rl
             return height;
         }
 
-        inline glm::mat4 GetViewMatrix(float screenWidth, float screenHeight) const noexcept
+        [[nodiscard]] inline glm::mat4 GetViewMatrix(float screenWidth, float screenHeight) const noexcept
         {
             return glm::perspectiveLH(glm::radians(fov), screenWidth / screenHeight, nearPlane, farPlane);
         }
@@ -56,4 +56,4 @@ namespace rl
         uint32_t width = 0;
         uint32_t height = 0;
     };
-} // namespace rl
+}

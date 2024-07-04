@@ -24,4 +24,4 @@ namespace rl
 
         Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer = Microsoft::WRL::ComPtr<ID3D11Buffer>();
     };
-} // namespace rl
+}

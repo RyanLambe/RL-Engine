@@ -115,4 +115,4 @@ namespace rl
     private:
         glm::mat4 matrix = glm::mat4(1);
     };
-} // namespace rl
+}

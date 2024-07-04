@@ -17,4 +17,4 @@ namespace rl
 
         virtual void Enable() = 0;
     };
-} // namespace rl
+}

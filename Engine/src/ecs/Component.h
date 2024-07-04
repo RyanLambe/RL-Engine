@@ -63,4 +63,4 @@ namespace rl
     protected:
         Entity entity;
     };
-} // namespace rl
+}

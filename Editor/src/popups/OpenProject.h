@@ -9,6 +9,7 @@ namespace rl::editor
     class OpenProject : public GuiElement
     {
     public:
+        ~OpenProject() override = default;
         OpenProject() = default;
 
         void Render() override;
@@ -18,6 +19,6 @@ namespace rl::editor
         bool open = true;
 
         std::string name;
-        std::string path = "C:\\Users\\ryanl\\OneDrive\\Documents\\RL-EngineTest"; // todo: remove
+        std::string path = R"(C:\Users\ryanl\OneDrive\Documents\RL-EngineTest)"; // todo: remove
     };
-} // namespace rl::editor
+}

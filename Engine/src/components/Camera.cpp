@@ -29,22 +29,22 @@ void rl::Camera::RenderToWindow()
     height = Application::GetWindow().GetHeight();
 }
 
-void rl::Camera::RenderToTarget(uint32_t width, uint32_t height)
+void rl::Camera::RenderToTarget(uint32_t targetWidth, uint32_t targetHeight)
 {
-    renderTarget = RenderTarget::Create(width, height, Application::GetGraphicsContextPtr());
-    this->width = width;
-    this->height = height;
+    renderTarget = RenderTarget::Create(targetWidth, targetHeight, Application::GetGraphicsContextPtr());
+    width = targetWidth;
+    height = targetHeight;
 }
 
-void rl::Camera::ResizeTarget(uint32_t width, uint32_t height)
+void rl::Camera::ResizeTarget(uint32_t targetWidth, uint32_t targetHeight)
 {
-    if (width <= 0 || height <= 0)
+    if (targetWidth <= 0 || targetHeight <= 0)
         return;
-    if (width == this->width && height == this->height)
+    if (targetWidth == width && targetHeight == height)
         return;
-    this->width = width;
-    this->height = height;
-    renderTarget->Resize(width, height);
+    width = targetWidth;
+    height = targetHeight;
+    renderTarget->Resize(targetWidth, targetHeight);
 }
 
 void rl::Camera::EnableTarget()

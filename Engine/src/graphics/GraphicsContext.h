@@ -7,7 +7,7 @@
 namespace rl
 {
 
-    enum GraphicsAPI
+    enum GraphicsAPI : uint8_t
     {
         None = 0,
         DX11 = 1,
@@ -30,4 +30,4 @@ namespace rl
         [[nodiscard]] virtual void* GetDXDevice() const = 0;
         [[nodiscard]] virtual void* GetDXContext() const = 0;
     };
-} // namespace rl
+}

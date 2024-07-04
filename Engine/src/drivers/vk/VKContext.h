@@ -4,10 +4,10 @@
 
 namespace rl
 {
-    class VKContext : public Context
+    class VKContext : public GraphicsContext
     {
     public:
-        VKContext(const Context&) = delete;
+        VKContext(const GraphicsContext&) = delete;
         VKContext() = delete;
         explicit VKContext(Window* window);
 
@@ -20,4 +20,4 @@ namespace rl
 
     private:
     };
-} // namespace rl
+}

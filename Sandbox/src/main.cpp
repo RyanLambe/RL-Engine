@@ -9,18 +9,19 @@
 
 using namespace rl;
 
-Entity test = 0;
-Entity test1 = 2;
-Entity test2 = 3;
-Entity test3 = 4;
-Entity test4 = 5;
-Entity test5 = 6;
-Entity cam = 1;
+const Entity test = 0;
+
+const Entity test1 = 2;
+const Entity test2 = 3;
+const Entity test3 = 4;
+const Entity test4 = 5;
+const Entity test5 = 6;
+const Entity cam = 1;
 
 class Demo : public System
 {
 public:
-    void Start()
+    void Start() override
     {
         // create test entities
         Transform::Create(test);
@@ -59,7 +60,7 @@ public:
         Camera::GetComponent(cam).RenderToWindow();
     }
 
-    void Update()
+    void Update() override
     {
         if (Input::GetKey(Key::Keyboard::W) > 0)
         {

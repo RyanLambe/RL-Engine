@@ -62,7 +62,7 @@ namespace rl
 
         inline bool operator!=(const OptionalVectorIterator& other) const
         {
-            return !(*this == other);
+            return *this != other;
         }
 
     private:
@@ -93,7 +93,7 @@ namespace rl
             vec.emplace_back(std::forward<Args>(args)...);
         }
 
-        inline size_t size() const noexcept
+        [[nodiscard]] inline size_t size() const noexcept
         {
             return vec.size();
         }
@@ -108,4 +108,4 @@ namespace rl
             return Iterator(vec.data() + vec.size(), vec.data() + vec.size());
         }
     };
-} // namespace rl
+}

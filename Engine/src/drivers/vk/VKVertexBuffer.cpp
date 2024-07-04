@@ -10,4 +10,4 @@ namespace rl
     void VKVertexBuffer::Enable() {}
 
     void VKVertexBuffer::Set(const std::vector<Vertex>& data) {}
-} // namespace rl
+}

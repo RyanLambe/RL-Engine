@@ -9,4 +9,4 @@ namespace rl
     public:
         static std::string getFormattedTime();
     };
-} // namespace rl
+}

@@ -10,7 +10,7 @@ namespace rl
 {
 
     // error code is the type of errors that can happen regular use
-    enum ErrorCode
+    enum ErrorCode : uint8_t
     {
         Success = 0,
         UnknownError = 1,
@@ -59,7 +59,7 @@ namespace rl
     class RLException : public std::exception
     {
     public:
-        RLException(std::string msg, std::string file, int line)
+        RLException(const std::string& msg, const std::string& file, int line)
         {
             std::ostringstream oss;
 
@@ -77,7 +77,7 @@ namespace rl
     private:
         std::string message;
     };
-} // namespace rl
+}
 
 #define RL_THROW_EXCEPTION(msg) throw RLException(msg, __FILE__, __LINE__)
 #define RL_THROW_RESULT(res) throw RLException(res.toString(), __FILE__, __LINE__)

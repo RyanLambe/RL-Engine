@@ -7,7 +7,7 @@
 namespace rl
 {
 
-    enum ShaderType
+    enum ShaderType : uint8_t
     {
         VertexShader,
         PixelShader
@@ -23,4 +23,4 @@ namespace rl
 
         virtual void SetData(const void* data, uint32_t size, uint32_t offset) = 0;
     };
-} // namespace rl
+}

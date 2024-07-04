@@ -39,7 +39,7 @@ namespace rl::Logger
         Log(file, line, args...);
     }
 
-} // namespace rl::Logger
+}
 
 #define RL_LOG(...) rl::Logger::LogMessage(__FILE__, __LINE__, __VA_ARGS__)
 #define RL_LOG_WARNING(...) rl::Logger::LogWarning(__FILE__, __LINE__, __VA_ARGS__)

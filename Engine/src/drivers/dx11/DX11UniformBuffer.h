@@ -20,4 +20,4 @@ namespace rl
         ShaderType shaderType;
         uint32_t binding;
     };
-} // namespace rl
+}

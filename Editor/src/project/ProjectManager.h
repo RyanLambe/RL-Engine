@@ -28,4 +28,4 @@ namespace rl::editor
         HINSTANCE library = nullptr;
     };
 
-} // namespace rl::editor
+}

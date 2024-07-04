@@ -17,4 +17,4 @@ namespace rl
         std::shared_ptr<UniformBuffer> ObjectUniformBuffer = nullptr;
         std::shared_ptr<UniformBuffer> SceneUniformBuffer = nullptr;
     };
-} // namespace rl
+}

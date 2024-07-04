@@ -9,4 +9,4 @@ namespace rl
 
     void VKShader::Enable() {}
 
-} // namespace rl
+}

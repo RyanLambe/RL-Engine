@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <vector>
+#include "Key.h"
 
 namespace rl
 {
@@ -12,4 +13,4 @@ namespace rl
         std::vector<std::pair<Key, float>> keys;
     };
 
-} // namespace rl
+}

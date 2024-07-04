@@ -9,6 +9,7 @@ namespace rl::editor
     class NewProject : public GuiElement
     {
     public:
+        ~NewProject() override = default;
         NewProject() = default;
 
         void Render() override;
@@ -20,4 +21,4 @@ namespace rl::editor
         std::string name;
         std::string path;
     };
-} // namespace rl::editor
+}

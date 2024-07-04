@@ -34,4 +34,4 @@ namespace rl
 
         static void CreateAxis(const std::string& key, Axis axis);
     };
-} // namespace rl
+}
