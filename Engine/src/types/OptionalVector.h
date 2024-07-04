@@ -62,7 +62,8 @@ namespace rl
 
         inline bool operator!=(const OptionalVectorIterator& other) const
         {
-            return *this != other;
+            const bool eq = *this == other;
+            return !eq;
         }
 
     private:
