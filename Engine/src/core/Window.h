@@ -8,7 +8,7 @@
 namespace rl
 {
     class Window;
-    using RLWindowResizeCallback = void(*)(Window *, int, int);
+    using RLWindowResizeCallback = void (*)(Window*, int, int);
 
     class Window
     {

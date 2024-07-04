@@ -31,9 +31,9 @@ DX11Shader::DX11Shader(const std::string& vertexShaderPath, const std::string& p
         {"TexCoord", 0,    DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
         {"NormalVS", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0}
     };
-    DX_LOG_ERROR(context->GetDevice()->CreateInputLayout((D3D11_INPUT_ELEMENT_DESC*)ied, sizeof(ied) / sizeof(D3D11_INPUT_ELEMENT_DESC),
-                                                         blob->GetBufferPointer(), blob->GetBufferSize(),
-                                                         &inputLayout));
+    DX_LOG_ERROR(context->GetDevice()->CreateInputLayout(
+        (D3D11_INPUT_ELEMENT_DESC*)ied, sizeof(ied) / sizeof(D3D11_INPUT_ELEMENT_DESC), blob->GetBufferPointer(),
+        blob->GetBufferSize(), &inputLayout));
 }
 
 void DX11Shader::Enable()

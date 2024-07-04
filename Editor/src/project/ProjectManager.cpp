@@ -9,7 +9,7 @@
 
 using namespace rl::editor;
 
-using SetupFunc = void (*)(void *);
+using SetupFunc = void (*)(void*);
 
 ProjectManager* ProjectManager::projectManager = nullptr;
 
