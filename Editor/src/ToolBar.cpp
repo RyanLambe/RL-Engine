@@ -4,6 +4,7 @@
 
 #include "Editor.h"
 #include "project/ProjectManager.h"
+#include "windows/Console.h"
 
 using namespace rl::editor;
 
@@ -14,9 +15,9 @@ void ToolBar::Render()
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("New"))
-                NewProject();
+                NewProject::OpenPopup();
             if (ImGui::MenuItem("Open"))
-                OpenProject();
+                OpenProject::OpenPopup();
             ImGui::MenuItem("Save");
             ImGui::MenuItem("SaveAs");
             ImGui::Separator();
@@ -30,6 +31,8 @@ void ToolBar::Render()
         {
             if (ImGui::MenuItem("Viewport"))
                 ShowViewport();
+            if (ImGui::MenuItem("Console"))
+                Console::OpenWindow();
             ImGui::MenuItem("Scene Hierarchy");
             ImGui::MenuItem("Details");
             ImGui::MenuItem("Asset Browser");
@@ -57,17 +60,5 @@ bool ToolBar::IsOpen()
 void ToolBar::ShowViewport()
 {
     viewport = std::make_shared<Viewport>();
-    Editor::CreateGuiElement(viewport);
-}
-
-void ToolBar::NewProject()
-{
-    newProject = std::make_shared<editor::NewProject>();
-    Editor::CreateGuiElement(newProject);
-}
-
-void ToolBar::OpenProject()
-{
-    openProject = std::make_shared<editor::OpenProject>();
-    Editor::CreateGuiElement(openProject);
+    Editor::AddGuiElement(viewport);
 }

@@ -21,6 +21,8 @@ add_executable(Editor src/main.cpp
         src/popups/NewProject.h
         src/popups/OpenProject.cpp
         src/popups/OpenProject.h
+        src/windows/Console.cpp
+        src/windows/Console.h
 )
 
 # build shaders
