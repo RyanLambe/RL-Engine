@@ -40,13 +40,13 @@ namespace rl
                 switch (type)
                 {
                     case LogType::Log:
-                        return "[LOG] [" + time + "] [" + file + ":" + std::to_string(line) + "] - " + message;
+                        return "[LOG] [" + time + "] [" + file + ":" + std::to_string(line) + "]:\n" + message;
                     case LogType::Warning:
-                        return "[WARNING] [" + time + "] [" + file + ":" + std::to_string(line) + "] - " + message;
+                        return "[WARNING] [" + time + "] [" + file + ":" + std::to_string(line) + "]:\n" + message;
                     case LogType::Error:
-                        return "[ERROR] [" + time + "] [" + file + ":" + std::to_string(line) + "] - " + message;
+                        return "[ERROR] [" + time + "] [" + file + ":" + std::to_string(line) + "]:\n" + message;
                     default:
-                        return "[UNKNOWN] [" + time + "] [" + file + ":" + std::to_string(line) + "] - " + message;
+                        return "[UNKNOWN] [" + time + "] [" + file + ":" + std::to_string(line) + "]:\n" + message;
                 }
             }
         };

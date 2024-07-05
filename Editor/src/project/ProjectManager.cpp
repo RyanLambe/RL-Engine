@@ -6,6 +6,7 @@
 #include <filesystem>
 
 #include "../Editor.h"
+#include "../windows/Console.h"
 
 using namespace rl::editor;
 
@@ -111,15 +112,18 @@ void ProjectManager::Compile()
 #endif
 
     std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
+    std::filesystem::create_directory("./logs/");
 
     std::string command = "cmake -S " + projectManager->projectDir + " -B " + projectManager->projectDir
                           + "/ProjectData/temp" + " -DEDITOR_PATH:STRING=" + std::filesystem::current_path().string()
                           + " -DRL_BUILD_FLAGS:STRING=\"" + RL_BUILD_FLAGS + "\"" + " -DRL_BUILD_CONFIG_FLAGS:STRING=\""
-                          + RL_BUILD_CONFIG_FLAGS + "\"" + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel);
+                          + RL_BUILD_CONFIG_FLAGS + "\"" + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel) + " > ./logs/CMakeOut.txt";
     system(command.c_str());
 
-    command = "cmake --build " + projectManager->projectDir + "/ProjectData/temp";
+    command = "cmake --build " + projectManager->projectDir + "/ProjectData/temp" + " > ./logs/BuildOut.txt";
     int code = system(command.c_str());
+    Console::UpdateBuildLogs();
+
     if (code != 0)
     {
         RL_LOG_ERROR("Error while Compiling: ");
