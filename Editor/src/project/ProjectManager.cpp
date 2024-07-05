@@ -9,7 +9,7 @@
 #include "../Editor.h"
 #include "../windows/Console.h"
 
-using namespace rl::editor;
+using namespace rl::ed;
 
 using SetupFunc = void (*)(void*);
 

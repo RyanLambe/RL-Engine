@@ -6,7 +6,7 @@
 
 #include "../Editor.h"
 
-namespace rl::editor
+namespace rl::ed
 {
     std::shared_ptr<Console> Console::window = nullptr;
     std::string Console::cmakeLog = "The project has not been compiled yet.";
@@ -53,11 +53,6 @@ namespace rl::editor
             }
 
             ImGui::End();
-        }
-        else
-        {
-            open = false;
-            return;
         }
     }
 

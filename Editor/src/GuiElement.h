@@ -1,6 +1,6 @@
 #pragma once
 
-namespace rl::editor
+namespace rl::ed
 {
     class GuiElement
     {

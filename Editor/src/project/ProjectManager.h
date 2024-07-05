@@ -7,9 +7,8 @@
 #include <string>
 #include <thread>
 
-namespace rl::editor
+namespace rl::ed
 {
-
     class ProjectManager
     {
     public:

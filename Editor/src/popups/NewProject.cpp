@@ -6,7 +6,7 @@
 #include "../Editor.h"
 #include "../project/ProjectManager.h"
 
-using namespace rl::editor;
+using namespace rl::ed;
 
 std::shared_ptr<NewProject> NewProject::popup = nullptr;
 

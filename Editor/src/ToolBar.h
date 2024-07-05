@@ -7,7 +7,7 @@
 #include "popups/OpenProject.h"
 #include "windows/Viewport.h"
 
-namespace rl::editor
+namespace rl::ed
 {
     class ToolBar : public GuiElement
     {

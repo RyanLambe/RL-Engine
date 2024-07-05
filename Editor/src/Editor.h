@@ -6,7 +6,7 @@
 #include "imgui.h"
 #include "types/OptionalVector.h"
 
-namespace rl::editor
+namespace rl::ed
 {
     class Editor
     {

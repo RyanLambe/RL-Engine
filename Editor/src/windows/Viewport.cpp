@@ -5,7 +5,7 @@
 #include "../Editor.h"
 #include "components/Camera.h"
 
-using namespace rl::editor;
+using namespace rl::ed;
 
 void Viewport::Render()
 {
@@ -20,11 +20,6 @@ void Viewport::Render()
         Camera::GetMain()->ResizeTarget((int)ImGui::GetContentRegionAvail().x, (int)ImGui::GetContentRegionAvail().y);
         ImGui::Image(Camera::GetMain()->GetTexture(), ImGui::GetContentRegionAvail());
         ImGui::End();
-    }
-    else
-    {
-        open = false;
-        return;
     }
 }
 

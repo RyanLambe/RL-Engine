@@ -5,8 +5,9 @@
 #include "Editor.h"
 #include "project/ProjectManager.h"
 #include "windows/Console.h"
+#include "windows/SystemsManager.h"
 
-using namespace rl::editor;
+using namespace rl::ed;
 
 void ToolBar::Render()
 {
@@ -33,6 +34,8 @@ void ToolBar::Render()
                 ShowViewport();
             if (ImGui::MenuItem("Console"))
                 Console::OpenWindow();
+            if (ImGui::MenuItem("Systems Manager"))
+                SystemsManager::OpenWindow();
             ImGui::MenuItem("Scene Hierarchy");
             ImGui::MenuItem("Details");
             ImGui::MenuItem("Asset Browser");

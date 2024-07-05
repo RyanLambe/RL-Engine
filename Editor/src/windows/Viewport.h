@@ -3,7 +3,7 @@
 #include "../GuiElement.h"
 #include "Engine.h"
 
-namespace rl::editor
+namespace rl::ed
 {
     class Viewport : public GuiElement
     {

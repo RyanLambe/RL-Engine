@@ -5,7 +5,7 @@
 
 #include "../GuiElement.h"
 
-namespace rl::editor
+namespace rl::ed
 {
     class Console : public GuiElement
     {

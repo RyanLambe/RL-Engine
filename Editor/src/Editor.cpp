@@ -6,7 +6,7 @@
 #include "ecs/SystemManager.h"
 #include "project/ProjectManager.h"
 
-using namespace rl::editor;
+using namespace rl::ed;
 
 int Editor::newWidth;
 int Editor::newHeight;
