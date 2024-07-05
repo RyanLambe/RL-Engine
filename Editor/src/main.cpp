@@ -2,25 +2,25 @@
 #include "ToolBar.h"
 #include "project/ProjectManager.h"
 
-using namespace rl;
+using namespace rl::editor;
 
-std::shared_ptr<editor::ToolBar> toolbar;
+std::shared_ptr<ToolBar> toolbar;
 
 int main()
 {
-    editor::Editor editor = editor::Editor();
-    editor::ProjectManager projectManager = editor::ProjectManager();
+    Editor editor = Editor();
+    ProjectManager projectManager = ProjectManager();
 
-    toolbar = std::make_shared<editor::ToolBar>();
-    editor::Editor::AddGuiElement(toolbar);
+    toolbar = std::make_shared<ToolBar>();
+    Editor::AddGuiElement(toolbar);
 
     // main loop
-    while (editor.Update())
+    while (Editor::Update())
     {
         editor.Render();
-        if (editor::Editor::Playing())
+        if (Editor::Playing())
         {
-            Application::Update();
+            rl::Application::Update();
         }
     }
     return 0;

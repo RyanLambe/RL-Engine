@@ -1,9 +1,10 @@
 #include "ProjectManager.h"
 
+#include <filesystem>
+#include <chrono>
+
 #include <core/Application.h>
 #include <core/Logger.h>
-
-#include <filesystem>
 
 #include "../Editor.h"
 #include "../windows/Console.h"
@@ -95,62 +96,7 @@ bool ProjectManager::Open(const std::string& name, const std::string& path)
     return true;
 }
 
-void ProjectManager::Compile()
-{
-    if (!projectManager->projectOpen)
-    {
-        RL_LOG_ERROR("No Project Open.");
-        return;
-    }
-
-    Editor::Pause();
-    Application::Reset();
-
-    int debugLevel = 0;
-#ifdef _ITERATOR_DEBUG_LEVEL
-    debugLevel = _ITERATOR_DEBUG_LEVEL;
-#endif
-
-    std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
-    std::filesystem::create_directory("./logs/");
-
-    std::string command = "cmake -S " + projectManager->projectDir + " -B " + projectManager->projectDir
-                          + "/ProjectData/temp" + " -DEDITOR_PATH:STRING=" + std::filesystem::current_path().string()
-                          + " -DRL_BUILD_FLAGS:STRING=\"" + RL_BUILD_FLAGS + "\"" + " -DRL_BUILD_CONFIG_FLAGS:STRING=\""
-                          + RL_BUILD_CONFIG_FLAGS + "\"" + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel) + " > ./logs/CMakeOut.txt";
-    system(command.c_str());
-
-    command = "cmake --build " + projectManager->projectDir + "/ProjectData/temp" + " > ./logs/BuildOut.txt";
-    int code = system(command.c_str());
-    Console::UpdateBuildLogs();
-
-    if (code != 0)
-    {
-        RL_LOG_ERROR("Error while Compiling: ");
-        return;
-    }
-
-    RL_LOG_WARNING("Game.dll Compiled.");
-
-    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData/out/Game.dll"))
-    {
-        RL_LOG_ERROR("Cannot find Game.dll.");
-        return;
-    }
-
-    if (projectManager->library)
-        FreeLibrary(projectManager->library);
-
-    std::filesystem::remove("./Game.dll");
-    std::filesystem::copy_file(projectManager->projectDir + "/ProjectData/out/Game.dll", "./Game.dll",
-                               std::filesystem::copy_options::overwrite_existing);
-
-    projectManager->library = LoadLibrary("Game.dll");
-    if (!projectManager->library)
-        RL_LOG_ERROR("Game.dll not found: ", GetLastError());
-}
-
-void ProjectManager::Run()
+void ProjectManager::Start()
 {
     if (!projectManager->library)
     {
@@ -174,4 +120,78 @@ void ProjectManager::Run()
         RL_LOG_ERROR("THSI IASDJFKLASJDF");
         // do nothing? todo: should probably recompile after code fixes are made
     }
+}
+
+void ProjectManager::Compile()
+{
+    if (!projectManager->projectOpen)
+    {
+        RL_LOG_ERROR("No Project Open.");
+        return;
+    }
+
+    Editor::Pause();
+    Application::Reset();
+
+    std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
+    std::filesystem::create_directory("./logs/");
+
+    // split
+    projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir);
+    projectManager->threadExists = true;
+}
+
+void ProjectManager::Update() {
+
+    if(!projectManager->threadExists)
+        return;
+    if(projectManager->threadVal.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+        return;
+
+    projectManager->threadExists = false;
+    bool result = projectManager->threadVal.get();
+    Console::UpdateBuildLogs();
+
+    if (!result)
+    {
+        RL_LOG_ERROR("Error while Compiling: ");
+        return;
+    }
+    RL_LOG_WARNING("Game.dll Compiled.");
+
+    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData/out/Game.dll"))
+    {
+        RL_LOG_ERROR("Cannot find Game.dll.");
+        return;
+    }
+
+    if (projectManager->library)
+        FreeLibrary(projectManager->library);
+
+    std::filesystem::remove("./Game.dll");
+    std::filesystem::copy_file(projectManager->projectDir + "/ProjectData/out/Game.dll", "./Game.dll",
+                               std::filesystem::copy_options::overwrite_existing);
+
+    projectManager->library = LoadLibrary("Game.dll");
+    if (!projectManager->library)
+        RL_LOG_ERROR("Game.dll not found: ", GetLastError());
+
+}
+
+bool ProjectManager::CompileInternal(const std::string& projectDir) {
+
+    int debugLevel = 0;
+#ifdef _ITERATOR_DEBUG_LEVEL
+    debugLevel = _ITERATOR_DEBUG_LEVEL;
+#endif
+
+    std::string command = "cmake -S " + projectDir + " -B " + projectDir
+                          + "/ProjectData/temp" + " -DEDITOR_PATH:STRING=" + std::filesystem::current_path().string()
+                          + " -DRL_BUILD_FLAGS:STRING=\"" + RL_BUILD_FLAGS + "\"" + " -DRL_BUILD_CONFIG_FLAGS:STRING=\""
+                          + RL_BUILD_CONFIG_FLAGS + "\"" + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel) + " > ./logs/CMakeOut.txt";
+    system(command.c_str());
+
+    command = "cmake --build " + projectDir + "/ProjectData/temp" + " > ./logs/BuildOut.txt";
+    int code = system(command.c_str());
+    return code == 0;
 }

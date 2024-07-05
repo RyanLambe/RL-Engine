@@ -1,8 +1,10 @@
 #pragma once
 
 #include <windows.h>
-
+#include <thread>
 #include <string>
+#include <future>
+#include <optional>
 
 namespace rl::editor
 {
@@ -15,9 +17,11 @@ namespace rl::editor
 
         static bool New(const std::string& name, const std::string& path);
         static bool Open(const std::string& name, const std::string& path);
-        static void Compile();
 
-        static void Run();
+        static void Start();
+
+        static void Compile();
+        static void Update();
 
     private:
         static ProjectManager* projectManager;
@@ -26,6 +30,11 @@ namespace rl::editor
         std::string projectName;
         std::string projectDir;
         HINSTANCE library = nullptr;
+
+        static bool CompileInternal(const std::string& projectDir);
+
+        bool threadExists = false;
+        std::future<bool> threadVal;
     };
 
 }

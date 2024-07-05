@@ -15,7 +15,7 @@ namespace rl::editor
         ~Editor();
 
         void Render();
-        bool Update();
+        static bool Update();
         static void Exit();
 
         static bool Playing();

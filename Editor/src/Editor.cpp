@@ -96,6 +96,7 @@ void Editor::Render()
 
 bool Editor::Update()
 {
+    ProjectManager::Update();
     return Application::GetWindow().Update() && open;
 }
 
@@ -131,7 +132,7 @@ bool Editor::Playing()
 void Editor::Play()
 {
     Application::Reset();
-    ProjectManager::Run();
+    ProjectManager::Start();
     Application::GetScene().systemManager.StartSystems();
     playing = true;
 }
