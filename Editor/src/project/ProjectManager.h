@@ -1,10 +1,11 @@
 #pragma once
 
 #include <windows.h>
-#include <thread>
-#include <string>
+
 #include <future>
 #include <optional>
+#include <string>
+#include <thread>
 
 namespace rl::editor
 {

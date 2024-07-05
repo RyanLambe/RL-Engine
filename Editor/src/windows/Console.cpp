@@ -1,8 +1,8 @@
 #include "Console.h"
 
+#include <fstream>
 #include <ranges>
 #include <sstream>
-#include <fstream>
 
 #include "../Editor.h"
 
@@ -29,10 +29,8 @@ namespace rl::editor
 
     void Console::Render()
     {
-
         if (ImGui::Begin("Console", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
-
             ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
             if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
             {
@@ -68,18 +66,21 @@ namespace rl::editor
         return open;
     }
 
-    void Console::DrawLogger() {
-
-        if(ImGui::Button("Clear")){
+    void Console::DrawLogger()
+    {
+        if (ImGui::Button("Clear"))
+        {
             Application::GetLogger().ClearMessages();
         }
 
         ImGui::Separator();
 
-        if(ImGui::BeginChild("logs")){
-
-            for(auto const& message : Application::GetLogger().GetMessages() | std::views::reverse){
-                switch (message.type) {
+        if (ImGui::BeginChild("logs"))
+        {
+            for (auto const& message : Application::GetLogger().GetMessages() | std::views::reverse)
+            {
+                switch (message.type)
+                {
                     case rl::Logger::LogType::Error:
                         ImGui::PushStyleColor(ImGuiCol_Text, (ImVec4)ImColor::HSV(0, .55, .98));
                         break;
@@ -96,7 +97,8 @@ namespace rl::editor
                 ImGui::TextWrapped("%s", message.GetFormatted().c_str());
                 ImGui::PopStyleColor();
 
-                if(ImGui::IsItemHovered() && ImGui::IsMouseClicked(0)){
+                if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+                {
                     system(("explorer " + message.file).c_str());
                 }
 
@@ -106,7 +108,8 @@ namespace rl::editor
         }
     }
 
-    void Console::UpdateBuildLogs() {
+    void Console::UpdateBuildLogs()
+    {
         std::ifstream cmakeIn("./logs/CMakeOut.txt");
         std::ostringstream cmakeSS;
         cmakeSS << cmakeIn.rdbuf();

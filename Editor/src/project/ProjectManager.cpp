@@ -1,10 +1,10 @@
 #include "ProjectManager.h"
 
-#include <filesystem>
-#include <chrono>
-
 #include <core/Application.h>
 #include <core/Logger.h>
+
+#include <chrono>
+#include <filesystem>
 
 #include "../Editor.h"
 #include "../windows/Console.h"
@@ -141,11 +141,11 @@ void ProjectManager::Compile()
     projectManager->threadExists = true;
 }
 
-void ProjectManager::Update() {
-
-    if(!projectManager->threadExists)
+void ProjectManager::Update()
+{
+    if (!projectManager->threadExists)
         return;
-    if(projectManager->threadVal.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
+    if (projectManager->threadVal.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
         return;
 
     projectManager->threadExists = false;
@@ -175,20 +175,20 @@ void ProjectManager::Update() {
     projectManager->library = LoadLibrary("Game.dll");
     if (!projectManager->library)
         RL_LOG_ERROR("Game.dll not found: ", GetLastError());
-
 }
 
-bool ProjectManager::CompileInternal(const std::string& projectDir) {
-
+bool ProjectManager::CompileInternal(const std::string& projectDir)
+{
     int debugLevel = 0;
 #ifdef _ITERATOR_DEBUG_LEVEL
     debugLevel = _ITERATOR_DEBUG_LEVEL;
 #endif
 
-    std::string command = "cmake -S " + projectDir + " -B " + projectDir
-                          + "/ProjectData/temp" + " -DEDITOR_PATH:STRING=" + std::filesystem::current_path().string()
+    std::string command = "cmake -S " + projectDir + " -B " + projectDir + "/ProjectData/temp"
+                          + " -DEDITOR_PATH:STRING=" + std::filesystem::current_path().string()
                           + " -DRL_BUILD_FLAGS:STRING=\"" + RL_BUILD_FLAGS + "\"" + " -DRL_BUILD_CONFIG_FLAGS:STRING=\""
-                          + RL_BUILD_CONFIG_FLAGS + "\"" + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel) + " > ./logs/CMakeOut.txt";
+                          + RL_BUILD_CONFIG_FLAGS + "\"" + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel)
+                          + " > ./logs/CMakeOut.txt";
     system(command.c_str());
 
     command = "cmake --build " + projectDir + "/ProjectData/temp" + " > ./logs/BuildOut.txt";
