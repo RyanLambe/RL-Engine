@@ -73,6 +73,7 @@ namespace rl
 
     void Application::Reset()
     {
+        app->logger->ClearMessages();
         app->scene->Reset();
     }
 
