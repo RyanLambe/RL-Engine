@@ -1,6 +1,8 @@
 #include "Editor.h"
 #include "ToolBar.h"
 #include "project/ProjectManager.h"
+#include "windows/Console.h"
+#include "windows/SystemsManager.h"
 
 using namespace rl::ed;
 
@@ -13,6 +15,10 @@ int main()
 
     toolbar = std::make_shared<ToolBar>();
     Editor::AddGuiElement(toolbar);
+
+    // open default windows
+    Console::OpenWindow();
+    SystemsManager::OpenWindow();
 
     // main loop
     while (Editor::Update())
