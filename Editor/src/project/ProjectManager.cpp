@@ -8,6 +8,7 @@
 
 #include "../Editor.h"
 #include "../windows/Console.h"
+#include "../windows/AssetBrowser.h"
 
 using namespace rl::ed;
 
@@ -62,6 +63,7 @@ bool ProjectManager::New(const std::string& name, const std::string& path)
                           std::filesystem::copy_options::update_existing);
 
     projectManager->projectOpen = true;
+    AssetBrowser::Setup(projectManager->projectDir);
     return true;
 }
 
@@ -93,6 +95,7 @@ bool ProjectManager::Open(const std::string& name, const std::string& path)
     }
 
     projectManager->projectOpen = true;
+    AssetBrowser::Setup(projectManager->projectDir);
     return true;
 }
 
@@ -194,4 +197,12 @@ bool ProjectManager::CompileInternal(const std::string& projectDir)
     command = "cmake --build " + projectDir + "/ProjectData/temp" + " > ./logs/BuildOut.txt";
     int code = system(command.c_str());
     return code == 0;
+}
+
+bool ProjectManager::IsProjectOpen() {
+    return projectManager->projectOpen;
+}
+
+std::string ProjectManager::GetProjectDirectory() {
+    return projectManager->projectDir;
 }

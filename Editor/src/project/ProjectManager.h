@@ -23,6 +23,9 @@ namespace rl::ed
         static void Compile();
         static void Update();
 
+        static bool IsProjectOpen();
+        static std::string GetProjectDirectory();
+
     private:
         static ProjectManager* projectManager;
 

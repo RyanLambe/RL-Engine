@@ -25,6 +25,9 @@ add_executable(Editor src/main.cpp
         src/windows/Console.h
         src/windows/SystemsManager.cpp
         src/windows/SystemsManager.h
+        src/windows/AssetBrowser.cpp
+        src/windows/AssetBrowser.h
+        src/temp/temp.h
 )
 
 # build shaders

@@ -1,6 +1,7 @@
 #include "Editor.h"
 #include "ToolBar.h"
 #include "project/ProjectManager.h"
+#include "windows/AssetBrowser.h"
 #include "windows/Console.h"
 #include "windows/SystemsManager.h"
 
@@ -17,6 +18,7 @@ int main()
     Editor::AddGuiElement(toolbar);
 
     // open default windows
+    AssetBrowser::OpenWindow();
     Console::OpenWindow();
     SystemsManager::OpenWindow();
 
