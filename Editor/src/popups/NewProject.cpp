@@ -27,6 +27,9 @@ void NewProject::ClosePopup()
 
 void NewProject::Render()
 {
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
     if (ImGui::Begin("New Project", &open, ImGuiWindowFlags_NoDocking))
     {
         ImGui::SetWindowSize(ImVec2(600, 300));
