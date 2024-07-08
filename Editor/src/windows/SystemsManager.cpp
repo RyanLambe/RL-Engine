@@ -2,7 +2,8 @@
 
 #include "../Editor.h"
 
-namespace rl::ed {
+namespace rl::ed
+{
 
     std::shared_ptr<SystemsManager> SystemsManager::window = nullptr;
 
@@ -21,7 +22,8 @@ namespace rl::ed {
         window->open = false;
     }
 
-    void SystemsManager::Render() {
+    void SystemsManager::Render()
+    {
         if (ImGui::Begin("Systems Manager", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
             ImGui::Text("Systems Manager");
@@ -31,7 +33,8 @@ namespace rl::ed {
         }
     }
 
-    bool SystemsManager::IsOpen() {
+    bool SystemsManager::IsOpen()
+    {
         return open;
     }
 }

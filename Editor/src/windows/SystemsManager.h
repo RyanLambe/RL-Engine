@@ -4,8 +4,10 @@
 
 #include "../GuiElement.h"
 
-namespace rl::ed {
-    class SystemsManager : public GuiElement {
+namespace rl::ed
+{
+    class SystemsManager : public GuiElement
+    {
     public:
         ~SystemsManager() override = default;
 
@@ -18,6 +20,5 @@ namespace rl::ed {
     private:
         static std::shared_ptr<SystemsManager> window;
         bool open = true;
-
     };
 }

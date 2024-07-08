@@ -7,8 +7,8 @@
 #include <filesystem>
 
 #include "../Editor.h"
-#include "../windows/Console.h"
 #include "../windows/AssetBrowser.h"
+#include "../windows/Console.h"
 
 using namespace rl::ed;
 
@@ -199,10 +199,12 @@ bool ProjectManager::CompileInternal(const std::string& projectDir)
     return code == 0;
 }
 
-bool ProjectManager::IsProjectOpen() {
+bool ProjectManager::IsProjectOpen()
+{
     return projectManager->projectOpen;
 }
 
-std::string ProjectManager::GetProjectDirectory() {
+std::string ProjectManager::GetProjectDirectory()
+{
     return projectManager->projectDir;
 }

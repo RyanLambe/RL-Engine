@@ -1,13 +1,14 @@
 #include "AssetBrowser.h"
 
 #include <locale>
+#include <array>
 
 #include "../Editor.h"
 #include "../project/ProjectManager.h"
-
 #include "imgui_internal.h"
 
-namespace rl::ed {
+namespace rl::ed
+{
     std::shared_ptr<AssetBrowser> AssetBrowser::window = nullptr;
 
     void AssetBrowser::OpenWindow()
@@ -25,10 +26,12 @@ namespace rl::ed {
         window->open = false;
     }
 
-    void AssetBrowser::Render() {
+    void AssetBrowser::Render()
+    {
         if (ImGui::Begin("Asset Browser", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
-            if(!ProjectManager::IsProjectOpen()){
+            if (!ProjectManager::IsProjectOpen())
+            {
                 ImGui::Text("No project is open.");
                 return;
             }
@@ -38,7 +41,8 @@ namespace rl::ed {
             ImGui::SetNextItemWidth(250);
             ImGui::SliderFloat("Icon Size", &iconSize, 25, 250);
 
-            if(ImGui::Button("Back") && currPath != rootPath){
+            if (ImGui::Button("Back") && currPath != rootPath)
+            {
                 currPath = currPath.parent_path();
                 selectedFile = std::nullopt;
             }
@@ -60,9 +64,10 @@ namespace rl::ed {
             ImGui::SetCursorPosX((outerPadding + area - ((iconSize + padding * 2) * (float)columns)) / 2);
             newFileSelected = false;
 
-            if (ImGui::BeginChild("files")) {
-                for (const auto& entry : std::filesystem::directory_iterator(currPath)){
-
+            if (ImGui::BeginChild("files"))
+            {
+                for (const auto& entry : std::filesystem::directory_iterator(currPath))
+                {
                     ImGui::PushID(i);
                     ImGui::BeginGroup();
 
@@ -70,7 +75,7 @@ namespace rl::ed {
 
                     // get text
                     std::string text = entry.path().filename().string();
-                    if(text.length() >= 75)
+                    if (text.length() >= 75)
                         text = text.substr(0, 75 - 3) + "...";
 
                     // write text
@@ -82,7 +87,7 @@ namespace rl::ed {
                     ImGui::PopID();
 
                     i++;
-                    if(i % columns != 0)
+                    if (i % columns != 0)
                         ImGui::SameLine();
                 }
                 ImGui::EndChild();
@@ -91,65 +96,107 @@ namespace rl::ed {
                     ImGui::OpenPopup("popup");
                 DrawRightClickMenu();
 
-                if((ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1)) && !(newFileSelected || ImGui::IsPopupOpen("popup"))) {
+                if ((ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1))
+                    && !(newFileSelected || ImGui::IsPopupOpen("popup")))
+                {
                     selectedFile = std::nullopt;
+                    renaming = false;
                 }
             }
             ImGui::End();
         }
     }
 
-    bool AssetBrowser::IsOpen() {
+    bool AssetBrowser::IsOpen()
+    {
         return open;
     }
 
-    void AssetBrowser::Setup(const std::string &projectDir) {
+    void AssetBrowser::Setup(const std::string& projectDir)
+    {
         window->rootPath = projectDir + "/Assets";
         window->currPath = projectDir + "/Assets";
     }
 
-    void AssetBrowser::DrawFileButton(const std::filesystem::directory_entry& entry) {
-
+    void AssetBrowser::DrawFileButton(const std::filesystem::directory_entry& entry)
+    {
         // draw
-        if(entry == selectedFile)
-            ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0,255,0,255));
+        if (entry == selectedFile)
+            ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 255, 0, 255));
         ImGui::Button(entry.is_directory() ? "Dir" : "File", ImVec2(iconSize, iconSize));
-        if(entry == selectedFile)
+        if (entry == selectedFile)
             ImGui::PopStyleColor();
 
         // select
-        if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1))){
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup)
+            && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1)))
+        {
             selectedFile = entry;
             newFileSelected = true;
+            renaming = false;
         }
 
         // open
-        if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
-            if(entry.is_directory()){
+        if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+        {
+            if (entry.is_directory())
+            {
                 currPath = entry.path();
                 selectedFile = std::nullopt;
             }
-            else{
+            else
+            {
                 system(("explorer " + FixPathFormat(entry.path().string())).c_str()); // windows specific
             }
         }
     }
 
-    void AssetBrowser::DrawRightClickMenu() const {
-
-        if(ImGui::BeginPopupContextWindow("popup")){
-
-            if(ImGui::Button("New")){
+    void AssetBrowser::DrawRightClickMenu()
+    {
+        if (ImGui::BeginPopupContextWindow("popup"))
+        {
+            if (ImGui::Button("New"))
+            {
                 // ???
             }
 
-            if(selectedFile.has_value()){
+            if (selectedFile.has_value())
+            {
                 ImGui::Separator();
-                if(ImGui::Button("Delete")){
+
+                // Delete File
+                if (ImGui::Button("Delete"))
+                {
                     std::filesystem::remove(selectedFile->path());
                 }
-                if(ImGui::Button("Rename")){
-                    // ???
+
+                // Rename File
+                if (renaming)
+                {
+                    ImGui::InputText("##label", (char*)buf, IM_ARRAYSIZE(buf));
+                    ImGui::SameLine();
+                }
+                if (ImGui::Button("Rename"))
+                {
+                    if (renaming)
+                    {
+                        try
+                        {
+                            const std::string newName = selectedFile->path().parent_path().string() + "\\"
+                                                        + std::string(buf) + selectedFile->path().extension().string();
+                            std::filesystem::rename(selectedFile->path(), newName);
+                            ImGui::CloseCurrentPopup();
+                        }
+                        catch (...)
+                        {
+                            RL_LOG_ERROR("Unable to rename file.");
+                        }
+                    }
+                    else
+                    {
+                        renaming = true;
+                        selectedFile->path().stem().string().copy((char*)buf, 256);
+                    }
                 }
             }
 
@@ -157,13 +204,15 @@ namespace rl::ed {
         }
     }
 
-    std::string AssetBrowser::FixPathFormat(const std::string& path) {
+    std::string AssetBrowser::FixPathFormat(const std::string& path)
+    {
         std::string str = path;
 
-        std::replace( str.begin(), str.end(), '/', '\\'); // windows specific
+        std::replace(str.begin(), str.end(), '/', '\\'); // windows specific
 
-        for(int i = 1; i < str.size(); i++) {
-            if(str[i] == str[i - 1] && (str[i] == '\\' || str[i] == '/'))
+        for (int i = 1; i < str.size(); i++)
+        {
+            if (str[i] == str[i - 1] && (str[i] == '\\' || str[i] == '/'))
             {
                 str.erase(i, 1);
             }

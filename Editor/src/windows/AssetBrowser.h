@@ -1,12 +1,14 @@
 #pragma once
 
-#include <memory>
 #include <filesystem>
+#include <memory>
 
 #include "../GuiElement.h"
 
-namespace rl::ed {
-    class AssetBrowser : public GuiElement {
+namespace rl::ed
+{
+    class AssetBrowser : public GuiElement
+    {
     public:
         ~AssetBrowser() override = default;
 
@@ -29,8 +31,11 @@ namespace rl::ed {
         std::optional<std::filesystem::directory_entry> selectedFile = std::nullopt;
         bool newFileSelected = false;
 
+        bool renaming = false;
+        char buf[256];
+
         void DrawFileButton(const std::filesystem::directory_entry& entry);
-        void DrawRightClickMenu() const;
+        void DrawRightClickMenu();
 
         static std::string FixPathFormat(const std::string& path);
     };
