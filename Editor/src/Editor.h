@@ -22,10 +22,7 @@ namespace rl::ed
         static void Play();
         static void Pause();
 
-        static inline void AddGuiElement(const std::weak_ptr<GuiElement>& element)
-        {
-            guiElements.push_back(element);
-        }
+        static void AddGuiElement(const std::weak_ptr<GuiElement>& newElement);
 
     private:
         static void OnWindowResize(Window* window, int width, int height);

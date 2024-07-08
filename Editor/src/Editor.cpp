@@ -141,3 +141,23 @@ void Editor::Pause()
 {
     playing = false;
 }
+
+void Editor::AddGuiElement(const std::weak_ptr<GuiElement> &newElement) {
+    // ensure new element is valid
+    auto newElementPtr = newElement.lock();
+    if(!newElementPtr)
+        return;
+
+    // ensure new element doesnt already exist
+    for(const auto& element : guiElements){
+        auto elementPtr = element.lock();
+        if (!elementPtr)
+            continue;
+
+        if(elementPtr.get() == newElementPtr.get())
+            return;
+    }
+
+    // add new element
+    guiElements.push_back(newElement);
+}
