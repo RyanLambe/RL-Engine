@@ -1,5 +1,7 @@
 #include "AssetBrowser.h"
 
+#include <locale>
+
 #include "../Editor.h"
 #include "../project/ProjectManager.h"
 
@@ -128,8 +130,7 @@ namespace rl::ed {
                 selectedFile = std::nullopt;
             }
             else{
-                RL_LOG(entry.path().string());
-                system(("explorer \"" + entry.path().parent_path().string() + "\"").c_str());
+                system(("explorer " + FixPathFormat(entry.path().string())).c_str()); // windows specific
             }
         }
     }
@@ -154,5 +155,19 @@ namespace rl::ed {
 
             ImGui::EndPopup();
         }
+    }
+
+    std::string AssetBrowser::FixPathFormat(const std::string& path) {
+        std::string str = path;
+
+        std::replace( str.begin(), str.end(), '/', '\\'); // windows specific
+
+        for(int i = 1; i < str.size(); i++) {
+            if(str[i] == str[i - 1] && (str[i] == '\\' || str[i] == '/'))
+            {
+                str.erase(i, 1);
+            }
+        }
+        return str;
     }
 }

@@ -31,5 +31,7 @@ namespace rl::ed {
 
         void DrawFileButton(const std::filesystem::directory_entry& entry);
         void DrawRightClickMenu() const;
+
+        static std::string FixPathFormat(const std::string& path);
     };
 }

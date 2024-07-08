@@ -94,7 +94,7 @@ namespace rl::ed
 
                 if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
                 {
-                    system(("explorer " + message.file).c_str());
+                    system(("explorer " + message.file).c_str()); // windows specific
                 }
 
                 ImGui::Separator();
