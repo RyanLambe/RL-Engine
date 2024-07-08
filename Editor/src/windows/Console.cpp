@@ -92,7 +92,7 @@ namespace rl::ed
                 ImGui::TextWrapped("%s", message.GetFormatted().c_str());
                 ImGui::PopStyleColor();
 
-                if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(0))
+                if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
                 {
                     system(("explorer " + message.file).c_str());
                 }

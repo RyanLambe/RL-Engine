@@ -26,5 +26,10 @@ namespace rl::ed {
         std::filesystem::path rootPath;
         std::filesystem::path currPath;
 
+        std::optional<std::filesystem::directory_entry> selectedFile = std::nullopt;
+        bool newFileSelected = false;
+
+        void DrawFileButton(const std::filesystem::directory_entry& entry);
+        void DrawRightClickMenu() const;
     };
 }

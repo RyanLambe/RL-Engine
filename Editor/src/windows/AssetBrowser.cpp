@@ -38,6 +38,7 @@ namespace rl::ed {
 
             if(ImGui::Button("Back") && currPath != rootPath){
                 currPath = currPath.parent_path();
+                selectedFile = std::nullopt;
             }
             ImGui::SameLine();
 
@@ -47,6 +48,7 @@ namespace rl::ed {
             ImGui::Text("%s", currPath.filename().string().c_str());
             ImGui::PopFont();
 
+            // draw files
             const float padding = ImGui::GetStyle().ItemInnerSpacing.x;
             const float outerPadding = ImGui::GetStyle().ItemSpacing.x;
             const float area = ImGui::GetCurrentWindow()->InnerRect.GetWidth() - outerPadding * 2;
@@ -54,23 +56,15 @@ namespace rl::ed {
             int i = 0;
 
             ImGui::SetCursorPosX((outerPadding + area - ((iconSize + padding * 2) * (float)columns)) / 2);
+            newFileSelected = false;
 
             if (ImGui::BeginChild("files")) {
-                for (const auto & entry : std::filesystem::directory_iterator(currPath)){
+                for (const auto& entry : std::filesystem::directory_iterator(currPath)){
 
                     ImGui::PushID(i);
                     ImGui::BeginGroup();
-                    if(entry.is_directory()){
-                        if(ImGui::Button("Dir", ImVec2(iconSize, iconSize))) {
-                            RL_LOG(entry.path().string());
-                            currPath = entry.path();
-                        }
-                    }
-                    else {
-                        if(ImGui::Button("File", ImVec2(iconSize, iconSize))) {
 
-                        }
-                    }
+                    DrawFileButton(entry);
 
                     // get text
                     std::string text = entry.path().filename().string();
@@ -81,6 +75,7 @@ namespace rl::ed {
                     ImGui::PushTextWrapPos(((float)(i % columns) * (iconSize + padding * 2)) + iconSize);
                     ImGui::TextWrapped("%s", text.c_str());
                     ImGui::PopTextWrapPos();
+
                     ImGui::EndGroup();
                     ImGui::PopID();
 
@@ -89,6 +84,14 @@ namespace rl::ed {
                         ImGui::SameLine();
                 }
                 ImGui::EndChild();
+
+                if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1))
+                    ImGui::OpenPopup("popup");
+                DrawRightClickMenu();
+
+                if((ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1)) && !(newFileSelected || ImGui::IsPopupOpen("popup"))) {
+                    selectedFile = std::nullopt;
+                }
             }
             ImGui::End();
         }
@@ -101,5 +104,55 @@ namespace rl::ed {
     void AssetBrowser::Setup(const std::string &projectDir) {
         window->rootPath = projectDir + "/Assets";
         window->currPath = projectDir + "/Assets";
+    }
+
+    void AssetBrowser::DrawFileButton(const std::filesystem::directory_entry& entry) {
+
+        // draw
+        if(entry == selectedFile)
+            ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0,255,0,255));
+        ImGui::Button(entry.is_directory() ? "Dir" : "File", ImVec2(iconSize, iconSize));
+        if(entry == selectedFile)
+            ImGui::PopStyleColor();
+
+        // select
+        if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1))){
+            selectedFile = entry;
+            newFileSelected = true;
+        }
+
+        // open
+        if(ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)){
+            if(entry.is_directory()){
+                currPath = entry.path();
+                selectedFile = std::nullopt;
+            }
+            else{
+                RL_LOG(entry.path().string());
+                system(("explorer \"" + entry.path().parent_path().string() + "\"").c_str());
+            }
+        }
+    }
+
+    void AssetBrowser::DrawRightClickMenu() const {
+
+        if(ImGui::BeginPopupContextWindow("popup")){
+
+            if(ImGui::Button("New")){
+                // ???
+            }
+
+            if(selectedFile.has_value()){
+                ImGui::Separator();
+                if(ImGui::Button("Delete")){
+                    std::filesystem::remove(selectedFile->path());
+                }
+                if(ImGui::Button("Rename")){
+                    // ???
+                }
+            }
+
+            ImGui::EndPopup();
+        }
     }
 }
