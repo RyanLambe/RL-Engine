@@ -32,7 +32,7 @@ namespace rl::ed
         bool newFileSelected = false;
 
         bool renaming = false;
-        char buf[256];
+        char buf[256] = "";
 
         void DrawFileButton(const std::filesystem::directory_entry& entry);
         void DrawRightClickMenu();

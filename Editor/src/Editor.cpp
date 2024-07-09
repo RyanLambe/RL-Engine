@@ -19,7 +19,7 @@ std::vector<std::weak_ptr<GuiElement>> Editor::guiElements = std::vector<std::we
 Editor::Editor()
 {
     // rl setup
-    Application::Setup(1280, 720, "RL Engine 2.0", false, OnWindowResize);
+    Application::Setup(1920, 1080, "RL Engine 2.0", false, OnWindowResize);
     renderTarget = RenderTarget::Create(Application::GetWindowPtr(), Application::GetGraphicsContextPtr());
 
     // ImGui setup

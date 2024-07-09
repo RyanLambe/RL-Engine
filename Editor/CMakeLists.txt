@@ -27,7 +27,8 @@ add_executable(Editor src/main.cpp
         src/windows/SystemsManager.h
         src/windows/AssetBrowser.cpp
         src/windows/AssetBrowser.h
-        src/temp/temp.h
+        src/popups/AssetManager.cpp
+        src/popups/AssetManager.h
 )
 
 # build shaders

@@ -3,9 +3,11 @@
 #include <locale>
 #include <array>
 
+#include "imgui_internal.h"
+
 #include "../Editor.h"
 #include "../project/ProjectManager.h"
-#include "imgui_internal.h"
+#include "../popups/AssetManager.h"
 
 namespace rl::ed
 {
@@ -36,7 +38,13 @@ namespace rl::ed
                 return;
             }
 
-            ImGui::Button("New");
+            if(ImGui::Button("New")){
+                AssetManager::OpenNewAssetPopup(currPath);
+            }
+            ImGui::SameLine();
+            if(ImGui::Button("Import")){
+                AssetManager::OpenImportAssetPopup(currPath);
+            }
             ImGui::SameLine();
             ImGui::SetNextItemWidth(250);
             ImGui::SliderFloat("Icon Size", &iconSize, 25, 250);
@@ -157,7 +165,11 @@ namespace rl::ed
         {
             if (ImGui::Button("New"))
             {
-                // ???
+                AssetManager::OpenNewAssetPopup(currPath);
+            }
+
+            if(ImGui::Button("Import")){
+                AssetManager::OpenImportAssetPopup(currPath);
             }
 
             if (selectedFile.has_value())

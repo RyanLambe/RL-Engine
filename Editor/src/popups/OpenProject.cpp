@@ -36,11 +36,11 @@ void OpenProject::Render()
 
         ImGui::Text("Project Name: ");
         ImGui::SameLine();
-        ImGui::InputText(" ", &name);
+        ImGui::InputText("##name", &name);
 
         ImGui::Text("Project Directory: ");
         ImGui::SameLine();
-        ImGui::InputText("  ", &path);
+        ImGui::InputText("##dir", &path);
 
         if (ImGui::Button("Open"))
         {
