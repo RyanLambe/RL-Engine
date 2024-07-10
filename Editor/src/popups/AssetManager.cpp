@@ -2,11 +2,13 @@
 
 #include "../Editor.h"
 
-namespace rl::ed {
+namespace rl::ed
+{
 
     std::shared_ptr<AssetManager> AssetManager::popup = nullptr;
 
-    void AssetManager::OpenNewAssetPopup(const std::filesystem::path& location) {
+    void AssetManager::OpenNewAssetPopup(const std::filesystem::path& location)
+    {
         if (!popup || (popup && popup->IsOpen() && popup->importAsset))
         {
             popup = std::make_shared<AssetManager>();
@@ -18,7 +20,8 @@ namespace rl::ed {
         popup->location = location;
     }
 
-    void AssetManager::OpenImportAssetPopup(const std::filesystem::path& file) {
+    void AssetManager::OpenImportAssetPopup(const std::filesystem::path& file)
+    {
         if (!popup || (popup && popup->IsOpen() && !popup->importAsset))
         {
             popup = std::make_shared<AssetManager>();
@@ -31,11 +34,13 @@ namespace rl::ed {
         file.filename().string().copy((char*)popup->filenameBuf, 256);
     }
 
-    void AssetManager::ClosePopup() {
+    void AssetManager::ClosePopup()
+    {
         popup->open = false;
     }
 
-    void AssetManager::Render() {
+    void AssetManager::Render()
+    {
         ImVec2 center = ImGui::GetMainViewport()->GetCenter();
         ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
@@ -43,10 +48,12 @@ namespace rl::ed {
         {
             ImGui::SetWindowSize(ImVec2(600, 300));
 
-            if(importAsset){
+            if (importAsset)
+            {
                 ImGui::Text("Asset Name: %s", (char*)filenameBuf);
             }
-            else{
+            else
+            {
                 ImGui::Text("Asset Name: ");
                 ImGui::SameLine();
                 ImGui::InputText("##name", (char*)filenameBuf, 256);
@@ -55,11 +62,13 @@ namespace rl::ed {
             ImGui::Text("File Type: ");
             ImGui::SameLine();
 
-            class Test{
+            class Test
+            {
             public:
                 Test(int n) : n(n) {}
                 int n;
-                [[nodiscard]] std::string GetFormatName() const {
+                [[nodiscard]] std::string GetFormatName() const
+                {
                     return "test " + std::to_string(n);
                 }
             };
@@ -72,23 +81,23 @@ namespace rl::ed {
             tests.emplace_back(5);
 
             std::string list;
-            for(const auto& test : tests){
+            for (const auto& test : tests)
+            {
                 list += test.GetFormatName() + '\0';
             }
-
 
             static int currItem = 0;
             ImGui::Combo("##fileType", &currItem, list.c_str());
 
-            if(ImGui::Button(importAsset ? "Import" : "Create")){
-
-            }
+            if (ImGui::Button(importAsset ? "Import" : "Create"))
+            {}
 
             ImGui::End();
         }
     }
 
-    bool AssetManager::IsOpen() {
+    bool AssetManager::IsOpen()
+    {
         return open;
     }
 

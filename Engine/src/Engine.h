@@ -1,5 +1,7 @@
 #pragma once
 
+#include "assets/Asset.h"
+#include "assets/Mesh.h"
 #include "components/Camera.h"
 #include "components/MeshComponent.h"
 #include "components/Transform.h"

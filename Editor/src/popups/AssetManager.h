@@ -1,12 +1,14 @@
 #pragma once
 
-#include <memory>
 #include <filesystem>
+#include <memory>
 
 #include "../GuiElement.h"
 
-namespace rl::ed {
-    class AssetManager : public GuiElement {
+namespace rl::ed
+{
+    class AssetManager : public GuiElement
+    {
     public:
         ~AssetManager() override = default;
         AssetManager() = default;

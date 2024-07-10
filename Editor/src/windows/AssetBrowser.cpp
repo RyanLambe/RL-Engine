@@ -1,13 +1,12 @@
 #include "AssetBrowser.h"
 
-#include <locale>
 #include <array>
-
-#include "imgui_internal.h"
+#include <locale>
 
 #include "../Editor.h"
-#include "../project/ProjectManager.h"
 #include "../popups/AssetManager.h"
+#include "../project/ProjectManager.h"
+#include "imgui_internal.h"
 
 namespace rl::ed
 {
@@ -38,11 +37,13 @@ namespace rl::ed
                 return;
             }
 
-            if(ImGui::Button("New")){
+            if (ImGui::Button("New"))
+            {
                 AssetManager::OpenNewAssetPopup(currPath);
             }
             ImGui::SameLine();
-            if(ImGui::Button("Import")){
+            if (ImGui::Button("Import"))
+            {
                 AssetManager::OpenImportAssetPopup(currPath);
             }
             ImGui::SameLine();
@@ -168,7 +169,8 @@ namespace rl::ed
                 AssetManager::OpenNewAssetPopup(currPath);
             }
 
-            if(ImGui::Button("Import")){
+            if (ImGui::Button("Import"))
+            {
                 AssetManager::OpenImportAssetPopup(currPath);
             }
 

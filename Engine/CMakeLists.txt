@@ -143,6 +143,12 @@ add_library(Engine STATIC
         src/systems/Renderer.cpp
         src/systems/Renderer.h
 
+        # assets
+        src/assets/Asset.cpp
+        src/assets/Asset.h
+        src/assets/Mesh.cpp
+        src/assets/Mesh.h
+
         # types
         src/types/Vertex.h
         src/types/OptionalVector.h
@@ -178,6 +184,7 @@ endif ()
 # *** Create Include Folder ***
 # *****************************
 set(ENGINE_HEADER_DIRS
+        /assets
         /components
         /core
         /drivers/glfw
