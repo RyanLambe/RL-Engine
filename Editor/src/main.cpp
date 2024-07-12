@@ -2,10 +2,10 @@
 #include "ToolBar.h"
 #include "project/ProjectManager.h"
 #include "windows/AssetBrowser.h"
+#include "windows/Components.h"
 #include "windows/Console.h"
 #include "windows/SceneHierarchy.h"
 #include "windows/SystemsManager.h"
-#include "windows/Components.h"
 
 using namespace rl::ed;
 

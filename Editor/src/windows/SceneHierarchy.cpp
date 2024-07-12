@@ -53,7 +53,9 @@ namespace rl::ed
                         if (treeVisibleStack.back())
                         {
                             ImGui::SetCursorPosX(cursorPos);
-                            if(ImGui::Selectable((hierarchy[i].name + "##e" + std::to_string(hierarchy[i].id)).c_str())){
+                            if (ImGui::Selectable(
+                                    (hierarchy[i].name + "##e" + std::to_string(hierarchy[i].id)).c_str()))
+                            {
                                 Components::SelectEntity(hierarchy[i].id, hierarchy[i].name);
                             }
                         }
@@ -158,9 +160,11 @@ namespace rl::ed
         return size;
     }
 
-    void SceneHierarchy::SetEntityName(rl::Entity entity, const std::string& name) {
-        for(auto& element : window->hierarchy){
-            if(element.type == ElementType::Entity && element.id == entity)
+    void SceneHierarchy::SetEntityName(rl::Entity entity, const std::string& name)
+    {
+        for (auto& element : window->hierarchy)
+        {
+            if (element.type == ElementType::Entity && element.id == entity)
                 element.name = name.empty() ? "Entity " + std::to_string(entity) : name;
         }
     }
