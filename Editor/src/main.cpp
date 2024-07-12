@@ -4,6 +4,7 @@
 #include "windows/AssetBrowser.h"
 #include "windows/Console.h"
 #include "windows/SystemsManager.h"
+#include "windows/SceneHierarchy.h"
 
 using namespace rl::ed;
 
@@ -21,6 +22,7 @@ int main()
     AssetBrowser::OpenWindow();
     Console::OpenWindow();
     SystemsManager::OpenWindow();
+    SceneHierarchy::OpenWindow();
 
     // main loop
     while (Editor::Update())
