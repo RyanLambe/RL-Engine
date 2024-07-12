@@ -5,6 +5,7 @@
 #include "windows/Console.h"
 #include "windows/SceneHierarchy.h"
 #include "windows/SystemsManager.h"
+#include "windows/Components.h"
 
 using namespace rl::ed;
 
@@ -23,6 +24,7 @@ int main()
     Console::OpenWindow();
     SystemsManager::OpenWindow();
     SceneHierarchy::OpenWindow();
+    Components::OpenWindow();
 
     // main loop
     while (Editor::Update())

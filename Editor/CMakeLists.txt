@@ -31,6 +31,8 @@ add_executable(Editor src/main.cpp
         src/popups/AssetManager.h
         src/windows/SceneHierarchy.cpp
         src/windows/SceneHierarchy.h
+        src/windows/Components.cpp
+        src/windows/Components.h
 )
 
 # build shaders

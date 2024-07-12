@@ -1,6 +1,7 @@
 #include "SceneHierarchy.h"
 
 #include "../Editor.h"
+#include "Components.h"
 
 namespace rl::ed
 {
@@ -28,15 +29,15 @@ namespace rl::ed
             if (ImGui::Button("New Folder"))
             {
                 // todo: all folders should end with "##fN" where 'N' is the id of the folder
-                hierarchy.emplace_back(ElementType::Folder, nextFolder, "Folder: " + std::to_string(nextFolder));
-                hierarchy.emplace_back(ElementType::FolderEnd, nextFolder, "Folder: " + std::to_string(nextFolder));
+                hierarchy.emplace_back(ElementType::Folder, nextFolder, "Folder " + std::to_string(nextFolder));
+                hierarchy.emplace_back(ElementType::FolderEnd, nextFolder, "Folder " + std::to_string(nextFolder));
                 nextFolder++;
             }
             ImGui::SameLine();
             if (ImGui::Button("New Entity"))
             {
                 // todo: all entities should end with "##eN" where 'N' is the id of the Entity
-                hierarchy.emplace_back(ElementType::Entity, nextEntity, std::to_string(nextEntity));
+                hierarchy.emplace_back(ElementType::Entity, nextEntity, "Entity " + std::to_string(nextEntity));
                 nextEntity++;
             }
 
@@ -52,7 +53,9 @@ namespace rl::ed
                         if (treeVisibleStack.back())
                         {
                             ImGui::SetCursorPosX(cursorPos);
-                            ImGui::Selectable(hierarchy[i].name.c_str());
+                            if(ImGui::Selectable((hierarchy[i].name + "##e" + std::to_string(hierarchy[i].id)).c_str())){
+                                Components::SelectEntity(hierarchy[i].id, hierarchy[i].name);
+                            }
                         }
                         break;
 
@@ -65,10 +68,10 @@ namespace rl::ed
                                 hierarchy[i].enabled = !hierarchy[i].enabled;
                             }
                             treeVisibleStack.push_back(hierarchy[i].enabled);
-                            cursorPos += 16;
                         }
                         else
                             treeVisibleStack.push_back(false);
+                        cursorPos += 16;
                         break;
 
                     case ElementType::FolderEnd:
@@ -153,5 +156,12 @@ namespace rl::ed
         }
 
         return size;
+    }
+
+    void SceneHierarchy::SetEntityName(rl::Entity entity, const std::string& name) {
+        for(auto& element : window->hierarchy){
+            if(element.type == ElementType::Entity && element.id == entity)
+                element.name = name.empty() ? "Entity " + std::to_string(entity) : name;
+        }
     }
 }

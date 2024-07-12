@@ -19,6 +19,8 @@ namespace rl::ed
         void Render() override;
         bool IsOpen() override;
 
+        static void SetEntityName(rl::Entity entity, const std::string& name);
+
     private:
         static std::shared_ptr<SceneHierarchy> window;
         bool open = true;
