@@ -51,9 +51,8 @@ namespace rl::ed
                 }
                 ImGui::EndTabBar();
             }
-
-            ImGui::End();
         }
+        ImGui::End();
     }
 
     bool Console::IsOpen()

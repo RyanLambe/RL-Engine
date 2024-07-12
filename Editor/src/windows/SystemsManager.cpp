@@ -28,9 +28,8 @@ namespace rl::ed
         {
             ImGui::Text("Systems Manager");
             ImGui::Button("Hi :)");
-
-            ImGui::End();
         }
+        ImGui::End();
     }
 
     bool SystemsManager::IsOpen()

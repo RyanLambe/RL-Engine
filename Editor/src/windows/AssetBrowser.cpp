@@ -34,6 +34,7 @@ namespace rl::ed
             if (!ProjectManager::IsProjectOpen())
             {
                 ImGui::Text("No project is open.");
+                ImGui::End();
                 return;
             }
 
@@ -112,8 +113,8 @@ namespace rl::ed
                     renaming = false;
                 }
             }
-            ImGui::End();
         }
+        ImGui::End();
     }
 
     bool AssetBrowser::IsOpen()
