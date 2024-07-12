@@ -2,7 +2,8 @@
 
 #include "../Editor.h"
 
-namespace rl::ed{
+namespace rl::ed
+{
     std::shared_ptr<SceneHierarchy> SceneHierarchy::window = nullptr;
 
     void SceneHierarchy::OpenWindow()
@@ -24,15 +25,16 @@ namespace rl::ed{
     {
         if (ImGui::Begin("Scene Hierarchy", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
-
-            if(ImGui::Button("New Folder")){
+            if (ImGui::Button("New Folder"))
+            {
                 // todo: all folders should end with "##fN" where 'N' is the id of the folder
                 hierarchy.emplace_back(ElementType::Folder, nextFolder, "Folder: " + std::to_string(nextFolder));
                 hierarchy.emplace_back(ElementType::FolderEnd, nextFolder, "Folder: " + std::to_string(nextFolder));
                 nextFolder++;
             }
             ImGui::SameLine();
-            if(ImGui::Button("New Entity")){
+            if (ImGui::Button("New Entity"))
+            {
                 // todo: all entities should end with "##eN" where 'N' is the id of the Entity
                 hierarchy.emplace_back(ElementType::Entity, nextEntity, std::to_string(nextEntity));
                 nextEntity++;
@@ -42,20 +44,24 @@ namespace rl::ed{
             treeVisibleStack.push_back(true);
             float cursorPos = ImGui::GetCursorPosX();
 
-            for(int i = 0; i < hierarchy.size(); i++){
-
-                switch (hierarchy[i].type) {
+            for (int i = 0; i < hierarchy.size(); i++)
+            {
+                switch (hierarchy[i].type)
+                {
                     case ElementType::Entity:
-                        if(treeVisibleStack.back()){
+                        if (treeVisibleStack.back())
+                        {
                             ImGui::SetCursorPosX(cursorPos);
                             ImGui::Selectable(hierarchy[i].name.c_str());
                         }
                         break;
 
                     case ElementType::Folder:
-                        if(treeVisibleStack.back()){
+                        if (treeVisibleStack.back())
+                        {
                             ImGui::SetCursorPosX(cursorPos);
-                            if(ImGui::Selectable((hierarchy[i].name.c_str()))){
+                            if (ImGui::Selectable((hierarchy[i].name.c_str())))
+                            {
                                 hierarchy[i].enabled = !hierarchy[i].enabled;
                             }
                             treeVisibleStack.push_back(hierarchy[i].enabled);
@@ -66,7 +72,8 @@ namespace rl::ed{
                         break;
 
                     case ElementType::FolderEnd:
-                        if(treeVisibleStack.back()){
+                        if (treeVisibleStack.back())
+                        {
                             ImGui::SetCursorPosX(cursorPos);
                             ImGui::Separator();
                         }
@@ -75,10 +82,11 @@ namespace rl::ed{
                         cursorPos -= 16;
                         continue;
                 }
-                if(hierarchy[i].type == ElementType::FolderEnd)
+                if (hierarchy[i].type == ElementType::FolderEnd)
                     continue;
 
-                if(ImGui::IsMouseDown(0) && ImGui::IsItemHovered() && moving.empty()){
+                if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered() && moving.empty())
+                {
                     moving = hierarchy[i].name;
                 }
 
@@ -88,10 +96,14 @@ namespace rl::ed{
                     int dest = i + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
                     if (dest >= 0 && dest + size <= hierarchy.size() && hierarchy.size() > 1)
                     {
-                        if(hierarchy[i].name != hierarchy[dest].name && hierarchy[dest].type == ElementType::Folder && !hierarchy[dest].enabled){
+                        if (hierarchy[i].name != hierarchy[dest].name && hierarchy[dest].type == ElementType::Folder
+                            && !hierarchy[dest].enabled)
+                        {
                             dest += GetHierarchyElementSize(dest) - 1;
                         }
-                        else if(hierarchy[i].name != hierarchy[dest].name && hierarchy[dest].type == ElementType::FolderEnd && !hierarchy[dest].enabled){
+                        else if (hierarchy[i].name != hierarchy[dest].name
+                                 && hierarchy[dest].type == ElementType::FolderEnd && !hierarchy[dest].enabled)
+                        {
                             dest -= GetHierarchyElementSize(dest) + 1;
                         }
                         dest = std::max(dest, 0);
@@ -107,7 +119,8 @@ namespace rl::ed{
                 }
             }
 
-            if(ImGui::IsMouseReleased(0)){
+            if (ImGui::IsMouseReleased(0))
+            {
                 moving = "";
             }
         }
@@ -119,19 +132,22 @@ namespace rl::ed{
         return open;
     }
 
-    int SceneHierarchy::GetHierarchyElementSize(int element) const {
+    int SceneHierarchy::GetHierarchyElementSize(int element) const
+    {
         int size = 1;
 
-        if(hierarchy[element].type == ElementType::Folder){
+        if (hierarchy[element].type == ElementType::Folder)
+        {
             int subLevel = 1;
-            for(int j = element + 1; j < hierarchy.size(); j++){
-                if(hierarchy[j].type == ElementType::Folder)
+            for (int j = element + 1; j < hierarchy.size(); j++)
+            {
+                if (hierarchy[j].type == ElementType::Folder)
                     subLevel++;
-                else if(hierarchy[j].type == ElementType::FolderEnd)
+                else if (hierarchy[j].type == ElementType::FolderEnd)
                     subLevel--;
                 size++;
 
-                if(subLevel <= 0)
+                if (subLevel <= 0)
                     break;
             }
         }

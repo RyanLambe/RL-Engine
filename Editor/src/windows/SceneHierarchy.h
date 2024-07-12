@@ -6,8 +6,10 @@
 #include "../GuiElement.h"
 #include "ecs/ComponentType.h"
 
-namespace rl::ed{
-    class SceneHierarchy : public GuiElement {
+namespace rl::ed
+{
+    class SceneHierarchy : public GuiElement
+    {
     public:
         ~SceneHierarchy() override = default;
 
@@ -21,13 +23,15 @@ namespace rl::ed{
         static std::shared_ptr<SceneHierarchy> window;
         bool open = true;
 
-        enum class ElementType : uint8_t {
+        enum class ElementType : uint8_t
+        {
             Entity = 0,
             Folder = 1,
             FolderEnd = 2
         };
 
-        struct Element {
+        struct Element
+        {
             ElementType type;
             size_t id = 0;
             std::string name;

@@ -1,6 +1,6 @@
-#include <iostream>
-
 #include <Engine.h>
+
+#include <iostream>
 
 using namespace rl;
 
@@ -140,7 +140,8 @@ int main()
         Application::Update();
         Application::GetGraphicsContextUnsafe()->Present();
 
-        for(const auto& message : Application::GetLogger().GetMessages()){
+        for (const auto& message : Application::GetLogger().GetMessages())
+        {
             std::cout << message.GetFormatted() << '\n';
         }
         Application::GetLogger().ClearMessages();

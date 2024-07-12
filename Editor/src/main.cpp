@@ -3,8 +3,8 @@
 #include "project/ProjectManager.h"
 #include "windows/AssetBrowser.h"
 #include "windows/Console.h"
-#include "windows/SystemsManager.h"
 #include "windows/SceneHierarchy.h"
+#include "windows/SystemsManager.h"
 
 using namespace rl::ed;
 

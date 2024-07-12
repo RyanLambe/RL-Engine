@@ -107,11 +107,10 @@ namespace rl
         }
     }
 
-    void Mesh::ReadFile(std::ifstream &input) {
+    void Mesh::ReadFile(std::ifstream& input) {}
 
-    }
-
-    void Mesh::WriteData(std::ofstream& output) {
+    void Mesh::WriteData(std::ofstream& output)
+    {
         output << vertices.size() << indices.size();
         output.write((char*)&vertices[0], vertices.size() * sizeof(Vertex));
         output.write((char*)&indices[0], indices.size() * sizeof(uint32_t));

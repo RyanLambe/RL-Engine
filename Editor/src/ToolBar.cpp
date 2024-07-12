@@ -5,8 +5,8 @@
 #include "Editor.h"
 #include "project/ProjectManager.h"
 #include "windows/Console.h"
-#include "windows/SystemsManager.h"
 #include "windows/SceneHierarchy.h"
+#include "windows/SystemsManager.h"
 
 using namespace rl::ed;
 
@@ -37,7 +37,7 @@ void ToolBar::Render()
                 Console::OpenWindow();
             if (ImGui::MenuItem("Systems Manager"))
                 SystemsManager::OpenWindow();
-            if(ImGui::MenuItem("Scene Hierarchy"))
+            if (ImGui::MenuItem("Scene Hierarchy"))
                 SceneHierarchy::OpenWindow();
             ImGui::MenuItem("Details");
             ImGui::MenuItem("Asset Browser");
