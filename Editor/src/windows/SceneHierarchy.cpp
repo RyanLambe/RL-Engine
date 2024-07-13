@@ -54,29 +54,6 @@ namespace rl::ed
         return open;
     }
 
-    int SceneHierarchy::GetHierarchyElementSize(int element) const
-    {
-        int size = 1;
-
-        if (hierarchy[element].type == ElementType::Folder)
-        {
-            int subLevel = 1;
-            for (int j = element + 1; j < hierarchy.size(); j++)
-            {
-                if (hierarchy[j].type == ElementType::Folder)
-                    subLevel++;
-                else if (hierarchy[j].type == ElementType::FolderEnd)
-                    subLevel--;
-                size++;
-
-                if (subLevel <= 0)
-                    break;
-            }
-        }
-
-        return size;
-    }
-
     void SceneHierarchy::SetEntityName(rl::Entity entity, const std::string& name)
     {
         for (auto& element : window->hierarchy)
@@ -136,10 +113,12 @@ namespace rl::ed
             if (hierarchy[i].type == ElementType::FolderEnd)
                 continue;
 
+            // handle input
+
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1))
             {
                 ImGui::OpenPopup(
-                    ("popup" + std::to_string((uint8_t)hierarchy[i].type) + std::to_string(hierarchy[i].id)).c_str());
+                        ("popup" + std::to_string((uint8_t)hierarchy[i].type) + std::to_string(hierarchy[i].id)).c_str());
                 rightClickedElement = i;
                 rightClickedEnabled = true;
             }
@@ -159,6 +138,29 @@ namespace rl::ed
             if (TryMoveElement(i))
                 break;
         }
+    }
+
+    int SceneHierarchy::GetHierarchyElementSize(int element) const
+    {
+        int size = 1;
+
+        if (hierarchy[element].type == ElementType::Folder)
+        {
+            int subLevel = 1;
+            for (int j = element + 1; j < hierarchy.size(); j++)
+            {
+                if (hierarchy[j].type == ElementType::Folder)
+                    subLevel++;
+                else if (hierarchy[j].type == ElementType::FolderEnd)
+                    subLevel--;
+                size++;
+
+                if (subLevel <= 0)
+                    break;
+            }
+        }
+
+        return size;
     }
 
     bool SceneHierarchy::TryMoveElement(int elementIndex)

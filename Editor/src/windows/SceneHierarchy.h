@@ -22,8 +22,6 @@ namespace rl::ed
         static void SetEntityName(rl::Entity entity, const std::string& name);
 
     private:
-        static std::shared_ptr<SceneHierarchy> window;
-        bool open = true;
 
         enum class ElementType : uint8_t
         {
@@ -51,10 +49,12 @@ namespace rl::ed
         bool rightClickedEnabled = false;
         size_t rightClickedElement = 0;
 
-        [[nodiscard]] int GetHierarchyElementSize(int element) const;
+        static std::shared_ptr<SceneHierarchy> window;
+        bool open = true;
 
         void DrawHierarchy();
-        bool TryMoveElement(int elementIndex);
-        bool DrawRightClickMenu(ElementType type, int index);
+        [[nodiscard]] int GetHierarchyElementSize(int element) const;
+        [[nodiscard]] bool TryMoveElement(int elementIndex);
+        [[nodiscard]] bool DrawRightClickMenu(ElementType type, int index);
     };
 }
