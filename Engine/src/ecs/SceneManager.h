@@ -3,6 +3,7 @@
 #include "../components/Camera.h"
 #include "ComponentCollection.h"
 #include "SystemManager.h"
+#include <queue>
 
 namespace rl
 {
@@ -20,6 +21,14 @@ namespace rl
             systemManager = SystemManager();
             components = ComponentCollection();
         }
+
+        Entity CreateEntity();
+        void DestroyEntity(Entity entity);
+
+    private:
+        std::vector<Entity> entities = std::vector<Entity>();
+        std::queue<Entity> deletedEntities = std::queue<Entity>();
+        Entity nextEntity = (Entity)0;
     };
 
     class SceneManager
