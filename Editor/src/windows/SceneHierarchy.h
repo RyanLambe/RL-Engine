@@ -44,10 +44,17 @@ namespace rl::ed
         };
 
         std::vector<Element> hierarchy = std::vector<Element>();
-        Entity nextEntity = 0;
+        std::vector<size_t> deletedFolders = std::vector<size_t>();
         size_t nextFolder = 0;
+
         std::string moving;
+        bool rightClickedEnabled = false;
+        size_t rightClickedElement = 0;
 
         [[nodiscard]] int GetHierarchyElementSize(int element) const;
+
+        void DrawHierarchy();
+        bool TryMoveElement(int elementIndex);
+        bool DrawRightClickMenu(ElementType type, int index);
     };
 }
