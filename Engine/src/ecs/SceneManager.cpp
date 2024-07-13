@@ -9,13 +9,16 @@ Scene& Scene::MainScene()
     return Application::GetScene();
 }
 
-Entity Scene::CreateEntity() {
+Entity Scene::CreateEntity()
+{
     Entity temp;
-    if(deletedEntities.empty()){
+    if (deletedEntities.empty())
+    {
         temp = nextEntity;
         nextEntity++;
     }
-    else{
+    else
+    {
         temp = deletedEntities.front();
         deletedEntities.pop();
     }
@@ -23,7 +26,8 @@ Entity Scene::CreateEntity() {
     return temp;
 }
 
-void Scene::DestroyEntity(Entity entity) {
+void Scene::DestroyEntity(Entity entity)
+{
     deletedEntities.push(entity);
     entities.erase(std::remove(entities.begin(), entities.end(), 8), entities.end());
 }

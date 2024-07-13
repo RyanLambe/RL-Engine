@@ -86,7 +86,8 @@ namespace rl::ed
         }
     }
 
-    void SceneHierarchy::DrawHierarchy() {
+    void SceneHierarchy::DrawHierarchy()
+    {
         std::vector<bool> treeVisibleStack;
         treeVisibleStack.push_back(true);
         float cursorPos = ImGui::GetCursorPosX();
@@ -99,8 +100,7 @@ namespace rl::ed
                     if (treeVisibleStack.back())
                     {
                         ImGui::SetCursorPosX(cursorPos);
-                        if (ImGui::Selectable(
-                                (hierarchy[i].name + "##e" + std::to_string(hierarchy[i].id)).c_str()))
+                        if (ImGui::Selectable((hierarchy[i].name + "##e" + std::to_string(hierarchy[i].id)).c_str()))
                         {
                             Components::SelectEntity(hierarchy[i].id, hierarchy[i].name);
                         }
@@ -136,15 +136,19 @@ namespace rl::ed
             if (hierarchy[i].type == ElementType::FolderEnd)
                 continue;
 
-            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1)){
-                ImGui::OpenPopup(("popup" + std::to_string((uint8_t)hierarchy[i].type) + std::to_string(hierarchy[i].id)).c_str());
+            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1))
+            {
+                ImGui::OpenPopup(
+                    ("popup" + std::to_string((uint8_t)hierarchy[i].type) + std::to_string(hierarchy[i].id)).c_str());
                 rightClickedElement = i;
                 rightClickedEnabled = true;
             }
-            if(i == rightClickedElement && ImGui::IsMouseClicked(1) && !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup)){
+            if (i == rightClickedElement && ImGui::IsMouseClicked(1)
+                && !ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))
+            {
                 rightClickedEnabled = false;
             }
-            if(DrawRightClickMenu(hierarchy[i].type, i))
+            if (DrawRightClickMenu(hierarchy[i].type, i))
                 break;
 
             if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered() && moving.empty())
@@ -152,12 +156,13 @@ namespace rl::ed
                 moving = hierarchy[i].name;
             }
 
-            if(TryMoveElement(i))
+            if (TryMoveElement(i))
                 break;
         }
     }
 
-    bool SceneHierarchy::TryMoveElement(int elementIndex) {
+    bool SceneHierarchy::TryMoveElement(int elementIndex)
+    {
         if (hierarchy[elementIndex].name == moving && !ImGui::IsItemHovered())
         {
             int size = GetHierarchyElementSize(elementIndex);
@@ -188,11 +193,14 @@ namespace rl::ed
         return false;
     }
 
-    bool SceneHierarchy::DrawRightClickMenu(ElementType type, int index) {
-        if(!rightClickedEnabled || index != rightClickedElement)
+    bool SceneHierarchy::DrawRightClickMenu(ElementType type, int index)
+    {
+        if (!rightClickedEnabled || index != rightClickedElement)
             return false;
 
-        if (ImGui::BeginPopupContextWindow(("popup" + std::to_string((uint8_t)hierarchy[index].type) + std::to_string(hierarchy[index].id)).c_str()))
+        if (ImGui::BeginPopupContextWindow(
+                ("popup" + std::to_string((uint8_t)hierarchy[index].type) + std::to_string(hierarchy[index].id))
+                    .c_str()))
         {
             ImGui::Text("%s", hierarchy[index].name.c_str());
             ImGui::Separator();
@@ -201,15 +209,18 @@ namespace rl::ed
             {
                 size_t idToDel = hierarchy[index].id;
                 std::vector<Element>::iterator iter;
-                for (iter = hierarchy.begin(); iter != hierarchy.end(); ) {
-                    if (iter->id == idToDel && (iter->type == type || (type == ElementType::Folder && iter->type == ElementType::FolderEnd)))
+                for (iter = hierarchy.begin(); iter != hierarchy.end();)
+                {
+                    if (iter->id == idToDel
+                        && (iter->type == type
+                            || (type == ElementType::Folder && iter->type == ElementType::FolderEnd)))
                         iter = hierarchy.erase(iter);
                     else
                         ++iter;
                 }
-                if(type == ElementType::Folder)
+                if (type == ElementType::Folder)
                     deletedFolders.emplace_back(idToDel);
-                if(type == ElementType::Entity)
+                if (type == ElementType::Entity)
                     Application::GetScene().DestroyEntity(idToDel);
 
                 rightClickedEnabled = false;

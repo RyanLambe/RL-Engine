@@ -1,9 +1,10 @@
 #pragma once
 
+#include <queue>
+
 #include "../components/Camera.h"
 #include "ComponentCollection.h"
 #include "SystemManager.h"
-#include <queue>
 
 namespace rl
 {
