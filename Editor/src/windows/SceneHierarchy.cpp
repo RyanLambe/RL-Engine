@@ -188,7 +188,8 @@ namespace rl::ed
 
             if (moving == hierarchy[i].name)
             {
-                if(TryMoveElement(i)){
+                if (TryMoveElement(i))
+                {
                     if (shouldCloseChildWindow)
                         ImGui::EndChild();
                     break;
@@ -229,7 +230,8 @@ namespace rl::ed
         {
             int size = GetHierarchyElementSize(elementIndex);
             int dest = elementIndex + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-            if (std::abs(ImGui::GetMouseDragDelta(0).y) >= 12.0f && dest >= 0 && dest + size <= hierarchy.size() && hierarchy.size() > 1)
+            if (std::abs(ImGui::GetMouseDragDelta(0).y) >= 12.0f && dest >= 0 && dest + size <= hierarchy.size()
+                && hierarchy.size() > 1)
             {
                 if (hierarchy[elementIndex].name != hierarchy[dest].name && hierarchy[dest].type == ElementType::Folder
                     && !hierarchy[dest].enabled)

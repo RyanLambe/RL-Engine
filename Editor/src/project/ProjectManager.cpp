@@ -9,6 +9,7 @@
 #include "../Editor.h"
 #include "../windows/AssetBrowser.h"
 #include "../windows/Console.h"
+#include "../tools/CodeManager.h"
 
 using namespace rl::ed;
 
@@ -138,6 +139,8 @@ void ProjectManager::Compile()
 
     std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
     std::filesystem::create_directory("./logs/");
+
+    CodeManager::Generate();
 
     // split
     projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir);

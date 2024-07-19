@@ -6,6 +6,7 @@
 #include "windows/Console.h"
 #include "windows/SceneHierarchy.h"
 #include "windows/SystemsManager.h"
+#include "tools/CodeManager.h"
 
 using namespace rl::ed;
 
@@ -25,6 +26,9 @@ int main()
     SystemsManager::OpenWindow();
     SceneHierarchy::OpenWindow();
     Components::OpenWindow();
+
+    // temp
+    CodeManager::AddSystem(std::filesystem::path("Assets/Example.cpp"), std::filesystem::path("Assets/Example.h"));
 
     // main loop
     while (Editor::Update())
