@@ -23,6 +23,8 @@ namespace rl::ed
         static void Pause();
 
         static void AddGuiElement(const std::weak_ptr<GuiElement>& newElement);
+        static ImFont* GetGenericFont();
+        static ImFont* GetWingdingFont();
 
     private:
         static void OnWindowResize(Window* window, int width, int height);
@@ -34,6 +36,9 @@ namespace rl::ed
         static bool resized;
         static bool open;
         static bool playing;
+
+        static ImFont* genericFont;
+        static ImFont* wingdingFont;
 
         static std::vector<std::weak_ptr<GuiElement>> guiElements;
         ImGuiIO* io;

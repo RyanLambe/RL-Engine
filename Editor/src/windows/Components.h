@@ -15,7 +15,8 @@ namespace rl::ed
         ~Components() override = default;
 
         static void SelectEntity(rl::Entity entity, const std::string& name);
-        static void DeselectEntity();
+        static void SelectFolder(size_t folder, const std::string& name);
+        static void Deselect();
 
         static void OpenWindow();
         static void CloseWindow();
@@ -28,7 +29,9 @@ namespace rl::ed
         bool open = true;
 
         bool isSelected = false;
-        rl::Entity selected;
+        bool isFolderSelected = false;
+        size_t selected;
+
         char name[256] = "";
     };
 }

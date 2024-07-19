@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <queue>
 #include <vector>
 
 #include "../GuiElement.h"
@@ -20,9 +21,9 @@ namespace rl::ed
         bool IsOpen() override;
 
         static void SetEntityName(rl::Entity entity, const std::string& name);
+        static void SetFolderName(size_t folder, const std::string& name);
 
     private:
-
         enum class ElementType : uint8_t
         {
             Entity = 0,
@@ -42,10 +43,11 @@ namespace rl::ed
         };
 
         std::vector<Element> hierarchy = std::vector<Element>();
-        std::vector<size_t> deletedFolders = std::vector<size_t>();
+        std::queue<size_t> deletedFolders = std::queue<size_t>();
         size_t nextFolder = 0;
 
         std::string moving;
+        bool moved = false;
         bool rightClickedEnabled = false;
         size_t rightClickedElement = 0;
 

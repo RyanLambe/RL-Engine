@@ -14,6 +14,9 @@ bool Editor::resized = false;
 bool Editor::open = true;
 bool Editor::playing = false;
 
+ImFont* Editor::genericFont = nullptr;
+ImFont* Editor::wingdingFont = nullptr;
+
 std::vector<std::weak_ptr<GuiElement>> Editor::guiElements = std::vector<std::weak_ptr<GuiElement>>();
 
 Editor::Editor()
@@ -115,7 +118,8 @@ void Editor::OnWindowResize(Window* window, int width, int height)
 void Editor::SetImGuiStyle()
 {
     ImGui::StyleColorsDark();
-    io->Fonts->AddFontFromFileTTF("fonts/Tauri/Tauri-Regular.ttf", 18.0f);
+    genericFont = io->Fonts->AddFontFromFileTTF("fonts/Tauri/Tauri-Regular.ttf", 18.0f);
+    wingdingFont = io->Fonts->AddFontFromFileTTF("fonts/RL-Wingding.ttf", 18.0f);
     ImGuiStyle& style = ImGui::GetStyle();
     if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
@@ -162,4 +166,14 @@ void Editor::AddGuiElement(const std::weak_ptr<GuiElement>& newElement)
 
     // add new element
     guiElements.push_back(newElement);
+}
+
+ImFont* Editor::GetGenericFont()
+{
+    return genericFont;
+}
+
+ImFont* Editor::GetWingdingFont()
+{
+    return wingdingFont;
 }

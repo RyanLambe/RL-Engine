@@ -10,13 +10,23 @@ namespace rl::ed
     void Components::SelectEntity(rl::Entity entity, const std::string& name)
     {
         window->isSelected = true;
+        window->isFolderSelected = false;
         window->selected = entity;
         (name + '\0').copy((char*)window->name, 256);
     }
 
-    void Components::DeselectEntity()
+    void Components::SelectFolder(size_t folder, const std::string& name)
+    {
+        window->isSelected = true;
+        window->isFolderSelected = true;
+        window->selected = folder;
+        (name + '\0').copy((char*)window->name, 256);
+    }
+
+    void Components::Deselect()
     {
         window->isSelected = false;
+        window->isFolderSelected = false;
         window->selected = 0;
         window->name[0] = '\0';
     }
@@ -40,6 +50,10 @@ namespace rl::ed
     {
         if (ImGui::Begin("Components", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
+            if (ImGui::IsMouseClicked(0) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))
+            {
+                Deselect();
+            }
             if (!isSelected)
             {
                 ImGui::End();
@@ -49,7 +63,10 @@ namespace rl::ed
             ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
             if (ImGui::InputText("##name", &name[0], 256))
             {
-                SceneHierarchy::SetEntityName(selected, std::string((char*)name));
+                if (!isFolderSelected)
+                    SceneHierarchy::SetEntityName(selected, std::string((char*)name));
+                else
+                    SceneHierarchy::SetFolderName(selected, std::string((char*)name));
             }
 
             ImGui::Separator();
