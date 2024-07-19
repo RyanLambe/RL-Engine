@@ -7,9 +7,9 @@
 #include <filesystem>
 
 #include "../Editor.h"
+#include "../tools/CodeManager.h"
 #include "../windows/AssetBrowser.h"
 #include "../windows/Console.h"
-#include "../tools/CodeManager.h"
 
 using namespace rl::ed;
 

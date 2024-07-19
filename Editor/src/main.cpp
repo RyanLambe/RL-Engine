@@ -1,12 +1,12 @@
 #include "Editor.h"
 #include "ToolBar.h"
 #include "project/ProjectManager.h"
+#include "tools/CodeManager.h"
 #include "windows/AssetBrowser.h"
 #include "windows/Components.h"
 #include "windows/Console.h"
 #include "windows/SceneHierarchy.h"
 #include "windows/SystemsManager.h"
-#include "tools/CodeManager.h"
 
 using namespace rl::ed;
 
