@@ -59,7 +59,8 @@ namespace rl::ed
     void CodeManager::GenerateCmake()
     {
         std::ofstream file(ProjectManager::GetProjectDirectory() + "/CMakeLists.txt");
-        if(!file.is_open()){
+        if (!file.is_open())
+        {
             RL_LOG_ERROR("Unable to open file at: ", ProjectManager::GetProjectDirectory() + "/CMakeLists.txt", ".");
             return;
         }
@@ -108,8 +109,10 @@ namespace rl::ed
     void CodeManager::GenerateSetupCpp()
     {
         std::ofstream file(ProjectManager::GetProjectDirectory() + "/ProjectData/Setup.cpp");
-        if(!file.is_open()){
-            RL_LOG_ERROR("Unable to open file at: ", ProjectManager::GetProjectDirectory() + "/ProjectData/Setup.cpp", ".");
+        if (!file.is_open())
+        {
+            RL_LOG_ERROR("Unable to open file at: ", ProjectManager::GetProjectDirectory() + "/ProjectData/Setup.cpp",
+                         ".");
             return;
         }
 
@@ -141,14 +144,18 @@ namespace rl::ed
         file.close();
     }
 
-    void CodeManager::ParseComponent(const std::string &component) {
-        if(!headerFiles.contains(component)){
+    void CodeManager::ParseComponent(const std::string& component)
+    {
+        if (!headerFiles.contains(component))
+        {
             RL_LOG_ERROR("Unable to find component ", component, ". Are you sure it is imported?");
             return;
         }
         std::ifstream file(ProjectManager::GetProjectDirectory() + headerFiles[component]);
-        if(!file.is_open()){
-            RL_LOG_ERROR("Unable to open file at: ", ProjectManager::GetProjectDirectory() + headerFiles[component], ".");
+        if (!file.is_open())
+        {
+            RL_LOG_ERROR("Unable to open file at: ", ProjectManager::GetProjectDirectory() + headerFiles[component],
+                         ".");
             return;
         }
 
@@ -160,13 +167,17 @@ namespace rl::ed
         bool publicDef = false;
         int bracketsDeep = 0;
         int goalBracketsDeep = -1;
-        for(int i = 0; i < words.size(); i++){
-            if(words[i] == "{"){
+        for (int i = 0; i < words.size(); i++)
+        {
+            if (words[i] == "{")
+            {
                 bracketsDeep++;
                 continue;
             }
-            if(words[i] == "}"){
-                if(classDef && bracketsDeep == goalBracketsDeep){
+            if (words[i] == "}")
+            {
+                if (classDef && bracketsDeep == goalBracketsDeep)
+                {
                     classDef = false;
                     break;
                 }
@@ -175,13 +186,16 @@ namespace rl::ed
             }
 
             // Find if in public definitions
-            if(classDef && bracketsDeep == goalBracketsDeep && i + 1 < words.size()){
-                if(words[i] == "public" && words[i+1] == ":"){
+            if (classDef && bracketsDeep == goalBracketsDeep && i + 1 < words.size())
+            {
+                if (words[i] == "public" && words[i + 1] == ":")
+                {
                     publicDef = true;
                     i++;
                     continue;
                 }
-                if((words[i] == "private" || words[i] == "protected") && words[i+1] == ":"){
+                if ((words[i] == "private" || words[i] == "protected") && words[i + 1] == ":")
+                {
                     publicDef = false;
                     i++;
                     continue;
@@ -189,15 +203,20 @@ namespace rl::ed
             }
 
             // Find class definition
-            if(!classDef && words[i] == "class" && words[i+1] == component){
-                if(words[i+2] != ":"){
+            if (!classDef && words[i] == "class" && words[i + 1] == component)
+            {
+                if (words[i + 2] != ":")
+                {
                     RL_LOG_ERROR(component, " must inherit from the \"rl::Component\" class.");
                     break;
                 }
 
                 i += 3;
-                while(i + 3 < words.size() && words[i] != "{"){
-                    if(words[i] == "public" && words[i+1] == "rl" && words[i+2] == "::" && words[i+3] == "Component"){
+                while (i + 3 < words.size() && words[i] != "{")
+                {
+                    if (words[i] == "public" && words[i + 1] == "rl" && words[i + 2] == "::"
+                        && words[i + 3] == "Component")
+                    {
                         classDef = true;
                         goalBracketsDeep = bracketsDeep + 1;
                         i += 3;
@@ -205,7 +224,8 @@ namespace rl::ed
                     }
                     i++;
                 }
-                if(!classDef){
+                if (!classDef)
+                {
                     RL_LOG_ERROR(component, " must inherit from the \"rl::Component\" class.");
                     break;
                 }
@@ -213,46 +233,56 @@ namespace rl::ed
             }
 
             // find parameters
-            if(classDef && publicDef && bracketsDeep == goalBracketsDeep){
-                if(i <= 0 && i + 2 >= words.size())
+            if (classDef && publicDef && bracketsDeep == goalBracketsDeep)
+            {
+                if (i <= 0 && i + 2 >= words.size())
                     continue;
-                if(words[i-1] == "static" || words[i-1] == "const") // type preceded by
+                if (words[i - 1] == "static" || words[i - 1] == "const") // type preceded by
                     continue;
-                if(words[i+1] == "const" || words[i+1] == "*") // type followed by
+                if (words[i + 1] == "const" || words[i + 1] == "*") // type followed by
                     continue;
-                std::string temp = words[i+2];
-                if(temp != ";" && temp != "=") // name followed by
+                std::string temp = words[i + 2];
+                if (temp != ";" && temp != "=") // name followed by
                     continue;
 
-                if(words[i] == "float") {
-                    RL_LOG("float at: ", words[i+1]);
+                if (words[i] == "float")
+                {
+                    RL_LOG("float at: ", words[i + 1]);
                 }
 
-                if(words[i] == "double") {
-                    RL_LOG("double at: ", words[i+1]);
+                if (words[i] == "double")
+                {
+                    RL_LOG("double at: ", words[i + 1]);
                 }
 
-                if(words[i] == "int") {
-                    RL_LOG("int at: ", words[i+1]);
+                if (words[i] == "int")
+                {
+                    RL_LOG("int at: ", words[i + 1]);
                 }
             }
         }
     }
 
-    void CodeManager::BreakupHeaderToWords(std::vector<std::string> &words, std::ifstream &file) {
+    void CodeManager::BreakupHeaderToWords(std::vector<std::string>& words, std::ifstream& file)
+    {
         std::string word;
         char nextLetter;
-        while (file >> std::noskipws >> nextLetter) {
-            if(std::isspace(static_cast<unsigned char>(nextLetter))){
-                if(!word.empty()){
+        while (file >> std::noskipws >> nextLetter)
+        {
+            if (std::isspace(static_cast<unsigned char>(nextLetter)))
+            {
+                if (!word.empty())
+                {
                     words.push_back(word);
                     word = "";
                 }
                 continue;
             }
-            switch(nextLetter){
+            switch (nextLetter)
+            {
                 case ':':
-                    if(words.back() == ":"){
+                    if (words.back() == ":")
+                    {
                         words.back() += ':';
                         continue;
                     }
@@ -264,7 +294,8 @@ namespace rl::ed
                 case '*':
                 case ',':
                 case '=':
-                    if(!word.empty()){
+                    if (!word.empty())
+                    {
                         words.push_back(word);
                         word = "";
                     }
@@ -276,7 +307,8 @@ namespace rl::ed
                     word += nextLetter;
             }
         }
-        if(!word.empty()){
+        if (!word.empty())
+        {
             words.push_back(word);
             word = "";
         }
