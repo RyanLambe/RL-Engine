@@ -15,9 +15,14 @@ namespace rl::ed
 
         static void Generate();
 
+        float test = 0;
+
     private:
         static void GenerateCmake();
         static void GenerateSetupCpp();
+
+        static void ParseComponent(const std::string& component);
+        static void BreakupHeaderToWords(std::vector<std::string>& words, std::ifstream& file);
 
         // names of the systems/components
         static std::vector<std::string> systems;
