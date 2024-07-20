@@ -7,6 +7,13 @@
 
 namespace rl::ed
 {
+    enum class VariableType : uint8_t {
+        Unknown = 0,
+        F32 = 1,
+        F64 = 2,
+        I32 = 3,
+    };
+
     class CodeManager
     {
     public:
@@ -31,5 +38,7 @@ namespace rl::ed
         // gets the location of the file based on the name
         static std::unordered_map<std::string, std::string> cppFiles;
         static std::unordered_map<std::string, std::string> headerFiles;
+
+        static std::unordered_map<std::string, std::vector<std::pair<VariableType, std::string>>> componentVariables;
     };
 }

@@ -12,6 +12,8 @@ namespace rl::ed
     std::unordered_map<std::string, std::string> CodeManager::cppFiles = {};
     std::unordered_map<std::string, std::string> CodeManager::headerFiles = {};
 
+    std::unordered_map<std::string, std::vector<std::pair<VariableType, std::string>>> CodeManager::componentVariables = {};
+
     void CodeManager::AddSystem(const std::filesystem::path& cppFile, const std::filesystem::path& headerFile)
     {
         if (cppFile.stem() != headerFile.stem())
@@ -54,6 +56,10 @@ namespace rl::ed
     {
         GenerateCmake();
         GenerateSetupCpp();
+        for (const auto& component : components)
+        {
+            ParseComponent(component);
+        }
     }
 
     void CodeManager::GenerateCmake()
@@ -122,7 +128,6 @@ namespace rl::ed
         for (const auto& hFile : headerFiles)
         {
             file << "#include \"../" << hFile.second << "\"\n";
-            ParseComponent(hFile.first);
         }
 
         file << "\nusing namespace rl;\n\n"
@@ -247,16 +252,25 @@ namespace rl::ed
 
                 if (words[i] == "float")
                 {
+                    if(!componentVariables.contains(component))
+                        componentVariables[component] = {};
+                    componentVariables[component].emplace_back(VariableType::F32, words[i + 1]);
                     RL_LOG("float at: ", words[i + 1]);
                 }
 
                 if (words[i] == "double")
                 {
+                    if(!componentVariables.contains(component))
+                        componentVariables[component] = {};
+                    componentVariables[component].emplace_back(VariableType::F64, words[i + 1]);
                     RL_LOG("double at: ", words[i + 1]);
                 }
 
                 if (words[i] == "int")
                 {
+                    if(!componentVariables.contains(component))
+                        componentVariables[component] = {};
+                    componentVariables[component].emplace_back(VariableType::I32, words[i + 1]);
                     RL_LOG("int at: ", words[i + 1]);
                 }
             }
