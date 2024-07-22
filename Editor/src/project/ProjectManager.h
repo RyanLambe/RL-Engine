@@ -46,10 +46,13 @@ namespace rl::ed
             {
                 return func(args...);
             }
+            catch (const std::exception& e)
+            {
+                RL_LOG_ERROR(e.what());
+            }
             catch (...)
             {
-                RL_LOG_ERROR("THSI IASDJFKLASJDF");
-                // do nothing? todo: should probably recompile after code fixes are made
+                RL_LOG_ERROR("Caught Unknown Exception");
             }
             return T();
         }

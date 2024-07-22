@@ -49,19 +49,20 @@ bool ProjectManager::New(const std::string& name, const std::string& path)
         return false;
     }
 
-    std::filesystem::create_directories(projectManager->projectDir);
+    std::filesystem::create_directory(projectManager->projectDir);
     if (!std::filesystem::exists(projectManager->projectDir))
     {
         RL_LOG_ERROR("Unable to create project Directory.");
         return false;
     }
 
-    std::filesystem::copy("./template/Assets", projectManager->projectDir + "/Assets",
-                          std::filesystem::copy_options::update_existing | std::filesystem::copy_options::recursive);
-    std::filesystem::copy("./template/ProjectData", projectManager->projectDir + "/ProjectData",
-                          std::filesystem::copy_options::update_existing | std::filesystem::copy_options::recursive);
-    std::filesystem::copy("./template/CMakeLists.txt", projectManager->projectDir + "/CMakeLists.txt",
-                          std::filesystem::copy_options::update_existing);
+    if (!std::filesystem::exists(projectManager->projectDir + "/Assets")) {
+        std::filesystem::create_directory(projectManager->projectDir + "/Assets");
+    }
+
+    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData")) {
+        std::filesystem::create_directory(projectManager->projectDir + "/ProjectData");
+    }
 
     projectManager->projectOpen = true;
     AssetBrowser::Setup(projectManager->projectDir);
@@ -111,7 +112,7 @@ void ProjectManager::Compile()
     std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
     std::filesystem::create_directory("./logs/");
 
-    CodeManager::Generate(); // is this the best spot?
+    CodeManager::Generate();
 
     // split
     projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir);
@@ -212,9 +213,12 @@ void ProjectManager::Start()
     {
         func((void*)Application::GetSharedPtr());
     }
+    catch (const std::exception& e)
+    {
+        RL_LOG_ERROR(e.what());
+    }
     catch (...)
     {
-        RL_LOG_ERROR("THSI IASDJFKLASJDF");
-        // do nothing? todo: should probably recompile after code fixes are made
+        RL_LOG_ERROR("Caught Unknown Exception");
     }
 }

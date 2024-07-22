@@ -62,7 +62,6 @@ add_dependencies(Editor shaders)
 
 # copy dependencies to build path
 file(COPY fonts DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-file(COPY template DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 # add Engine
 include_directories(Editor ../Engine/src)

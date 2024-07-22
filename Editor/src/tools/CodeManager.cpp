@@ -1,6 +1,5 @@
 #include "CodeManager.h"
 
-#include "../project/ProjectManager.h"
 #include "core/Logger.h"
 #include "fstream"
 
@@ -12,7 +11,8 @@ namespace rl::ed
     std::unordered_map<std::string, std::string> CodeManager::cppFiles = {};
     std::unordered_map<std::string, std::string> CodeManager::headerFiles = {};
 
-    std::unordered_map<std::string, std::vector<std::pair<VariableType, std::string>>> CodeManager::componentVariables = {};
+    std::unordered_map<std::string, std::vector<std::pair<VariableType, std::string>>> CodeManager::componentVariables
+        = {};
 
     void CodeManager::AddSystem(const std::filesystem::path& cppFile, const std::filesystem::path& headerFile)
     {
@@ -52,14 +52,93 @@ namespace rl::ed
         headerFiles[headerFile.stem().string()] = headerFile.string();
     }
 
+    const std::vector<std::string> &CodeManager::GetSystems() {
+        return systems;
+    }
+
+    const std::vector<std::string> &CodeManager::GetComponents() {
+        return components;
+    }
+
+    const std::vector<std::pair<VariableType, std::string>>& CodeManager::GetProperties(const std::string& component)
+    {
+        return componentVariables[component];
+    }
+
+    void CodeManager::AddComponent(const std::string& component, rl::Entity entity)
+    {
+        ProjectManager::RunFunction<void>("AddComponent", component, entity);
+    }
+
+    void CodeManager::RemoveComponent(const std::string& component, rl::Entity entity)
+    {
+        ProjectManager::RunFunction<void>("RemoveComponent", component, entity);
+    }
+
+    void* CodeManager::GetComponent(const std::string& component, rl::Entity entity)
+    {
+        return ProjectManager::RunFunction<void*>("GetComponent", component, entity);
+    }
+
+    void CodeManager::GetValue(const VariableType& valType, const std::string& componentType,
+                               const std::string& varName, const Entity& entity, void* outBuf)
+    {
+        switch (valType)
+        {
+            case VariableType::Unknown:
+                return;
+            case VariableType::I8:
+                *(i8*)outBuf = ProjectManager::RunFunction<i8>("GetValue" + ToStringUpper(valType), componentType,
+                                                               varName, entity);
+            case VariableType::I16:
+                *(i16*)outBuf = ProjectManager::RunFunction<i16>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::I32:
+                *(i32*)outBuf = ProjectManager::RunFunction<i32>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::I64:
+                *(i64*)outBuf = ProjectManager::RunFunction<i64>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::U8:
+                *(u8*)outBuf = ProjectManager::RunFunction<u8>("GetValue" + ToStringUpper(valType), componentType,
+                                                               varName, entity);
+            case VariableType::U16:
+                *(u16*)outBuf = ProjectManager::RunFunction<u16>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::U32:
+                *(u32*)outBuf = ProjectManager::RunFunction<u32>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::U64:
+                *(u64*)outBuf = ProjectManager::RunFunction<u64>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::F32:
+                *(f32*)outBuf = ProjectManager::RunFunction<f32>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::F64:
+                *(f64*)outBuf = ProjectManager::RunFunction<f64>("GetValue" + ToStringUpper(valType), componentType,
+                                                                 varName, entity);
+            case VariableType::VEC2:
+                *(vec2*)outBuf = ProjectManager::RunFunction<vec2>("GetValue" + ToStringUpper(valType), componentType,
+                                                                   varName, entity);
+            case VariableType::VEC3:
+                *(vec3*)outBuf = ProjectManager::RunFunction<vec3>("GetValue" + ToStringUpper(valType), componentType,
+                                                                   varName, entity);
+            case VariableType::VEC4:
+                *(vec4*)outBuf = ProjectManager::RunFunction<vec4>("GetValue" + ToStringUpper(valType), componentType,
+                                                                   varName, entity);
+        }
+    }
+
     void CodeManager::Generate()
     {
-        GenerateCmake();
-        GenerateSetupCpp();
+        componentVariables = {};
         for (const auto& component : components)
         {
             ParseComponent(component);
         }
+        GenerateCmake();
+        GenerateSetupCpp();
+        GenerateSetupHeader();
     }
 
     void CodeManager::GenerateCmake()
@@ -135,7 +214,7 @@ namespace rl::ed
              << "extern \"C\" void GameSetup(void* mainApp) {\n"
              << "\tGameSetupInternal(mainApp);\n"
              << "}\n\n"
-             << "void GameSetupInternal(void* mainApp){\n"
+             << "void GameSetupInternal(void* mainApp) {\n"
                 "\tApplication::ConnectToApp((std::shared_ptr<Application>*)mainApp);\n\n";
 
         // todo: find better way to add systems that is linked to the scene
@@ -145,6 +224,97 @@ namespace rl::ed
             file << "\tApplication::GetScene().systemManager.AddSystem<" << system << ">();\n";
         }
         file << "}\n";
+
+        WriteAddOrRemoveComponentFunc(file, true);
+        WriteAddOrRemoveComponentFunc(file, false);
+        WriteGetComponentFunc(file);
+
+        WriteSetOrGetValueFunc(file, VariableType::I8, true);
+        WriteSetOrGetValueFunc(file, VariableType::I8, false);
+        WriteSetOrGetValueFunc(file, VariableType::I16, true);
+        WriteSetOrGetValueFunc(file, VariableType::I16, false);
+        WriteSetOrGetValueFunc(file, VariableType::I32, true);
+        WriteSetOrGetValueFunc(file, VariableType::I32, false);
+        WriteSetOrGetValueFunc(file, VariableType::I64, true);
+        WriteSetOrGetValueFunc(file, VariableType::I64, false);
+
+        WriteSetOrGetValueFunc(file, VariableType::U8, true);
+        WriteSetOrGetValueFunc(file, VariableType::U8, false);
+        WriteSetOrGetValueFunc(file, VariableType::U16, true);
+        WriteSetOrGetValueFunc(file, VariableType::U16, false);
+        WriteSetOrGetValueFunc(file, VariableType::U32, true);
+        WriteSetOrGetValueFunc(file, VariableType::U32, false);
+        WriteSetOrGetValueFunc(file, VariableType::U64, true);
+        WriteSetOrGetValueFunc(file, VariableType::U64, false);
+
+        WriteSetOrGetValueFunc(file, VariableType::F32, true);
+        WriteSetOrGetValueFunc(file, VariableType::F32, false);
+        WriteSetOrGetValueFunc(file, VariableType::F64, true);
+        WriteSetOrGetValueFunc(file, VariableType::F64, false);
+
+        WriteSetOrGetValueFunc(file, VariableType::VEC2, true);
+        WriteSetOrGetValueFunc(file, VariableType::VEC2, false);
+        WriteSetOrGetValueFunc(file, VariableType::VEC3, true);
+        WriteSetOrGetValueFunc(file, VariableType::VEC3, false);
+        WriteSetOrGetValueFunc(file, VariableType::VEC4, true);
+        WriteSetOrGetValueFunc(file, VariableType::VEC4, false);
+
+        file.close();
+    }
+
+    void CodeManager::GenerateSetupHeader() {
+        std::ofstream file(ProjectManager::GetProjectDirectory() + "/ProjectData/Setup.h");
+        if (!file.is_open())
+        {
+            RL_LOG_ERROR("Unable to open file at: ", ProjectManager::GetProjectDirectory() + "/ProjectData/Setup.cpp",
+                         ".");
+            return;
+        }
+
+        file << "#pragma once\n"
+             << "#include \"Engine.h\"\n\n"
+             << "extern \"C\"\n{\n"
+             << "__declspec(dllexport) void GameSetup(void* mainApp);\n\n"
+
+             << "__declspec(dllexport) void AddComponent(const std::string& componentType, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void RemoveComponent(const std::string& componentType, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetComponent(const std::string& componentType, const rl::Entity& entity);\n\n"
+
+             << "__declspec(dllexport) void SetValueI8(const std::string& componentType, const std::string& varName, const rl::Entity& entity, i8 val);\n"
+             << "__declspec(dllexport) void SetValueI16(const std::string& componentType, const std::string& varName, const rl::Entity& entity, i16 val);\n"
+             << "__declspec(dllexport) void SetValueI32(const std::string& componentType, const std::string& varName, const rl::Entity& entity, i32 val);\n"
+             << "__declspec(dllexport) void SetValueI64(const std::string& componentType, const std::string& varName, const rl::Entity& entity, i64 val);\n\n"
+
+             << "__declspec(dllexport) i8 GetValueI8(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) i16 GetValueI16(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) i32 GetValueI32(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) i64 GetValueI64(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n\n"
+
+             << "__declspec(dllexport) void SetValueU8(const std::string& componentType, const std::string& varName, const rl::Entity& entity, u8 val);\n"
+             << "__declspec(dllexport) void SetValueU16(const std::string& componentType, const std::string& varName, const rl::Entity& entity, u16 val);\n"
+             << "__declspec(dllexport) void SetValueU32(const std::string& componentType, const std::string& varName, const rl::Entity& entity, u32 val);\n"
+             << "__declspec(dllexport) void SetValueU64(const std::string& componentType, const std::string& varName, const rl::Entity& entity, u64 val);\n\n"
+
+             << "__declspec(dllexport) u8 GetValueU8(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) u16 GetValueU16(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) u32 GetValueU32(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) u64 GetValueU64(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n\n"
+
+             << "__declspec(dllexport) void SetValueF32(const std::string& componentType, const std::string& varName, const rl::Entity& entity, f32 val);\n"
+             << "__declspec(dllexport) void SetValueF64(const std::string& componentType, const std::string& varName, const rl::Entity& entity, f64 val);\n\n"
+
+             << "__declspec(dllexport) f32 GetValueF32(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) f64 GetValueF64(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n\n"
+
+             << "__declspec(dllexport) void SetValueVec2(const std::string& componentType, const std::string& varName, const rl::Entity& entity, vec2 val);\n"
+             << "__declspec(dllexport) void SetValueVec3(const std::string& componentType, const std::string& varName, const rl::Entity& entity, vec3 val);\n"
+             << "__declspec(dllexport) void SetValueVec4(const std::string& componentType, const std::string& varName, const rl::Entity& entity, vec4 val);\n\n"
+
+             << "__declspec(dllexport) vec2 GetValueVec2(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) vec3 GetValueVec3(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n"
+             << "__declspec(dllexport) vec4 GetValueVec4(const std::string& componentType, const std::string& varName, const rl::Entity& entity);\n";
+
+        file << "};\n";
 
         file.close();
     }
@@ -217,21 +387,22 @@ namespace rl::ed
                 }
 
                 i += 3;
-                while (i + 3 < words.size() && words[i] != "{")
+                while (i + 6 < words.size() && words[i] != "{")
                 {
                     if (words[i] == "public" && words[i + 1] == "rl" && words[i + 2] == "::"
-                        && words[i + 3] == "Component")
+                        && words[i + 3] == "Component" && words[i + 4] == "<" && words[i + 5] == component
+                        && words[i + 6] == ">")
                     {
                         classDef = true;
                         goalBracketsDeep = bracketsDeep + 1;
-                        i += 3;
+                        i += 6;
                         break;
                     }
                     i++;
                 }
                 if (!classDef)
                 {
-                    RL_LOG_ERROR(component, " must inherit from the \"rl::Component\" class.");
+                    RL_LOG_ERROR(component, " must inherit from the \"rl::Component<", component, ">\" class.");
                     break;
                 }
                 continue;
@@ -246,32 +417,63 @@ namespace rl::ed
                     continue;
                 if (words[i + 1] == "const" || words[i + 1] == "*") // type followed by
                     continue;
-                std::string temp = words[i + 2];
-                if (temp != ";" && temp != "=") // name followed by
+                if (words[i + 2] != ";" && words[i + 2] != "=") // name followed by
                     continue;
 
-                if (words[i] == "float")
+                if (!componentVariables.contains(component))
+                    componentVariables[component] = {};
+
+                if (words[i] == "f32")
                 {
-                    if(!componentVariables.contains(component))
-                        componentVariables[component] = {};
                     componentVariables[component].emplace_back(VariableType::F32, words[i + 1]);
-                    RL_LOG("float at: ", words[i + 1]);
                 }
-
-                if (words[i] == "double")
+                else if (words[i] == "f64")
                 {
-                    if(!componentVariables.contains(component))
-                        componentVariables[component] = {};
                     componentVariables[component].emplace_back(VariableType::F64, words[i + 1]);
-                    RL_LOG("double at: ", words[i + 1]);
                 }
-
-                if (words[i] == "int")
+                else if (words[i] == "i8")
                 {
-                    if(!componentVariables.contains(component))
-                        componentVariables[component] = {};
+                    componentVariables[component].emplace_back(VariableType::I8, words[i + 1]);
+                }
+                else if (words[i] == "i16")
+                {
+                    componentVariables[component].emplace_back(VariableType::I16, words[i + 1]);
+                }
+                else if (words[i] == "i32")
+                {
                     componentVariables[component].emplace_back(VariableType::I32, words[i + 1]);
-                    RL_LOG("int at: ", words[i + 1]);
+                }
+                else if (words[i] == "i64")
+                {
+                    componentVariables[component].emplace_back(VariableType::I64, words[i + 1]);
+                }
+                else if (words[i] == "u8")
+                {
+                    componentVariables[component].emplace_back(VariableType::U8, words[i + 1]);
+                }
+                else if (words[i] == "u16")
+                {
+                    componentVariables[component].emplace_back(VariableType::U16, words[i + 1]);
+                }
+                else if (words[i] == "u32")
+                {
+                    componentVariables[component].emplace_back(VariableType::U32, words[i + 1]);
+                }
+                else if (words[i] == "u64")
+                {
+                    componentVariables[component].emplace_back(VariableType::U64, words[i + 1]);
+                }
+                else if (words[i] == "vec2")
+                {
+                    componentVariables[component].emplace_back(VariableType::VEC2, words[i + 1]);
+                }
+                else if (words[i] == "vec3")
+                {
+                    componentVariables[component].emplace_back(VariableType::VEC3, words[i + 1]);
+                }
+                else if (words[i] == "vec4")
+                {
+                    componentVariables[component].emplace_back(VariableType::VEC4, words[i + 1]);
                 }
             }
         }
@@ -304,6 +506,8 @@ namespace rl::ed
                 case '}':
                 case '(':
                 case ')':
+                case '<':
+                case '>':
                 case ';':
                 case '*':
                 case ',':
@@ -326,5 +530,160 @@ namespace rl::ed
             words.push_back(word);
             word = "";
         }
+    }
+
+    void CodeManager::WriteSetOrGetValueFunc(std::ofstream& file, VariableType type, bool writeSetFunc)
+    {
+        if (writeSetFunc)
+        {
+            file << "\nextern \"C\" void SetValue" << ToStringUpper(type)
+                 << "(const std::string& componentType, const std::string& varName, const Entity& entity, "
+                 << ToString(type) << " val) {\n";
+        }
+        else
+        {
+            file << "\nextern \"C\" " << ToString(type) << " GetValue" << ToStringUpper(type)
+                 << "(const std::string& componentType, const std::string& varName, const Entity& entity) {\n";
+        }
+
+        for (const auto& component : components)
+        {
+            file << "\tif (componentType == \"" << component << "\")\n\t{\n";
+            for (const std::pair<VariableType, std::string>& var : componentVariables[component])
+            {
+                if (var.first != type)
+                    continue;
+                file << "\t\tif (varName == \"" << var.second << "\")\n";
+                if (writeSetFunc)
+                {
+                    file << "\t\t\t" << component << "::GetComponent(entity)." << var.second << " = val;\n";
+                }
+                else
+                {
+                    file << "\t\t\treturn " << component << "::GetComponent(entity)." << var.second << ";\n";
+                }
+            }
+
+            if (writeSetFunc)
+                file << "\t\treturn;\n";
+            file << "\t}\n";
+        }
+        if (!writeSetFunc)
+            file << "\treturn " << ToString(type) << "(0);\n";
+        file << "}\n";
+    }
+
+    void CodeManager::WriteAddOrRemoveComponentFunc(std::ofstream& file, bool writeAddFunc)
+    {
+        file << "\nextern \"C\" void " << (writeAddFunc ? "AddComponent" : "RemoveComponent")
+             << "(const std::string& componentType, const Entity& entity) {\n";
+
+        bool first = true;
+        for (const auto& component : components)
+        {
+            file << "\t";
+            if (!first)
+                file << "else ";
+            file << "if (componentType == \"" << component << "\")\n\t{\n";
+
+            if (writeAddFunc)
+            {
+                file << "\t\tif (!" << component << "::HasComponent(entity))\n";
+                file << "\t\t\t" << component << "::Create(entity);\n\t}\n";
+            }
+            else
+            {
+                file << "\t\tif (" << component << "::HasComponent(entity))\n";
+                file << "\t\t\t" << component << "::Delete(entity);\n\t}\n";
+            }
+
+            first = false;
+        }
+
+        file << "}\n";
+    }
+
+    void CodeManager::WriteGetComponentFunc(std::ofstream& file)
+    {
+        file << "\nextern \"C\" void* GetComponent(const std::string& componentType, const Entity& entity) {\n";
+
+        for (const auto& component : components)
+        {
+            file << "\tif (componentType == \"" << component << "\")\n";
+            file << "\t\treturn (void*)&" << component << "::GetComponent(entity);\n";
+        }
+        file << "\treturn nullptr;\n}\n";
+    }
+
+    std::string CodeManager::ToString(VariableType type)
+    {
+        switch (type)
+        {
+            case VariableType::Unknown:
+                return "Unknown";
+            case VariableType::I8:
+                return "i8";
+            case VariableType::I16:
+                return "i16";
+            case VariableType::I32:
+                return "i32";
+            case VariableType::I64:
+                return "i64";
+            case VariableType::U8:
+                return "u8";
+            case VariableType::U16:
+                return "u16";
+            case VariableType::U32:
+                return "u32";
+            case VariableType::U64:
+                return "u64";
+            case VariableType::F32:
+                return "f32";
+            case VariableType::F64:
+                return "f64";
+            case VariableType::VEC2:
+                return "vec2";
+            case VariableType::VEC3:
+                return "vec3";
+            case VariableType::VEC4:
+                return "vec4";
+        }
+        return "Error";
+    }
+
+    std::string CodeManager::ToStringUpper(VariableType type)
+    {
+        switch (type)
+        {
+            case VariableType::Unknown:
+                return "Unknown";
+            case VariableType::I8:
+                return "I8";
+            case VariableType::I16:
+                return "I16";
+            case VariableType::I32:
+                return "I32";
+            case VariableType::I64:
+                return "I64";
+            case VariableType::U8:
+                return "U8";
+            case VariableType::U16:
+                return "U16";
+            case VariableType::U32:
+                return "U32";
+            case VariableType::U64:
+                return "U64";
+            case VariableType::F32:
+                return "F32";
+            case VariableType::F64:
+                return "F64";
+            case VariableType::VEC2:
+                return "Vec2";
+            case VariableType::VEC3:
+                return "Vec3";
+            case VariableType::VEC4:
+                return "Vec4";
+        }
+        return "Error";
     }
 }

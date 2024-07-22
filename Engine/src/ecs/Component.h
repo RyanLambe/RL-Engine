@@ -58,6 +58,11 @@ namespace rl
             return entity;
         }
 
+        inline void setEntity(Entity newEntity) noexcept
+        {
+            entity = newEntity;
+        }
+
     protected:
         Entity entity;
     };
