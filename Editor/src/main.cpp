@@ -29,6 +29,8 @@ int main()
 
     // temp
     CodeManager::AddSystem(std::filesystem::path("Assets/Example.cpp"), std::filesystem::path("Assets/Example.h"));
+    CodeManager::AddComponent(std::filesystem::path("Assets/ExampleComp.cpp"),
+                              std::filesystem::path("Assets/ExampleComp.h"));
 
     // main loop
     while (Editor::Update())

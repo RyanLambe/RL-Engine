@@ -135,8 +135,8 @@ bool Editor::Playing()
 
 void Editor::Play()
 {
-    Application::Reset();
-    ProjectManager::Start();
+    Application::GetLogger().ClearMessages();
+    Application::GetScene().components = ComponentCollection(); // remove?
     Application::GetScene().systemManager.StartSystems();
     playing = true;
 }

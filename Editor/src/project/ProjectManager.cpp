@@ -100,32 +100,6 @@ bool ProjectManager::Open(const std::string& name, const std::string& path)
     return true;
 }
 
-void ProjectManager::Start()
-{
-    if (!projectManager->library)
-    {
-        RL_LOG_ERROR("Game.dll not loaded");
-        return;
-    }
-
-    auto func = (SetupFunc)GetProcAddress(projectManager->library, "GameSetup");
-    if (!func)
-    {
-        RL_LOG_ERROR("GameSetup function not found: ", GetLastError());
-        return;
-    }
-
-    try
-    {
-        func((void*)Application::GetSharedPtr());
-    }
-    catch (...)
-    {
-        RL_LOG_ERROR("THSI IASDJFKLASJDF");
-        // do nothing? todo: should probably recompile after code fixes are made
-    }
-}
-
 void ProjectManager::Compile()
 {
     if (!projectManager->projectOpen)
@@ -134,13 +108,10 @@ void ProjectManager::Compile()
         return;
     }
 
-    Editor::Pause();
-    Application::Reset();
-
     std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
     std::filesystem::create_directory("./logs/");
 
-    CodeManager::Generate();
+    CodeManager::Generate(); // is this the best spot?
 
     // split
     projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir);
@@ -156,6 +127,9 @@ void ProjectManager::Update()
 
     projectManager->threadExists = false;
     bool result = projectManager->threadVal.get();
+
+    Editor::Pause();
+    Application::Reset();
     Console::UpdateBuildLogs();
 
     if (!result)
@@ -179,8 +153,14 @@ void ProjectManager::Update()
                                std::filesystem::copy_options::overwrite_existing);
 
     projectManager->library = LoadLibrary("Game.dll");
-    if (!projectManager->library)
+    if (!projectManager->library){
         RL_LOG_ERROR("Game.dll not found: ", GetLastError());
+        return;
+    }
+    RL_LOG_WARNING("Game.dll Connected.");
+
+    Start();
+    RL_LOG_WARNING("Game.dll Setup.");
 }
 
 bool ProjectManager::CompileInternal(const std::string& projectDir)
@@ -210,4 +190,30 @@ bool ProjectManager::IsProjectOpen()
 std::string ProjectManager::GetProjectDirectory()
 {
     return projectManager->projectDir;
+}
+
+void ProjectManager::Start()
+{
+    if (!projectManager->library)
+    {
+        RL_LOG_ERROR("Game.dll not loaded");
+        return;
+    }
+
+    auto func = (SetupFunc)GetProcAddress(projectManager->library, "GameSetup");
+    if (!func)
+    {
+        RL_LOG_ERROR("GameSetup function not found: ", GetLastError());
+        return;
+    }
+
+    try
+    {
+        func((void*)Application::GetSharedPtr());
+    }
+    catch (...)
+    {
+        RL_LOG_ERROR("THSI IASDJFKLASJDF");
+        // do nothing? todo: should probably recompile after code fixes are made
+    }
 }
