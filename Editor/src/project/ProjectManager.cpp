@@ -153,7 +153,8 @@ void ProjectManager::Update()
                                std::filesystem::copy_options::overwrite_existing);
 
     projectManager->library = LoadLibrary("Game.dll");
-    if (!projectManager->library){
+    if (!projectManager->library)
+    {
         RL_LOG_ERROR("Game.dll not found: ", GetLastError());
         return;
     }

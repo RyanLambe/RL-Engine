@@ -25,7 +25,8 @@ namespace rl
         {
             if (entityToIndex.contains(entity))
             {
-                RL_THROW_EXCEPTION("Multiple components cannot be added to the same entity.");
+                RL_LOG_ERROR("Multiple components cannot be added to the same entity.");
+                return GetComponent(entity);
             }
 
             for (size_t i = 0; i < components.size(); i++)

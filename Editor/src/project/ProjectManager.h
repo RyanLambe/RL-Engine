@@ -6,6 +6,7 @@
 #include <optional>
 #include <string>
 #include <thread>
+
 #include "core/Logger.h"
 
 namespace rl::ed
@@ -25,8 +26,8 @@ namespace rl::ed
         static bool IsProjectOpen();
         static std::string GetProjectDirectory();
 
-        template<typename T, typename... Args>
-        static T RunFunction(const std::string& name, const Args&... args){
+        template<typename T, typename... Args> static T RunFunction(const std::string& name, const Args&... args)
+        {
             if (!projectManager->library)
             {
                 RL_LOG_ERROR("Game.dll not loaded");

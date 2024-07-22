@@ -35,6 +35,9 @@ namespace rl
 
         inline static T& GetComponent(Entity entity)
         {
+            if (!HasComponent(entity))
+                RL_THROW_EXCEPTION("No component of type " + std::string(typeid(T).name()) + " attached to entity "
+                                   + std::to_string(entity));
             return internal::ComponentHelper::FindActiveComponentCollection().GetComponentType<T>()->GetComponent(
                 entity);
         }
@@ -53,11 +56,6 @@ namespace rl
         [[nodiscard]] inline Entity GetEntity() const noexcept
         {
             return entity;
-        }
-
-        inline void setEntity(Entity newEntity) noexcept
-        {
-            entity = newEntity;
         }
 
     protected:
