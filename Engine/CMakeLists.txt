@@ -151,6 +151,7 @@ add_library(Engine STATIC
 
         # types
         src/types/Vertex.h
+        src/types/Types.h
         src/types/OptionalVector.h
 )
 
