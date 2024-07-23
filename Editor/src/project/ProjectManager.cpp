@@ -56,11 +56,13 @@ bool ProjectManager::New(const std::string& name, const std::string& path)
         return false;
     }
 
-    if (!std::filesystem::exists(projectManager->projectDir + "/Assets")) {
+    if (!std::filesystem::exists(projectManager->projectDir + "/Assets"))
+    {
         std::filesystem::create_directory(projectManager->projectDir + "/Assets");
     }
 
-    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData")) {
+    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData"))
+    {
         std::filesystem::create_directory(projectManager->projectDir + "/ProjectData");
     }
 

@@ -1,5 +1,7 @@
 #include "SceneHierarchy.h"
 
+#include <algorithm>
+
 #include "../Editor.h"
 #include "Components.h"
 
@@ -243,7 +245,7 @@ namespace rl::ed
                 {
                     dest -= GetHierarchyElementSize(dest) + 1;
                 }
-                dest = std::max(dest, 0);
+                dest = dest > 0 ? dest : 0;
 
                 std::vector<Element> temp = {};
                 temp.insert(temp.begin(), hierarchy.begin() + elementIndex, hierarchy.begin() + elementIndex + size);

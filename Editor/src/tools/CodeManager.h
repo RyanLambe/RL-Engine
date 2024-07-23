@@ -7,8 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ecs/ComponentType.h"
 #include "../project/ProjectManager.h"
+#include "ecs/ComponentType.h"
 
 namespace rl::ed
 {
@@ -28,6 +28,22 @@ namespace rl::ed
         VEC2 = 11,
         VEC3 = 12,
         VEC4 = 13,
+    };
+
+    union VariableData {
+        i8 I8;
+        i16 I16;
+        i32 I32;
+        i64 I64;
+        u8 U8;
+        u16 U16;
+        u32 U32;
+        u64 U64;
+        f32 F32;
+        f64 F64;
+        vec2 Vec2;
+        vec3 Vec3;
+        vec4 Vec4;
     };
 
     class CodeManager

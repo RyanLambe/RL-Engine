@@ -68,7 +68,7 @@ namespace rl::ed
             const float padding = ImGui::GetStyle().ItemInnerSpacing.x;
             const float outerPadding = ImGui::GetStyle().ItemSpacing.x;
             const float area = ImGui::GetCurrentWindow()->InnerRect.GetWidth() - outerPadding * 2;
-            const int columns = max(std::floor(area / (iconSize + padding * 2)), 1.0f);
+            const int columns = std::max(std::floor(area / (iconSize + padding * 2)), 1.0f);
             int i = 0;
 
             ImGui::SetCursorPosX((outerPadding + area - ((iconSize + padding * 2) * (float)columns)) / 2);

@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../GuiElement.h"
+#include "../tools/CodeManager.h"
 
 namespace rl::ed
 {
@@ -31,7 +32,11 @@ namespace rl::ed
         bool isSelected = false;
         bool isFolderSelected = false;
         size_t selected;
-
         char name[256] = "";
+
+        std::unordered_map<Entity, std::unordered_map<std::string, std::unordered_map<std::string, VariableData>>> data;
+
+        void DrawAddComponentMenu();
+        static std::string FormatName(const std::string& name);
     };
 }
