@@ -52,6 +52,9 @@ namespace rl::ed
         static void AddSystem(const std::filesystem::path& cppFile, const std::filesystem::path& headerFile);
         static void AddComponent(const std::filesystem::path& cppFile, const std::filesystem::path& headerFile);
 
+        static void AddBuiltInSystem(const std::filesystem::path& headerFile);
+        static void AddBuiltInComponent(const std::filesystem::path& headerFile);
+
         static const std::vector<std::string>& GetSystems();
         static const std::vector<std::string>& GetComponents();
 
@@ -95,6 +98,7 @@ namespace rl::ed
         // gets the location of the file based on the name
         static std::unordered_map<std::string, std::string> cppFiles;
         static std::unordered_map<std::string, std::string> headerFiles;
+        static std::unordered_map<std::string, std::string> builtInFiles;
 
         static std::unordered_map<std::string, std::vector<std::pair<VariableType, std::string>>> componentVariables;
     };

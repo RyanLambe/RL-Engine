@@ -10,6 +10,7 @@ namespace rl::ed
 
     std::unordered_map<std::string, std::string> CodeManager::cppFiles = {};
     std::unordered_map<std::string, std::string> CodeManager::headerFiles = {};
+    std::unordered_map<std::string, std::string> CodeManager::builtInFiles = {};
 
     std::unordered_map<std::string, std::vector<std::pair<VariableType, std::string>>> CodeManager::componentVariables
         = {};
@@ -22,9 +23,10 @@ namespace rl::ed
             return;
         }
 
-        if (cppFiles.contains(cppFile.stem().string()) || headerFiles.contains(headerFile.stem().string()))
+        if (builtInFiles.contains(headerFile.stem().string()) || cppFiles.contains(cppFile.stem().string())
+            || headerFiles.contains(headerFile.stem().string()))
         {
-            RL_LOG_ERROR("The cpp file: ", cppFile.stem(), " already exists.");
+            RL_LOG_ERROR("The file: ", cppFile.stem().string(), " already exists.");
             return;
         }
 
@@ -41,15 +43,40 @@ namespace rl::ed
             return;
         }
 
-        if (cppFiles.contains(cppFile.stem().string()) || headerFiles.contains(headerFile.stem().string()))
+        if (builtInFiles.contains(headerFile.stem().string()) || cppFiles.contains(cppFile.stem().string())
+            || headerFiles.contains(headerFile.stem().string()))
         {
-            RL_LOG_ERROR("The cpp file: ", cppFile.stem(), " already exists.");
+            RL_LOG_ERROR("The file: ", cppFile.stem().string(), " already exists.");
             return;
         }
 
         components.push_back(cppFile.stem().string());
         cppFiles[cppFile.stem().string()] = cppFile.string();
         headerFiles[headerFile.stem().string()] = headerFile.string();
+    }
+
+    void CodeManager::AddBuiltInSystem(const std::filesystem::path& headerFile)
+    {
+        if (builtInFiles.contains(headerFile.stem().string()) || headerFiles.contains(headerFile.stem().string()))
+        {
+            RL_LOG_ERROR("The file: ", headerFile.stem().string(), " already exists.");
+            return;
+        }
+
+        systems.push_back(headerFile.stem().string());
+        builtInFiles[headerFile.stem().string()] = headerFile.string();
+    }
+
+    void CodeManager::AddBuiltInComponent(const std::filesystem::path& headerFile)
+    {
+        if (builtInFiles.contains(headerFile.stem().string()) || headerFiles.contains(headerFile.stem().string()))
+        {
+            RL_LOG_ERROR("The file: ", headerFile.stem().string(), " already exists.");
+            return;
+        }
+
+        components.push_back(headerFile.stem().string());
+        builtInFiles[headerFile.stem().string()] = headerFile.string();
     }
 
     const std::vector<std::string>& CodeManager::GetSystems()
@@ -352,16 +379,31 @@ namespace rl::ed
 
     void CodeManager::ParseComponent(const std::string& component)
     {
-        if (!headerFiles.contains(component))
+        if (!headerFiles.contains(component) && !builtInFiles.contains(component))
         {
             RL_LOG_ERROR("Unable to find component ", component, ". Are you sure it is imported?");
             return;
         }
-        std::ifstream file(ProjectManager::GetProjectDirectory() + headerFiles[component]);
+
+        std::string path;
+        if (headerFiles.contains(component))
+        {
+            path = ProjectManager::GetProjectDirectory() + headerFiles[component];
+        }
+        else if (builtInFiles.contains(component))
+        {
+            path = std::filesystem::current_path().string() + builtInFiles[component];
+        }
+        else
+        {
+            RL_LOG_ERROR("Unable to find file for component: ", component, ".");
+            return;
+        }
+
+        std::ifstream file(path);
         if (!file.is_open())
         {
-            RL_LOG_ERROR("Unable to open file at: ", ProjectManager::GetProjectDirectory() + headerFiles[component],
-                         ".");
+            RL_LOG_ERROR("Unable to open file at: ", path, ".");
             return;
         }
 
@@ -394,16 +436,14 @@ namespace rl::ed
             // Find if in public definitions
             if (classDef && bracketsDeep == goalBracketsDeep && i + 1 < words.size())
             {
-                if (words[i] == "public" && words[i + 1] == ":")
+                if (words[i] == "public")
                 {
                     publicDef = true;
-                    i++;
                     continue;
                 }
-                if ((words[i] == "private" || words[i] == "protected") && words[i + 1] == ":")
+                if (words[i] == "private" || words[i] == "protected")
                 {
                     publicDef = false;
-                    i++;
                     continue;
                 }
             }
@@ -425,6 +465,7 @@ namespace rl::ed
                         && words[i + 6] == ">")
                     {
                         classDef = true;
+                        publicDef = false;
                         goalBracketsDeep = bracketsDeep + 1;
                         i += 6;
                         break;
@@ -574,8 +615,8 @@ namespace rl::ed
         else
         {
             file << "\nextern \"C\" void GetValue" << ToStringUpper(type)
-                    << "(const std::string& componentType, const std::string& varName, const Entity& entity, "
-                    << ToString(type) << "* val) {\n";
+                 << "(const std::string& componentType, const std::string& varName, const Entity& entity, "
+                 << ToString(type) << "* val) {\n";
         }
 
         for (const auto& component : components)

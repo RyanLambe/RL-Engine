@@ -7,7 +7,7 @@
 
 namespace rl
 {
-    class MeshComponent : public Component<MeshComponent>
+    class MeshComponent : public rl::Component<MeshComponent>
     {
     public:
         void Enable() const;

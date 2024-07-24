@@ -1,18 +1,19 @@
 #pragma once
 
 #include "../ecs/Component.h"
+#include "../types/Types.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/quaternion.hpp"
 
 namespace rl
 {
-    class Transform : public Component<Transform>
+    class Transform : public rl::Component<Transform>
     {
     public:
         // instance variables
-        glm::vec3 position = glm::vec3(0);
+        vec3 position = vec3(0);
         glm::quat rotation = glm::quat(1, 0, 0, 0);
-        glm::vec3 scale = glm::vec3(1);
+        vec3 scale = vec3(1);
 
         // set values
         inline void SetPosition(float x, float y, float z) noexcept

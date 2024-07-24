@@ -32,6 +32,10 @@ int main()
     CodeManager::AddComponent(std::filesystem::path("Assets/ExampleComp.cpp"),
                               std::filesystem::path("Assets/ExampleComp.h"));
 
+    CodeManager::AddBuiltInComponent(std::filesystem::path("/include/components/Transform.h"));
+    CodeManager::AddBuiltInComponent(std::filesystem::path("/include/components/Camera.h"));
+    CodeManager::AddBuiltInComponent(std::filesystem::path("/include/components/MeshComponent.h"));
+
     // main loop
     while (Editor::Update())
     {

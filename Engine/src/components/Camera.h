@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../types/Types.h"
 #include "../ecs/Component.h"
 #include "../graphics/RenderTarget.h"
 #include "glm/glm.hpp"
@@ -7,12 +8,12 @@
 
 namespace rl
 {
-    class Camera : public Component<Camera>
+    class Camera : public rl::Component<Camera>
     {
     public:
-        float fov = 90;
-        float nearPlane = 0.01f;
-        float farPlane = 1000;
+        f32 fov = 90;
+        f32 nearPlane = 0.01f;
+        f32 farPlane = 1000;
 
         static Camera* GetMain();
         static void SetMain(Camera* cam);
@@ -53,7 +54,7 @@ namespace rl
     private:
         std::shared_ptr<RenderTarget> renderTarget = nullptr;
 
-        uint32_t width = 0;
-        uint32_t height = 0;
+        u32 width = 0;
+        u32 height = 0;
     };
 }

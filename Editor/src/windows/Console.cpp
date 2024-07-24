@@ -115,7 +115,8 @@ namespace rl::ed
         buildLog = buildSS.str();
     }
 
-    void Console::ClearBuildLogs() {
+    void Console::ClearBuildLogs()
+    {
         std::ofstream cmakeOut("./logs/CMakeOut.txt");
         cmakeOut << "Compiling...";
         cmakeOut.close();

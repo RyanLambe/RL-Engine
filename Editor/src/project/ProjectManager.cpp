@@ -114,9 +114,9 @@ void ProjectManager::Compile()
     std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
     std::filesystem::create_directory("./logs/");
 
-    CodeManager::Generate();
     Application::GetLogger().ClearMessages();
     Console::ClearBuildLogs();
+    CodeManager::Generate();
 
     // split
     projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir);

@@ -86,7 +86,8 @@ namespace rl::ed
             for (auto& component : data[selected])
             {
                 ImGui::PushFont(Editor::GetWingdingFont());
-                if(ImGui::Button("T", ImVec2(0, 0))){
+                if (ImGui::Button("T", ImVec2(0, 0)))
+                {
                     CodeManager::RemoveComponent(component.first, selected);
                     data[selected].erase(component.first);
                     ImGui::PopFont();
