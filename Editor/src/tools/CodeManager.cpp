@@ -147,13 +147,16 @@ namespace rl::ed
                 *(f64*)outBuf = ProjectManager::RunFunction<f64>("GetValue" + ToStringUpper(valType), componentType,
                                                                  varName, entity);
             case VariableType::VEC2:
-                *(vec2*)outBuf = ProjectManager::RunFunction<vec2>("GetValue" + ToStringUpper(valType), componentType,
+                *(Vec2*)outBuf = ProjectManager::RunFunction<Vec2>("GetValue" + ToStringUpper(valType), componentType,
                                                                    varName, entity);
             case VariableType::VEC3:
-                *(vec3*)outBuf = ProjectManager::RunFunction<vec3>("GetValue" + ToStringUpper(valType), componentType,
+                *(Vec3*)outBuf = ProjectManager::RunFunction<Vec3>("GetValue" + ToStringUpper(valType), componentType,
                                                                    varName, entity);
             case VariableType::VEC4:
-                *(vec4*)outBuf = ProjectManager::RunFunction<vec4>("GetValue" + ToStringUpper(valType), componentType,
+                *(Vec4*)outBuf = ProjectManager::RunFunction<Vec4>("GetValue" + ToStringUpper(valType), componentType,
+                                                                   varName, entity);
+            case VariableType::QUAT:
+                *(Quaternion*)outBuf = ProjectManager::RunFunction<Quaternion>("GetValue" + ToStringUpper(valType), componentType,
                                                                    varName, entity);
         }
     }
@@ -287,6 +290,8 @@ namespace rl::ed
         WriteSetOrGetValueFunc(file, VariableType::VEC3, false);
         WriteSetOrGetValueFunc(file, VariableType::VEC4, true);
         WriteSetOrGetValueFunc(file, VariableType::VEC4, false);
+        WriteSetOrGetValueFunc(file, VariableType::QUAT, true);
+        WriteSetOrGetValueFunc(file, VariableType::QUAT, false);
 
         file.close();
     }
@@ -359,18 +364,22 @@ namespace rl::ed
                 "const rl::Entity& entity, f64* val);\n\n"
 
              << "__declspec(dllexport) void SetValueVec2(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, vec2 val);\n"
+                "const rl::Entity& entity, Vec2 val);\n"
              << "__declspec(dllexport) void SetValueVec3(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, vec3 val);\n"
+                "const rl::Entity& entity, Vec3 val);\n"
              << "__declspec(dllexport) void SetValueVec4(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, vec4 val);\n\n"
+                "const rl::Entity& entity, Vec4 val);\n"
+             << "__declspec(dllexport) void SetValueQuaternion(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity, Quaternion val);\n\n"
 
              << "__declspec(dllexport) void GetValueVec2(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, vec2* val);\n"
+                "const rl::Entity& entity, Vec2* val);\n"
              << "__declspec(dllexport) void GetValueVec3(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, vec3* val);\n"
+                "const rl::Entity& entity, Vec3* val);\n"
              << "__declspec(dllexport) void GetValueVec4(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, vec4* val);\n";
+                "const rl::Entity& entity, Vec4* val);\n"
+             << "__declspec(dllexport) void GetValueQuaternion(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity, Quaternion* val);\n";
 
         file << "};\n";
 
@@ -535,17 +544,21 @@ namespace rl::ed
                 {
                     componentVariables[component].emplace_back(VariableType::U64, words[i + 1]);
                 }
-                else if (words[i] == "vec2")
+                else if (words[i] == "Vec2")
                 {
                     componentVariables[component].emplace_back(VariableType::VEC2, words[i + 1]);
                 }
-                else if (words[i] == "vec3")
+                else if (words[i] == "Vec3")
                 {
                     componentVariables[component].emplace_back(VariableType::VEC3, words[i + 1]);
                 }
-                else if (words[i] == "vec4")
+                else if (words[i] == "Vec4")
                 {
                     componentVariables[component].emplace_back(VariableType::VEC4, words[i + 1]);
+                }
+                else if (words[i] == "Quaternion")
+                {
+                    componentVariables[component].emplace_back(VariableType::QUAT, words[i + 1]);
                 }
             }
         }
@@ -711,11 +724,13 @@ namespace rl::ed
             case VariableType::F64:
                 return "f64";
             case VariableType::VEC2:
-                return "vec2";
+                return "Vec2";
             case VariableType::VEC3:
-                return "vec3";
+                return "Vec3";
             case VariableType::VEC4:
-                return "vec4";
+                return "Vec4";
+            case VariableType::QUAT:
+                return "Quaternion";
         }
         return "Error";
     }
@@ -752,6 +767,8 @@ namespace rl::ed
                 return "Vec3";
             case VariableType::VEC4:
                 return "Vec4";
+            case VariableType::QUAT:
+                return "Quaternion";
         }
         return "Error";
     }

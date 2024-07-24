@@ -11,9 +11,9 @@ namespace rl
     {
     public:
         // instance variables
-        vec3 position = vec3(0);
-        glm::quat rotation = glm::quat(1, 0, 0, 0);
-        vec3 scale = vec3(1);
+        Vec3 position = Vec3(0);
+        Quaternion rotation = Quaternion(1, 0, 0, 0);
+        Vec3 scale = Vec3(1);
 
         // set values
         inline void SetPosition(float x, float y, float z) noexcept

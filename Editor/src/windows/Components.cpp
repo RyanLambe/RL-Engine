@@ -223,6 +223,14 @@ namespace rl::ed
                                                       component.second[property.second].Vec4);
                             }
                             break;
+                        case VariableType::QUAT:
+                            if (ImGui::DragFloat3(("##in-" + component.first + property.second).c_str(),
+                                                  (float*)&component.second[property.second].Vec3, 0.1))
+                            {
+                                CodeManager::SetValue(property.first, component.first, property.second, selected,
+                                                      Transform::EulerToQuat(component.second[property.second].Vec3));
+                            }
+                            break;
                     }
                     ImGui::NextColumn();
                 }

@@ -28,6 +28,7 @@ namespace rl::ed
         VEC2 = 11,
         VEC3 = 12,
         VEC4 = 13,
+        QUAT = 14,
     };
 
     union VariableData {
@@ -41,9 +42,10 @@ namespace rl::ed
         u64 U64;
         f32 F32;
         f64 F64;
-        vec2 Vec2;
-        vec3 Vec3;
-        vec4 Vec4;
+        Vec2 Vec2;
+        Vec3 Vec3;
+        Vec4 Vec4;
+        glm::quat quat;
     };
 
     class CodeManager

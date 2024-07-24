@@ -2,12 +2,13 @@
 #include <climits>
 #include <cstdint>
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 // vectors
-using quaternion = glm::quat;
-using vec4 = glm::vec4;
-using vec3 = glm::vec3;
-using vec2 = glm::vec2;
+using Quaternion = glm::quat;
+using Vec4 = glm::vec4;
+using Vec3 = glm::vec3;
+using Vec2 = glm::vec2;
 
 // floats
 static_assert(sizeof(double) * CHAR_BIT == 64, "double is not 64 bit on this architecture, fix the f64 typedef.");
