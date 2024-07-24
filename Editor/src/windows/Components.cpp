@@ -185,7 +185,7 @@ namespace rl::ed
                             break;
                         case VariableType::F32:
                             if (ImGui::DragFloat(("##in-" + component.first + property.second).c_str(),
-                                                 (float*)&component.second[property.second].F32, 1))
+                                                 (float*)&component.second[property.second].F32, 0.1))
                             {
                                 CodeManager::SetValue(property.first, component.first, property.second, selected,
                                                       component.second[property.second].F32);
@@ -193,7 +193,7 @@ namespace rl::ed
                             break;
                         case VariableType::F64:
                             if (ImGui::DragFloat(("##in-" + component.first + property.second).c_str(),
-                                                 (float*)&component.second[property.second].F64, 1))
+                                                 (float*)&component.second[property.second].F64, 0.1))
                             {
                                 CodeManager::SetValue(property.first, component.first, property.second, selected,
                                                       component.second[property.second].F64);
@@ -201,7 +201,7 @@ namespace rl::ed
                             break;
                         case VariableType::VEC2:
                             if (ImGui::DragFloat2(("##in-" + component.first + property.second).c_str(),
-                                                  (float*)&component.second[property.second].Vec2, 1))
+                                                  (float*)&component.second[property.second].Vec2, 0.1))
                             {
                                 CodeManager::SetValue(property.first, component.first, property.second, selected,
                                                       component.second[property.second].Vec2);
@@ -209,7 +209,7 @@ namespace rl::ed
                             break;
                         case VariableType::VEC3:
                             if (ImGui::DragFloat3(("##in-" + component.first + property.second).c_str(),
-                                                  (float*)&component.second[property.second].Vec3, 1))
+                                                  (float*)&component.second[property.second].Vec3, 0.1))
                             {
                                 CodeManager::SetValue(property.first, component.first, property.second, selected,
                                                       component.second[property.second].Vec3);
@@ -217,7 +217,7 @@ namespace rl::ed
                             break;
                         case VariableType::VEC4:
                             if (ImGui::DragFloat4(("##in-" + component.first + property.second).c_str(),
-                                                  (float*)&component.second[property.second].Vec4, 1))
+                                                  (float*)&component.second[property.second].Vec4, 0.1))
                             {
                                 CodeManager::SetValue(property.first, component.first, property.second, selected,
                                                       component.second[property.second].Vec4);
