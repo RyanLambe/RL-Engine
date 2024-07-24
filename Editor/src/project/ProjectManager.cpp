@@ -115,6 +115,8 @@ void ProjectManager::Compile()
     std::filesystem::create_directory("./logs/");
 
     CodeManager::Generate();
+    Application::GetLogger().ClearMessages();
+    Console::ClearBuildLogs();
 
     // split
     projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir);
@@ -125,6 +127,9 @@ void ProjectManager::Update()
 {
     if (!projectManager->threadExists)
         return;
+
+    Console::UpdateBuildLogs();
+
     if (projectManager->threadVal.wait_for(std::chrono::seconds(0)) != std::future_status::ready)
         return;
 
@@ -133,7 +138,6 @@ void ProjectManager::Update()
 
     Editor::Pause();
     Application::Reset();
-    Console::UpdateBuildLogs();
 
     if (!result)
     {

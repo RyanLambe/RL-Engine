@@ -19,6 +19,7 @@ namespace rl::ed
         bool IsOpen() override;
 
         static void UpdateBuildLogs();
+        static void ClearBuildLogs();
 
     private:
         static std::shared_ptr<Console> window;

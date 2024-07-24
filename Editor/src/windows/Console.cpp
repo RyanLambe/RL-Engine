@@ -114,4 +114,14 @@ namespace rl::ed
         buildSS << buildIn.rdbuf();
         buildLog = buildSS.str();
     }
+
+    void Console::ClearBuildLogs() {
+        std::ofstream cmakeOut("./logs/CMakeOut.txt");
+        cmakeOut << "Compiling...";
+        cmakeOut.close();
+
+        std::ofstream buildOut("./logs/BuildOut.txt");
+        buildOut << "Compiling...";
+        buildOut.close();
+    }
 }
