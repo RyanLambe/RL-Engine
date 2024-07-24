@@ -13,6 +13,7 @@ int Editor::newHeight;
 bool Editor::resized = false;
 bool Editor::open = true;
 bool Editor::playing = false;
+float Editor::fontSize = 24.0f;
 
 ImFont* Editor::genericFont = nullptr;
 ImFont* Editor::wingdingFont = nullptr;
@@ -118,8 +119,8 @@ void Editor::OnWindowResize(Window* window, int width, int height)
 void Editor::SetImGuiStyle()
 {
     ImGui::StyleColorsDark();
-    genericFont = io->Fonts->AddFontFromFileTTF("fonts/Tauri/Tauri-Regular.ttf", 18.0f);
-    wingdingFont = io->Fonts->AddFontFromFileTTF("fonts/RL-Wingding.ttf", 18.0f);
+    genericFont = io->Fonts->AddFontFromFileTTF("fonts/Tauri/Tauri-Regular.ttf", fontSize);
+    wingdingFont = io->Fonts->AddFontFromFileTTF("fonts/RL-Wingding.ttf", fontSize);
     ImGuiStyle& style = ImGui::GetStyle();
     if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
@@ -176,4 +177,12 @@ ImFont* Editor::GetGenericFont()
 ImFont* Editor::GetWingdingFont()
 {
     return wingdingFont;
+}
+
+float Editor::GetFontSize() {
+    return fontSize;
+}
+
+void Editor::SetFontSize(float size) {
+    fontSize = size;
 }

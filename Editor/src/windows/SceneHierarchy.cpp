@@ -151,13 +151,13 @@ namespace rl::ed
                     }
                     else
                         treeVisibleStack.push_back(false);
-                    cursorPos += 20;
+                    cursorPos += Editor::GetFontSize() * 1.25f;
                     break;
 
                 case ElementType::FolderEnd:
                     hierarchy[i].enabled = treeVisibleStack.back();
                     treeVisibleStack.pop_back();
-                    cursorPos -= 20;
+                    cursorPos -= Editor::GetFontSize() * 1.25f;
                     continue;
             }
 
