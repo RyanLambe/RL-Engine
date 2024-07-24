@@ -85,6 +85,15 @@ namespace rl::ed
 
             for (auto& component : data[selected])
             {
+                ImGui::PushFont(Editor::GetWingdingFont());
+                if(ImGui::Button("T", ImVec2(0, 0))){
+                    CodeManager::RemoveComponent(component.first, selected);
+                    data[selected].erase(component.first);
+                    ImGui::PopFont();
+                    break;
+                }
+                ImGui::PopFont();
+                ImGui::SameLine();
                 ImGui::SeparatorText(FormatName(component.first).c_str());
 
                 float size = ImGui::GetContentRegionAvail().x;
