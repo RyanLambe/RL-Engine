@@ -11,9 +11,9 @@ namespace rl
     class Camera : public rl::Component<Camera>
     {
     public:
-        f32 fov = 90;
+        f32 fov = 90.0f;
         f32 nearPlane = 0.01f;
-        f32 farPlane = 1000;
+        f32 farPlane = 1000.0f;
 
         static Camera* GetMain();
         static void SetMain(Camera* cam);

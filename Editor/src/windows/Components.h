@@ -35,8 +35,11 @@ namespace rl::ed
         char name[256] = "";
 
         std::unordered_map<Entity, std::unordered_map<std::string, std::unordered_map<std::string, VariableData>>> data;
+        std::unordered_map<Entity, std::vector<std::string>> componentOrder;
 
         void DrawAddComponentMenu();
+        void DrawRightClickMenu(const std::string& componentName);
+        void UpdateComponent(const std::string& componentName);
         static std::string FormatName(const std::string& name);
     };
 }

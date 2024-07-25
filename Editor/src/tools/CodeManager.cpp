@@ -112,52 +112,55 @@ namespace rl::ed
     void CodeManager::GetValue(const VariableType& valType, const std::string& componentType,
                                const std::string& varName, const Entity& entity, void* outBuf)
     {
+        void* temp = ProjectManager::RunFunction<void*>("GetValue" + ToStringUpper(valType), componentType, varName, entity);
+        if(temp == nullptr)
+            return;
         switch (valType)
         {
             case VariableType::Unknown:
-                return;
+                break;
             case VariableType::I8:
-                *(i8*)outBuf = ProjectManager::RunFunction<i8>("GetValue" + ToStringUpper(valType), componentType,
-                                                               varName, entity);
+                *(i8*)outBuf = *std::bit_cast<i8*>(temp);
+                break;
             case VariableType::I16:
-                *(i16*)outBuf = ProjectManager::RunFunction<i16>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(i16*)outBuf = *std::bit_cast<i16*>(temp);
+                break;
             case VariableType::I32:
-                *(i32*)outBuf = ProjectManager::RunFunction<i32>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(i32*)outBuf = *std::bit_cast<i32*>(temp);
+                break;
             case VariableType::I64:
-                *(i64*)outBuf = ProjectManager::RunFunction<i64>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(i64*)outBuf = *std::bit_cast<i64*>(temp);
+                break;
             case VariableType::U8:
-                *(u8*)outBuf = ProjectManager::RunFunction<u8>("GetValue" + ToStringUpper(valType), componentType,
-                                                               varName, entity);
+                *(u8*)outBuf = *(u8*)temp;
+                break;
             case VariableType::U16:
-                *(u16*)outBuf = ProjectManager::RunFunction<u16>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(u16*)outBuf = *(u16*)temp;
+                break;
             case VariableType::U32:
-                *(u32*)outBuf = ProjectManager::RunFunction<u32>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(u32*)outBuf = *(u32*)temp;
+                break;
             case VariableType::U64:
-                *(u64*)outBuf = ProjectManager::RunFunction<u64>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(u64*)outBuf = *(u64*)temp;
+                break;
             case VariableType::F32:
-                *(f32*)outBuf = ProjectManager::RunFunction<f32>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(f32*)outBuf = *(f32*)temp;
+                break;
             case VariableType::F64:
-                *(f64*)outBuf = ProjectManager::RunFunction<f64>("GetValue" + ToStringUpper(valType), componentType,
-                                                                 varName, entity);
+                *(f64*)outBuf = *(f64*)temp;
+                break;
             case VariableType::VEC2:
-                *(Vec2*)outBuf = ProjectManager::RunFunction<Vec2>("GetValue" + ToStringUpper(valType), componentType,
-                                                                   varName, entity);
+                *(Vec2*)outBuf = *(Vec2*)temp;
+                break;
             case VariableType::VEC3:
-                *(Vec3*)outBuf = ProjectManager::RunFunction<Vec3>("GetValue" + ToStringUpper(valType), componentType,
-                                                                   varName, entity);
+                *(Vec3*)outBuf = *(Vec3*)temp;
+                break;
             case VariableType::VEC4:
-                *(Vec4*)outBuf = ProjectManager::RunFunction<Vec4>("GetValue" + ToStringUpper(valType), componentType,
-                                                                   varName, entity);
+                *(Vec4*)outBuf = *(Vec4*)temp;
+                break;
             case VariableType::QUAT:
-                *(Quaternion*)outBuf = ProjectManager::RunFunction<Quaternion>("GetValue" + ToStringUpper(valType), componentType,
-                                                                   varName, entity);
+                *(Quaternion*)outBuf = *(Quaternion*)temp;
+                break;
         }
     }
 
@@ -318,68 +321,68 @@ namespace rl::ed
                 "entity);\n\n"
 
              << "__declspec(dllexport) void SetValueI8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i8 val);\n"
+                "const rl::Entity& entity, const i8& val);\n"
              << "__declspec(dllexport) void SetValueI16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i16 val);\n"
+                "const rl::Entity& entity, const i16& val);\n"
              << "__declspec(dllexport) void SetValueI32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i32 val);\n"
+                "const rl::Entity& entity, const i32& val);\n"
              << "__declspec(dllexport) void SetValueI64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i64 val);\n\n"
+                "const rl::Entity& entity, const i64& val);\n\n"
 
-             << "__declspec(dllexport) void GetValueI8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i8* val);\n"
-             << "__declspec(dllexport) void GetValueI16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i16* val);\n"
-             << "__declspec(dllexport) void GetValueI32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i32* val);\n"
-             << "__declspec(dllexport) void GetValueI64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, i64* val);\n\n"
+             << "__declspec(dllexport) void* GetValueI8(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueI16(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueI32(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueI64(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n\n"
 
              << "__declspec(dllexport) void SetValueU8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u8 val);\n"
+                "const rl::Entity& entity, const u8& val);\n"
              << "__declspec(dllexport) void SetValueU16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u16 val);\n"
+                "const rl::Entity& entity, const u16& val);\n"
              << "__declspec(dllexport) void SetValueU32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u32 val);\n"
+                "const rl::Entity& entity, const u32& val);\n"
              << "__declspec(dllexport) void SetValueU64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u64 val);\n\n"
+                "const rl::Entity& entity, const u64& val);\n\n"
 
-             << "__declspec(dllexport) void GetValueU8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u8* val);\n"
-             << "__declspec(dllexport) void GetValueU16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u16* val);\n"
-             << "__declspec(dllexport) void GetValueU32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u32* val);\n"
-             << "__declspec(dllexport) void GetValueU64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, u64* val);\n\n"
+             << "__declspec(dllexport) void* GetValueU8(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueU16(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueU32(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueU64(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n\n"
 
              << "__declspec(dllexport) void SetValueF32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, f32 val);\n"
+                "const rl::Entity& entity, const f32& val);\n"
              << "__declspec(dllexport) void SetValueF64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, f64 val);\n\n"
+                "const rl::Entity& entity, const f64& val);\n\n"
 
-             << "__declspec(dllexport) void GetValueF32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, f32* val);\n"
-             << "__declspec(dllexport) void GetValueF64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, f64* val);\n\n"
+             << "__declspec(dllexport) void* GetValueF32(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueF64(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n\n"
 
              << "__declspec(dllexport) void SetValueVec2(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Vec2 val);\n"
+                "const rl::Entity& entity, const Vec2& val);\n"
              << "__declspec(dllexport) void SetValueVec3(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Vec3 val);\n"
+                "const rl::Entity& entity, const Vec3& val);\n"
              << "__declspec(dllexport) void SetValueVec4(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Vec4 val);\n"
+                "const rl::Entity& entity, const Vec4& val);\n"
              << "__declspec(dllexport) void SetValueQuaternion(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Quaternion val);\n\n"
+                "const rl::Entity& entity, const Quaternion& val);\n\n"
 
-             << "__declspec(dllexport) void GetValueVec2(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Vec2* val);\n"
-             << "__declspec(dllexport) void GetValueVec3(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Vec3* val);\n"
-             << "__declspec(dllexport) void GetValueVec4(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Vec4* val);\n"
-             << "__declspec(dllexport) void GetValueQuaternion(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, Quaternion* val);\n";
+             << "__declspec(dllexport) void* GetValueVec2(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueVec3(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueVec4(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n"
+             << "__declspec(dllexport) void* GetValueQuaternion(const std::string& componentType, const std::string& varName, "
+                "const rl::Entity& entity);\n";
 
         file << "};\n";
 
@@ -623,13 +626,12 @@ namespace rl::ed
         {
             file << "\nextern \"C\" void SetValue" << ToStringUpper(type)
                  << "(const std::string& componentType, const std::string& varName, const Entity& entity, "
-                 << ToString(type) << " val) {\n";
+                 << "const " << ToString(type) << "& val) {\n";
         }
         else
         {
-            file << "\nextern \"C\" void GetValue" << ToStringUpper(type)
-                 << "(const std::string& componentType, const std::string& varName, const Entity& entity, "
-                 << ToString(type) << "* val) {\n";
+            file << "\nextern \"C\" void* GetValue" << ToStringUpper(type)
+                 << "(const std::string& componentType, const std::string& varName, const Entity& entity) {\n";
         }
 
         for (const auto& component : components)
@@ -643,15 +645,22 @@ namespace rl::ed
                 if (writeSetFunc)
                 {
                     file << "\t\t\t" << component << "::GetComponent(entity)." << var.second << " = val;\n";
+                    file << "\t\t\treturn;\n\t\t}\n";
                 }
                 else
                 {
-                    file << "\t\t\t*val = " << component << "::GetComponent(entity)." << var.second << ";\n";
+                    file << "\t\t\treturn &" << component << "::GetComponent(entity)." << var.second << ";\n\t\t}\n";
                 }
-                file << "\t\t\treturn;\n\t\t}\n";
             }
-            file << "\t\treturn;\n\t}\n";
+            if(writeSetFunc){
+                file << "\t\treturn;\n\t}\n";
+            }
+            else {
+                file << "\t\treturn nullptr;\n\t}\n";
+            }
         }
+        if(!writeSetFunc)
+            file << "\treturn nullptr;\n";
         file << "}\n";
     }
 

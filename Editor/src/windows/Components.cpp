@@ -80,28 +80,38 @@ namespace rl::ed
                 return;
             }
 
-            if (!data.contains(selected))
+            if (!data.contains(selected)){
                 data[selected] = {};
+                componentOrder[selected] = {};
+            }
 
-            for (auto& component : data[selected])
+            for (auto& componentName : componentOrder[selected])
             {
+                auto& component = data[selected][componentName];
                 ImGui::PushFont(Editor::GetWingdingFont());
-                if (ImGui::Button("T", ImVec2(0, 0)))
+                if (ImGui::Button(("T##" + componentName + std::to_string(selected)).c_str(), ImVec2(0, 0)))
                 {
-                    CodeManager::RemoveComponent(component.first, selected);
-                    data[selected].erase(component.first);
+                    CodeManager::RemoveComponent(componentName, selected);
                     ImGui::PopFont();
+                    data[selected].erase(componentName);
+                    componentOrder[selected].erase(std::find(componentOrder[selected].begin(),
+                                                             componentOrder[selected].end(), componentName));
                     break;
                 }
                 ImGui::PopFont();
                 ImGui::SameLine();
-                ImGui::SeparatorText(FormatName(component.first).c_str());
+                ImGui::SeparatorText(FormatName(componentName).c_str());
+                if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1)){
+                    ImGui::OpenPopup(("RightClick" + componentName + std::to_string(selected)).c_str());
+                }
+                DrawRightClickMenu(componentName);
 
                 float size = ImGui::GetContentRegionAvail().x;
                 ImGui::Columns(2, "locations", false);
                 ImGui::SetColumnWidth(0, size * 0.3f);
 
-                for (const auto& property : CodeManager::GetProperties(component.first))
+                UpdateComponent(componentName);
+                for (const auto& property : CodeManager::GetProperties(componentName))
                 {
                     ImGui::Text("%s", FormatName(property.second).c_str());
                     ImGui::NextColumn();
@@ -113,122 +123,122 @@ namespace rl::ed
                             ImGui::Text("UNKNOWN_TYPE");
                             break;
                         case VariableType::I8:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].I8, 1,
+                            if(ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].I8, 1,
                                                std::numeric_limits<i8>::min(), std::numeric_limits<i8>::max()))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].I8);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].I8);
                             }
                             break;
                         case VariableType::I16:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].I16, 1,
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].I16, 1,
                                                std::numeric_limits<i16>::min(), std::numeric_limits<i16>::max()))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].I16);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].I16);
                             }
                             break;
                         case VariableType::I32:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].I32, 1,
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].I32, 1,
                                                std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max()))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].I32);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].I32);
                             }
                             break;
                         case VariableType::I64:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].I64, 1))
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].I64, 1))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].I64);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].I64);
                             }
                             break;
                         case VariableType::U8:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].U8, 1,
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].U8, 1,
                                                std::numeric_limits<u8>::min(), std::numeric_limits<u8>::max()))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].U8);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].U8);
                             }
                             break;
                         case VariableType::U16:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].U16, 1,
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].U16, 1,
                                                std::numeric_limits<u16>::min(), std::numeric_limits<u16>::max()))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].U16);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].U16);
                             }
                             break;
                         case VariableType::U32:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].U32, 1,
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].U32, 1,
                                                std::numeric_limits<u32>::min(), std::numeric_limits<int>::max()))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].U32);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].U32);
                             }
                             break;
                         case VariableType::U64:
-                            if (ImGui::DragInt(("##in-" + component.first + property.second).c_str(),
-                                               (int*)&component.second[property.second].U64, 1,
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].U64, 1,
                                                std::numeric_limits<u64>::min(), std::numeric_limits<int>::max()))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].U64);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].U64);
                             }
                             break;
                         case VariableType::F32:
-                            if (ImGui::DragFloat(("##in-" + component.first + property.second).c_str(),
-                                                 (float*)&component.second[property.second].F32, 0.1))
+                            if (ImGui::DragFloat(("##in-" + componentName + property.second).c_str(),
+                                                 (float*)&component[property.second].F32, 0.1))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].F32);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].F32);
                             }
                             break;
                         case VariableType::F64:
-                            if (ImGui::DragFloat(("##in-" + component.first + property.second).c_str(),
-                                                 (float*)&component.second[property.second].F64, 0.1))
+                            if (ImGui::DragFloat(("##in-" + componentName + property.second).c_str(),
+                                                 (float*)&component[property.second].F64, 0.1))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].F64);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].F64);
                             }
                             break;
                         case VariableType::VEC2:
-                            if (ImGui::DragFloat2(("##in-" + component.first + property.second).c_str(),
-                                                  (float*)&component.second[property.second].Vec2, 0.1))
+                            if (ImGui::DragFloat2(("##in-" + componentName + property.second).c_str(),
+                                                  (float*)&component[property.second].Vec2, 0.1))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].Vec2);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].Vec2);
                             }
                             break;
                         case VariableType::VEC3:
-                            if (ImGui::DragFloat3(("##in-" + component.first + property.second).c_str(),
-                                                  (float*)&component.second[property.second].Vec3, 0.1))
+                            if (ImGui::DragFloat3(("##in-" + componentName + property.second).c_str(),
+                                                  (float*)&component[property.second].Vec3, 0.1))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].Vec3);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].Vec3);
                             }
                             break;
                         case VariableType::VEC4:
-                            if (ImGui::DragFloat4(("##in-" + component.first + property.second).c_str(),
-                                                  (float*)&component.second[property.second].Vec4, 0.1))
+                            if (ImGui::DragFloat4(("##in-" + componentName + property.second).c_str(),
+                                                  (float*)&component[property.second].Vec4, 0.1))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      component.second[property.second].Vec4);
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      component[property.second].Vec4);
                             }
                             break;
                         case VariableType::QUAT:
-                            if (ImGui::DragFloat3(("##in-" + component.first + property.second).c_str(),
-                                                  (float*)&component.second[property.second].Vec3, 0.1))
+                            if (ImGui::DragFloat3(("##in-" + componentName + property.second).c_str(),
+                                                  (float*)&component[property.second].Vec3, 0.1))
                             {
-                                CodeManager::SetValue(property.first, component.first, property.second, selected,
-                                                      Transform::EulerToQuat(component.second[property.second].Vec3));
+                                CodeManager::SetValue(property.first, componentName, property.second, selected,
+                                                      Transform::EulerToQuat(component[property.second].Vec3));
                             }
                             break;
                     }
@@ -264,11 +274,55 @@ namespace rl::ed
                 if (data[selected].contains(component))
                     continue;
 
-                if (ImGui::Button(component.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+                if (ImGui::Button(FormatName(component).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 {
                     data[selected][component] = {};
+                    componentOrder[selected].push_back(component);
                     CodeManager::AddComponent(component, selected);
+                    UpdateComponent(component);
 
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+
+            ImGui::EndPopup();
+        }
+    }
+
+    void Components::DrawRightClickMenu(const std::string& componentName) {
+        if (ImGui::BeginPopup(("RightClick" + componentName + std::to_string(selected)).c_str()))
+        {
+            ImGui::Text("%s\t\t\t", FormatName(componentName).c_str());
+            ImGui::Separator();
+
+            if(ImGui::Button("Refresh")){
+                UpdateComponent(componentName);
+            }
+
+            if(componentOrder[selected].front() != componentName){
+                if(ImGui::Button("Move Up")){
+                    for(int i = 1; i < componentOrder[selected].size(); i++){
+                        if(componentOrder[selected][i] == componentName){
+                            const std::string temp = componentOrder[selected][i-1];
+                            componentOrder[selected][i-1] = componentOrder[selected][i];
+                            componentOrder[selected][i] = temp;
+                            break;
+                        }
+                    }
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+
+            if(componentOrder[selected].back() != componentName){
+                if(ImGui::Button("Move Down")){
+                    for(int i = 0; i < componentOrder[selected].size() - 1; i++){
+                        if(componentOrder[selected][i] == componentName){
+                            const std::string temp = componentOrder[selected][i+1];
+                            componentOrder[selected][i+1] = componentOrder[selected][i];
+                            componentOrder[selected][i] = temp;
+                            break;
+                        }
+                    }
                     ImGui::CloseCurrentPopup();
                 }
             }
@@ -297,5 +351,75 @@ namespace rl::ed
             out += name[i];
         }
         return out;
+    }
+
+    void Components::UpdateComponent(const std::string &componentName) {
+
+        Quaternion quatTemp; // only used for quat properties
+
+        for(const auto& property : CodeManager::GetProperties(componentName)){
+            switch (property.first)
+            {
+                case VariableType::Unknown:
+                    return;
+                case VariableType::I8:
+                    data[selected][componentName][property.second].I8 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I8);
+                    break;
+                case VariableType::I16:
+                    data[selected][componentName][property.second].I16 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I16);
+                    break;
+                case VariableType::I32:
+                    data[selected][componentName][property.second].I32 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I32);
+                    break;
+                case VariableType::I64:
+                    data[selected][componentName][property.second].I64 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I64);
+                    break;
+                case VariableType::U8:
+                    data[selected][componentName][property.second].U8 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U8);
+                    break;
+                case VariableType::U16:
+                    data[selected][componentName][property.second].U16 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U16);
+                    break;
+                case VariableType::U32:
+                    data[selected][componentName][property.second].U32 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U32);
+                    break;
+                case VariableType::U64:
+                    data[selected][componentName][property.second].U64 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U64);
+                    break;
+                case VariableType::F32:
+                    //data[selected][componentName][property.second].F32 = 0;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].F32);
+                    break;
+                case VariableType::F64:
+                    data[selected][componentName][property.second].F64 = 0.0f;
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].F64);
+                    break;
+                case VariableType::VEC2:
+                    data[selected][componentName][property.second].Vec2 = Vec2(0);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].Vec2);
+                    break;
+                case VariableType::VEC3:
+                    data[selected][componentName][property.second].Vec3 = Vec3(0);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].Vec3);
+                    break;
+                case VariableType::VEC4:
+                    data[selected][componentName][property.second].Vec4 = Vec4(0);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].Vec4);
+                    break;
+                case VariableType::QUAT:
+                    quatTemp = Quaternion(1, 0, 0, 0);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected, &quatTemp);
+                    data[selected][componentName][property.second].Vec3 = Transform::QuatToEuler(quatTemp);
+                    break;
+            }
+        }
     }
 }

@@ -181,7 +181,8 @@ bool ProjectManager::CompileInternal(const std::string& projectDir)
     std::string command = "cmake -S " + projectDir + " -B " + projectDir + "/ProjectData/temp"
                           + " -DEDITOR_PATH:STRING=" + std::filesystem::current_path().string()
                           + " -DRL_BUILD_FLAGS:STRING=\"" + RL_BUILD_FLAGS + "\"" + " -DRL_BUILD_CONFIG_FLAGS:STRING=\""
-                          + RL_BUILD_CONFIG_FLAGS + "\"" + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel)
+                          + (debugLevel == 0 ? "" : "/MDd ") + RL_BUILD_CONFIG_FLAGS + "\""
+                          + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel)
                           + " > ./logs/CMakeOut.txt";
     system(command.c_str());
 

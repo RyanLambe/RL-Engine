@@ -45,7 +45,7 @@ namespace rl::ed
         Vec2 Vec2;
         Vec3 Vec3;
         Vec4 Vec4;
-        glm::quat quat;
+        Quaternion Quat;
     };
 
     class CodeManager
