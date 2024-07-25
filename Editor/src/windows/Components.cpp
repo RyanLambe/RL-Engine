@@ -236,11 +236,11 @@ namespace rl::ed
                             }
                             break;
                         case VariableType::QUAT:
-                            if (ImGui::DragFloat3(("##in-" + componentName + property.second).c_str(),
-                                                  (float*)&component[property.second].Vec3, 0.1))
+                            if (ImGui::DragFloat4(("##in-" + componentName + property.second).c_str(),
+                                                  (float*)&component[property.second].Quat, 0.1))
                             {
                                 CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      Transform::EulerToQuat(component[property.second].Vec3));
+                                                      component[property.second].Quat);
                             }
                             break;
                     }
@@ -441,9 +441,9 @@ namespace rl::ed
                                           &data[selected][componentName][property.second].Vec4);
                     break;
                 case VariableType::QUAT:
-                    quatTemp = Quaternion(1, 0, 0, 0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &quatTemp);
-                    data[selected][componentName][property.second].Vec3 = Transform::QuatToEuler(quatTemp);
+                    data[selected][componentName][property.second].Quat = Quaternion(1, 0, 0, 0);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].Quat);
                     break;
             }
         }
