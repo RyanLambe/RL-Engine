@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../types/Types.h"
 #include "../ecs/Component.h"
 #include "../graphics/RenderTarget.h"
+#include "../types/Types.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 

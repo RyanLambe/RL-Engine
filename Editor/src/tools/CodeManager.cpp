@@ -112,8 +112,9 @@ namespace rl::ed
     void CodeManager::GetValue(const VariableType& valType, const std::string& componentType,
                                const std::string& varName, const Entity& entity, void* outBuf)
     {
-        void* temp = ProjectManager::RunFunction<void*>("GetValue" + ToStringUpper(valType), componentType, varName, entity);
-        if(temp == nullptr)
+        void* temp
+            = ProjectManager::RunFunction<void*>("GetValue" + ToStringUpper(valType), componentType, varName, entity);
+        if (temp == nullptr)
             return;
         switch (valType)
         {
@@ -309,80 +310,83 @@ namespace rl::ed
             return;
         }
 
-        file << "#pragma once\n"
-             << "#include \"Engine.h\"\n\n"
-             << "extern \"C\"\n{\n"
-             << "__declspec(dllexport) void GameSetup(void* mainApp);\n\n"
+        file
+            << "#pragma once\n"
+            << "#include \"Engine.h\"\n\n"
+            << "extern \"C\"\n{\n"
+            << "__declspec(dllexport) void GameSetup(void* mainApp);\n\n"
 
-             << "__declspec(dllexport) void AddComponent(const std::string& componentType, const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void RemoveComponent(const std::string& componentType, const rl::Entity& "
-                "entity);\n"
-             << "__declspec(dllexport) void* GetComponent(const std::string& componentType, const rl::Entity& "
-                "entity);\n\n"
+            << "__declspec(dllexport) void AddComponent(const std::string& componentType, const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void RemoveComponent(const std::string& componentType, const rl::Entity& "
+               "entity);\n"
+            << "__declspec(dllexport) void* GetComponent(const std::string& componentType, const rl::Entity& "
+               "entity);\n\n"
 
-             << "__declspec(dllexport) void SetValueI8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const i8& val);\n"
-             << "__declspec(dllexport) void SetValueI16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const i16& val);\n"
-             << "__declspec(dllexport) void SetValueI32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const i32& val);\n"
-             << "__declspec(dllexport) void SetValueI64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const i64& val);\n\n"
+            << "__declspec(dllexport) void SetValueI8(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const i8& val);\n"
+            << "__declspec(dllexport) void SetValueI16(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const i16& val);\n"
+            << "__declspec(dllexport) void SetValueI32(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const i32& val);\n"
+            << "__declspec(dllexport) void SetValueI64(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const i64& val);\n\n"
 
-             << "__declspec(dllexport) void* GetValueI8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueI16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueI32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueI64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n\n"
+            << "__declspec(dllexport) void* GetValueI8(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueI16(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueI32(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueI64(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n\n"
 
-             << "__declspec(dllexport) void SetValueU8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const u8& val);\n"
-             << "__declspec(dllexport) void SetValueU16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const u16& val);\n"
-             << "__declspec(dllexport) void SetValueU32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const u32& val);\n"
-             << "__declspec(dllexport) void SetValueU64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const u64& val);\n\n"
+            << "__declspec(dllexport) void SetValueU8(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const u8& val);\n"
+            << "__declspec(dllexport) void SetValueU16(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const u16& val);\n"
+            << "__declspec(dllexport) void SetValueU32(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const u32& val);\n"
+            << "__declspec(dllexport) void SetValueU64(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const u64& val);\n\n"
 
-             << "__declspec(dllexport) void* GetValueU8(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueU16(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueU32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueU64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n\n"
+            << "__declspec(dllexport) void* GetValueU8(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueU16(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueU32(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueU64(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n\n"
 
-             << "__declspec(dllexport) void SetValueF32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const f32& val);\n"
-             << "__declspec(dllexport) void SetValueF64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const f64& val);\n\n"
+            << "__declspec(dllexport) void SetValueF32(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const f32& val);\n"
+            << "__declspec(dllexport) void SetValueF64(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const f64& val);\n\n"
 
-             << "__declspec(dllexport) void* GetValueF32(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueF64(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n\n"
+            << "__declspec(dllexport) void* GetValueF32(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueF64(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n\n"
 
-             << "__declspec(dllexport) void SetValueVec2(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const Vec2& val);\n"
-             << "__declspec(dllexport) void SetValueVec3(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const Vec3& val);\n"
-             << "__declspec(dllexport) void SetValueVec4(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const Vec4& val);\n"
-             << "__declspec(dllexport) void SetValueQuaternion(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity, const Quaternion& val);\n\n"
+            << "__declspec(dllexport) void SetValueVec2(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const Vec2& val);\n"
+            << "__declspec(dllexport) void SetValueVec3(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const Vec3& val);\n"
+            << "__declspec(dllexport) void SetValueVec4(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity, const Vec4& val);\n"
+            << "__declspec(dllexport) void SetValueQuaternion(const std::string& componentType, const std::string& "
+               "varName, "
+               "const rl::Entity& entity, const Quaternion& val);\n\n"
 
-             << "__declspec(dllexport) void* GetValueVec2(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueVec3(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueVec4(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n"
-             << "__declspec(dllexport) void* GetValueQuaternion(const std::string& componentType, const std::string& varName, "
-                "const rl::Entity& entity);\n";
+            << "__declspec(dllexport) void* GetValueVec2(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueVec3(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueVec4(const std::string& componentType, const std::string& varName, "
+               "const rl::Entity& entity);\n"
+            << "__declspec(dllexport) void* GetValueQuaternion(const std::string& componentType, const std::string& "
+               "varName, "
+               "const rl::Entity& entity);\n";
 
         file << "};\n";
 
@@ -652,14 +656,16 @@ namespace rl::ed
                     file << "\t\t\treturn &" << component << "::GetComponent(entity)." << var.second << ";\n\t\t}\n";
                 }
             }
-            if(writeSetFunc){
+            if (writeSetFunc)
+            {
                 file << "\t\treturn;\n\t}\n";
             }
-            else {
+            else
+            {
                 file << "\t\treturn nullptr;\n\t}\n";
             }
         }
-        if(!writeSetFunc)
+        if (!writeSetFunc)
             file << "\treturn nullptr;\n";
         file << "}\n";
     }

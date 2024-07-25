@@ -182,8 +182,7 @@ bool ProjectManager::CompileInternal(const std::string& projectDir)
                           + " -DEDITOR_PATH:STRING=" + std::filesystem::current_path().string()
                           + " -DRL_BUILD_FLAGS:STRING=\"" + RL_BUILD_FLAGS + "\"" + " -DRL_BUILD_CONFIG_FLAGS:STRING=\""
                           + (debugLevel == 0 ? "" : "/MDd ") + RL_BUILD_CONFIG_FLAGS + "\""
-                          + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel)
-                          + " > ./logs/CMakeOut.txt";
+                          + " -DRL_DEBUG_LEVEL=" + std::to_string(debugLevel) + " > ./logs/CMakeOut.txt";
     system(command.c_str());
 
     command = "cmake --build " + projectDir + "/ProjectData/temp" + " > ./logs/BuildOut.txt";

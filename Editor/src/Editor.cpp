@@ -179,10 +179,12 @@ ImFont* Editor::GetWingdingFont()
     return wingdingFont;
 }
 
-float Editor::GetFontSize() {
+float Editor::GetFontSize()
+{
     return fontSize;
 }
 
-void Editor::SetFontSize(float size) {
+void Editor::SetFontSize(float size)
+{
     fontSize = size;
 }

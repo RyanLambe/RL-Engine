@@ -80,7 +80,8 @@ namespace rl::ed
                 return;
             }
 
-            if (!data.contains(selected)){
+            if (!data.contains(selected))
+            {
                 data[selected] = {};
                 componentOrder[selected] = {};
             }
@@ -94,14 +95,15 @@ namespace rl::ed
                     CodeManager::RemoveComponent(componentName, selected);
                     ImGui::PopFont();
                     data[selected].erase(componentName);
-                    componentOrder[selected].erase(std::find(componentOrder[selected].begin(),
-                                                             componentOrder[selected].end(), componentName));
+                    componentOrder[selected].erase(
+                        std::find(componentOrder[selected].begin(), componentOrder[selected].end(), componentName));
                     break;
                 }
                 ImGui::PopFont();
                 ImGui::SameLine();
                 ImGui::SeparatorText(FormatName(componentName).c_str());
-                if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1)){
+                if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1))
+                {
                     ImGui::OpenPopup(("RightClick" + componentName + std::to_string(selected)).c_str());
                 }
                 DrawRightClickMenu(componentName);
@@ -123,9 +125,9 @@ namespace rl::ed
                             ImGui::Text("UNKNOWN_TYPE");
                             break;
                         case VariableType::I8:
-                            if(ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].I8, 1,
-                                               std::numeric_limits<i8>::min(), std::numeric_limits<i8>::max()))
+                            if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
+                                               (int*)&component[property.second].I8, 1, std::numeric_limits<i8>::min(),
+                                               std::numeric_limits<i8>::max()))
                             {
                                 CodeManager::SetValue(property.first, componentName, property.second, selected,
                                                       component[property.second].I8);
@@ -159,8 +161,8 @@ namespace rl::ed
                             break;
                         case VariableType::U8:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].U8, 1,
-                                               std::numeric_limits<u8>::min(), std::numeric_limits<u8>::max()))
+                                               (int*)&component[property.second].U8, 1, std::numeric_limits<u8>::min(),
+                                               std::numeric_limits<u8>::max()))
                             {
                                 CodeManager::SetValue(property.first, componentName, property.second, selected,
                                                       component[property.second].U8);
@@ -289,22 +291,28 @@ namespace rl::ed
         }
     }
 
-    void Components::DrawRightClickMenu(const std::string& componentName) {
+    void Components::DrawRightClickMenu(const std::string& componentName)
+    {
         if (ImGui::BeginPopup(("RightClick" + componentName + std::to_string(selected)).c_str()))
         {
             ImGui::Text("%s\t\t\t", FormatName(componentName).c_str());
             ImGui::Separator();
 
-            if(ImGui::Button("Refresh")){
+            if (ImGui::Button("Refresh"))
+            {
                 UpdateComponent(componentName);
             }
 
-            if(componentOrder[selected].front() != componentName){
-                if(ImGui::Button("Move Up")){
-                    for(int i = 1; i < componentOrder[selected].size(); i++){
-                        if(componentOrder[selected][i] == componentName){
-                            const std::string temp = componentOrder[selected][i-1];
-                            componentOrder[selected][i-1] = componentOrder[selected][i];
+            if (componentOrder[selected].front() != componentName)
+            {
+                if (ImGui::Button("Move Up"))
+                {
+                    for (int i = 1; i < componentOrder[selected].size(); i++)
+                    {
+                        if (componentOrder[selected][i] == componentName)
+                        {
+                            const std::string temp = componentOrder[selected][i - 1];
+                            componentOrder[selected][i - 1] = componentOrder[selected][i];
                             componentOrder[selected][i] = temp;
                             break;
                         }
@@ -313,12 +321,16 @@ namespace rl::ed
                 }
             }
 
-            if(componentOrder[selected].back() != componentName){
-                if(ImGui::Button("Move Down")){
-                    for(int i = 0; i < componentOrder[selected].size() - 1; i++){
-                        if(componentOrder[selected][i] == componentName){
-                            const std::string temp = componentOrder[selected][i+1];
-                            componentOrder[selected][i+1] = componentOrder[selected][i];
+            if (componentOrder[selected].back() != componentName)
+            {
+                if (ImGui::Button("Move Down"))
+                {
+                    for (int i = 0; i < componentOrder[selected].size() - 1; i++)
+                    {
+                        if (componentOrder[selected][i] == componentName)
+                        {
+                            const std::string temp = componentOrder[selected][i + 1];
+                            componentOrder[selected][i + 1] = componentOrder[selected][i];
                             componentOrder[selected][i] = temp;
                             break;
                         }
@@ -353,66 +365,80 @@ namespace rl::ed
         return out;
     }
 
-    void Components::UpdateComponent(const std::string &componentName) {
-
+    void Components::UpdateComponent(const std::string& componentName)
+    {
         Quaternion quatTemp; // only used for quat properties
 
-        for(const auto& property : CodeManager::GetProperties(componentName)){
+        for (const auto& property : CodeManager::GetProperties(componentName))
+        {
             switch (property.first)
             {
                 case VariableType::Unknown:
                     return;
                 case VariableType::I8:
                     data[selected][componentName][property.second].I8 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I8);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].I8);
                     break;
                 case VariableType::I16:
                     data[selected][componentName][property.second].I16 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I16);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].I16);
                     break;
                 case VariableType::I32:
                     data[selected][componentName][property.second].I32 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I32);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].I32);
                     break;
                 case VariableType::I64:
                     data[selected][componentName][property.second].I64 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].I64);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].I64);
                     break;
                 case VariableType::U8:
                     data[selected][componentName][property.second].U8 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U8);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].U8);
                     break;
                 case VariableType::U16:
                     data[selected][componentName][property.second].U16 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U16);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].U16);
                     break;
                 case VariableType::U32:
                     data[selected][componentName][property.second].U32 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U32);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].U32);
                     break;
                 case VariableType::U64:
                     data[selected][componentName][property.second].U64 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].U64);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].U64);
                     break;
                 case VariableType::F32:
                     //data[selected][componentName][property.second].F32 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].F32);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].F32);
                     break;
                 case VariableType::F64:
                     data[selected][componentName][property.second].F64 = 0.0f;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].F64);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].F64);
                     break;
                 case VariableType::VEC2:
                     data[selected][componentName][property.second].Vec2 = Vec2(0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].Vec2);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].Vec2);
                     break;
                 case VariableType::VEC3:
                     data[selected][componentName][property.second].Vec3 = Vec3(0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].Vec3);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].Vec3);
                     break;
                 case VariableType::VEC4:
                     data[selected][componentName][property.second].Vec4 = Vec4(0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected, &data[selected][componentName][property.second].Vec4);
+                    CodeManager::GetValue(property.first, componentName, property.second, selected,
+                                          &data[selected][componentName][property.second].Vec4);
                     break;
                 case VariableType::QUAT:
                     quatTemp = Quaternion(1, 0, 0, 0);
