@@ -18,6 +18,7 @@ namespace rl::ed
         static void SelectEntity(rl::Entity entity, const std::string& name);
         static void SelectFolder(size_t folder, const std::string& name);
         static void Deselect();
+        static bool IsSelected(size_t val, bool folder);
 
         static void OpenWindow();
         static void CloseWindow();
@@ -40,6 +41,5 @@ namespace rl::ed
         void DrawAddComponentMenu();
         void DrawRightClickMenu(const std::string& componentName);
         void UpdateComponent(const std::string& componentName);
-        static std::string FormatName(const std::string& name);
     };
 }

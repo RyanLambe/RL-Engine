@@ -91,15 +91,23 @@ namespace rl::ed
         treeVisibleStack.push_back(true);
         float cursorPos = ImGui::GetCursorPosX();
         bool shouldCloseChildWindow;
+        bool shouldPopWindowColor;
 
         for (int i = 0; i < hierarchy.size(); i++)
         {
             shouldCloseChildWindow = false;
+            shouldPopWindowColor = false;
             switch (hierarchy[i].type)
             {
                 case ElementType::Entity:
                     if (treeVisibleStack.back())
                     {
+                        if (Components::IsSelected(hierarchy[i].id, false))
+                        {
+                            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_TextSelectedBg));
+                            shouldPopWindowColor = true;
+                        }
+
                         if (ImGui::BeginChild(('e' + std::to_string(hierarchy[i].id)).c_str(), ImVec2(0, 0),
                                               ImGuiChildFlags_AutoResizeY))
                         {
@@ -122,6 +130,12 @@ namespace rl::ed
                 case ElementType::Folder:
                     if (treeVisibleStack.back())
                     {
+                        if (Components::IsSelected(hierarchy[i].id, true))
+                        {
+                            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_TextSelectedBg));
+                            shouldPopWindowColor = true;
+                        }
+
                         if (ImGui::BeginChild(('f' + std::to_string(hierarchy[i].id)).c_str(), ImVec2(0, 0),
                                               ImGuiChildFlags_AutoResizeY))
                         {
@@ -179,6 +193,8 @@ namespace rl::ed
             {
                 if (shouldCloseChildWindow)
                     ImGui::EndChild();
+                if (shouldPopWindowColor)
+                    ImGui::PopStyleColor();
                 break;
             }
 
@@ -194,12 +210,16 @@ namespace rl::ed
                 {
                     if (shouldCloseChildWindow)
                         ImGui::EndChild();
+                    if (shouldPopWindowColor)
+                        ImGui::PopStyleColor();
                     break;
                 }
             }
 
             if (shouldCloseChildWindow)
                 ImGui::EndChild();
+            if (shouldPopWindowColor)
+                ImGui::PopStyleColor();
         }
     }
 

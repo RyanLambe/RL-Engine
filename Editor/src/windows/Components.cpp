@@ -35,6 +35,15 @@ namespace rl::ed
         window->name[0] = '\0';
     }
 
+    bool Components::IsSelected(size_t val, bool folder)
+    {
+        if (!window->isSelected)
+            return false;
+        if (window->isFolderSelected != folder)
+            return false;
+        return val == window->selected;
+    }
+
     void Components::OpenWindow()
     {
         if (!window)
@@ -101,7 +110,7 @@ namespace rl::ed
                 }
                 ImGui::PopFont();
                 ImGui::SameLine();
-                ImGui::SeparatorText(FormatName(componentName).c_str());
+                ImGui::SeparatorText(Editor::FormatName(componentName).c_str());
                 if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseClicked(1))
                 {
                     ImGui::OpenPopup(("RightClick" + componentName + std::to_string(selected)).c_str());
@@ -115,7 +124,7 @@ namespace rl::ed
                 UpdateComponent(componentName);
                 for (const auto& property : CodeManager::GetProperties(componentName))
                 {
-                    ImGui::Text("%s", FormatName(property.second).c_str());
+                    ImGui::Text("%s", Editor::FormatName(property.second).c_str());
                     ImGui::NextColumn();
 
                     ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
@@ -276,7 +285,7 @@ namespace rl::ed
                 if (data[selected].contains(component))
                     continue;
 
-                if (ImGui::Button(FormatName(component).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+                if (ImGui::Button(Editor::FormatName(component).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 {
                     data[selected][component] = {};
                     componentOrder[selected].push_back(component);
@@ -295,7 +304,7 @@ namespace rl::ed
     {
         if (ImGui::BeginPopup(("RightClick" + componentName + std::to_string(selected)).c_str()))
         {
-            ImGui::Text("%s\t\t\t", FormatName(componentName).c_str());
+            ImGui::Text("%s\t\t\t", Editor::FormatName(componentName).c_str());
             ImGui::Separator();
 
             if (ImGui::Button("Refresh"))
@@ -341,28 +350,6 @@ namespace rl::ed
 
             ImGui::EndPopup();
         }
-    }
-
-    std::string Components::FormatName(const std::string& name)
-    {
-        std::string out;
-        for (int i = 0; i < name.size(); i++)
-        {
-            if (i == 0)
-            {
-                out += (i8)toupper(name[i]);
-                continue;
-            }
-            if (name[i] == '_')
-            {
-                out += ' ';
-                continue;
-            }
-            if (name[i - 1] != toupper(name[i - 1]) && name[i] == toupper(name[i]))
-                out += ' ';
-            out += name[i];
-        }
-        return out;
     }
 
     void Components::UpdateComponent(const std::string& componentName)
