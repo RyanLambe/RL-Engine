@@ -36,6 +36,8 @@ int main()
     CodeManager::AddBuiltInComponent(std::filesystem::path("/include/components/Camera.h"));
     CodeManager::AddBuiltInComponent(std::filesystem::path("/include/components/MeshComponent.h"));
 
+    CodeManager::AddBuiltInSystem(std::filesystem::path("/include/systems/Renderer.h"));
+
     // main loop
     while (Editor::Update())
     {

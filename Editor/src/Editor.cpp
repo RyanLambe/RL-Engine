@@ -188,3 +188,25 @@ void Editor::SetFontSize(float size)
 {
     fontSize = size;
 }
+
+std::string Editor::FormatName(const std::string& name)
+{
+    std::string out;
+    for (int i = 0; i < name.size(); i++)
+    {
+        if (i == 0)
+        {
+            out += (i8)toupper(name[i]);
+            continue;
+        }
+        if (name[i] == '_')
+        {
+            out += ' ';
+            continue;
+        }
+        if (name[i - 1] != toupper(name[i - 1]) && name[i] == toupper(name[i]))
+            out += ' ';
+        out += name[i];
+    }
+    return out;
+}

@@ -20,5 +20,7 @@ namespace rl::ed
     private:
         static std::shared_ptr<SystemsManager> window;
         bool open = true;
+
+        void DrawAddSystemMenu();
     };
 }

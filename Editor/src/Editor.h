@@ -29,6 +29,8 @@ namespace rl::ed
         static float GetFontSize();
         static void SetFontSize(float size);
 
+        static std::string FormatName(const std::string& name);
+
     private:
         static void OnWindowResize(Window* window, int width, int height);
 
