@@ -63,12 +63,14 @@ namespace rl::ed
     {
         if (ImGui::Begin("Components", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
-            if(!ProjectManager::IsProjectOpen()){
+            if (!ProjectManager::IsProjectOpen())
+            {
                 ImGui::Text("No project is currently open.");
                 ImGui::End();
                 return;
             }
-            if(!ProjectManager::IsProjectCompiled()){
+            if (!ProjectManager::IsProjectCompiled())
+            {
                 ImGui::Text("The project has not been compiled yet.");
                 ImGui::End();
                 return;

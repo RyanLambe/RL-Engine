@@ -195,7 +195,8 @@ bool ProjectManager::IsProjectOpen()
     return projectManager->projectOpen;
 }
 
-bool ProjectManager::IsProjectCompiled() {
+bool ProjectManager::IsProjectCompiled()
+{
     return projectManager->library != nullptr;
 }
 
