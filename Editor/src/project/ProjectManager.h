@@ -25,6 +25,7 @@ namespace rl::ed
         static void Update();
 
         static bool IsProjectOpen();
+        static bool IsProjectCompiled();
         static std::string GetProjectDirectory();
 
         template<typename T, typename... Args> static T RunFunction(const std::string& name, const Args&... args)

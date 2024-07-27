@@ -27,6 +27,17 @@ namespace rl::ed
     {
         if (ImGui::Begin("Systems Manager", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
+            if(!ProjectManager::IsProjectOpen()){
+                ImGui::Text("No project is currently open.");
+                ImGui::End();
+                return;
+            }
+            if(!ProjectManager::IsProjectCompiled()){
+                ImGui::Text("The project has not been compiled yet.");
+                ImGui::End();
+                return;
+            }
+
             float SystemHeight = Editor::GetFontSize() * 2;
             ImVec2 nextItemPos;
             ImVec2 ChildSize;

@@ -63,9 +63,15 @@ namespace rl::ed
     {
         if (ImGui::Begin("Components", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
-            if (ImGui::IsMouseClicked(0) && !ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup))
-            {
-                //Deselect();
+            if(!ProjectManager::IsProjectOpen()){
+                ImGui::Text("No project is currently open.");
+                ImGui::End();
+                return;
+            }
+            if(!ProjectManager::IsProjectCompiled()){
+                ImGui::Text("The project has not been compiled yet.");
+                ImGui::End();
+                return;
             }
             if (!isSelected)
             {

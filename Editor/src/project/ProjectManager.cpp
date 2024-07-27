@@ -195,6 +195,10 @@ bool ProjectManager::IsProjectOpen()
     return projectManager->projectOpen;
 }
 
+bool ProjectManager::IsProjectCompiled() {
+    return projectManager->library != nullptr;
+}
+
 std::string ProjectManager::GetProjectDirectory()
 {
     return projectManager->projectDir;

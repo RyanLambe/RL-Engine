@@ -28,6 +28,17 @@ namespace rl::ed
     {
         if (ImGui::Begin("Scene Hierarchy", &open, ImGuiWindowFlags_NoCollapse))
         {
+            if(!ProjectManager::IsProjectOpen()){
+                ImGui::Text("No project is currently open.");
+                ImGui::End();
+                return;
+            }
+            if(!ProjectManager::IsProjectCompiled()){
+                ImGui::Text("The project has not been compiled yet.");
+                ImGui::End();
+                return;
+            }
+
             if (ImGui::Button("New Entity", ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 0.0f)))
             {
                 Entity entity = Application::GetScene().CreateEntity();
