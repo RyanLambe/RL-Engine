@@ -40,11 +40,15 @@ namespace rl::ed
                 return;
             }
 
+            bool disabled = Editor::Playing();
             float SystemHeight = Editor::GetFontSize() * 2;
             ImVec2 nextItemPos;
             ImVec2 ChildSize;
             bool popColor;
             bool exitForLoop = false;
+
+            if (disabled)
+                ImGui::BeginDisabled();
 
             for (int i = 0; i < systems.size(); i++)
             {
@@ -54,8 +58,9 @@ namespace rl::ed
                     = ImVec2(ImGui::GetContentRegionAvail().x, SystemHeight + ImGui::GetStyle().ItemSpacing.y * 4);
                 popColor = false;
 
-                if (ImGui::IsMouseHoveringRect(nextItemPos,
-                                               ImVec2(nextItemPos.x + ChildSize.x, nextItemPos.y + ChildSize.y)))
+                if (!disabled
+                    && ImGui::IsMouseHoveringRect(nextItemPos,
+                                                  ImVec2(nextItemPos.x + ChildSize.x, nextItemPos.y + ChildSize.y)))
                 {
                     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_TextSelectedBg));
                     popColor = true;
@@ -92,7 +97,7 @@ namespace rl::ed
                     ImGui::PopFont();
                 }
 
-                if (!exitForLoop)
+                if (!exitForLoop && !disabled)
                 {
                     if (TryMoveSystem(i))
                         exitForLoop = true;
@@ -105,12 +110,13 @@ namespace rl::ed
                     break;
             }
 
-            //RL_LOG("Hovered: ", hoveredMoving, ", moving: ", moving);
-
             ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 20);
             if (ImGui::Button("Add System", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 ImGui::OpenPopup("Add System Menu");
             DrawAddSystemMenu();
+
+            if (disabled)
+                ImGui::EndDisabled();
 
             if (ImGui::IsMouseReleased(0))
             {
