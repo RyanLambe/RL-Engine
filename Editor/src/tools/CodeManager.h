@@ -86,7 +86,6 @@ namespace rl::ed
         static void GenerateSetupHeader();
 
         static void ParseComponent(const std::string& component);
-        static void BreakupHeaderToWords(std::vector<std::string>& words, std::ifstream& file);
 
         static void WriteAddSystemFunc(std::ofstream& file);
 

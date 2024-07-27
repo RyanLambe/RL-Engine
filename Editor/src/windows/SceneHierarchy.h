@@ -3,6 +3,9 @@
 #include <memory>
 #include <queue>
 #include <vector>
+#include <filesystem>
+
+#include <types/Types.h>
 
 #include "../GuiElement.h"
 #include "ecs/ComponentType.h"
@@ -23,8 +26,12 @@ namespace rl::ed
         static void SetEntityName(rl::Entity entity, const std::string& name);
         static void SetFolderName(size_t folder, const std::string& name);
 
+        static void NewScene(const std::filesystem::path& file);
+        static void OpenScene(const std::filesystem::path& file);
+        static void SaveScene();
+
     private:
-        enum class ElementType : uint8_t
+        enum class ElementType : u8
         {
             Entity = 0,
             Folder = 1,
@@ -43,7 +50,7 @@ namespace rl::ed
         };
 
         std::vector<Element> hierarchy = std::vector<Element>();
-        std::queue<size_t> deletedFolders = std::queue<size_t>();
+        std::deque<size_t> deletedFolders = std::deque<size_t>();
         size_t nextFolder = 0;
 
         std::string moving;
@@ -53,6 +60,8 @@ namespace rl::ed
 
         static std::shared_ptr<SceneHierarchy> window;
         bool open = true;
+
+        std::filesystem::path filePath = "/";
 
         void DrawHierarchy();
         [[nodiscard]] int GetHierarchyElementSize(int element) const;

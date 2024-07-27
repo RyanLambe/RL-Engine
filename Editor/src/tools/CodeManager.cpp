@@ -1,7 +1,10 @@
 #include "CodeManager.h"
 
+#include <fstream>
+
 #include "core/Logger.h"
-#include "fstream"
+
+#include "FileParser.h"
 
 namespace rl::ed
 {
@@ -422,7 +425,7 @@ namespace rl::ed
         }
 
         std::vector<std::string> words = {};
-        BreakupHeaderToWords(words, file);
+        FileParser::BreakupFileToWords(words, file);
         file.close();
 
         bool classDef = false;
@@ -566,59 +569,6 @@ namespace rl::ed
                     componentVariables[component].emplace_back(VariableType::QUAT, words[i + 1]);
                 }
             }
-        }
-    }
-
-    void CodeManager::BreakupHeaderToWords(std::vector<std::string>& words, std::ifstream& file)
-    {
-        std::string word;
-        char nextLetter;
-        while (file >> std::noskipws >> nextLetter)
-        {
-            if (std::isspace(static_cast<unsigned char>(nextLetter)))
-            {
-                if (!word.empty())
-                {
-                    words.push_back(word);
-                    word = "";
-                }
-                continue;
-            }
-            switch (nextLetter)
-            {
-                case ':':
-                    if (words.back() == ":")
-                    {
-                        words.back() += ':';
-                        continue;
-                    }
-                case '{':
-                case '}':
-                case '(':
-                case ')':
-                case '<':
-                case '>':
-                case ';':
-                case '*':
-                case ',':
-                case '=':
-                    if (!word.empty())
-                    {
-                        words.push_back(word);
-                        word = "";
-                    }
-                    word += nextLetter;
-                    words.push_back(word);
-                    word = "";
-                    break;
-                default:
-                    word += nextLetter;
-            }
-        }
-        if (!word.empty())
-        {
-            words.push_back(word);
-            word = "";
         }
     }
 

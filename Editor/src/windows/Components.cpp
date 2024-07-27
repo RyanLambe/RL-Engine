@@ -84,6 +84,12 @@ namespace rl::ed
             ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
             if (ImGui::InputText("##name", &name[0], 256))
             {
+                for(char& i : name){
+                    if(i == '\0')
+                        break;
+                    if(i == '_')
+                        i = ' ';
+                }
                 if (!isFolderSelected)
                     SceneHierarchy::SetEntityName(selected, std::string((char*)name));
                 else
