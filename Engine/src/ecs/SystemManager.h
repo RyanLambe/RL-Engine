@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include "../core/Logger.h"
+
 namespace rl
 {
 
@@ -19,10 +21,15 @@ namespace rl
     public:
         SystemManager() = default;
 
-        template<typename T> void AddSystem() noexcept
+        template<typename T> inline void AddSystem() noexcept
         {
             static_assert(std::is_base_of<System, T>::value, "T must inherit from System");
             systems.push_back(std::make_unique<T>());
+        }
+
+        inline void RemoveAllSystems()
+        {
+            systems = std::vector<std::unique_ptr<System>>();
         }
 
         void StartSystems();

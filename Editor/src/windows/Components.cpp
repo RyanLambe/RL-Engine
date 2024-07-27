@@ -138,8 +138,8 @@ namespace rl::ed
                                                (int*)&component[property.second].I8, 1, std::numeric_limits<i8>::min(),
                                                std::numeric_limits<i8>::max()))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].I8);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].I8);
                             }
                             break;
                         case VariableType::I16:
@@ -147,8 +147,8 @@ namespace rl::ed
                                                (int*)&component[property.second].I16, 1,
                                                std::numeric_limits<i16>::min(), std::numeric_limits<i16>::max()))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].I16);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].I16);
                             }
                             break;
                         case VariableType::I32:
@@ -156,16 +156,16 @@ namespace rl::ed
                                                (int*)&component[property.second].I32, 1,
                                                std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max()))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].I32);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].I32);
                             }
                             break;
                         case VariableType::I64:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
                                                (int*)&component[property.second].I64, 1))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].I64);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].I64);
                             }
                             break;
                         case VariableType::U8:
@@ -173,8 +173,8 @@ namespace rl::ed
                                                (int*)&component[property.second].U8, 1, std::numeric_limits<u8>::min(),
                                                std::numeric_limits<u8>::max()))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].U8);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].U8);
                             }
                             break;
                         case VariableType::U16:
@@ -182,8 +182,8 @@ namespace rl::ed
                                                (int*)&component[property.second].U16, 1,
                                                std::numeric_limits<u16>::min(), std::numeric_limits<u16>::max()))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].U16);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].U16);
                             }
                             break;
                         case VariableType::U32:
@@ -191,8 +191,8 @@ namespace rl::ed
                                                (int*)&component[property.second].U32, 1,
                                                std::numeric_limits<u32>::min(), std::numeric_limits<int>::max()))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].U32);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].U32);
                             }
                             break;
                         case VariableType::U64:
@@ -200,56 +200,56 @@ namespace rl::ed
                                                (int*)&component[property.second].U64, 1,
                                                std::numeric_limits<u64>::min(), std::numeric_limits<int>::max()))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].U64);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].U64);
                             }
                             break;
                         case VariableType::F32:
                             if (ImGui::DragFloat(("##in-" + componentName + property.second).c_str(),
                                                  (float*)&component[property.second].F32, 0.1))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].F32);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].F32);
                             }
                             break;
                         case VariableType::F64:
                             if (ImGui::DragFloat(("##in-" + componentName + property.second).c_str(),
                                                  (float*)&component[property.second].F64, 0.1))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].F64);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].F64);
                             }
                             break;
                         case VariableType::VEC2:
                             if (ImGui::DragFloat2(("##in-" + componentName + property.second).c_str(),
                                                   (float*)&component[property.second].Vec2, 0.1))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].Vec2);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].Vec2);
                             }
                             break;
                         case VariableType::VEC3:
                             if (ImGui::DragFloat3(("##in-" + componentName + property.second).c_str(),
                                                   (float*)&component[property.second].Vec3, 0.1))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].Vec3);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].Vec3);
                             }
                             break;
                         case VariableType::VEC4:
                             if (ImGui::DragFloat4(("##in-" + componentName + property.second).c_str(),
                                                   (float*)&component[property.second].Vec4, 0.1))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].Vec4);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].Vec4);
                             }
                             break;
                         case VariableType::QUAT:
                             if (ImGui::DragFloat4(("##in-" + componentName + property.second).c_str(),
                                                   (float*)&component[property.second].Quat, 0.1))
                             {
-                                CodeManager::SetValue(property.first, componentName, property.second, selected,
-                                                      component[property.second].Quat);
+                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
+                                                               component[property.second].Quat);
                             }
                             break;
                     }
@@ -364,73 +364,73 @@ namespace rl::ed
                     return;
                 case VariableType::I8:
                     data[selected][componentName][property.second].I8 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].I8);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].I8);
                     break;
                 case VariableType::I16:
                     data[selected][componentName][property.second].I16 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].I16);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].I16);
                     break;
                 case VariableType::I32:
                     data[selected][componentName][property.second].I32 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].I32);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].I32);
                     break;
                 case VariableType::I64:
                     data[selected][componentName][property.second].I64 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].I64);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].I64);
                     break;
                 case VariableType::U8:
                     data[selected][componentName][property.second].U8 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].U8);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].U8);
                     break;
                 case VariableType::U16:
                     data[selected][componentName][property.second].U16 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].U16);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].U16);
                     break;
                 case VariableType::U32:
                     data[selected][componentName][property.second].U32 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].U32);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].U32);
                     break;
                 case VariableType::U64:
                     data[selected][componentName][property.second].U64 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].U64);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].U64);
                     break;
                 case VariableType::F32:
                     //data[selected][componentName][property.second].F32 = 0;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].F32);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].F32);
                     break;
                 case VariableType::F64:
                     data[selected][componentName][property.second].F64 = 0.0f;
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].F64);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].F64);
                     break;
                 case VariableType::VEC2:
                     data[selected][componentName][property.second].Vec2 = Vec2(0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].Vec2);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].Vec2);
                     break;
                 case VariableType::VEC3:
                     data[selected][componentName][property.second].Vec3 = Vec3(0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].Vec3);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].Vec3);
                     break;
                 case VariableType::VEC4:
                     data[selected][componentName][property.second].Vec4 = Vec4(0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].Vec4);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].Vec4);
                     break;
                 case VariableType::QUAT:
                     data[selected][componentName][property.second].Quat = Quaternion(1, 0, 0, 0);
-                    CodeManager::GetValue(property.first, componentName, property.second, selected,
-                                          &data[selected][componentName][property.second].Quat);
+                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
+                                                   &data[selected][componentName][property.second].Quat);
                     break;
             }
         }

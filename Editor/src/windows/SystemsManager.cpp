@@ -31,8 +31,9 @@ namespace rl::ed
             ImVec2 nextItemPos;
             ImVec2 ChildSize;
             bool popColor;
+            bool exitForLoop = false;
 
-            for (int i = 0; i < CodeManager::GetSystems().size(); i++)
+            for (int i = 0; i < systems.size(); i++)
             {
                 nextItemPos = ImVec2(ImGui::GetWindowPos().x + ImGui::GetCursorPos().x,
                                      ImGui::GetWindowPos().y + ImGui::GetCursorPos().y);
@@ -47,20 +48,21 @@ namespace rl::ed
                     popColor = true;
                 }
 
-                if (ImGui::BeginChild(("sys" + CodeManager::GetSystems()[i]).c_str(), ChildSize,
-                                      ImGuiChildFlags_Border))
+                if (ImGui::BeginChild(("sys" + std::to_string(i)).c_str(), ChildSize, ImGuiChildFlags_Border))
                 {
                     // check box
-                    static bool t = false;
                     float temp = ImGui::GetCursorPosY();
                     ImGui::SetCursorPosY(temp + (SystemHeight / 2) - (ImGui::GetFrameHeight() / 2));
-                    ImGui::Checkbox(("##Box" + CodeManager::GetSystems()[i]).c_str(), &t);
+                    if (ImGui::Checkbox(("##Box" + std::to_string(i)).c_str(), &systems[i].first))
+                    {
+                        UpdateSystems();
+                    }
 
                     // text
                     ImGui::SameLine();
-                    ImGui::SetCursorPosX(
-                        (ImGui::GetWindowSize().x - ImGui::CalcTextSize(CodeManager::GetSystems()[i].c_str()).x) / 2);
-                    ImGui::Text("%s", CodeManager::GetSystems()[i].c_str());
+                    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize(systems[i].second.c_str()).x)
+                                         / 2);
+                    ImGui::Text("%s", systems[i].second.c_str());
                     ImGui::SameLine();
 
                     // delete button
@@ -68,18 +70,39 @@ namespace rl::ed
                     ImGui::SetCursorPosX(ImGui::GetWindowSize().x - SystemHeight - ImGui::GetStyle().ItemSpacing.y * 2);
 
                     ImGui::PushFont(Editor::GetWingdingFont());
-                    ImGui::Button(("T##" + CodeManager::GetSystems()[i]).c_str(), ImVec2(SystemHeight, SystemHeight));
+                    if (ImGui::Button(("T##" + std::to_string(i)).c_str(), ImVec2(SystemHeight, SystemHeight)))
+                    {
+                        systems.erase(systems.begin() + i);
+                        UpdateSystems();
+                        exitForLoop = true;
+                    }
                     ImGui::PopFont();
                 }
+
+                if (!exitForLoop)
+                {
+                    if (TryMoveSystem(i))
+                        exitForLoop = true;
+                }
+
                 ImGui::EndChild();
                 if (popColor)
                     ImGui::PopStyleColor();
+                if (exitForLoop)
+                    break;
             }
+
+            //RL_LOG("Hovered: ", hoveredMoving, ", moving: ", moving);
 
             ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 20);
             if (ImGui::Button("Add System", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 ImGui::OpenPopup("Add System Menu");
             DrawAddSystemMenu();
+
+            if (ImGui::IsMouseReleased(0))
+            {
+                moving = -1;
+            }
         }
         ImGui::End();
     }
@@ -89,7 +112,38 @@ namespace rl::ed
         return open;
     }
 
-    void SystemsManager::DrawAddSystemMenu() {
+    bool SystemsManager::TryMoveSystem(int systemIndex)
+    {
+        if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(0) && moving == -1)
+        {
+            moving = systemIndex;
+        }
+
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && moving == systemIndex)
+            hoveredMoving = true;
+
+        if (!ImGui::IsWindowHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && moving == systemIndex
+            && hoveredMoving)
+        {
+            int swapIndex = systemIndex + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
+            if (swapIndex >= 0 && swapIndex < systems.size())
+            {
+                auto temp = systems[systemIndex];
+                systems[systemIndex] = systems[swapIndex];
+                systems[swapIndex] = temp;
+
+                moving = swapIndex;
+                hoveredMoving = false;
+
+                ImGui::ResetMouseDragDelta();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void SystemsManager::DrawAddSystemMenu()
+    {
         if (ImGui::BeginPopup("Add System Menu"))
         {
             ImGui::Text("Add System:\t\t\t\t\t");
@@ -99,12 +153,26 @@ namespace rl::ed
             {
                 if (ImGui::Button(Editor::FormatName(system).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 {
+                    systems.emplace_back(true, system);
+                    UpdateSystems();
 
                     ImGui::CloseCurrentPopup();
                 }
             }
 
             ImGui::EndPopup();
+        }
+    }
+
+    void SystemsManager::UpdateSystems()
+    {
+        Application::GetScene().systemManager.RemoveAllSystems();
+        for (const auto& system : systems)
+        {
+            if (!system.first)
+                continue;
+
+            CodeManager::AddSystem(system.second);
         }
     }
 }

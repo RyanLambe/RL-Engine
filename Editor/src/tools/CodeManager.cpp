@@ -89,6 +89,11 @@ namespace rl::ed
         return components;
     }
 
+    void CodeManager::AddSystem(const std::string& system)
+    {
+        ProjectManager::RunFunction<void>("AddSystem", system);
+    }
+
     const std::vector<std::pair<VariableType, std::string>>& CodeManager::GetProperties(const std::string& component)
     {
         return componentVariables[component];
@@ -109,8 +114,8 @@ namespace rl::ed
         return ProjectManager::RunFunction<void*>("GetComponent", component, entity);
     }
 
-    void CodeManager::GetValue(const VariableType& valType, const std::string& componentType,
-                               const std::string& varName, const Entity& entity, void* outBuf)
+    void CodeManager::GetComponentValue(const VariableType& valType, const std::string& componentType,
+                                        const std::string& varName, const Entity& entity, void* outBuf)
     {
         void* temp
             = ProjectManager::RunFunction<void*>("GetValue" + ToStringUpper(valType), componentType, varName, entity);
@@ -246,20 +251,11 @@ namespace rl::ed
         }
 
         file << "\nusing namespace rl;\n\n"
-             << "void GameSetupInternal(void* mainApp);\n\n"
              << "extern \"C\" void GameSetup(void* mainApp) {\n"
-             << "\tGameSetupInternal(mainApp);\n"
-             << "}\n\n"
-             << "void GameSetupInternal(void* mainApp) {\n"
-                "\tApplication::ConnectToApp((std::shared_ptr<Application>*)mainApp);\n\n";
+             << "\tApplication::ConnectToApp((std::shared_ptr<Application>*)mainApp);\n"
+             << "}\n";
 
-        // todo: find better way to add systems that is linked to the scene
-        file << "\tApplication::GetScene().systemManager.AddSystem<Renderer>();\n";
-        for (const auto& system : systems)
-        {
-            file << "\tApplication::GetScene().systemManager.AddSystem<" << system << ">();\n";
-        }
-        file << "}\n";
+        WriteAddSystemFunc(file);
 
         WriteAddOrRemoveComponentFunc(file, true);
         WriteAddOrRemoveComponentFunc(file, false);
@@ -315,6 +311,8 @@ namespace rl::ed
             << "#include \"Engine.h\"\n\n"
             << "extern \"C\"\n{\n"
             << "__declspec(dllexport) void GameSetup(void* mainApp);\n\n"
+
+            << "__declspec(dllexport) void AddSystem(const std::string& system);\n\n"
 
             << "__declspec(dllexport) void AddComponent(const std::string& componentType, const rl::Entity& entity);\n"
             << "__declspec(dllexport) void RemoveComponent(const std::string& componentType, const rl::Entity& "
@@ -622,6 +620,23 @@ namespace rl::ed
             words.push_back(word);
             word = "";
         }
+    }
+
+    void CodeManager::WriteAddSystemFunc(std::ofstream& file)
+    {
+        file << "\nextern \"C\" void AddSystem(const std::string& system) {\n";
+
+        bool first = true;
+        for (const auto& system : systems)
+        {
+            file << "\t";
+            if (!first)
+                file << "else ";
+            file << "if (system == \"" << system << "\")\n";
+            file << "\t\tApplication::GetScene().systemManager.AddSystem<" << system << ">();\n";
+            first = false;
+        }
+        file << "}\n";
     }
 
     void CodeManager::WriteSetOrGetValueFunc(std::ofstream& file, VariableType type, bool writeSetFunc)

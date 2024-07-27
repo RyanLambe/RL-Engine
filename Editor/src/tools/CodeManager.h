@@ -60,16 +60,18 @@ namespace rl::ed
         static const std::vector<std::string>& GetSystems();
         static const std::vector<std::string>& GetComponents();
 
+        static void AddSystem(const std::string& system);
+
         static const std::vector<std::pair<VariableType, std::string>>& GetProperties(const std::string& component);
         static void AddComponent(const std::string& component, rl::Entity entity);
         static void RemoveComponent(const std::string& component, rl::Entity entity);
         static void* GetComponent(const std::string& component, rl::Entity entity);
 
-        static void GetValue(const VariableType& valType, const std::string& componentType, const std::string& varName,
-                             const Entity& entity, void* outBuf);
+        static void GetComponentValue(const VariableType& valType, const std::string& componentType,
+                                      const std::string& varName, const Entity& entity, void* outBuf);
         template<typename T>
-        static void SetValue(const VariableType& valType, const std::string& componentType, const std::string& varName,
-                             const Entity& entity, T val)
+        static void SetComponentValue(const VariableType& valType, const std::string& componentType,
+                                      const std::string& varName, const Entity& entity, T val)
         {
             ProjectManager::RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val);
         }
@@ -85,6 +87,8 @@ namespace rl::ed
 
         static void ParseComponent(const std::string& component);
         static void BreakupHeaderToWords(std::vector<std::string>& words, std::ifstream& file);
+
+        static void WriteAddSystemFunc(std::ofstream& file);
 
         static void WriteSetOrGetValueFunc(std::ofstream& file, VariableType type, bool writeSetFunc);
         static void WriteAddOrRemoveComponentFunc(std::ofstream& file, bool writeAddFunc);
