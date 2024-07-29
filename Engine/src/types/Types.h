@@ -28,3 +28,20 @@ using i64 = int64_t;
 using i32 = int32_t;
 using i16 = int16_t;
 using i8 = int8_t;
+
+union VariableData {
+    i8 I8;
+    i16 I16;
+    i32 I32;
+    i64 I64;
+    u8 U8;
+    u16 U16;
+    u32 U32;
+    u64 U64;
+    f32 F32;
+    f64 F64;
+    Vec2 Vec2;
+    Vec3 Vec3;
+    Vec4 Vec4;
+    Quaternion Quat;
+};

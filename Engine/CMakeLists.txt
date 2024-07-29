@@ -126,6 +126,8 @@ add_library(Engine STATIC
         src/ecs/Component.h
         src/ecs/ComponentCollection.h
         src/ecs/ComponentType.h
+        src/ecs/Scene.cpp
+        src/ecs/Scene.h
         src/ecs/SceneManager.cpp
         src/ecs/SceneManager.h
         src/ecs/SystemManager.cpp
