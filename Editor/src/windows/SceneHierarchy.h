@@ -1,11 +1,11 @@
 #pragma once
 
+#include <types/Types.h>
+
+#include <filesystem>
 #include <memory>
 #include <queue>
 #include <vector>
-#include <filesystem>
-
-#include <types/Types.h>
 
 #include "../GuiElement.h"
 #include "ecs/ComponentType.h"

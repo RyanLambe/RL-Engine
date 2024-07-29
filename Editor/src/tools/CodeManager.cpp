@@ -2,9 +2,8 @@
 
 #include <fstream>
 
-#include "core/Logger.h"
-
 #include "FileParser.h"
+#include "core/Logger.h"
 
 namespace rl::ed
 {

@@ -1,11 +1,13 @@
 #pragma once
 
 #include <fstream>
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace rl::ed{
-    class FileParser {
+namespace rl::ed
+{
+    class FileParser
+    {
     public:
         static void BreakupFileToWords(std::vector<std::string>& words, std::ifstream& file)
         {

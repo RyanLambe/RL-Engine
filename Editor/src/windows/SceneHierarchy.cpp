@@ -4,8 +4,8 @@
 #include <fstream>
 
 #include "../Editor.h"
-#include "Components.h"
 #include "../tools/FileParser.h"
+#include "Components.h"
 
 namespace rl::ed
 {
@@ -40,17 +40,21 @@ namespace rl::ed
             static int openSceneName = 0;
             ImGui::Text("Open Scene: %i", openSceneName);
 
-            if(ImGui::Button("New Scene")){
+            if (ImGui::Button("New Scene"))
+            {
                 openSceneName++;
                 NewScene(std::filesystem::path("C:/RL_TEST/Scene" + std::to_string(openSceneName) + ".scene"));
             }
-            if(ImGui::Button("Open Scene")){
-                if(openSceneName != 0){
+            if (ImGui::Button("Open Scene"))
+            {
+                if (openSceneName != 0)
+                {
                     openSceneName--;
                     OpenScene(std::filesystem::path("C:/RL_TEST/Scene" + std::to_string(openSceneName) + ".scene"));
                 }
             }
-            if(ImGui::Button("Save Scene")){
+            if (ImGui::Button("Save Scene"))
+            {
                 SaveScene();
             }
 
@@ -345,7 +349,8 @@ namespace rl::ed
         return false;
     }
 
-    void SceneHierarchy::NewScene(const std::filesystem::path& filePath) {
+    void SceneHierarchy::NewScene(const std::filesystem::path& filePath)
+    {
         std::ofstream file(filePath);
 
         // write entities
@@ -369,9 +374,10 @@ namespace rl::ed
         window->nextFolder = 0;
     }
 
-    void SceneHierarchy::OpenScene(const std::filesystem::path& filePath) {
+    void SceneHierarchy::OpenScene(const std::filesystem::path& filePath)
+    {
         std::ifstream file(filePath);
-        if(!file.is_open())
+        if (!file.is_open())
         {
             RL_LOG_ERROR("Unable to open scene: Cannot open file - ", window->filePath.string());
             return;
@@ -386,7 +392,8 @@ namespace rl::ed
         std::vector<std::string> words;
         FileParser::BreakupFileToWords(words, file);
 
-        enum ParsingStages : u8 {
+        enum ParsingStages : u8
+        {
             SearchingForHierarchy = 0,
             ParsingHierarchy = 1,
             SearchingForComponents = 2,
@@ -398,40 +405,49 @@ namespace rl::ed
         u8 stage = SearchingForHierarchy;
         std::vector<std::string> temp = {};
 
-        for(const auto & word : words){
-            if(stage == Done)
+        for (const auto& word : words)
+        {
+            if (stage == Done)
                 break;
 
-            if(word == "{"){
+            if (word == "{")
+            {
                 temp = {};
                 stage++;
                 continue;
             }
 
-            if(word == "}"){
-                if(stage == ParsingComponents){
+            if (word == "}")
+            {
+                if (stage == ParsingComponents)
+                {
                     // pass temp to Components to load
                 }
-                if(stage == ParsingSystems){
+                if (stage == ParsingSystems)
+                {
                     // pass temp to Systems to load
                 }
                 stage++;
                 continue;
             }
 
-            if(stage == ParsingHierarchy){
-                if(word == ";"){
-                    if(temp[0] == "en")
+            if (stage == ParsingHierarchy)
+            {
+                if (word == ";")
+                {
+                    if (temp[0] == "en")
                     {
                         std::string tempName = temp[8];
                         std::replace(tempName.begin(), tempName.end(), '_', ' ');
                         window->hierarchy.emplace_back((ElementType)std::stoull(temp[4]), std::stoi(temp[2]), tempName);
                         window->hierarchy.back().enabled = (bool)std::stoi(temp[6]);
                     }
-                    else if (temp[0] == "df"){
+                    else if (temp[0] == "df")
+                    {
                         window->deletedFolders.push_back(std::stoull(temp[2]));
                     }
-                    else if (temp[0] == "nf"){
+                    else if (temp[0] == "nf")
+                    {
                         window->nextFolder = std::stoull(temp[2]);
                     }
 
@@ -441,7 +457,8 @@ namespace rl::ed
                     temp.push_back(word);
             }
 
-            if(stage == ParsingComponents || stage == ParsingSystems){
+            if (stage == ParsingComponents || stage == ParsingSystems)
+            {
                 temp.push_back(word);
             }
         }
@@ -450,15 +467,16 @@ namespace rl::ed
         window->filePath = filePath;
     }
 
-    void SceneHierarchy::SaveScene() {
-        if(window->filePath == "/")
+    void SceneHierarchy::SaveScene()
+    {
+        if (window->filePath == "/")
         {
             RL_LOG_ERROR("Unable to save scene: No scene is open.");
             return;
         }
 
         std::ofstream file(window->filePath);
-        if(!file.is_open())
+        if (!file.is_open())
         {
             RL_LOG_ERROR("Unable to save scene: Cannot open file - ", window->filePath.string());
             return;
@@ -468,7 +486,7 @@ namespace rl::ed
         file << "{\n";
 
         std::string tempName;
-        for(const auto& element : window->hierarchy)
+        for (const auto& element : window->hierarchy)
         {
             file << "\ten:";
             file << std::to_string(element.id) << ", ";
@@ -480,14 +498,13 @@ namespace rl::ed
             file << tempName << ";\n";
         }
 
-        for(const auto& element : window->deletedFolders)
+        for (const auto& element : window->deletedFolders)
         {
             file << "\tdf:" << std::to_string(element) << ";\n";
         }
 
         file << "\tnf:" << std::to_string(window->nextFolder) << ";\n";
         file << "}\n";
-
 
         file.close();
     }
