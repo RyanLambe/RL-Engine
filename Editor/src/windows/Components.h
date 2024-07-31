@@ -15,11 +15,6 @@ namespace rl::ed
     public:
         ~Components() override = default;
 
-        static void SelectEntity(rl::Entity entity, const std::string& name);
-        static void SelectFolder(size_t folder, const std::string& name);
-        static void Deselect();
-        static bool IsSelected(size_t val, bool folder);
-
         static void OpenWindow();
         static void CloseWindow();
 
@@ -30,13 +25,7 @@ namespace rl::ed
         static std::shared_ptr<Components> window;
         bool open = true;
 
-        bool isSelected = false;
-        bool isFolderSelected = false;
-        size_t selected;
         char name[256] = "";
-
-        std::unordered_map<Entity, std::unordered_map<std::string, std::unordered_map<std::string, VariableData>>> data;
-        std::unordered_map<Entity, std::vector<std::string>> componentOrder;
 
         void DrawAddComponentMenu();
         void DrawRightClickMenu(const std::string& componentName);

@@ -11,39 +11,6 @@ namespace rl::ed
 {
     std::shared_ptr<Components> Components::window = nullptr;
 
-    void Components::SelectEntity(rl::Entity entity, const std::string& name)
-    {
-        window->isSelected = true;
-        window->isFolderSelected = false;
-        window->selected = entity;
-        (name + '\0').copy((char*)window->name, 256);
-    }
-
-    void Components::SelectFolder(size_t folder, const std::string& name)
-    {
-        window->isSelected = true;
-        window->isFolderSelected = true;
-        window->selected = folder;
-        (name + '\0').copy((char*)window->name, 256);
-    }
-
-    void Components::Deselect()
-    {
-        window->isSelected = false;
-        window->isFolderSelected = false;
-        window->selected = 0;
-        window->name[0] = '\0';
-    }
-
-    bool Components::IsSelected(size_t val, bool folder)
-    {
-        if (!window->isSelected)
-            return false;
-        if (window->isFolderSelected != folder)
-            return false;
-        return val == window->selected;
-    }
-
     void Components::OpenWindow()
     {
         if (!window)
@@ -75,13 +42,17 @@ namespace rl::ed
                 ImGui::End();
                 return;
             }*/
-            if (!isSelected)
+
+            Entity selected = SceneHierarchy::GetSelected();
+            if (selected == NullEntity)
             {
                 ImGui::End();
                 return;
             }
 
             ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+            Scene::EntityData* selectedData = Scene::MainScene().GetEntityData(selected);
+            (selectedData->name + '\0').copy((char*)name, 256);
             if (ImGui::InputText("##name", &name[0], 256))
             {
                 for (char& i : name)
@@ -91,36 +62,20 @@ namespace rl::ed
                     if (i == '_')
                         i = ' ';
                 }
-                /*if (!isFolderSelected)
-                    SceneHierarchy::SetEntityName(selected, std::string((char*)name));
-                else
-                    SceneHierarchy::SetFolderName(selected, std::string((char*)name));*/
+                selectedData->name = std::string((char*)name);
             }
 
-            if (isFolderSelected)
+            for (auto& componentName : selectedData->componentOrder)
             {
-                ImGui::Separator();
-                ImGui::End();
-                return;
-            }
-
-            if (!data.contains(selected))
-            {
-                data[selected] = {};
-                componentOrder[selected] = {};
-            }
-
-            for (auto& componentName : componentOrder[selected])
-            {
-                auto& component = data[selected][componentName];
+                auto& component = selectedData->componentData[componentName];
                 ImGui::PushFont(Editor::GetWingdingFont());
                 if (ImGui::Button(("T##" + componentName + std::to_string(selected)).c_str(), ImVec2(0, 0)))
                 {
                     CodeManager::RemoveComponent(componentName, selected);
                     ImGui::PopFont();
-                    data[selected].erase(componentName);
-                    componentOrder[selected].erase(
-                        std::find(componentOrder[selected].begin(), componentOrder[selected].end(), componentName));
+                    selectedData->componentData.erase(componentName);
+                    selectedData->componentOrder.erase(
+                        std::find(selectedData->componentOrder.begin(), selectedData->componentOrder.end(), componentName));
                     break;
                 }
                 ImGui::PopFont();
@@ -295,16 +250,18 @@ namespace rl::ed
             ImGui::Text("Add Component:\t\t\t\t\t");
             ImGui::Separator();
 
+            Scene::EntityData* selectedData = Scene::MainScene().GetEntityData(SceneHierarchy::GetSelected());
+
             for (const auto& component : CodeManager::GetComponents())
             {
-                if (data[selected].contains(component))
+                if (selectedData->componentData.contains(component))
                     continue;
 
                 if (ImGui::Button(Editor::FormatName(component).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 {
-                    data[selected][component] = {};
-                    componentOrder[selected].push_back(component);
-                    CodeManager::AddComponent(component, selected);
+                    selectedData->componentData[component] = {};
+                    selectedData->componentOrder.push_back(component);
+                    CodeManager::AddComponent(component, SceneHierarchy::GetSelected());
                     UpdateComponent(component);
 
                     ImGui::CloseCurrentPopup();
@@ -317,27 +274,29 @@ namespace rl::ed
 
     void Components::DrawRightClickMenu(const std::string& componentName)
     {
-        if (ImGui::BeginPopup(("RightClick" + componentName + std::to_string(selected)).c_str()))
+        if (ImGui::BeginPopup(("RightClick" + componentName + std::to_string(SceneHierarchy::GetSelected())).c_str()))
         {
             ImGui::Text("%s\t\t\t", Editor::FormatName(componentName).c_str());
             ImGui::Separator();
+
+            Scene::EntityData* selectedData = Scene::MainScene().GetEntityData(SceneHierarchy::GetSelected());
 
             if (ImGui::Button("Refresh"))
             {
                 UpdateComponent(componentName);
             }
 
-            if (componentOrder[selected].front() != componentName)
+            if (selectedData->componentOrder.front() != componentName)
             {
                 if (ImGui::Button("Move Up"))
                 {
-                    for (int i = 1; i < componentOrder[selected].size(); i++)
+                    for (int i = 1; i < selectedData->componentOrder.size(); i++)
                     {
-                        if (componentOrder[selected][i] == componentName)
+                        if (selectedData->componentOrder[i] == componentName)
                         {
-                            const std::string temp = componentOrder[selected][i - 1];
-                            componentOrder[selected][i - 1] = componentOrder[selected][i];
-                            componentOrder[selected][i] = temp;
+                            const std::string temp = selectedData->componentOrder[i - 1];
+                            selectedData->componentOrder[i - 1] = selectedData->componentOrder[i];
+                            selectedData->componentOrder[i] = temp;
                             break;
                         }
                     }
@@ -345,17 +304,17 @@ namespace rl::ed
                 }
             }
 
-            if (componentOrder[selected].back() != componentName)
+            if (selectedData->componentOrder.back() != componentName)
             {
                 if (ImGui::Button("Move Down"))
                 {
-                    for (int i = 0; i < componentOrder[selected].size() - 1; i++)
+                    for (int i = 0; i < selectedData->componentOrder.size() - 1; i++)
                     {
-                        if (componentOrder[selected][i] == componentName)
+                        if (selectedData->componentOrder[i] == componentName)
                         {
-                            const std::string temp = componentOrder[selected][i + 1];
-                            componentOrder[selected][i + 1] = componentOrder[selected][i];
-                            componentOrder[selected][i] = temp;
+                            const std::string temp = selectedData->componentOrder[i + 1];
+                            selectedData->componentOrder[i + 1] = selectedData->componentOrder[i];
+                            selectedData->componentOrder[i] = temp;
                             break;
                         }
                     }
@@ -369,6 +328,8 @@ namespace rl::ed
 
     void Components::UpdateComponent(const std::string& componentName)
     {
+        Entity selected = SceneHierarchy::GetSelected();
+        Scene::EntityData* selectedData = Scene::MainScene().GetEntityData(selected);
         Quaternion quatTemp; // only used for quat properties
 
         for (const auto& property : CodeManager::GetProperties(componentName))
@@ -378,74 +339,74 @@ namespace rl::ed
                 case VariableType::Unknown:
                     return;
                 case VariableType::I8:
-                    data[selected][componentName][property.second].I8 = 0;
+                    selectedData->componentData[componentName][property.second].I8 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].I8);
+                                                   &selectedData->componentData[componentName][property.second].I8);
                     break;
                 case VariableType::I16:
-                    data[selected][componentName][property.second].I16 = 0;
+                    selectedData->componentData[componentName][property.second].I16 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].I16);
+                                                   &selectedData->componentData[componentName][property.second].I16);
                     break;
                 case VariableType::I32:
-                    data[selected][componentName][property.second].I32 = 0;
+                    selectedData->componentData[componentName][property.second].I32 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].I32);
+                                                   &selectedData->componentData[componentName][property.second].I32);
                     break;
                 case VariableType::I64:
-                    data[selected][componentName][property.second].I64 = 0;
+                    selectedData->componentData[componentName][property.second].I64 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].I64);
+                                                   &selectedData->componentData[componentName][property.second].I64);
                     break;
                 case VariableType::U8:
-                    data[selected][componentName][property.second].U8 = 0;
+                    selectedData->componentData[componentName][property.second].U8 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].U8);
+                                                   &selectedData->componentData[componentName][property.second].U8);
                     break;
                 case VariableType::U16:
-                    data[selected][componentName][property.second].U16 = 0;
+                    selectedData->componentData[componentName][property.second].U16 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].U16);
+                                                   &selectedData->componentData[componentName][property.second].U16);
                     break;
                 case VariableType::U32:
-                    data[selected][componentName][property.second].U32 = 0;
+                    selectedData->componentData[componentName][property.second].U32 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].U32);
+                                                   &selectedData->componentData[componentName][property.second].U32);
                     break;
                 case VariableType::U64:
-                    data[selected][componentName][property.second].U64 = 0;
+                    selectedData->componentData[componentName][property.second].U64 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].U64);
+                                                   &selectedData->componentData[componentName][property.second].U64);
                     break;
                 case VariableType::F32:
                     //data[selected][componentName][property.second].F32 = 0;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].F32);
+                                                   &selectedData->componentData[componentName][property.second].F32);
                     break;
                 case VariableType::F64:
-                    data[selected][componentName][property.second].F64 = 0.0f;
+                    selectedData->componentData[componentName][property.second].F64 = 0.0f;
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].F64);
+                                                   &selectedData->componentData[componentName][property.second].F64);
                     break;
                 case VariableType::VEC2:
-                    data[selected][componentName][property.second].Vec2 = Vec2(0);
+                    selectedData->componentData[componentName][property.second].Vec2 = Vec2(0);
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].Vec2);
+                                                   &selectedData->componentData[componentName][property.second].Vec2);
                     break;
                 case VariableType::VEC3:
-                    data[selected][componentName][property.second].Vec3 = Vec3(0);
+                    selectedData->componentData[componentName][property.second].Vec3 = Vec3(0);
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].Vec3);
+                                                   &selectedData->componentData[componentName][property.second].Vec3);
                     break;
                 case VariableType::VEC4:
-                    data[selected][componentName][property.second].Vec4 = Vec4(0);
+                    selectedData->componentData[componentName][property.second].Vec4 = Vec4(0);
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].Vec4);
+                                                   &selectedData->componentData[componentName][property.second].Vec4);
                     break;
                 case VariableType::QUAT:
-                    data[selected][componentName][property.second].Quat = Quaternion(1, 0, 0, 0);
+                    selectedData->componentData[componentName][property.second].Quat = Quaternion(1, 0, 0, 0);
                     CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &data[selected][componentName][property.second].Quat);
+                                                   &selectedData->componentData[componentName][property.second].Quat);
                     break;
             }
         }

@@ -24,7 +24,7 @@ namespace rl::ed
         void Render() override;
         bool IsOpen() override;
 
-        Entity GetSelected();
+        static Entity GetSelected();
 
     private:
         void DrawEntity(Entity entity);

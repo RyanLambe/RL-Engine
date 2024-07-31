@@ -89,7 +89,7 @@ namespace rl::ed
 
     Entity SceneHierarchy::GetSelected()
     {
-        return selected;
+        return window->selected;
     }
 
     void SceneHierarchy::DrawEntity(Entity entity)
