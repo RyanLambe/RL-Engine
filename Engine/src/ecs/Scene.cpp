@@ -7,6 +7,7 @@ namespace rl
     Scene::Scene()
     {
         entities[NullEntity] = EntityData(NullEntity);
+        entities[NullEntity].name = "Scene";
     }
 
     Scene& Scene::MainScene()

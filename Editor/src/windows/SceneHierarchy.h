@@ -1,5 +1,6 @@
 #pragma once
 
+#include <imgui.h>
 #include <types/Types.h>
 
 #include <filesystem>
@@ -23,49 +24,22 @@ namespace rl::ed
         void Render() override;
         bool IsOpen() override;
 
-        static void SetEntityName(rl::Entity entity, const std::string& name);
-        static void SetFolderName(size_t folder, const std::string& name);
-
-        static void NewScene(const std::filesystem::path& file);
-        static void OpenScene(const std::filesystem::path& file);
-        static void SaveScene();
+        Entity GetSelected();
 
     private:
-        enum class ElementType : u8
-        {
-            Entity = 0,
-            Folder = 1,
-            FolderEnd = 2
-        };
+        void DrawEntity(Entity entity);
+        void DrawSeparator(Entity entity);
+        void DrawRightClickMenu();
 
-        struct Element
-        {
-            ElementType type;
-            size_t id = 0;
-            std::string name;
-            bool enabled = true;
+        float GetEntityDepth(Entity entity);
 
-            Element() = delete;
-            Element(ElementType type, size_t id, std::string name) : type(type), id(id), name(std::move(name)) {}
-        };
-
-        std::vector<Element> hierarchy = std::vector<Element>();
-        std::deque<size_t> deletedFolders = std::deque<size_t>();
-        size_t nextFolder = 0;
-
-        std::string moving;
-        bool moved = false;
-        bool rightClickedEnabled = false;
-        size_t rightClickedElement = 0;
+        bool popupOpen = false;
+        ImVec2 nextHoverRectPos = ImVec2(0, 0);
+        float hoverRectOffset = 5; // should be turned to setting
+        Entity moving = NullEntity;
+        Entity selected = NullEntity;
 
         static std::shared_ptr<SceneHierarchy> window;
         bool open = true;
-
-        std::filesystem::path filePath = "/";
-
-        void DrawHierarchy();
-        [[nodiscard]] int GetHierarchyElementSize(int element) const;
-        [[nodiscard]] bool TryMoveElement(int elementIndex);
-        [[nodiscard]] bool DrawRightClickMenu(ElementType type, int index);
     };
 }

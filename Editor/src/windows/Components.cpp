@@ -63,7 +63,7 @@ namespace rl::ed
     {
         if (ImGui::Begin("Components", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
-            if (!ProjectManager::IsProjectOpen())
+            /*if (!ProjectManager::IsProjectOpen())
             {
                 ImGui::Text("No project is currently open.");
                 ImGui::End();
@@ -74,7 +74,7 @@ namespace rl::ed
                 ImGui::Text("The project has not been compiled yet.");
                 ImGui::End();
                 return;
-            }
+            }*/
             if (!isSelected)
             {
                 ImGui::End();
@@ -91,10 +91,10 @@ namespace rl::ed
                     if (i == '_')
                         i = ' ';
                 }
-                if (!isFolderSelected)
+                /*if (!isFolderSelected)
                     SceneHierarchy::SetEntityName(selected, std::string((char*)name));
                 else
-                    SceneHierarchy::SetFolderName(selected, std::string((char*)name));
+                    SceneHierarchy::SetFolderName(selected, std::string((char*)name));*/
             }
 
             if (isFolderSelected)
