@@ -30,7 +30,7 @@ namespace rl::ed
     {
         if (ImGui::Begin("Components", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoCollapse))
         {
-            /*if (!ProjectManager::IsProjectOpen())
+            if (!ProjectManager::IsProjectOpen())
             {
                 ImGui::Text("No project is currently open.");
                 ImGui::End();
@@ -41,7 +41,7 @@ namespace rl::ed
                 ImGui::Text("The project has not been compiled yet.");
                 ImGui::End();
                 return;
-            }*/
+            }
 
             Entity selected = SceneHierarchy::GetSelected();
             if (selected == NullEntity)
@@ -74,8 +74,8 @@ namespace rl::ed
                     CodeManager::RemoveComponent(componentName, selected);
                     ImGui::PopFont();
                     selectedData->componentData.erase(componentName);
-                    selectedData->componentOrder.erase(
-                        std::find(selectedData->componentOrder.begin(), selectedData->componentOrder.end(), componentName));
+                    selectedData->componentOrder.erase(std::find(selectedData->componentOrder.begin(),
+                                                                 selectedData->componentOrder.end(), componentName));
                     break;
                 }
                 ImGui::PopFont();

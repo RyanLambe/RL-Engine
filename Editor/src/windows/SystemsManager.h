@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <types/Types.h>
+
 #include "../GuiElement.h"
 
 namespace rl::ed
@@ -23,13 +25,10 @@ namespace rl::ed
         static std::shared_ptr<SystemsManager> window;
         bool open = true;
 
-        std::vector<std::pair<bool, std::string>> systems;
-        int moving = -1;
         bool hoveredMoving = true;
+        i64 moving = -1;
 
         [[nodiscard]] bool TryMoveSystem(int systemIndex);
-
-        void DrawAddSystemMenu();
-        void UpdateSystems();
+        static void DrawAddSystemMenu();
     };
 }

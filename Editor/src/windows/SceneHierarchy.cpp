@@ -4,6 +4,7 @@
 #include <ranges>
 
 #include "../Editor.h"
+#include "../project/ProjectManager.h"
 #include "../tools/FileParser.h"
 
 namespace rl::ed
@@ -29,6 +30,13 @@ namespace rl::ed
     {
         if (ImGui::Begin("Scene Hierarchy", &open, ImGuiWindowFlags_NoCollapse))
         {
+            if (!ProjectManager::IsProjectOpen())
+            {
+                ImGui::Text("No project is currently open.");
+                ImGui::End();
+                return;
+            }
+
             std::vector<Entity> stack;
             stack.push_back(0);
 
@@ -42,10 +50,16 @@ namespace rl::ed
                 }
 
                 if (entity != NullEntity)
+                {
                     DrawSeparator(entity);
-                DrawEntity(entity);
+                    DrawEntity(entity);
+                }
+
                 if (entity == NullEntity)
+                {
+                    ImGui::Text("\t%s", Scene::MainScene().GetEntityData(NullEntity)->name.c_str());
                     ImGui::Separator();
+                }
             }
 
             if (ImGui::IsWindowHovered() && selected != NullEntity

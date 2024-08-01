@@ -1,14 +1,13 @@
 #include "SystemManager.h"
 
-#include "../core/Logger.h"
-
 void rl::SystemManager::StartSystems()
 {
     for (auto& system : systems)
     {
         try
         {
-            system->Start();
+            if (system.first)
+                system.second->Start();
         }
         catch (const std::exception& e)
         {
@@ -27,7 +26,8 @@ void rl::SystemManager::UpdateSystems()
     {
         try
         {
-            system->Update();
+            if (system.first)
+                system.second->Update();
         }
         catch (const std::exception& e)
         {
