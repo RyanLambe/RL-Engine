@@ -6,6 +6,6 @@ namespace rl::internal
 {
     ComponentCollection& ComponentHelper::FindActiveComponentCollection()
     {
-        return Application::GetScene().components;
+        return Scene::GetScene().components;
     }
-} // namespace rl::internal
+}

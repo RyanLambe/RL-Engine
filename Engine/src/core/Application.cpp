@@ -58,7 +58,7 @@ namespace rl
         app->graphicsContext = GraphicsContext::Create(app->window.get());
 
         // setup scene
-        app->scene = std::make_unique<Scene>();
+        app->sceneManager = std::make_unique<SceneManager>();
 
         // setup logger
         app->logger = std::make_unique<Logger>();
@@ -68,13 +68,13 @@ namespace rl
 
     void Application::Update()
     {
-        app->scene->systemManager.UpdateSystems();
+        app->sceneManager->GetCurrentScene().systemManager.UpdateSystems();
     }
 
     void Application::Reset()
     {
         app->logger->ClearMessages();
-        app->scene->Reset();
+        app->sceneManager->GetCurrentScene().Reset();
     }
 
     bool Application::IsSetup()
@@ -97,9 +97,9 @@ namespace rl
         return app->window;
     }
 
-    Scene& Application::GetScene()
+    SceneManager& Application::GetSceneManager()
     {
-        return *app->scene;
+        return *app->sceneManager;
     }
 
     Logger& Application::GetLogger()

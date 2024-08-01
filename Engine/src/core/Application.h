@@ -25,7 +25,7 @@ namespace rl
 
         static bool IsSetup();
 
-        static Scene& GetScene();
+        static SceneManager& GetSceneManager();
 
         static Logger& GetLogger();
 
@@ -41,9 +41,9 @@ namespace rl
         static bool allowApplicationCreation;
         bool isSetup = false;
 
-        std::unique_ptr<Scene> scene = nullptr;
         std::unique_ptr<Logger> logger = nullptr;
-        std::shared_ptr<Window> window = nullptr;
+        std::unique_ptr<SceneManager> sceneManager = nullptr;
         std::shared_ptr<GraphicsContext> graphicsContext = nullptr;
+        std::shared_ptr<Window> window = nullptr;
     };
 }

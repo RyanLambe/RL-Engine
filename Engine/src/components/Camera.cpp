@@ -4,22 +4,22 @@
 
 rl::Camera* rl::Camera::GetMain()
 {
-    return Application::GetScene().mainCamera;
+    return Scene::GetScene().mainCamera;
 }
 
 void rl::Camera::SetMain(Camera* cam)
 {
-    Application::GetScene().mainCamera = cam;
+    Scene::GetScene().mainCamera = cam;
 }
 
 void rl::Camera::SetMain()
 {
-    Application::GetScene().mainCamera = this;
+    Scene::GetScene().mainCamera = this;
 }
 
 bool rl::Camera::IsMain() const
 {
-    return GetEntity() == Application::GetScene().mainCamera->GetEntity();
+    return GetEntity() == Scene::GetScene().mainCamera->GetEntity();
 }
 
 void rl::Camera::RenderToWindow()

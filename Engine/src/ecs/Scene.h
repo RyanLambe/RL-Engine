@@ -40,7 +40,7 @@ namespace rl
 
         Scene();
 
-        static Scene& MainScene();
+        static Scene& GetScene();
         void Reset()
         {
             systemManager = SystemManager();

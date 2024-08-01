@@ -10,9 +10,9 @@ namespace rl
         entities[NullEntity].name = "Scene";
     }
 
-    Scene& Scene::MainScene()
+    Scene& Scene::GetScene()
     {
-        return Application::GetScene();
+        return Application::GetSceneManager().GetCurrentScene();
     }
 
     Entity Scene::CreateEntity()

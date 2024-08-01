@@ -1,10 +1,10 @@
 #pragma once
 
+#include <types/Types.h>
+
 #include <memory>
 #include <string>
 #include <vector>
-
-#include <types/Types.h>
 
 #include "../GuiElement.h"
 

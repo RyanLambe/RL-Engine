@@ -50,7 +50,7 @@ namespace rl::ed
             if (disabled)
                 ImGui::BeginDisabled();
 
-            for (int i = 0; i < Scene::MainScene().systemManager.GetSystemsCount(); i++)
+            for (int i = 0; i < Scene::GetScene().systemManager.GetSystemsCount(); i++)
             {
                 nextItemPos = ImVec2(ImGui::GetWindowPos().x + ImGui::GetCursorPos().x,
                                      ImGui::GetWindowPos().y + ImGui::GetCursorPos().y);
@@ -72,11 +72,11 @@ namespace rl::ed
                     float temp = ImGui::GetCursorPosY();
                     ImGui::SetCursorPosY(temp + (SystemHeight / 2) - (ImGui::GetFrameHeight() / 2));
                     ImGui::Checkbox(("##Box" + std::to_string(i)).c_str(),
-                                    Scene::MainScene().systemManager.GetEnabledPtr(i));
+                                    Scene::GetScene().systemManager.GetEnabledPtr(i));
 
                     // text
                     ImGui::SameLine();
-                    const std::string& name = Scene::MainScene().systemManager.GetName(i);
+                    const std::string& name = Scene::GetScene().systemManager.GetName(i);
                     ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize(name.c_str()).x) / 2);
                     ImGui::Text("%s", name.c_str());
                     ImGui::SameLine();
@@ -88,7 +88,7 @@ namespace rl::ed
                     ImGui::PushFont(Editor::GetWingdingFont());
                     if (ImGui::Button(("T##" + std::to_string(i)).c_str(), ImVec2(SystemHeight, SystemHeight)))
                     {
-                        Scene::MainScene().systemManager.RemoveSystem(i);
+                        Scene::GetScene().systemManager.RemoveSystem(i);
                         exitForLoop = true;
                     }
                     ImGui::PopFont();
@@ -142,9 +142,9 @@ namespace rl::ed
             && hoveredMoving)
         {
             int swapIndex = systemIndex + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-            if (swapIndex >= 0 && swapIndex < Scene::MainScene().systemManager.GetSystemsCount())
+            if (swapIndex >= 0 && swapIndex < Scene::GetScene().systemManager.GetSystemsCount())
             {
-                Scene::MainScene().systemManager.SwapSystems(systemIndex, swapIndex);
+                Scene::GetScene().systemManager.SwapSystems(systemIndex, swapIndex);
                 moving = swapIndex;
                 hoveredMoving = false;
 

@@ -37,6 +37,15 @@ namespace rl::ed
                 return;
             }
 
+            try{
+                Application::GetSceneManager().GetCurrentScene();
+            }
+            catch(...){
+                ImGui::Text("No scene is currently open.");
+                ImGui::End();
+                return;
+            }
+
             std::vector<Entity> stack;
             stack.push_back(0);
 
@@ -44,7 +53,7 @@ namespace rl::ed
             {
                 Entity entity = stack.back();
                 stack.pop_back();
-                for (const auto& child : Scene::MainScene().GetChildren(entity) | std::views::reverse)
+                for (const auto& child : Scene::GetScene().GetChildren(entity) | std::views::reverse)
                 {
                     stack.push_back(child);
                 }
@@ -57,7 +66,7 @@ namespace rl::ed
 
                 if (entity == NullEntity)
                 {
-                    ImGui::Text("\t%s", Scene::MainScene().GetEntityData(NullEntity)->name.c_str());
+                    ImGui::Text("\t%s", Scene::GetScene().GetEntityData(NullEntity)->name.c_str());
                     ImGui::Separator();
                 }
             }
@@ -79,7 +88,7 @@ namespace rl::ed
             {
                 if (ImGui::IsWindowHovered())
                 {
-                    Scene::MainScene().SetParent(NullEntity, moving);
+                    Scene::GetScene().SetParent(NullEntity, moving);
                 }
                 moving = NullEntity;
             }
@@ -134,7 +143,7 @@ namespace rl::ed
             ImGui::Text("a");
             ImGui::PopFont();
             ImGui::SameLine();
-            ImGui::Text("%s", Scene::MainScene().GetEntityData(entity)->name.c_str());
+            ImGui::Text("%s", Scene::GetScene().GetEntityData(entity)->name.c_str());
 
             if (ImGui::IsMouseClicked(1) && hovered && moving == NullEntity)
             {
@@ -149,7 +158,7 @@ namespace rl::ed
 
             if (ImGui::IsMouseReleased(0) && hovered && moving != NullEntity && moving != entity)
             {
-                Scene::MainScene().SetParent(entity, moving);
+                Scene::GetScene().SetParent(entity, moving);
                 moving = NullEntity;
             }
             else if (ImGui::IsMouseReleased(0) && hovered && moving != NullEntity)
@@ -185,8 +194,8 @@ namespace rl::ed
 
         if (ImGui::IsMouseReleased(0) && hovered && moving != NullEntity && moving != entity)
         {
-            Scene::MainScene().SetParent(Scene::MainScene().GetParent(entity), moving);
-            Scene::EntityData* data = Scene::MainScene().GetEntityData(Scene::MainScene().GetParent(entity));
+            Scene::GetScene().SetParent(Scene::GetScene().GetParent(entity), moving);
+            Scene::EntityData* data = Scene::GetScene().GetEntityData(Scene::GetScene().GetParent(entity));
             for (int i = data->children.size() - 1; i >= 0; i--)
             {
                 if (data->children[i] == moving)
@@ -217,13 +226,13 @@ namespace rl::ed
             {
                 if (ImGui::Button("Create Entity"))
                 {
-                    Application::GetScene().CreateEntity();
+                    Scene::GetScene().CreateEntity();
                     ImGui::CloseCurrentPopup();
                 }
             }
             else
             {
-                auto selectedData = Scene::MainScene().GetEntityData(selected);
+                auto selectedData = Scene::GetScene().GetEntityData(selected);
                 if (!selectedData)
                 {
                     ImGui::Text("Unable to find entity: %zu", selected);
@@ -236,15 +245,15 @@ namespace rl::ed
 
                 if (ImGui::Button("Create Entity"))
                 {
-                    Entity child = Application::GetScene().CreateEntity();
-                    Scene::MainScene().SetParent(selected, child);
+                    Entity child = Scene::GetScene().CreateEntity();
+                    Scene::GetScene().SetParent(selected, child);
 
                     ImGui::CloseCurrentPopup();
                 }
 
                 if (ImGui::Button("Delete"))
                 {
-                    Application::GetScene().DestroyEntity(selected);
+                    Scene::GetScene().DestroyEntity(selected);
                     selected = NullEntity;
                     moving = NullEntity;
 
@@ -265,6 +274,6 @@ namespace rl::ed
     {
         if (entity == NullEntity)
             return 0;
-        return GetEntityDepth(Application::GetScene().GetParent(entity)) + 1.0f;
+        return GetEntityDepth(Scene::GetScene().GetParent(entity)) + 1.0f;
     }
 }
