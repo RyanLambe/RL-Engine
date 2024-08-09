@@ -10,6 +10,9 @@ set(RL_USE_GLFW 1)
 set(RL_USE_DX11 1)
 #set(RL_USE_VULKAN 1)
 
+set(RL_USE_WINDOWS 1)
+#set(RL_USE_LINUX 1)
+
 # include dependencies
 add_subdirectory(External)
 

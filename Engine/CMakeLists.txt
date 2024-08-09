@@ -15,6 +15,25 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out/${CMAKE_BUILD_TYPE})
 # *********************
 set(RL_DRIVERS)
 
+# add system drivers
+set(RL_USING_SYSTEM_DRIVER 0)
+if (DEFINED RL_USE_WINDOWS)
+    set(RL_DRIVERS ${RL_DRIVERS}
+            src/drivers/windows/WINDynamicLibrary.cpp
+            src/drivers/windows/WINDynamicLibrary.h
+    )
+    add_compile_definitions(RL_USE_WINDOWS)
+    set(RL_USING_WINDOW_DRIVER 1)
+endif()
+
+if (DEFINED RL_USE_LINUX)
+    message(FATAL_ERROR "Linux is not currently supported.")
+endif()
+
+if (RL_USING_WINDOW_DRIVER EQUAL 0)
+    message(FATAL_ERROR "No System Driver has been specified.")
+endif()
+
 # add window driver
 set(RL_USING_WINDOW_DRIVER 0)
 if (DEFINED RL_USE_GLFW)
@@ -97,6 +116,8 @@ add_library(Engine STATIC
         src/core/Axis.h
         src/core/Clock.cpp
         src/core/Clock.h
+        src/core/DynamicLibrary.cpp
+        src/core/DynamicLibrary.h
         src/core/Input.cpp
         src/core/Input.h
         src/core/Key.h
