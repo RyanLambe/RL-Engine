@@ -6,6 +6,7 @@
 #include "../graphics/GraphicsContext.h"
 #include "Logger.h"
 #include "Window.h"
+#include "DynamicLibrary.h"
 
 namespace rl
 {
@@ -36,6 +37,9 @@ namespace rl
         static GraphicsContext* GetGraphicsContextUnsafe();
         static std::weak_ptr<GraphicsContext> GetGraphicsContextPtr();
 
+        static std::shared_ptr<DynamicLibrary> GetGameContext();
+        static void SetGameContext(std::shared_ptr<DynamicLibrary> newContext);
+
     private:
         static std::shared_ptr<Application> app;
         static bool allowApplicationCreation;
@@ -44,6 +48,7 @@ namespace rl
         std::unique_ptr<Logger> logger = nullptr;
         std::unique_ptr<SceneManager> sceneManager = nullptr;
         std::shared_ptr<GraphicsContext> graphicsContext = nullptr;
+        std::shared_ptr<DynamicLibrary> gameContext = nullptr;
         std::shared_ptr<Window> window = nullptr;
     };
 }

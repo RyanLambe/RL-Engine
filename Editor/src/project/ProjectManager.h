@@ -6,7 +6,7 @@
 #include <thread>
 
 #include "core/Logger.h"
-#include "core/DynamicLibrary.h"
+#include "core/Application.h"
 
 namespace rl::ed
 {
@@ -28,12 +28,12 @@ namespace rl::ed
 
         template<typename T, typename... Args> static T RunFunction(const std::string& name, const Args&... args)
         {
-            if (!projectManager->library)
+            if (!Application::GetGameContext())
             {
-                RL_LOG_ERROR("Game.dll not loaded");
+                RL_LOG_ERROR("Game Context(dynamic lib) not loaded");
                 return T();
             }
-            return projectManager->library->RunFunction<T>(name, args...);
+            return Application::GetGameContext()->RunFunction<T>(name, args...);
         }
 
     private:
@@ -42,7 +42,6 @@ namespace rl::ed
         bool projectOpen = false;
         std::string projectName;
         std::string projectDir;
-        std::shared_ptr<rl::DynamicLibrary> library = nullptr;
 
         static bool CompileInternal(const std::string& projectDir);
         static void Start();

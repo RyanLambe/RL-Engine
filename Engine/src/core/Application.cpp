@@ -119,4 +119,12 @@ namespace rl
     {
         return app->graphicsContext.get();
     }
+
+    std::shared_ptr<DynamicLibrary> Application::GetGameContext() {
+        return app->gameContext;
+    }
+
+    void Application::SetGameContext(std::shared_ptr<DynamicLibrary> newContext) {
+        app->gameContext = newContext;
+    }
 }

@@ -1,7 +1,5 @@
 #include "ProjectManager.h"
 
-#include <core/Application.h>
-
 #include <chrono>
 #include <filesystem>
 
@@ -26,7 +24,7 @@ ProjectManager::ProjectManager()
 
 ProjectManager::~ProjectManager()
 {
-    projectManager->library = nullptr;
+    Application::SetGameContext(nullptr);
 }
 
 bool ProjectManager::New(const std::string& name, const std::string& path)
@@ -140,24 +138,24 @@ void ProjectManager::Update()
         RL_LOG_ERROR("Error while Compiling: ");
         return;
     }
-    RL_LOG_WARNING("Game.dll Compiled.");
+    RL_LOG_WARNING("Game Context Compiled.");
 
     if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData/out/Game.dll"))
     {
-        RL_LOG_ERROR("Cannot find Game.dll.");
+        RL_LOG_ERROR("Cannot find Game Context(dynamic library).");
         return;
     }
 
-    projectManager->library = nullptr;
+    Application::SetGameContext(nullptr);
 
     std::filesystem::remove("./Game.dll");
     std::filesystem::copy_file(projectManager->projectDir + "/ProjectData/out/Game.dll", "./Game.dll",
                                std::filesystem::copy_options::overwrite_existing);
 
-    projectManager->library = DynamicLibrary::Load(std::filesystem::path("Game.dll"));
+    Application::SetGameContext(DynamicLibrary::Load(std::filesystem::path("Game.dll")));
 
     Start();
-    RL_LOG_WARNING("Game.dll Setup.");
+    RL_LOG_WARNING("Game Context Setup.");
 }
 
 bool ProjectManager::CompileInternal(const std::string& projectDir)
@@ -186,7 +184,7 @@ bool ProjectManager::IsProjectOpen()
 
 bool ProjectManager::IsProjectCompiled()
 {
-    return projectManager->library != nullptr;
+    return Application::GetGameContext() != nullptr;
 }
 
 std::string ProjectManager::GetProjectDirectory()
@@ -196,11 +194,11 @@ std::string ProjectManager::GetProjectDirectory()
 
 void ProjectManager::Start()
 {
-    if (!projectManager->library)
+    if (!Application::GetGameContext())
     {
-        RL_LOG_ERROR("Game.dll not loaded");
+        RL_LOG_ERROR("Game Context(dynamic lib) not loaded");
         return;
     }
 
-    projectManager->library->RunFunctionVal<void>("GameSetup", (void*)Application::GetSharedPtr());
+    Application::GetGameContext()->RunFunctionVal<void>("GameSetup", (void*)Application::GetSharedPtr());
 }
