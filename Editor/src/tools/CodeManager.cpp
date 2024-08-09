@@ -227,6 +227,7 @@ namespace rl::ed
              << "target_include_directories(Game PUBLIC ${EDITOR_PATH}/include)\n"
              << "target_include_directories(Game PUBLIC ${EDITOR_PATH}/ThirdParty/glm)\n"
              << "target_include_directories(Game PUBLIC ${EDITOR_PATH}/ThirdParty/glfw)\n"
+             << "target_include_directories(Game PUBLIC ${EDITOR_PATH}/ThirdParty/json/include)\n"
              << "target_link_libraries(Game PRIVATE ${GLFW})\n"
              << "target_link_libraries(Game PRIVATE ${ENGINE})\n\n"
              << "target_compile_definitions(Game PUBLIC _ITERATOR_DEBUG_LEVEL=${RL_DEBUG_LEVEL})\n";

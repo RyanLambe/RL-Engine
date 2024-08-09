@@ -235,4 +235,5 @@ endforeach(DIR)
 file(COPY ${CMAKE_SOURCE_DIR}/External/glm/glm DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/ThirdParty/glm)
 file(COPY ${CMAKE_SOURCE_DIR}/External/glm/copying.txt DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/ThirdParty/glm)
 
-
+# include json in output
+file(COPY ${CMAKE_SOURCE_DIR}/External/json/include DESTINATION ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/ThirdParty/json)
