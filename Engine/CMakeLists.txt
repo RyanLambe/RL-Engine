@@ -155,6 +155,9 @@ add_library(Engine STATIC
         src/types/Vertex.h
         src/types/Types.h
         src/types/OptionalVector.h
+
+        # files
+        src/files/FileParser.h
 )
 
 # *************************
@@ -194,6 +197,7 @@ set(ENGINE_HEADER_DIRS
         /drivers/dx11
         /drivers/vk
         /ecs
+        /files
         /graphics
         /systems
         /types

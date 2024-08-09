@@ -5,7 +5,6 @@
 
 #include "../Editor.h"
 #include "../project/ProjectManager.h"
-#include "../tools/FileParser.h"
 
 namespace rl::ed
 {

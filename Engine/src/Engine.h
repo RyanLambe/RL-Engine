@@ -15,3 +15,4 @@
 #include "ecs/SceneManager.h"
 #include "systems/Renderer.h"
 #include "types/Types.h"
+#include "files/FileParser.h"
