@@ -51,7 +51,7 @@ namespace rl::ed
             }
 
             ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-            Scene::EntityData* selectedData = Scene::GetScene().GetEntityData(selected);
+            EntityData* selectedData = Scene::GetScene().GetEntityData(selected);
             (selectedData->name + '\0').copy((char*)name, 256);
             if (ImGui::InputText("##name", &name[0], 256))
             {
@@ -250,7 +250,7 @@ namespace rl::ed
             ImGui::Text("Add Component:\t\t\t\t\t");
             ImGui::Separator();
 
-            Scene::EntityData* selectedData = Scene::GetScene().GetEntityData(SceneHierarchy::GetSelected());
+            EntityData* selectedData = Scene::GetScene().GetEntityData(SceneHierarchy::GetSelected());
 
             for (const auto& component : CodeManager::GetComponents())
             {
@@ -279,7 +279,7 @@ namespace rl::ed
             ImGui::Text("%s\t\t\t", Editor::FormatName(componentName).c_str());
             ImGui::Separator();
 
-            Scene::EntityData* selectedData = Scene::GetScene().GetEntityData(SceneHierarchy::GetSelected());
+            EntityData* selectedData = Scene::GetScene().GetEntityData(SceneHierarchy::GetSelected());
 
             if (ImGui::Button("Refresh"))
             {
@@ -329,7 +329,7 @@ namespace rl::ed
     void Components::UpdateComponent(const std::string& componentName)
     {
         Entity selected = SceneHierarchy::GetSelected();
-        Scene::EntityData* selectedData = Scene::GetScene().GetEntityData(selected);
+        EntityData* selectedData = Scene::GetScene().GetEntityData(selected);
         Quaternion quatTemp; // only used for quat properties
 
         for (const auto& property : CodeManager::GetProperties(componentName))

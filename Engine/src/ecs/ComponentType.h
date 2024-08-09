@@ -4,13 +4,10 @@
 
 #include "../core/RLResult.h"
 #include "../types/OptionalVector.h"
+#include "../types/Types.h"
 
 namespace rl
 {
-
-    using Entity = size_t;
-    const Entity NullEntity = Entity(0);
-
     namespace internal
     {
         class ComponentType

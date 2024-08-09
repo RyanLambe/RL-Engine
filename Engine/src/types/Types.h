@@ -1,8 +1,17 @@
 #pragma once
 #include <climits>
 #include <cstdint>
+#include <variant>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+
+// entity
+namespace rl
+{
+    using Entity = size_t;
+    const Entity NullEntity = Entity(0);
+}
+
 
 // vectors
 using Quaternion = glm::quat;
@@ -29,19 +38,22 @@ using i32 = int32_t;
 using i16 = int16_t;
 using i8 = int8_t;
 
-union VariableData {
-    i8 I8;
-    i16 I16;
-    i32 I32;
-    i64 I64;
-    u8 U8;
-    u16 U16;
-    u32 U32;
-    u64 U64;
-    f32 F32;
-    f64 F64;
-    Vec2 Vec2;
-    Vec3 Vec3;
-    Vec4 Vec4;
-    Quaternion Quat;
-};
+namespace rl
+{
+    union VariableData {
+        i8 I8;
+        i16 I16;
+        i32 I32;
+        i64 I64;
+        u8 U8;
+        u16 U16;
+        u32 U32;
+        u64 U64;
+        f32 F32;
+        f64 F64;
+        Vec2 Vec2;
+        Vec3 Vec3;
+        Vec4 Vec4;
+        Quaternion Quat;
+    };
+}

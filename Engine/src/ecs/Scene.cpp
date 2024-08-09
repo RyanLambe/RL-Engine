@@ -1,6 +1,9 @@
 #include "Scene.h"
 
+#include <fstream>
+
 #include "../core/Application.h"
+
 
 namespace rl
 {
@@ -92,5 +95,33 @@ namespace rl
                 break;
             }
         }
+    }
+
+    void Scene::SaveToFile(Scene &scene, const std::filesystem::path &filePath) {
+        std::ofstream file(filePath);
+        if(!file.is_open()){
+            RL_LOG_ERROR("Unable to open file: ", filePath.string());
+            return;
+        }
+        json data = {};
+
+        data["nextEntity"] = scene.nextEntity;
+        data["deletedEntities"] = scene.deletedEntities;
+        data["entities"] = scene.entities;
+
+        file << std::setw(4) << data << "\n";
+    }
+
+    void Scene::LoadFromFile(Scene* scene, const std::filesystem::path &filePath) {
+        std::ifstream file(filePath);
+        if(!file.is_open()){
+            RL_LOG_ERROR("Unable to open file: ", filePath.string());
+            return;
+        }
+        json data = json::parse(file);
+
+        scene->nextEntity = data["nextEntity"];
+        scene->deletedEntities = data["deletedEntities"].get<std::deque<Entity>>();
+        scene->entities = data["entities"].get<std::unordered_map<Entity, EntityData>>();
     }
 }

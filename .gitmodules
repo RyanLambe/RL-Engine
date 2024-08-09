@@ -11,3 +11,6 @@
 	path = External/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
+[submodule "External/json"]
+	path = External/json
+	url = https://github.com/nlohmann/json.git

@@ -74,7 +74,10 @@ namespace rl
     void Application::Reset()
     {
         app->logger->ClearMessages();
-        app->sceneManager->GetCurrentScene().Reset();
+        try        {
+            app->sceneManager->GetCurrentScene().Reset();
+        }
+        catch(...){ }
     }
 
     bool Application::IsSetup()

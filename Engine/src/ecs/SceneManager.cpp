@@ -5,27 +5,18 @@
 namespace rl
 {
     std::string rl::SceneManager::NewScene(const std::filesystem::path& filePath) {
-        std::ofstream file(filePath);
-
-
-        file.close();
+        loadedScenes.emplace_back(filePath, std::make_shared<Scene>());
         return filePath.stem().string();
     }
 
     std::string SceneManager::LoadScene(const std::filesystem::path& filePath) {
-        return "";
+        loadedScenes.emplace_back(filePath, std::make_shared<Scene>());
+        Scene::LoadFromFile(loadedScenes.back().second.get(), loadedScenes.back().first);
+        return filePath.stem().string();
     }
 
     void SceneManager::SaveScene() {
-        std::ofstream file(loadedScenes[currentScene].first);
-        if(!file.is_open()){
-            RL_LOG_ERROR("Save Failed. Unable to open the Scene file: ", loadedScenes[currentScene].first.string());
-            return;
-        }
-
-
-
-        file.close();
+        Scene::SaveToFile(*loadedScenes[currentScene].second, loadedScenes[currentScene].first);
     }
 }
 

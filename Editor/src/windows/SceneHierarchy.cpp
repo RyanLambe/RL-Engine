@@ -36,6 +36,14 @@ namespace rl::ed
                 return;
             }
 
+            if(ImGui::Button("New Scene")){
+                Application::GetSceneManager().NewScene(ProjectManager::GetProjectDirectory() + "/testScene.scene");
+            }
+            if(ImGui::Button("Open Scene")){
+                Application::GetSceneManager().LoadScene(ProjectManager::GetProjectDirectory() + "/testScene.scene");
+                Application::GetSceneManager().SetScene("testScene");
+            }
+
             try{
                 Application::GetSceneManager().GetCurrentScene();
             }
@@ -43,6 +51,10 @@ namespace rl::ed
                 ImGui::Text("No scene is currently open.");
                 ImGui::End();
                 return;
+            }
+
+            if(ImGui::Button("Save Scene")){
+                Application::GetSceneManager().SaveScene();
             }
 
             std::vector<Entity> stack;
@@ -194,7 +206,7 @@ namespace rl::ed
         if (ImGui::IsMouseReleased(0) && hovered && moving != NullEntity && moving != entity)
         {
             Scene::GetScene().SetParent(Scene::GetScene().GetParent(entity), moving);
-            Scene::EntityData* data = Scene::GetScene().GetEntityData(Scene::GetScene().GetParent(entity));
+            EntityData* data = Scene::GetScene().GetEntityData(Scene::GetScene().GetParent(entity));
             for (int i = data->children.size() - 1; i >= 0; i--)
             {
                 if (data->children[i] == moving)

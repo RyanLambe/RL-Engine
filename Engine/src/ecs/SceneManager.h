@@ -12,7 +12,7 @@ namespace rl
         inline Scene& GetCurrentScene()
         {
             if(currentScene < loadedScenes.size())
-                return loadedScenes[currentScene].second;
+                return *loadedScenes[currentScene].second;
             RL_THROW_EXCEPTION("Unable to get current scene as it has either not been loaded or set.");
         }
 
@@ -55,6 +55,6 @@ namespace rl
 
     private:
         size_t currentScene = 0;
-        std::vector<std::pair<std::filesystem::path, Scene>> loadedScenes = {};
+        std::vector<std::pair<std::filesystem::path, std::shared_ptr<Scene>>> loadedScenes = {};
     };
 }

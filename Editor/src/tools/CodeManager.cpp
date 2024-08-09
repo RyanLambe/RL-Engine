@@ -582,7 +582,7 @@ namespace rl::ed
             if (!first)
                 file << "else ";
             file << "if (system == \"" << system << "\")\n";
-            file << "\t\tApplication::GetScene().systemManager.AddSystem<" << system << ">(system);\n";
+            file << "\t\tScene::GetScene().systemManager.AddSystem<" << system << ">(system);\n";
             first = false;
         }
         file << "}\n";

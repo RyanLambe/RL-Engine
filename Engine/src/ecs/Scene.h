@@ -1,38 +1,18 @@
 #pragma once
 
 #include <queue>
+#include <optional>
+#include <filesystem>
 
+#include "EntityData.h"
 #include "../components/Camera.h"
 #include "ComponentCollection.h"
 #include "SystemManager.h"
-#include "optional"
 
 namespace rl
 {
     class Scene
     {
-    public:
-        class EntityData
-        {
-        public:
-            Entity id = NullEntity;
-            std::string name = "root";
-            bool enabled = true;
-            bool collapsed = false;
-
-            Entity parent = NullEntity;
-            std::vector<Entity> children = {};
-
-            std::unordered_map<std::string, std::unordered_map<std::string, VariableData>> componentData = {};
-            std::vector<std::string> componentOrder = {};
-
-            EntityData(Entity id) : id(id)
-            {
-                name = "Entity " + std::to_string(id);
-            }
-            EntityData() = default;
-        };
-
     public:
         SystemManager systemManager;
         ComponentCollection components;
@@ -89,6 +69,9 @@ namespace rl
                 return nullptr;
             return &entities[entity];
         }
+
+        static void SaveToFile(Scene& scene, const std::filesystem::path& filePath);
+        static void LoadFromFile(Scene* scene, const std::filesystem::path& filePath);
 
     private:
         void RemoveEntityFromParentsChildList(Entity entity);

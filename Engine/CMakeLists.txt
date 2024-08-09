@@ -166,6 +166,7 @@ add_library(Engine STATIC
 
 # include common libraries
 target_include_directories(Engine PUBLIC ../External/glm)
+target_include_directories(Engine PUBLIC ../External/json/include)
 
 # include window driver
 if(DEFINED RL_USE_GLFW)
