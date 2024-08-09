@@ -11,7 +11,7 @@
 namespace rl {
     class DynamicLibrary {
     public:
-        virtual ~DynamicLibrary() = 0;
+        virtual ~DynamicLibrary() = default;
 
         static std::shared_ptr<DynamicLibrary> Load(const std::filesystem::path& file);
 

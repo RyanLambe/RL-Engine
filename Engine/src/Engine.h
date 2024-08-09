@@ -7,6 +7,7 @@
 #include "components/Transform.h"
 #include "core/Application.h"
 #include "core/Clock.h"
+#include "core/DynamicLibrary.h"
 #include "core/Input.h"
 #include "core/Logger.h"
 #include "core/RLResult.h"

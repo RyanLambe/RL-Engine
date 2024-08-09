@@ -3,10 +3,16 @@
 namespace rl {
     WINDynamicLibrary::WINDynamicLibrary(const std::filesystem::path &file) {
         lib = LoadLibrary(file.string().c_str());
-
+        if (!lib)
+        {
+            RL_LOG_ERROR(GetLastError(), " - unable to link to library: ", file.string());
+            return;
+        }
+        RL_LOG_WARNING("Game.dll Connected.");
     }
 
     WINDynamicLibrary::~WINDynamicLibrary() {
+        RL_LOG_WARNING("Disconnected from library");
         FreeLibrary(lib);
     }
 

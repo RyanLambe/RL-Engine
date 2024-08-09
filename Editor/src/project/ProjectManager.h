@@ -1,14 +1,12 @@
 #pragma once
 
-#define NOMINMAX
-#include <windows.h>
-
 #include <future>
 #include <optional>
 #include <string>
 #include <thread>
 
 #include "core/Logger.h"
+#include "core/DynamicLibrary.h"
 
 namespace rl::ed
 {
@@ -35,28 +33,7 @@ namespace rl::ed
                 RL_LOG_ERROR("Game.dll not loaded");
                 return T();
             }
-
-            typedef T (*FuncType)(const Args&... args);
-            auto func = (FuncType)GetProcAddress(projectManager->library, name.c_str());
-            if (!func)
-            {
-                RL_LOG_ERROR(name, " function not found: ", GetLastError());
-                return T();
-            }
-
-            try
-            {
-                return func(args...);
-            }
-            catch (const std::exception& e)
-            {
-                RL_LOG_ERROR(e.what());
-            }
-            catch (...)
-            {
-                RL_LOG_ERROR("Caught Unknown Exception");
-            }
-            return T();
+            return projectManager->library->RunFunction<T>(name, args...);
         }
 
     private:
@@ -65,7 +42,7 @@ namespace rl::ed
         bool projectOpen = false;
         std::string projectName;
         std::string projectDir;
-        HINSTANCE library = nullptr;
+        std::shared_ptr<rl::DynamicLibrary> library = nullptr;
 
         static bool CompileInternal(const std::string& projectDir);
         static void Start();

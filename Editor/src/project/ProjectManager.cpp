@@ -1,7 +1,6 @@
 #include "ProjectManager.h"
 
 #include <core/Application.h>
-#include <core/Logger.h>
 
 #include <chrono>
 #include <filesystem>
@@ -12,8 +11,6 @@
 #include "../windows/Console.h"
 
 using namespace rl::ed;
-
-using SetupFunc = void (*)(void*);
 
 ProjectManager* ProjectManager::projectManager = nullptr;
 
@@ -29,8 +26,7 @@ ProjectManager::ProjectManager()
 
 ProjectManager::~ProjectManager()
 {
-    if (projectManager->library)
-        FreeLibrary(projectManager->library);
+    projectManager->library = nullptr;
 }
 
 bool ProjectManager::New(const std::string& name, const std::string& path)
@@ -152,20 +148,13 @@ void ProjectManager::Update()
         return;
     }
 
-    if (projectManager->library)
-        FreeLibrary(projectManager->library);
+    projectManager->library = nullptr;
 
     std::filesystem::remove("./Game.dll");
     std::filesystem::copy_file(projectManager->projectDir + "/ProjectData/out/Game.dll", "./Game.dll",
                                std::filesystem::copy_options::overwrite_existing);
 
-    projectManager->library = LoadLibrary("Game.dll");
-    if (!projectManager->library)
-    {
-        RL_LOG_ERROR("Game.dll not found: ", GetLastError());
-        return;
-    }
-    RL_LOG_WARNING("Game.dll Connected.");
+    projectManager->library = DynamicLibrary::Load(std::filesystem::path("Game.dll"));
 
     Start();
     RL_LOG_WARNING("Game.dll Setup.");
@@ -213,23 +202,5 @@ void ProjectManager::Start()
         return;
     }
 
-    auto func = (SetupFunc)GetProcAddress(projectManager->library, "GameSetup");
-    if (!func)
-    {
-        RL_LOG_ERROR("GameSetup function not found: ", GetLastError());
-        return;
-    }
-
-    try
-    {
-        func((void*)Application::GetSharedPtr());
-    }
-    catch (const std::exception& e)
-    {
-        RL_LOG_ERROR(e.what());
-    }
-    catch (...)
-    {
-        RL_LOG_ERROR("Caught Unknown Exception");
-    }
+    projectManager->library->RunFunctionVal<void>("GameSetup", (void*)Application::GetSharedPtr());
 }
