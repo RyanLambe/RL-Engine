@@ -7,7 +7,7 @@
 
 namespace rl
 {
-    Scene::Scene()
+    Scene::Scene(const std::filesystem::path& location) : location(location), name(location.stem().string())
     {
         entities[NullEntity] = EntityData(NullEntity);
         entities[NullEntity].name = "Scene";
@@ -97,17 +97,17 @@ namespace rl
         }
     }
 
-    void Scene::SaveToFile(Scene &scene, const std::filesystem::path &filePath) {
-        std::ofstream file(filePath);
+    void Scene::SaveToFile() {
+        std::ofstream file(location);
         if(!file.is_open()){
-            RL_LOG_ERROR("Unable to open file: ", filePath.string());
+            RL_LOG_ERROR("Unable to open file: ", location.string());
             return;
         }
         json data = {};
 
-        data["nextEntity"] = scene.nextEntity;
-        data["deletedEntities"] = scene.deletedEntities;
-        data["entities"] = scene.entities;
+        data["nextEntity"] = nextEntity;
+        data["deletedEntities"] = deletedEntities;
+        data["entities"] = entities;
 
         file << std::setw(4) << data << "\n";
     }
@@ -123,5 +123,40 @@ namespace rl
         scene->nextEntity = data["nextEntity"];
         scene->deletedEntities = data["deletedEntities"].get<std::deque<Entity>>();
         scene->entities = data["entities"].get<std::unordered_map<Entity, EntityData>>();
+
+        scene->LoadComponents();
+    }
+
+    void Scene::LoadComponents() {
+        if(!Application::isGameContextCreated()){
+            RL_LOG_ERROR("Unable to load scene components as the game context has not been compiled/loaded");
+            return;
+        }
+
+        // set as active scene
+        std::string currentScene = Application::GetSceneManager().GetCurrentScene().name;
+        Application::GetSceneManager().LoadScene(name);
+
+        // create components
+        for(const auto& entity : entities){
+            for(const auto& component : entity.second.componentOrder){
+                //Application::GetGameContext()->RunFunction<void>("AddComponent", component, entity.first);
+            }
+        }
+
+        // set component values
+        for(const auto& entity : entities)
+        {
+            for(const auto& component : entity.second.componentData)
+            {
+                for(const auto& componentData : component.second)
+                {
+                    //SetValue<>;
+                }
+            }
+        }
+
+        // set active scene back
+        Application::GetSceneManager().LoadScene(currentScene);
     }
 }

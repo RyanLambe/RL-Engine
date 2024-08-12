@@ -11,15 +11,16 @@ namespace rl
     public:
         inline Scene& GetCurrentScene()
         {
-            if(currentScene < loadedScenes.size())
-                return *loadedScenes[currentScene].second;
-            RL_THROW_EXCEPTION("Unable to get current scene as it has either not been loaded or set.");
+            if(currentScene >= loadedScenes.size()){
+                RL_THROW_EXCEPTION("Unable to get current scene as it has either not been loaded or set.");
+            }
+            return *loadedScenes[currentScene];
         }
 
         inline bool IsSceneLoaded(const std::string& name)
         {
             for(const auto& scene : loadedScenes){
-                if(scene.first.stem().string() == name)
+                if(scene->name == name)
                     return true;
             }
             return false;
@@ -28,7 +29,7 @@ namespace rl
         inline void SetScene(const std::string& name)
         {
             for(size_t i = 0; i < loadedScenes.size(); i++){
-                if(loadedScenes[i].first.stem().string() == name){
+                if(loadedScenes[i]->name == name){
                     currentScene = i;
                     break;
                 }
@@ -38,7 +39,7 @@ namespace rl
         inline void UnloadScene(const std::string& name)
         {
             for(size_t i = 0; i < loadedScenes.size(); i++){
-                if(loadedScenes[i].first.stem().string() == name){
+                if(loadedScenes[i]->name == name){
                     if(i == currentScene){
                         RL_LOG_ERROR("Cannot Unload scene as it is the currently set scene");
                         return;
@@ -55,6 +56,6 @@ namespace rl
 
     private:
         size_t currentScene = 0;
-        std::vector<std::pair<std::filesystem::path, std::shared_ptr<Scene>>> loadedScenes = {};
+        std::vector<std::shared_ptr<Scene>> loadedScenes = {};
     };
 }
