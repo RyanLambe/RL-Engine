@@ -14,6 +14,6 @@
 #include "core/Timer.h"
 #include "ecs/Component.h"
 #include "ecs/SceneManager.h"
+#include "files/FileParser.h"
 #include "systems/Renderer.h"
 #include "types/Types.h"
-#include "files/FileParser.h"

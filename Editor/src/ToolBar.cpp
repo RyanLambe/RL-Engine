@@ -54,13 +54,6 @@ void ToolBar::Render()
             Editor::Play();
         if (ImGui::MenuItem("Stop"))
             Editor::Pause();
-        if (ImGui::MenuItem("TEST"))
-        {
-            Entity test = 22;
-            RL_LOG("Returned: ",
-                   ProjectManager::RunFunction<int>("AddComponent", std::string("TEST FROM EDITOR"), test));
-            RL_LOG("Has Transform: ", Transform::HasComponent(test));
-        }
 
         ImGui::EndMainMenuBar();
     }

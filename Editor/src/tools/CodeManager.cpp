@@ -1,8 +1,9 @@
 #include "CodeManager.h"
 
+#include <files/FileParser.h>
+
 #include <fstream>
 
-#include <files/FileParser.h>
 #include "core/Logger.h"
 
 namespace rl::ed
@@ -91,85 +92,9 @@ namespace rl::ed
         return components;
     }
 
-    void CodeManager::AddSystem(const std::string& system)
-    {
-        ProjectManager::RunFunction<void>("AddSystem", system);
-    }
-
     const std::vector<std::pair<VariableType, std::string>>& CodeManager::GetProperties(const std::string& component)
     {
         return componentVariables[component];
-    }
-
-    void CodeManager::AddComponent(const std::string& component, rl::Entity entity)
-    {
-        ProjectManager::RunFunction<void>("AddComponent", component, entity);
-    }
-
-    void CodeManager::RemoveComponent(const std::string& component, rl::Entity entity)
-    {
-        ProjectManager::RunFunction<void>("RemoveComponent", component, entity);
-    }
-
-    void* CodeManager::GetComponent(const std::string& component, rl::Entity entity)
-    {
-        return ProjectManager::RunFunction<void*>("GetComponent", component, entity);
-    }
-
-    void CodeManager::GetComponentValue(const VariableType& valType, const std::string& componentType,
-                                        const std::string& varName, const Entity& entity, void* outBuf)
-    {
-        void* temp
-            = ProjectManager::RunFunction<void*>("GetValue" + ToStringUpper(valType), componentType, varName, entity);
-        if (temp == nullptr)
-            return;
-        switch (valType)
-        {
-            case VariableType::Unknown:
-                break;
-            case VariableType::I8:
-                *(i8*)outBuf = *std::bit_cast<i8*>(temp);
-                break;
-            case VariableType::I16:
-                *(i16*)outBuf = *std::bit_cast<i16*>(temp);
-                break;
-            case VariableType::I32:
-                *(i32*)outBuf = *std::bit_cast<i32*>(temp);
-                break;
-            case VariableType::I64:
-                *(i64*)outBuf = *std::bit_cast<i64*>(temp);
-                break;
-            case VariableType::U8:
-                *(u8*)outBuf = *(u8*)temp;
-                break;
-            case VariableType::U16:
-                *(u16*)outBuf = *(u16*)temp;
-                break;
-            case VariableType::U32:
-                *(u32*)outBuf = *(u32*)temp;
-                break;
-            case VariableType::U64:
-                *(u64*)outBuf = *(u64*)temp;
-                break;
-            case VariableType::F32:
-                *(f32*)outBuf = *(f32*)temp;
-                break;
-            case VariableType::F64:
-                *(f64*)outBuf = *(f64*)temp;
-                break;
-            case VariableType::VEC2:
-                *(Vec2*)outBuf = *(Vec2*)temp;
-                break;
-            case VariableType::VEC3:
-                *(Vec3*)outBuf = *(Vec3*)temp;
-                break;
-            case VariableType::VEC4:
-                *(Vec4*)outBuf = *(Vec4*)temp;
-                break;
-            case VariableType::QUAT:
-                *(Quaternion*)outBuf = *(Quaternion*)temp;
-                break;
-        }
     }
 
     void CodeManager::Generate()
@@ -675,81 +600,5 @@ namespace rl::ed
             file << "\t\treturn (void*)&" << component << "::GetComponent(entity);\n";
         }
         file << "\treturn nullptr;\n}\n";
-    }
-
-    std::string CodeManager::ToString(VariableType type)
-    {
-        switch (type)
-        {
-            case VariableType::Unknown:
-                return "Unknown";
-            case VariableType::I8:
-                return "i8";
-            case VariableType::I16:
-                return "i16";
-            case VariableType::I32:
-                return "i32";
-            case VariableType::I64:
-                return "i64";
-            case VariableType::U8:
-                return "u8";
-            case VariableType::U16:
-                return "u16";
-            case VariableType::U32:
-                return "u32";
-            case VariableType::U64:
-                return "u64";
-            case VariableType::F32:
-                return "f32";
-            case VariableType::F64:
-                return "f64";
-            case VariableType::VEC2:
-                return "Vec2";
-            case VariableType::VEC3:
-                return "Vec3";
-            case VariableType::VEC4:
-                return "Vec4";
-            case VariableType::QUAT:
-                return "Quaternion";
-        }
-        return "Error";
-    }
-
-    std::string CodeManager::ToStringUpper(VariableType type)
-    {
-        switch (type)
-        {
-            case VariableType::Unknown:
-                return "Unknown";
-            case VariableType::I8:
-                return "I8";
-            case VariableType::I16:
-                return "I16";
-            case VariableType::I32:
-                return "I32";
-            case VariableType::I64:
-                return "I64";
-            case VariableType::U8:
-                return "U8";
-            case VariableType::U16:
-                return "U16";
-            case VariableType::U32:
-                return "U32";
-            case VariableType::U64:
-                return "U64";
-            case VariableType::F32:
-                return "F32";
-            case VariableType::F64:
-                return "F64";
-            case VariableType::VEC2:
-                return "Vec2";
-            case VariableType::VEC3:
-                return "Vec3";
-            case VariableType::VEC4:
-                return "Vec4";
-            case VariableType::QUAT:
-                return "Quaternion";
-        }
-        return "Error";
     }
 }

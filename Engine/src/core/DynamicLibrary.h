@@ -1,22 +1,23 @@
 #pragma once
 
+#include <any>
+#include <filesystem>
 #include <memory>
 #include <vector>
-#include <filesystem>
-#include <any>
 
-#include "RLResult.h"
 #include "../types/Types.h"
+#include "RLResult.h"
 
-namespace rl {
-    class DynamicLibrary {
+namespace rl
+{
+    class DynamicLibrary
+    {
     public:
         virtual ~DynamicLibrary() = default;
 
         static std::shared_ptr<DynamicLibrary> Load(const std::filesystem::path& file);
 
-        template<typename T, typename... Args>
-        T RunFunction(const std::string& name, const Args&... args)
+        template<typename T, typename... Args> T RunFunction(const std::string& name, const Args&... args)
         {
             typedef T (*FuncType)(const Args&... args);
             auto func = (FuncType)GetFuncAddress(name);
@@ -41,8 +42,7 @@ namespace rl {
             return T();
         }
 
-        template<typename T, typename... Args>
-        T RunFunctionVal(const std::string& name, Args... args)
+        template<typename T, typename... Args> T RunFunctionVal(const std::string& name, Args... args)
         {
             typedef T (*FuncType)(Args... args);
             auto func = (FuncType)GetFuncAddress(name);

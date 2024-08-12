@@ -118,6 +118,8 @@ add_library(Engine STATIC
         src/core/Clock.h
         src/core/DynamicLibrary.cpp
         src/core/DynamicLibrary.h
+        src/core/GameContext.cpp
+        src/core/GameContext.h
         src/core/Input.cpp
         src/core/Input.h
         src/core/Key.h

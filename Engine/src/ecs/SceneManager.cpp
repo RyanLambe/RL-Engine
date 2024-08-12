@@ -4,20 +4,22 @@
 
 namespace rl
 {
-    std::string rl::SceneManager::NewScene(const std::filesystem::path& filePath) {
-        loadedScenes.push_back(std::make_shared<Scene>(filePath));
+    std::string rl::SceneManager::NewScene(const std::filesystem::path& filePath)
+    {
+        loadedScenes[filePath.stem().string()] = std::make_shared<Scene>(filePath);
 
         return filePath.stem().string();
     }
 
-    std::string SceneManager::LoadScene(const std::filesystem::path& filePath) {
-        loadedScenes.push_back(std::make_shared<Scene>(filePath));
-        Scene::LoadFromFile(loadedScenes.back().get(), filePath);
+    std::string SceneManager::LoadScene(const std::filesystem::path& filePath)
+    {
+        loadedScenes[filePath.stem().string()] = std::make_shared<Scene>(filePath);
+        Scene::LoadFromFile(loadedScenes[filePath.stem().string()].get(), filePath);
         return filePath.stem().string();
     }
 
-    void SceneManager::SaveScene() {
+    void SceneManager::SaveScene()
+    {
         loadedScenes[currentScene]->SaveToFile();
     }
 }
-

@@ -1,8 +1,7 @@
 #pragma once
 
-#include <string>
-
 #include <nlohmann/json.hpp>
+#include <string>
 using json = nlohmann::json;
 
 #include "../types/Types.h"
@@ -20,7 +19,7 @@ namespace rl
         Entity parent = NullEntity;
         std::vector<Entity> children = {};
 
-        std::unordered_map<std::string, std::unordered_map<std::string, VariableData>> componentData = {};
+        std::unordered_map<std::string, std::unordered_map<std::string, Variable>> componentData = {};
         std::vector<std::string> componentOrder = {};
 
         EntityData(Entity id) : id(id)
@@ -30,12 +29,20 @@ namespace rl
         EntityData() = default;
     };
 
-    static void from_json(const json& j, VariableData& val)
+    static void from_json(const json& j, VariableData& val) {}
+
+    static void to_json(json& j, const VariableData& val) {}
+
+    static void from_json(const json& j, Variable& val)
     {
+        val.type = j["type"];
+        val.data = j["data"];
     }
 
-    static void to_json(json& j, const VariableData& val)
+    static void to_json(json& j, const Variable& val)
     {
+        j["type"] = val.type;
+        j["data"] = val.data;
     }
 
     static void from_json(const json& j, EntityData& val)
@@ -48,7 +55,8 @@ namespace rl
 
         val.children = j["children"].get<std::vector<Entity>>();
         val.componentOrder = j["componentOrder"].get<std::vector<std::string>>();
-        val.componentData = j["componentData"].get<std::unordered_map<std::string, std::unordered_map<std::string, VariableData>>>();
+        val.componentData
+            = j["componentData"].get<std::unordered_map<std::string, std::unordered_map<std::string, Variable>>>();
     }
 
     static void to_json(json& j, const EntityData& val)

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <queue>
-#include <optional>
 #include <filesystem>
+#include <optional>
+#include <queue>
 
-#include "EntityData.h"
 #include "../components/Camera.h"
 #include "ComponentCollection.h"
+#include "EntityData.h"
 #include "SystemManager.h"
 
 namespace rl

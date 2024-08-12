@@ -5,8 +5,8 @@
 #include <string>
 #include <thread>
 
-#include "core/Logger.h"
 #include "core/Application.h"
+#include "core/Logger.h"
 
 namespace rl::ed
 {
@@ -25,16 +25,6 @@ namespace rl::ed
         static bool IsProjectOpen();
         static bool IsProjectCompiled();
         static std::string GetProjectDirectory();
-
-        template<typename T, typename... Args> static T RunFunction(const std::string& name, const Args&... args)
-        {
-            if (!Application::GetGameContext())
-            {
-                RL_LOG_ERROR("Game Context(dynamic lib) not loaded");
-                return T();
-            }
-            return Application::GetGameContext()->RunFunction<T>(name, args...);
-        }
 
     private:
         static ProjectManager* projectManager;

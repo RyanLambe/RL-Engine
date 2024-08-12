@@ -11,43 +11,40 @@ namespace rl
     public:
         inline Scene& GetCurrentScene()
         {
-            if(currentScene >= loadedScenes.size()){
+            if (!loadedScenes.contains(currentScene))
+            {
                 RL_THROW_EXCEPTION("Unable to get current scene as it has either not been loaded or set.");
             }
             return *loadedScenes[currentScene];
         }
 
+        inline bool IsSceneOpen()
+        {
+            return loadedScenes.contains(currentScene);
+        }
+
         inline bool IsSceneLoaded(const std::string& name)
         {
-            for(const auto& scene : loadedScenes){
-                if(scene->name == name)
-                    return true;
-            }
-            return false;
+            return loadedScenes.contains(name);
         }
 
         inline void SetScene(const std::string& name)
         {
-            for(size_t i = 0; i < loadedScenes.size(); i++){
-                if(loadedScenes[i]->name == name){
-                    currentScene = i;
-                    break;
-                }
+            if(!loadedScenes.contains(name)){
+                RL_LOG_ERROR("Scene does not exist, cannot set to: ", name);
+                return;
             }
+            currentScene = name;
         }
 
         inline void UnloadScene(const std::string& name)
         {
-            for(size_t i = 0; i < loadedScenes.size(); i++){
-                if(loadedScenes[i]->name == name){
-                    if(i == currentScene){
-                        RL_LOG_ERROR("Cannot Unload scene as it is the currently set scene");
-                        return;
-                    }
-                    loadedScenes.erase(loadedScenes.begin() + i);
-                    break;
-                }
+            if (name == currentScene)
+            {
+                RL_LOG_ERROR("Cannot Unload scene as it is the currently set scene");
+                return;
             }
+            loadedScenes.erase(name);
         }
 
         std::string NewScene(const std::filesystem::path& file);
@@ -55,7 +52,7 @@ namespace rl
         void SaveScene();
 
     private:
-        size_t currentScene = 0;
-        std::vector<std::shared_ptr<Scene>> loadedScenes = {};
+        std::string currentScene;
+        std::unordered_map<std::string, std::shared_ptr<Scene>> loadedScenes = {};
     };
 }

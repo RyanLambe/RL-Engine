@@ -42,6 +42,11 @@ namespace rl::ed
                 ImGui::End();
                 return;
             }
+            if(!Application::GetSceneManager().IsSceneOpen()){
+                ImGui::Text("No scene is open.");
+                ImGui::End();
+                return;
+            }
 
             Entity selected = SceneHierarchy::GetSelected();
             if (selected == NullEntity)
@@ -71,7 +76,7 @@ namespace rl::ed
                 ImGui::PushFont(Editor::GetWingdingFont());
                 if (ImGui::Button(("T##" + componentName + std::to_string(selected)).c_str(), ImVec2(0, 0)))
                 {
-                    CodeManager::RemoveComponent(componentName, selected);
+                    Application::GetGameContext().RemoveComponent(componentName, selected);
                     ImGui::PopFont();
                     selectedData->componentData.erase(componentName);
                     selectedData->componentOrder.erase(std::find(selectedData->componentOrder.begin(),
@@ -91,7 +96,7 @@ namespace rl::ed
                 ImGui::Columns(2, "locations", false);
                 ImGui::SetColumnWidth(0, size * 0.3f);
 
-                UpdateComponent(componentName);
+                Application::GetGameContext().UpdateComponent(componentName, SceneHierarchy::GetSelected());
                 for (const auto& property : CodeManager::GetProperties(componentName))
                 {
                     ImGui::Text("%s", Editor::FormatName(property.second).c_str());
@@ -105,121 +110,135 @@ namespace rl::ed
                             break;
                         case VariableType::I8:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].I8, 1, std::numeric_limits<i8>::min(),
+                                               (int*)&component[property.second].data.I8, 1, std::numeric_limits<i8>::min(),
                                                std::numeric_limits<i8>::max()))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].I8);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.I8);
                             }
                             break;
                         case VariableType::I16:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].I16, 1,
+                                               (int*)&component[property.second].data.I16, 1,
                                                std::numeric_limits<i16>::min(), std::numeric_limits<i16>::max()))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].I16);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.I16);
                             }
                             break;
                         case VariableType::I32:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].I32, 1,
+                                               (int*)&component[property.second].data.I32, 1,
                                                std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max()))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].I32);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.I32);
                             }
                             break;
                         case VariableType::I64:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].I64, 1))
+                                               (int*)&component[property.second].data.I64, 1))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].I64);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.I64);
                             }
                             break;
                         case VariableType::U8:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].U8, 1, std::numeric_limits<u8>::min(),
+                                               (int*)&component[property.second].data.U8, 1, std::numeric_limits<u8>::min(),
                                                std::numeric_limits<u8>::max()))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].U8);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.U8);
                             }
                             break;
                         case VariableType::U16:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].U16, 1,
+                                               (int*)&component[property.second].data.U16, 1,
                                                std::numeric_limits<u16>::min(), std::numeric_limits<u16>::max()))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].U16);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.U16);
                             }
                             break;
                         case VariableType::U32:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].U32, 1,
+                                               (int*)&component[property.second].data.U32, 1,
                                                std::numeric_limits<u32>::min(), std::numeric_limits<int>::max()))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].U32);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.U32);
                             }
                             break;
                         case VariableType::U64:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].U64, 1,
+                                               (int*)&component[property.second].data.U64, 1,
                                                std::numeric_limits<u64>::min(), std::numeric_limits<int>::max()))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].U64);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.U64);
                             }
                             break;
                         case VariableType::F32:
                             if (ImGui::DragFloat(("##in-" + componentName + property.second).c_str(),
-                                                 (float*)&component[property.second].F32, 0.1))
+                                                 (float*)&component[property.second].data.F32, 0.1))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].F32);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.F32);
                             }
                             break;
                         case VariableType::F64:
                             if (ImGui::DragFloat(("##in-" + componentName + property.second).c_str(),
-                                                 (float*)&component[property.second].F64, 0.1))
+                                                 (float*)&component[property.second].data.F64, 0.1))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].F64);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.F64);
                             }
                             break;
                         case VariableType::VEC2:
                             if (ImGui::DragFloat2(("##in-" + componentName + property.second).c_str(),
-                                                  (float*)&component[property.second].Vec2, 0.1))
+                                                  (float*)&component[property.second].data.Vec2, 0.1))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].Vec2);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.Vec2);
                             }
                             break;
                         case VariableType::VEC3:
                             if (ImGui::DragFloat3(("##in-" + componentName + property.second).c_str(),
-                                                  (float*)&component[property.second].Vec3, 0.1))
+                                                  (float*)&component[property.second].data.Vec3, 0.1))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].Vec3);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.Vec3);
                             }
                             break;
                         case VariableType::VEC4:
                             if (ImGui::DragFloat4(("##in-" + componentName + property.second).c_str(),
-                                                  (float*)&component[property.second].Vec4, 0.1))
+                                                  (float*)&component[property.second].data.Vec4, 0.1))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].Vec4);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.Vec4);
                             }
                             break;
                         case VariableType::QUAT:
                             if (ImGui::DragFloat4(("##in-" + componentName + property.second).c_str(),
-                                                  (float*)&component[property.second].Quat, 0.1))
+                                                  (float*)&component[property.second].data.Quat, 0.1))
                             {
-                                CodeManager::SetComponentValue(property.first, componentName, property.second, selected,
-                                                               component[property.second].Quat);
+                                Application::GetGameContext().SetComponentValue(property.first, componentName,
+                                                                                property.second, selected,
+                                                                                component[property.second].data.Quat);
                             }
                             break;
                     }
@@ -247,6 +266,10 @@ namespace rl::ed
     {
         if (ImGui::BeginPopup("Add Component Menu"))
         {
+            if(!ProjectManager::IsProjectCompiled()){
+                ImGui::CloseCurrentPopup();
+            }
+
             ImGui::Text("Add Component:\t\t\t\t\t");
             ImGui::Separator();
 
@@ -261,8 +284,8 @@ namespace rl::ed
                 {
                     selectedData->componentData[component] = {};
                     selectedData->componentOrder.push_back(component);
-                    CodeManager::AddComponent(component, SceneHierarchy::GetSelected());
-                    UpdateComponent(component);
+                    Application::GetGameContext().AddComponent(component, SceneHierarchy::GetSelected());
+                    Application::GetGameContext().UpdateComponent(component, SceneHierarchy::GetSelected());
 
                     ImGui::CloseCurrentPopup();
                 }
@@ -276,6 +299,10 @@ namespace rl::ed
     {
         if (ImGui::BeginPopup(("RightClick" + componentName + std::to_string(SceneHierarchy::GetSelected())).c_str()))
         {
+            if(!ProjectManager::IsProjectCompiled()){
+                ImGui::CloseCurrentPopup();
+            }
+
             ImGui::Text("%s\t\t\t", Editor::FormatName(componentName).c_str());
             ImGui::Separator();
 
@@ -283,7 +310,7 @@ namespace rl::ed
 
             if (ImGui::Button("Refresh"))
             {
-                UpdateComponent(componentName);
+                Application::GetGameContext().UpdateComponent(componentName, SceneHierarchy::GetSelected());
             }
 
             if (selectedData->componentOrder.front() != componentName)
@@ -323,92 +350,6 @@ namespace rl::ed
             }
 
             ImGui::EndPopup();
-        }
-    }
-
-    void Components::UpdateComponent(const std::string& componentName)
-    {
-        Entity selected = SceneHierarchy::GetSelected();
-        EntityData* selectedData = Scene::GetScene().GetEntityData(selected);
-        Quaternion quatTemp; // only used for quat properties
-
-        for (const auto& property : CodeManager::GetProperties(componentName))
-        {
-            switch (property.first)
-            {
-                case VariableType::Unknown:
-                    return;
-                case VariableType::I8:
-                    selectedData->componentData[componentName][property.second].I8 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].I8);
-                    break;
-                case VariableType::I16:
-                    selectedData->componentData[componentName][property.second].I16 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].I16);
-                    break;
-                case VariableType::I32:
-                    selectedData->componentData[componentName][property.second].I32 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].I32);
-                    break;
-                case VariableType::I64:
-                    selectedData->componentData[componentName][property.second].I64 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].I64);
-                    break;
-                case VariableType::U8:
-                    selectedData->componentData[componentName][property.second].U8 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].U8);
-                    break;
-                case VariableType::U16:
-                    selectedData->componentData[componentName][property.second].U16 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].U16);
-                    break;
-                case VariableType::U32:
-                    selectedData->componentData[componentName][property.second].U32 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].U32);
-                    break;
-                case VariableType::U64:
-                    selectedData->componentData[componentName][property.second].U64 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].U64);
-                    break;
-                case VariableType::F32:
-                    //data[selected][componentName][property.second].F32 = 0;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].F32);
-                    break;
-                case VariableType::F64:
-                    selectedData->componentData[componentName][property.second].F64 = 0.0f;
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].F64);
-                    break;
-                case VariableType::VEC2:
-                    selectedData->componentData[componentName][property.second].Vec2 = Vec2(0);
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].Vec2);
-                    break;
-                case VariableType::VEC3:
-                    selectedData->componentData[componentName][property.second].Vec3 = Vec3(0);
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].Vec3);
-                    break;
-                case VariableType::VEC4:
-                    selectedData->componentData[componentName][property.second].Vec4 = Vec4(0);
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].Vec4);
-                    break;
-                case VariableType::QUAT:
-                    selectedData->componentData[componentName][property.second].Quat = Quaternion(1, 0, 0, 0);
-                    CodeManager::GetComponentValue(property.first, componentName, property.second, selected,
-                                                   &selectedData->componentData[componentName][property.second].Quat);
-                    break;
-            }
         }
     }
 }

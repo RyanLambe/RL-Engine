@@ -39,6 +39,11 @@ namespace rl::ed
                 ImGui::End();
                 return;
             }
+            if(!Application::GetSceneManager().IsSceneOpen()){
+                ImGui::Text("No scene is open.");
+                ImGui::End();
+                return;
+            }
 
             bool disabled = Editor::Playing();
             float SystemHeight = Editor::GetFontSize() * 2;
@@ -159,6 +164,10 @@ namespace rl::ed
     {
         if (ImGui::BeginPopup("Add System Menu"))
         {
+            if(!ProjectManager::IsProjectCompiled()){
+                ImGui::CloseCurrentPopup();
+            }
+
             ImGui::Text("Add System:\t\t\t\t\t");
             ImGui::Separator();
 
@@ -166,7 +175,7 @@ namespace rl::ed
             {
                 if (ImGui::Button(Editor::FormatName(system).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 {
-                    CodeManager::AddSystem(system);
+                    Application::GetGameContext().AddSystem(system);
                     ImGui::CloseCurrentPopup();
                 }
             }

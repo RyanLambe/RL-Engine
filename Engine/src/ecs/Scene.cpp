@@ -4,7 +4,6 @@
 
 #include "../core/Application.h"
 
-
 namespace rl
 {
     Scene::Scene(const std::filesystem::path& location) : location(location), name(location.stem().string())
@@ -97,9 +96,11 @@ namespace rl
         }
     }
 
-    void Scene::SaveToFile() {
+    void Scene::SaveToFile()
+    {
         std::ofstream file(location);
-        if(!file.is_open()){
+        if (!file.is_open())
+        {
             RL_LOG_ERROR("Unable to open file: ", location.string());
             return;
         }
@@ -112,9 +113,11 @@ namespace rl
         file << std::setw(4) << data << "\n";
     }
 
-    void Scene::LoadFromFile(Scene* scene, const std::filesystem::path &filePath) {
+    void Scene::LoadFromFile(Scene* scene, const std::filesystem::path& filePath)
+    {
         std::ifstream file(filePath);
-        if(!file.is_open()){
+        if (!file.is_open())
+        {
             RL_LOG_ERROR("Unable to open file: ", filePath.string());
             return;
         }
@@ -127,8 +130,10 @@ namespace rl
         scene->LoadComponents();
     }
 
-    void Scene::LoadComponents() {
-        if(!Application::isGameContextCreated()){
+    void Scene::LoadComponents()
+    {
+        if (!Application::isGameContextCreated())
+        {
             RL_LOG_ERROR("Unable to load scene components as the game context has not been compiled/loaded");
             return;
         }
@@ -138,18 +143,20 @@ namespace rl
         Application::GetSceneManager().LoadScene(name);
 
         // create components
-        for(const auto& entity : entities){
-            for(const auto& component : entity.second.componentOrder){
+        for (const auto& entity : entities)
+        {
+            for (const auto& component : entity.second.componentOrder)
+            {
                 //Application::GetGameContext()->RunFunction<void>("AddComponent", component, entity.first);
             }
         }
 
         // set component values
-        for(const auto& entity : entities)
+        for (const auto& entity : entities)
         {
-            for(const auto& component : entity.second.componentData)
+            for (const auto& component : entity.second.componentData)
             {
-                for(const auto& componentData : component.second)
+                for (const auto& componentData : component.second)
                 {
                     //SetValue<>;
                 }

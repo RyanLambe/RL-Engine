@@ -29,6 +29,5 @@ namespace rl::ed
 
         void DrawAddComponentMenu();
         void DrawRightClickMenu(const std::string& componentName);
-        void UpdateComponent(const std::string& componentName);
     };
 }

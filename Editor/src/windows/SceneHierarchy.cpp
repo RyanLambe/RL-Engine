@@ -36,24 +36,25 @@ namespace rl::ed
                 return;
             }
 
-            if(ImGui::Button("New Scene")){
+            if (ImGui::Button("New Scene"))
+            {
                 Application::GetSceneManager().NewScene(ProjectManager::GetProjectDirectory() + "/testScene.scene");
+                Application::GetSceneManager().SetScene("testScene");
             }
-            if(ImGui::Button("Open Scene")){
+            if (ImGui::Button("Open Scene"))
+            {
                 Application::GetSceneManager().LoadScene(ProjectManager::GetProjectDirectory() + "/testScene.scene");
                 Application::GetSceneManager().SetScene("testScene");
             }
 
-            try{
-                Application::GetSceneManager().GetCurrentScene();
-            }
-            catch(...){
-                ImGui::Text("No scene is currently open.");
+            if(!Application::GetSceneManager().IsSceneOpen()){
+                ImGui::Text("No scene is open.");
                 ImGui::End();
                 return;
             }
 
-            if(ImGui::Button("Save Scene")){
+            if (ImGui::Button("Save Scene"))
+            {
                 Application::GetSceneManager().SaveScene();
             }
 
@@ -233,6 +234,10 @@ namespace rl::ed
     {
         if (ImGui::BeginPopupContextWindow("Hierarchy Right Click Menu"))
         {
+            if(!ProjectManager::IsProjectCompiled()){
+                ImGui::CloseCurrentPopup();
+            }
+
             if (selected == NullEntity)
             {
                 if (ImGui::Button("Create Entity"))

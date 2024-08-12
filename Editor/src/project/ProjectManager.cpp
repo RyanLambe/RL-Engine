@@ -24,7 +24,7 @@ ProjectManager::ProjectManager()
 
 ProjectManager::~ProjectManager()
 {
-    Application::SetGameContext(nullptr);
+    Application::RemoveGameContext();
 }
 
 bool ProjectManager::New(const std::string& name, const std::string& path)
@@ -146,13 +146,13 @@ void ProjectManager::Update()
         return;
     }
 
-    Application::SetGameContext(nullptr);
+    Application::RemoveGameContext();
 
     std::filesystem::remove("./Game.dll");
     std::filesystem::copy_file(projectManager->projectDir + "/ProjectData/out/Game.dll", "./Game.dll",
                                std::filesystem::copy_options::overwrite_existing);
 
-    Application::SetGameContext(DynamicLibrary::Load(std::filesystem::path("Game.dll")));
+    Application::CreateNewGameContext(DynamicLibrary::Load(std::filesystem::path("Game.dll")));
 
     Start();
     RL_LOG_WARNING("Game Context Setup.");
@@ -184,7 +184,7 @@ bool ProjectManager::IsProjectOpen()
 
 bool ProjectManager::IsProjectCompiled()
 {
-    return Application::GetGameContext() != nullptr;
+    return Application::isGameContextCreated();
 }
 
 std::string ProjectManager::GetProjectDirectory()
@@ -194,11 +194,10 @@ std::string ProjectManager::GetProjectDirectory()
 
 void ProjectManager::Start()
 {
-    if (!Application::GetGameContext())
+    if (!Application::isGameContextCreated())
     {
         RL_LOG_ERROR("Game Context(dynamic lib) not loaded");
         return;
     }
-
-    Application::GetGameContext()->RunFunctionVal<void>("GameSetup", (void*)Application::GetSharedPtr());
+    Application::GetGameContext().Setup();
 }

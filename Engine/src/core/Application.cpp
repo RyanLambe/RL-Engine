@@ -74,10 +74,6 @@ namespace rl
     void Application::Reset()
     {
         app->logger->ClearMessages();
-        try        {
-            app->sceneManager->GetCurrentScene().Reset();
-        }
-        catch(...){ }
     }
 
     bool Application::IsSetup()
@@ -120,11 +116,23 @@ namespace rl
         return app->graphicsContext.get();
     }
 
-    std::shared_ptr<DynamicLibrary> Application::GetGameContext() {
-        return app->gameContext;
+    bool Application::isGameContextCreated()
+    {
+        return app->gameContext != nullptr;
     }
 
-    void Application::SetGameContext(std::shared_ptr<DynamicLibrary> newContext) {
-        app->gameContext = newContext;
+    GameContext& Application::GetGameContext()
+    {
+        return *app->gameContext;
+    }
+
+    void Application::CreateNewGameContext(const std::shared_ptr<DynamicLibrary>& newLib)
+    {
+        app->gameContext = std::make_unique<GameContext>(newLib);
+    }
+
+    void Application::RemoveGameContext()
+    {
+        app->gameContext = nullptr;
     }
 }
