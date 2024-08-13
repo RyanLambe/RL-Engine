@@ -105,6 +105,11 @@ void ProjectManager::Compile()
         return;
     }
 
+    if(projectManager->threadExists)
+    {
+        projectManager->threadVal.wait();
+    }
+
     std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
     std::filesystem::create_directory("./logs/");
 
