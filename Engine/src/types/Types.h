@@ -7,18 +7,8 @@
 #include <string>
 #include <variant>
 
-// entity
-namespace rl
-{
-    using Entity = size_t;
-    const Entity NullEntity = Entity(0);
-}
-
-// vectors
-using Quaternion = glm::quat;
-using Vec4 = glm::vec4;
-using Vec3 = glm::vec3;
-using Vec2 = glm::vec2;
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 // floats
 static_assert(sizeof(double) * CHAR_BIT == 64, "double is not 64 bit on this architecture, fix the f64 typedef.");
@@ -38,6 +28,76 @@ using i64 = int64_t;
 using i32 = int32_t;
 using i16 = int16_t;
 using i8 = int8_t;
+
+// entity
+namespace rl
+{
+    using Entity = size_t;
+    const Entity NullEntity = Entity(0);
+}
+
+// vectors
+using Quaternion = glm::quat;
+using Vec4 = glm::vec4;
+using Vec3 = glm::vec3;
+using Vec2 = glm::vec2;
+
+namespace glm
+{
+    static void to_json(json& j, const Quaternion& val)
+    {
+        j["x"] = val.x;
+        j["y"] = val.y;
+        j["z"] = val.z;
+        j["w"] = val.w;
+    }
+    static void from_json(const json& j, Quaternion& val)
+    {
+        val.x = j["x"];
+        val.y = j["y"];
+        val.z = j["z"];
+        val.w = j["w"];
+    }
+
+    static void to_json(json& j, const Vec4& val)
+    {
+        j["x"] = val.x;
+        j["y"] = val.y;
+        j["z"] = val.z;
+        j["w"] = val.w;
+    }
+    static void from_json(const json& j, Vec4& val)
+    {
+        val.x = j["x"];
+        val.y = j["y"];
+        val.z = j["z"];
+        val.w = j["w"];
+    }
+
+    static void to_json(json& j, const Vec3& val)
+    {
+        j["x"] = val.x;
+        j["y"] = val.y;
+        j["z"] = val.z;
+    }
+    static void from_json(const json& j, Vec3& val)
+    {
+        val.x = j["x"];
+        val.y = j["y"];
+        val.z = j["z"];
+    }
+
+    static void to_json(json& j, const Vec2& val)
+    {
+        j["x"] = val.x;
+        j["y"] = val.y;
+    }
+    static void from_json(const json& j, Vec2& val)
+    {
+        val.x = j["x"];
+        val.y = j["y"];
+    }
+}
 
 namespace rl
 {
@@ -157,5 +217,110 @@ namespace rl
                 return "Quaternion";
         }
         return "Error";
+    }
+
+    static void from_json(const json& j, Variable& val)
+    {
+        val.type = j["type"];
+        switch (val.type)
+        {
+            case VariableType::I8:
+                val.data.I8 = j["data"];
+                return;
+            case VariableType::I16:
+                val.data.I16 = j["data"];
+                return;
+            case VariableType::I32:
+                val.data.I32 = j["data"];
+                return;
+            case VariableType::I64:
+                val.data.I64 = j["data"];
+                return;
+            case VariableType::U8:
+                val.data.U8 = j["data"];
+                return;
+            case VariableType::U16:
+                val.data.U16 = j["data"];
+                return;
+            case VariableType::U32:
+                val.data.U32 = j["data"];
+                return;
+            case VariableType::U64:
+                val.data.U64 = j["data"];
+                return;
+            case VariableType::F32:
+                val.data.F32 = j["data"];
+                return;
+            case VariableType::F64:
+                val.data.F64 = j["data"];
+                return;
+            case VariableType::VEC2:
+                val.data.Vec2 = j["data"];
+                return;
+            case VariableType::VEC3:
+                val.data.Vec3 = j["data"];
+                return;
+                return;
+            case VariableType::VEC4:
+                val.data.Vec4 = j["data"];
+                return;
+            case VariableType::QUAT:
+                val.data.Quat = j["data"];
+                return;
+            default:
+                return;
+        }
+    }
+
+    static void to_json(json& j, const Variable& val)
+    {
+        j["type"] = val.type;
+        switch (val.type)
+        {
+            case VariableType::I8:
+                j["data"] = val.data.I8;
+                return;
+            case VariableType::I16:
+                j["data"] = val.data.I16;
+                return;
+            case VariableType::I32:
+                j["data"] = val.data.I32;
+                return;
+            case VariableType::I64:
+                j["data"] = val.data.I64;
+                return;
+            case VariableType::U8:
+                j["data"] = val.data.U8;
+                return;
+            case VariableType::U16:
+                j["data"] = val.data.U16;
+                return;
+            case VariableType::U32:
+                j["data"] = val.data.U32;
+                return;
+            case VariableType::U64:
+                j["data"] = val.data.U64;
+                return;
+            case VariableType::F32:
+                j["data"] = val.data.F32;
+                return;
+            case VariableType::F64:
+                j["data"] = val.data.F64;
+                return;
+            case VariableType::VEC2:
+                j["data"] = val.data.Vec2;
+                return;
+            case VariableType::VEC3:
+                j["data"] = val.data.Vec3;
+                return;
+            case VariableType::VEC4:
+                j["data"] = val.data.Vec4;
+                return;
+            case VariableType::QUAT:
+                j["data"] = val.data.Quat;
+                return;
+            default:
+                return;
+        }
     }
 }

@@ -23,6 +23,16 @@ namespace rl
 
         static Scene& GetScene();
 
+        inline void Reset()
+        {
+            LoadComponents();
+        }
+
+        inline void Reload()
+        {
+            LoadFromFile(this, location);
+        }
+
         Entity CreateEntity();
         void DestroyEntity(Entity entity);
 
@@ -65,6 +75,9 @@ namespace rl
                 return nullptr;
             return &entities[entity];
         }
+
+        void InitComponentData(const std::string& componentName,
+                               const std::vector<std::pair<VariableType, std::string>>& values, Entity entity);
 
         void SaveToFile();
         static void LoadFromFile(Scene* scene, const std::filesystem::path& filePath);

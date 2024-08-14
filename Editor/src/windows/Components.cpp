@@ -96,7 +96,7 @@ namespace rl::ed
                 ImGui::Columns(2, "locations", false);
                 ImGui::SetColumnWidth(0, size * 0.3f);
 
-                Application::GetGameContext().UpdateComponent(componentName, SceneHierarchy::GetSelected());
+                Application::GetGameContext().UpdateSceneWithComponentData(componentName, SceneHierarchy::GetSelected());
                 for (const auto& property : CodeManager::GetProperties(componentName))
                 {
                     ImGui::Text("%s", Editor::FormatName(property.second).c_str());
@@ -282,10 +282,10 @@ namespace rl::ed
 
                 if (ImGui::Button(Editor::FormatName(component).c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 {
-                    selectedData->componentData[component] = {};
-                    selectedData->componentOrder.push_back(component);
+                    Scene::GetScene().InitComponentData(component, CodeManager::GetProperties(component),
+                                                        SceneHierarchy::GetSelected());
                     Application::GetGameContext().AddComponent(component, SceneHierarchy::GetSelected());
-                    Application::GetGameContext().UpdateComponent(component, SceneHierarchy::GetSelected());
+                    Application::GetGameContext().UpdateSceneWithComponentData(component, SceneHierarchy::GetSelected());
 
                     ImGui::CloseCurrentPopup();
                 }
@@ -310,7 +310,7 @@ namespace rl::ed
 
             if (ImGui::Button("Refresh"))
             {
-                Application::GetGameContext().UpdateComponent(componentName, SceneHierarchy::GetSelected());
+                Application::GetGameContext().UpdateSceneWithComponentData(componentName, SceneHierarchy::GetSelected());
             }
 
             if (selectedData->componentOrder.front() != componentName)

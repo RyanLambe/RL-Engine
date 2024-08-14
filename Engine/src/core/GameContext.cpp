@@ -85,7 +85,59 @@ namespace rl
         }
     }
 
-    void GameContext::UpdateComponent(const std::string& component, Entity entity)
+    void GameContext::SetComponentValue(const VariableType &valType, const std::string &componentType,
+                                        const std::string &varName, const Entity &entity, VariableData val)
+    {
+        switch (valType)
+        {
+            case VariableType::Unknown:
+                break;
+            case VariableType::I8:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.I8);
+                break;
+            case VariableType::I16:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.I16);
+                break;
+            case VariableType::I32:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.I32);
+                break;
+            case VariableType::I64:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.I64);
+                break;
+            case VariableType::U8:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.U8);
+                break;
+            case VariableType::U16:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.U16);
+                break;
+            case VariableType::U32:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.U32);
+                break;
+            case VariableType::U64:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.U64);
+                break;
+            case VariableType::F32:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.F32);
+                break;
+            case VariableType::F64:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.F64);
+                break;
+            case VariableType::VEC2:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.Vec2);
+                break;
+            case VariableType::VEC3:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.Vec3);
+                break;
+            case VariableType::VEC4:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.Vec4);
+                break;
+            case VariableType::QUAT:
+                library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val.Quat);
+                break;
+        }
+    }
+
+    void GameContext::UpdateSceneWithComponentData(const std::string& component, Entity entity)
     {
         Quaternion quatTemp; // only used for quat properties
 
@@ -166,6 +218,14 @@ namespace rl
                                       &property.second.data.Quat);
                     break;
             }
+        }
+    }
+
+    void GameContext::UpdateComponentWithSceneData(const std::string &component, Entity entity)
+    {
+        for (auto& property : Scene::GetScene().GetEntityData(entity)->componentData[component])
+        {
+            SetComponentValue(property.second.type, component, property.first, entity, property.second.data);
         }
     }
 }

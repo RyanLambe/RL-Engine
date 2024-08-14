@@ -1,9 +1,5 @@
 #pragma once
 
-#include <nlohmann/json.hpp>
-#include <string>
-using json = nlohmann::json;
-
 #include "../types/Types.h"
 
 namespace rl
@@ -28,22 +24,6 @@ namespace rl
         }
         EntityData() = default;
     };
-
-    static void from_json(const json& j, VariableData& val) {}
-
-    static void to_json(json& j, const VariableData& val) {}
-
-    static void from_json(const json& j, Variable& val)
-    {
-        val.type = j["type"];
-        val.data = j["data"];
-    }
-
-    static void to_json(json& j, const Variable& val)
-    {
-        j["type"] = val.type;
-        j["data"] = val.data;
-    }
 
     static void from_json(const json& j, EntityData& val)
     {

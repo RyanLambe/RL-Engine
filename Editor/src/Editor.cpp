@@ -136,8 +136,8 @@ bool Editor::Playing()
 
 void Editor::Play()
 {
-    Application::GetLogger().ClearMessages();
-    Scene::GetScene().components = ComponentCollection(); // remove?
+    Application::GetSceneManager().SaveScene();
+    Application::Reset();
     Scene::GetScene().systemManager.StartSystems();
     playing = true;
 }
@@ -145,6 +145,9 @@ void Editor::Play()
 void Editor::Pause()
 {
     playing = false;
+    Application::Reset();
+    if(Application::GetSceneManager().IsSceneOpen())
+        Scene::GetScene().Reload();
 }
 
 void Editor::AddGuiElement(const std::weak_ptr<GuiElement>& newElement)

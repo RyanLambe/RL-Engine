@@ -139,31 +139,35 @@ namespace rl
         }
 
         // set as active scene
-        std::string currentScene = Application::GetSceneManager().GetCurrentScene().name;
-        Application::GetSceneManager().LoadScene(name);
+        std::string currentScene;
+        if(Application::GetSceneManager().IsSceneOpen())
+            currentScene = Application::GetSceneManager().GetCurrentScene().name;
+        else
+            currentScene = name;
+        Application::GetSceneManager().SetScene(name);
 
         // create components
         for (const auto& entity : entities)
         {
             for (const auto& component : entity.second.componentOrder)
             {
-                //Application::GetGameContext()->RunFunction<void>("AddComponent", component, entity.first);
-            }
-        }
-
-        // set component values
-        for (const auto& entity : entities)
-        {
-            for (const auto& component : entity.second.componentData)
-            {
-                for (const auto& componentData : component.second)
-                {
-                    //SetValue<>;
-                }
+                Application::GetGameContext().AddComponent(component, entity.first);
+                Application::GetGameContext().UpdateComponentWithSceneData(component, entity.first);
             }
         }
 
         // set active scene back
-        Application::GetSceneManager().LoadScene(currentScene);
+        Application::GetSceneManager().SetScene(currentScene);
+    }
+
+    void Scene::InitComponentData(const std::string& componentName,
+                                  const std::vector<std::pair<VariableType, std::string>> &values, Entity entity)
+    {
+        entities[entity].componentOrder.push_back(componentName);
+        entities[entity].componentData[componentName] = {};
+        for(const auto& value : values){
+            entities[entity].componentData[componentName][value.second] = Variable();
+            entities[entity].componentData[componentName][value.second].type = value.first;
+        }
     }
 }

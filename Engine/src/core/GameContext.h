@@ -27,6 +27,9 @@ namespace rl
         void GetComponentValue(const VariableType& valType, const std::string& componentType,
                                const std::string& varName, const Entity& entity, void* outBuf);
 
+        void SetComponentValue(const VariableType& valType, const std::string& componentType,
+                               const std::string& varName, const Entity& entity, VariableData val);
+
         template<typename T>
         void SetComponentValue(const VariableType& valType, const std::string& componentType,
                                const std::string& varName, const Entity& entity, T val)
@@ -34,7 +37,8 @@ namespace rl
             library->RunFunction<void>("SetValue" + ToStringUpper(valType), componentType, varName, entity, val);
         }
 
-        void UpdateComponent(const std::string& component, Entity entity);
+        void UpdateSceneWithComponentData(const std::string& component, Entity entity);
+        void UpdateComponentWithSceneData(const std::string& component, Entity entity);
 
     private:
         std::shared_ptr<DynamicLibrary> library;
