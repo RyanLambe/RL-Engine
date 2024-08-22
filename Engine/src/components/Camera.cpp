@@ -2,24 +2,24 @@
 
 #include "../core/Application.h"
 
-rl::Camera* rl::Camera::GetMain()
+rl::Entity rl::Camera::GetMain()
 {
     return Scene::GetScene().mainCamera;
 }
 
-void rl::Camera::SetMain(Camera* cam)
+void rl::Camera::SetMain(Entity cam)
 {
     Scene::GetScene().mainCamera = cam;
 }
 
 void rl::Camera::SetMain()
 {
-    Scene::GetScene().mainCamera = this;
+    Scene::GetScene().mainCamera = GetEntity();
 }
 
 bool rl::Camera::IsMain() const
 {
-    return GetEntity() == Scene::GetScene().mainCamera->GetEntity();
+    return GetEntity() == Scene::GetScene().mainCamera;
 }
 
 void rl::Camera::RenderToWindow()

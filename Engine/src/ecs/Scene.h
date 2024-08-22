@@ -16,8 +16,7 @@ namespace rl
     public:
         SystemManager systemManager;
         ComponentCollection components;
-        Camera* mainCamera = nullptr;
-        std::string name;
+        Entity mainCamera = NullEntity;
 
         Scene(const std::filesystem::path& location);
 
@@ -82,6 +81,11 @@ namespace rl
         void SaveToFile();
         static void LoadFromFile(Scene* scene, const std::filesystem::path& filePath);
 
+        [[nodiscard]] const std::string& GetName() const
+        {
+            return name;
+        }
+
     private:
         void RemoveEntityFromParentsChildList(Entity entity);
         void LoadComponents();
@@ -89,6 +93,8 @@ namespace rl
         std::unordered_map<Entity, EntityData> entities = {};
         std::deque<Entity> deletedEntities = std::deque<Entity>();
         Entity nextEntity = Entity(1);
+
         std::filesystem::path location;
+        std::string name;
     };
 }

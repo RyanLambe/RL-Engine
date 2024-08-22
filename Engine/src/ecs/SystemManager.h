@@ -22,7 +22,7 @@ namespace rl
     public:
         SystemManager() = default;
 
-        template<typename T> inline void AddSystem(const std::string& name) noexcept
+        template<typename T> inline void AddSystem(const std::string& name)
         {
             static_assert(std::is_base_of<System, T>::value, "T must inherit from System");
             systems.emplace_back(true, std::make_unique<T>());
@@ -37,6 +37,11 @@ namespace rl
         [[nodiscard]] inline const std::string& GetName(i64 index) const
         {
             return names[index];
+        }
+
+        [[nodiscard]] inline bool IsEnabled(i64 index) const
+        {
+            return systems[index].first;
         }
 
         [[nodiscard]] inline bool* GetEnabledPtr(i64 index)
@@ -59,13 +64,25 @@ namespace rl
         inline void RemoveAllSystems()
         {
             systems = std::vector<std::pair<bool, std::unique_ptr<System>>>();
+            names = {};
         }
 
         void StartSystems();
         void UpdateSystems();
 
+        void LoadJSON(const json& j);
+
     private:
         std::vector<std::pair<bool, std::unique_ptr<System>>> systems = {};
         std::vector<std::string> names = {};
     };
+
+    static void to_json(json& j, const SystemManager& val)
+    {
+        std::vector<std::pair<bool, std::string>> systems;
+        for(int i = 0; i < val.GetSystemsCount(); i++){
+            systems.emplace_back(val.IsEnabled(i), val.GetName(i));
+        }
+        j["systems"] = systems;
+    }
 }

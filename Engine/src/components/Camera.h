@@ -15,8 +15,8 @@ namespace rl
         f32 nearPlane = 0.01f;
         f32 farPlane = 1000.0f;
 
-        static Camera* GetMain();
-        static void SetMain(Camera* cam);
+        static Entity GetMain();
+        static void SetMain(Entity cam);
         void SetMain();
         [[nodiscard]] bool IsMain() const;
 

@@ -9,7 +9,7 @@ namespace rl
     Scene::Scene(const std::filesystem::path& location) : location(location), name(location.stem().string())
     {
         entities[NullEntity] = EntityData(NullEntity);
-        entities[NullEntity].name = "Scene";
+        entities[NullEntity].name = name;
     }
 
     Scene& Scene::GetScene()
@@ -110,11 +110,15 @@ namespace rl
         data["deletedEntities"] = deletedEntities;
         data["entities"] = entities;
 
+        data["systemManager"] = systemManager;
+        data["mainCamera"] = mainCamera;
+
         file << std::setw(4) << data << "\n";
     }
 
     void Scene::LoadFromFile(Scene* scene, const std::filesystem::path& filePath)
     {
+        // open file
         std::ifstream file(filePath);
         if (!file.is_open())
         {
@@ -123,11 +127,27 @@ namespace rl
         }
         json data = json::parse(file);
 
+        // set as active scene
+        std::string currentScene;
+        if(Application::GetSceneManager().IsSceneOpen())
+            currentScene = Application::GetSceneManager().GetCurrentScene().name;
+        else
+            currentScene = scene->name;
+        Application::GetSceneManager().SetScene(scene->name);
+
+        // get input
         scene->nextEntity = data["nextEntity"];
         scene->deletedEntities = data["deletedEntities"].get<std::deque<Entity>>();
         scene->entities = data["entities"].get<std::unordered_map<Entity, EntityData>>();
 
+        scene->mainCamera = data["mainCamera"];
+
+        scene->systemManager.LoadJSON(data["systemManager"]);
+
         scene->LoadComponents();
+
+        // set active scene back
+        Application::GetSceneManager().SetScene(currentScene);
     }
 
     void Scene::LoadComponents()
@@ -146,7 +166,7 @@ namespace rl
             currentScene = name;
         Application::GetSceneManager().SetScene(name);
 
-        // create components
+        // update components
         for (const auto& entity : entities)
         {
             for (const auto& component : entity.second.componentOrder)
@@ -165,7 +185,8 @@ namespace rl
     {
         entities[entity].componentOrder.push_back(componentName);
         entities[entity].componentData[componentName] = {};
-        for(const auto& value : values){
+        for(const auto& value : values)
+        {
             entities[entity].componentData[componentName][value.second] = Variable();
             entities[entity].componentData[componentName][value.second].type = value.first;
         }
