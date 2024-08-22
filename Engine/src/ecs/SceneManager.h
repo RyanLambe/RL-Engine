@@ -30,7 +30,8 @@ namespace rl
 
         inline void SetScene(const std::string& name)
         {
-            if(!loadedScenes.contains(name)){
+            if (!loadedScenes.contains(name))
+            {
                 RL_LOG_ERROR("Scene does not exist, cannot set to: ", name);
                 return;
             }

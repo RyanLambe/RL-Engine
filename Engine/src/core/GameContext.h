@@ -12,7 +12,8 @@ namespace rl
     public:
         GameContext() = delete;
         GameContext(std::shared_ptr<DynamicLibrary> lib) : library(std::move(lib)) {}
-        ~GameContext(){
+        ~GameContext()
+        {
             library = nullptr;
         }
 

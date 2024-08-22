@@ -42,7 +42,8 @@ namespace rl::ed
                 ImGui::End();
                 return;
             }
-            if(!Application::GetSceneManager().IsSceneOpen()){
+            if (!Application::GetSceneManager().IsSceneOpen())
+            {
                 ImGui::Text("No scene is open.");
                 ImGui::End();
                 return;
@@ -96,7 +97,8 @@ namespace rl::ed
                 ImGui::Columns(2, "locations", false);
                 ImGui::SetColumnWidth(0, size * 0.3f);
 
-                Application::GetGameContext().UpdateSceneWithComponentData(componentName, SceneHierarchy::GetSelected());
+                Application::GetGameContext().UpdateSceneWithComponentData(componentName,
+                                                                           SceneHierarchy::GetSelected());
                 for (const auto& property : CodeManager::GetProperties(componentName))
                 {
                     ImGui::Text("%s", Editor::FormatName(property.second).c_str());
@@ -110,8 +112,8 @@ namespace rl::ed
                             break;
                         case VariableType::I8:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].data.I8, 1, std::numeric_limits<i8>::min(),
-                                               std::numeric_limits<i8>::max()))
+                                               (int*)&component[property.second].data.I8, 1,
+                                               std::numeric_limits<i8>::min(), std::numeric_limits<i8>::max()))
                             {
                                 Application::GetGameContext().SetComponentValue(property.first, componentName,
                                                                                 property.second, selected,
@@ -149,8 +151,8 @@ namespace rl::ed
                             break;
                         case VariableType::U8:
                             if (ImGui::DragInt(("##in-" + componentName + property.second).c_str(),
-                                               (int*)&component[property.second].data.U8, 1, std::numeric_limits<u8>::min(),
-                                               std::numeric_limits<u8>::max()))
+                                               (int*)&component[property.second].data.U8, 1,
+                                               std::numeric_limits<u8>::min(), std::numeric_limits<u8>::max()))
                             {
                                 Application::GetGameContext().SetComponentValue(property.first, componentName,
                                                                                 property.second, selected,
@@ -266,7 +268,8 @@ namespace rl::ed
     {
         if (ImGui::BeginPopup("Add Component Menu"))
         {
-            if(!ProjectManager::IsProjectCompiled()){
+            if (!ProjectManager::IsProjectCompiled())
+            {
                 ImGui::CloseCurrentPopup();
             }
 
@@ -285,7 +288,8 @@ namespace rl::ed
                     Scene::GetScene().InitComponentData(component, CodeManager::GetProperties(component),
                                                         SceneHierarchy::GetSelected());
                     Application::GetGameContext().AddComponent(component, SceneHierarchy::GetSelected());
-                    Application::GetGameContext().UpdateSceneWithComponentData(component, SceneHierarchy::GetSelected());
+                    Application::GetGameContext().UpdateSceneWithComponentData(component,
+                                                                               SceneHierarchy::GetSelected());
 
                     ImGui::CloseCurrentPopup();
                 }
@@ -299,7 +303,8 @@ namespace rl::ed
     {
         if (ImGui::BeginPopup(("RightClick" + componentName + std::to_string(SceneHierarchy::GetSelected())).c_str()))
         {
-            if(!ProjectManager::IsProjectCompiled()){
+            if (!ProjectManager::IsProjectCompiled())
+            {
                 ImGui::CloseCurrentPopup();
             }
 
@@ -310,7 +315,8 @@ namespace rl::ed
 
             if (ImGui::Button("Refresh"))
             {
-                Application::GetGameContext().UpdateSceneWithComponentData(componentName, SceneHierarchy::GetSelected());
+                Application::GetGameContext().UpdateSceneWithComponentData(componentName,
+                                                                           SceneHierarchy::GetSelected());
             }
 
             if (selectedData->componentOrder.front() != componentName)

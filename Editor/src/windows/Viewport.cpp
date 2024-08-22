@@ -18,8 +18,8 @@ void Viewport::Render()
             return;
         }
 
-        Camera::GetComponent(Camera::GetMain()).ResizeTarget((int)ImGui::GetContentRegionAvail().x,
-                                                             (int)ImGui::GetContentRegionAvail().y);
+        Camera::GetComponent(Camera::GetMain())
+            .ResizeTarget((int)ImGui::GetContentRegionAvail().x, (int)ImGui::GetContentRegionAvail().y);
         ImGui::Image(Camera::GetComponent(Camera::GetMain()).GetTexture(), ImGui::GetContentRegionAvail());
         ImGui::End();
     }

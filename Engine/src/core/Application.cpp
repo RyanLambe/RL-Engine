@@ -74,7 +74,7 @@ namespace rl
     void Application::Reset()
     {
         app->logger->ClearMessages();
-        if(app->sceneManager->IsSceneOpen())
+        if (app->sceneManager->IsSceneOpen())
             app->sceneManager->GetCurrentScene().Reset();
     }
 

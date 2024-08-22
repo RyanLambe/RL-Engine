@@ -47,7 +47,8 @@ namespace rl::ed
                 Application::GetSceneManager().SetScene("testScene");
             }
 
-            if(!Application::GetSceneManager().IsSceneOpen()){
+            if (!Application::GetSceneManager().IsSceneOpen())
+            {
                 ImGui::Text("No scene is open.");
                 ImGui::End();
                 return;
@@ -234,7 +235,8 @@ namespace rl::ed
     {
         if (ImGui::BeginPopupContextWindow("Hierarchy Right Click Menu"))
         {
-            if(!ProjectManager::IsProjectCompiled()){
+            if (!ProjectManager::IsProjectCompiled())
+            {
                 ImGui::CloseCurrentPopup();
             }
 

@@ -43,10 +43,11 @@ void rl::SystemManager::UpdateSystems()
     }
 }
 
-void rl::SystemManager::LoadJSON(const json &j)
+void rl::SystemManager::LoadJSON(const json& j)
 {
     RemoveAllSystems();
-    if(!Application::isGameContextCreated()){
+    if (!Application::isGameContextCreated())
+    {
         RL_LOG_ERROR("Unable to load systems from file as the game context has not been created/set.");
         return;
     }
@@ -54,7 +55,8 @@ void rl::SystemManager::LoadJSON(const json &j)
     // assumption: this == set scene (can be temporary for loading purposes)
     std::vector<std::pair<bool, std::string>> input;
     input = j["systems"];
-    for(const auto& sys : input){
+    for (const auto& sys : input)
+    {
         Application::GetGameContext().AddSystem(sys.second);
         systems.back().first = sys.first;
     }

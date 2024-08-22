@@ -4,10 +4,9 @@
 #include <cstdint>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <variant>
-
-#include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
 // floats

@@ -39,7 +39,8 @@ namespace rl::ed
                 ImGui::End();
                 return;
             }
-            if(!Application::GetSceneManager().IsSceneOpen()){
+            if (!Application::GetSceneManager().IsSceneOpen())
+            {
                 ImGui::Text("No scene is open.");
                 ImGui::End();
                 return;
@@ -164,7 +165,8 @@ namespace rl::ed
     {
         if (ImGui::BeginPopup("Add System Menu"))
         {
-            if(!ProjectManager::IsProjectCompiled()){
+            if (!ProjectManager::IsProjectCompiled())
+            {
                 ImGui::CloseCurrentPopup();
             }
 

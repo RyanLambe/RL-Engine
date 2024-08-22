@@ -80,7 +80,8 @@ namespace rl
     static void to_json(json& j, const SystemManager& val)
     {
         std::vector<std::pair<bool, std::string>> systems;
-        for(int i = 0; i < val.GetSystemsCount(); i++){
+        for (int i = 0; i < val.GetSystemsCount(); i++)
+        {
             systems.emplace_back(val.IsEnabled(i), val.GetName(i));
         }
         j["systems"] = systems;

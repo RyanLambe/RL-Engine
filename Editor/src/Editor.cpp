@@ -146,7 +146,7 @@ void Editor::Pause()
 {
     playing = false;
     Application::Reset();
-    if(Application::GetSceneManager().IsSceneOpen())
+    if (Application::GetSceneManager().IsSceneOpen())
         Scene::GetScene().Reload();
 }
 

@@ -129,7 +129,7 @@ namespace rl
 
         // set as active scene
         std::string currentScene;
-        if(Application::GetSceneManager().IsSceneOpen())
+        if (Application::GetSceneManager().IsSceneOpen())
             currentScene = Application::GetSceneManager().GetCurrentScene().name;
         else
             currentScene = scene->name;
@@ -160,7 +160,7 @@ namespace rl
 
         // set as active scene
         std::string currentScene;
-        if(Application::GetSceneManager().IsSceneOpen())
+        if (Application::GetSceneManager().IsSceneOpen())
             currentScene = Application::GetSceneManager().GetCurrentScene().name;
         else
             currentScene = name;
@@ -181,11 +181,11 @@ namespace rl
     }
 
     void Scene::InitComponentData(const std::string& componentName,
-                                  const std::vector<std::pair<VariableType, std::string>> &values, Entity entity)
+                                  const std::vector<std::pair<VariableType, std::string>>& values, Entity entity)
     {
         entities[entity].componentOrder.push_back(componentName);
         entities[entity].componentData[componentName] = {};
-        for(const auto& value : values)
+        for (const auto& value : values)
         {
             entities[entity].componentData[componentName][value.second] = Variable();
             entities[entity].componentData[componentName][value.second].type = value.first;

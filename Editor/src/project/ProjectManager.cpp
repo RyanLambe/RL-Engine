@@ -105,7 +105,7 @@ void ProjectManager::Compile()
         return;
     }
 
-    if(projectManager->threadExists)
+    if (projectManager->threadExists)
     {
         projectManager->threadVal.wait();
     }
