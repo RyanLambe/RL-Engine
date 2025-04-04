@@ -11,6 +11,8 @@
 using namespace rl::ed;
 
 ProjectManager* ProjectManager::projectManager = nullptr;
+std::filesystem::path ProjectManager::rootFolder = "";
+std::vector<std::filesystem::path> ProjectManager::projects = {};
 
 ProjectManager::ProjectManager()
 {
@@ -27,12 +29,34 @@ ProjectManager::~ProjectManager()
     Application::RemoveGameContext();
 }
 
-bool ProjectManager::New(const std::string& name, const std::string& path)
+void ProjectManager::SetProjectsFolder(const std::filesystem::path& projectsFolder) {
+    rootFolder = projectsFolder;
+
+    if (!std::filesystem::is_directory(rootFolder) || !std::filesystem::exists(rootFolder))
+        std::filesystem::create_directory(rootFolder);
+
+    RefreshProjectsFolder();
+}
+
+void ProjectManager::RefreshProjectsFolder() {
+    for (const auto& entry : std::filesystem::directory_iterator(rootFolder)) {
+        if (!entry.is_directory())
+            continue;
+
+        projects.push_back(entry.path());
+    }
+}
+
+const std::vector<std::filesystem::path> & ProjectManager::GetProjects() {
+    return projects;
+}
+
+bool ProjectManager::New(const std::string& name)
 {
     projectManager->projectName = name;
-    projectManager->projectDir = path + "/" + name + "/";
+    projectManager->projectDir = rootFolder.append(name);
 
-    if (name.empty() || path.empty())
+    if (name.empty() || rootFolder.empty())
     {
         RL_LOG_ERROR("Name or Path not entered.");
         return false;
@@ -50,50 +74,45 @@ bool ProjectManager::New(const std::string& name, const std::string& path)
         return false;
     }
 
-    if (!std::filesystem::exists(projectManager->projectDir + "/Assets"))
+    if (!std::filesystem::exists(projectManager->projectDir / "Assets"))
     {
-        std::filesystem::create_directory(projectManager->projectDir + "/Assets");
+        std::filesystem::create_directory(projectManager->projectDir / "Assets");
     }
 
-    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData"))
+    if (!std::filesystem::exists(projectManager->projectDir / "ProjectData"))
     {
-        std::filesystem::create_directory(projectManager->projectDir + "/ProjectData");
+        std::filesystem::create_directory(projectManager->projectDir / "ProjectData");
     }
 
     projectManager->projectOpen = true;
-    AssetBrowser::Setup(projectManager->projectDir);
+    AssetBrowser::Setup(projectManager->projectDir.string());
     return true;
 }
 
-bool ProjectManager::Open(const std::string& name, const std::string& path)
+bool ProjectManager::Open(const std::filesystem::path& project)
 {
-    projectManager->projectName = name;
-    projectManager->projectDir = path + "/" + name + "/";
+    projectManager->projectName = project.filename().string();
+    projectManager->projectDir = project;
 
-    if (name.empty() || path.empty())
-    {
-        RL_LOG_ERROR("Name or Path not entered.");
-        return false;
-    }
     if (!std::filesystem::exists(projectManager->projectDir))
     {
         RL_LOG_ERROR("The project you are trying to open doesnt exist.");
         return false;
     }
 
-    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData"))
+    if (!std::filesystem::exists(projectManager->projectDir / "ProjectData"))
     {
         RL_LOG_ERROR("The project you are trying to open is corrupt.");
         return false;
     }
-    if (!std::filesystem::exists(projectManager->projectDir + "/Assets"))
+    if (!std::filesystem::exists(projectManager->projectDir / "Assets"))
     {
         RL_LOG_ERROR("The project you are trying to open is corrupt.");
         return false;
     }
 
     projectManager->projectOpen = true;
-    AssetBrowser::Setup(projectManager->projectDir);
+    AssetBrowser::Setup(projectManager->projectDir.string());
     return true;
 }
 
@@ -110,7 +129,7 @@ void ProjectManager::Compile()
         projectManager->threadVal.wait();
     }
 
-    std::filesystem::remove_all(projectManager->projectDir + "/ProjectData/temp");
+    std::filesystem::remove_all(projectManager->projectDir / "ProjectData/temp");
     std::filesystem::create_directory("./logs/");
 
     Application::GetLogger().ClearMessages();
@@ -118,7 +137,7 @@ void ProjectManager::Compile()
     CodeManager::Generate();
 
     // split
-    projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir);
+    projectManager->threadVal = std::async(&CompileInternal, projectManager->projectDir.string());
     projectManager->threadExists = true;
 }
 
@@ -145,7 +164,7 @@ void ProjectManager::Update()
     }
     RL_LOG_WARNING("Game Context Compiled.");
 
-    if (!std::filesystem::exists(projectManager->projectDir + "/ProjectData/out/Game.dll"))
+    if (!std::filesystem::exists(projectManager->projectDir / "ProjectData/out/Game.dll"))
     {
         RL_LOG_ERROR("Cannot find Game Context(dynamic library).");
         return;
@@ -154,7 +173,7 @@ void ProjectManager::Update()
     Application::RemoveGameContext();
 
     std::filesystem::remove("./Game.dll");
-    std::filesystem::copy_file(projectManager->projectDir + "/ProjectData/out/Game.dll", "./Game.dll",
+    std::filesystem::copy_file(projectManager->projectDir / "ProjectData/out/Game.dll", "./Game.dll",
                                std::filesystem::copy_options::overwrite_existing);
 
     Application::CreateNewGameContext(DynamicLibrary::Load(std::filesystem::path("Game.dll")));
@@ -194,7 +213,7 @@ bool ProjectManager::IsProjectCompiled()
 
 std::string ProjectManager::GetProjectDirectory()
 {
-    return projectManager->projectDir;
+    return projectManager->projectDir.string() + "/";
 }
 
 void ProjectManager::Start()

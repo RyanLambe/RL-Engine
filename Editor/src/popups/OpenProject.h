@@ -22,8 +22,5 @@ namespace rl::ed
     private:
         static std::shared_ptr<OpenProject> popup;
         bool open = true;
-
-        std::string name;
-        std::string path = R"(C:\Users\ryanl\OneDrive\Documents\RL-EngineTest)"; // todo: remove
     };
 }

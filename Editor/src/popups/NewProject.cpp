@@ -35,16 +35,14 @@ void NewProject::Render()
         ImGui::SetWindowSize(ImVec2(600, 300));
 
         ImGui::Text("Project Name: ");
-        ImGui::SameLine();
         ImGui::InputText("##name", &name);
+        name.erase(std::remove(name.begin(), name.end(), ' '), name.end());
 
-        ImGui::Text("Project Directory: ");
-        ImGui::SameLine();
-        ImGui::InputText("##dir", &path);
+        ImGui::Separator();
 
-        if (ImGui::Button("Create"))
+        if (ImGui::Button("Create", ImVec2(585, 50)))
         {
-            ProjectManager::New(name, path);
+            ProjectManager::New(name);
             open = false;
         }
 

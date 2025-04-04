@@ -16,8 +16,13 @@ namespace rl::ed
         ProjectManager();
         ~ProjectManager();
 
-        static bool New(const std::string& name, const std::string& path);
-        static bool Open(const std::string& name, const std::string& path);
+        static void SetProjectsFolder(const std::filesystem::path& projectsFolder);
+        static void RefreshProjectsFolder();
+
+        static const std::vector<std::filesystem::path>& GetProjects();
+
+        static bool New(const std::string& name);
+        static bool Open(const std::filesystem::path& project);
 
         static void Compile();
         static void Update();
@@ -29,9 +34,12 @@ namespace rl::ed
     private:
         static ProjectManager* projectManager;
 
+        static std::filesystem::path rootFolder;
+        static std::vector<std::filesystem::path> projects;
+
         bool projectOpen = false;
         std::string projectName;
-        std::string projectDir;
+        std::filesystem::path projectDir;
 
         static bool CompileInternal(const std::string& projectDir);
         static void Start();

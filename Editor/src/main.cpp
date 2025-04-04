@@ -1,5 +1,6 @@
 #include "Editor.h"
 #include "ToolBar.h"
+#include "project/Project.h"
 #include "project/ProjectManager.h"
 #include "tools/CodeManager.h"
 #include "windows/AssetBrowser.h"
@@ -16,6 +17,7 @@ int main()
 {
     Editor editor = Editor();
     ProjectManager projectManager = ProjectManager();
+    ProjectManager::SetProjectsFolder("./projects/");
 
     toolbar = std::make_shared<ToolBar>();
     Editor::AddGuiElement(toolbar);

@@ -24,6 +24,5 @@ namespace rl::ed
         bool open = true;
 
         std::string name;
-        std::string path;
     };
 }

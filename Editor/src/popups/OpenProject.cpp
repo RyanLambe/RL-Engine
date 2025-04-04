@@ -32,19 +32,21 @@ void OpenProject::Render()
 
     if (ImGui::Begin("Open Project", &open, ImGuiWindowFlags_NoDocking))
     {
-        ImGui::SetWindowSize(ImVec2(600, 300));
+        ImGui::SetWindowSize(ImVec2(600, 700));
 
-        ImGui::Text("Project Name: ");
-        ImGui::SameLine();
-        ImGui::InputText("##name", &name);
+        static int selected = 0;
+        if (ImGui::BeginChild("ScrollableArea", ImVec2(585, 600), true, ImGuiWindowFlags_HorizontalScrollbar)) {
+            for(int i = 0; i < ProjectManager::GetProjects().size(); i++) {
+                if (ImGui::Selectable(ProjectManager::GetProjects()[i].filename().string().c_str(), selected == i)) {
+                    selected = i;
+                }
+            }
+            ImGui::EndChild();
+        }
 
-        ImGui::Text("Project Directory: ");
-        ImGui::SameLine();
-        ImGui::InputText("##dir", &path);
-
-        if (ImGui::Button("Open"))
+        if (ImGui::Button("Open", ImVec2(585, 50)))
         {
-            ProjectManager::Open(name, path);
+            ProjectManager::Open(ProjectManager::GetProjects()[selected]);
             open = false;
         }
 
