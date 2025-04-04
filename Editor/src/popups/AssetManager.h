@@ -27,5 +27,7 @@ namespace rl::ed
         bool importAsset = false;
         std::filesystem::path location;
         char filenameBuf[256];
+
+
     };
 }

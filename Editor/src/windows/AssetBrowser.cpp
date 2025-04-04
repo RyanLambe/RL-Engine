@@ -43,11 +43,6 @@ namespace rl::ed
                 AssetManager::OpenNewAssetPopup(currPath);
             }
             ImGui::SameLine();
-            if (ImGui::Button("Import"))
-            {
-                AssetManager::OpenImportAssetPopup(currPath);
-            }
-            ImGui::SameLine();
             ImGui::SetNextItemWidth(250);
             ImGui::SliderFloat("Icon Size", &iconSize, 25, 250);
 
@@ -156,7 +151,21 @@ namespace rl::ed
             }
             else
             {
-                system(("explorer " + FixPathFormat(entry.path().string())).c_str()); // windows specific
+                if(selectedFile->path().extension() == ".asset")
+                {
+                    Application::GetAssetManager().OpenAssetFile(selectedFile->path());
+                }
+                else if(entry.path().extension() == ".scene")
+                {
+                    if(!Application::GetSceneManager().IsSceneLoaded(entry.path().stem().string())){
+                        Application::GetSceneManager().LoadScene(entry.path());
+                    }
+                    Application::GetSceneManager().SetScene(entry.path().stem().string());
+                }
+                else
+                {
+                    system(("explorer " + FixPathFormat(entry.path().string())).c_str()); // windows specific
+                }
             }
         }
     }
@@ -170,14 +179,18 @@ namespace rl::ed
                 AssetManager::OpenNewAssetPopup(currPath);
             }
 
-            if (ImGui::Button("Import"))
-            {
-                AssetManager::OpenImportAssetPopup(currPath);
-            }
-
             if (selectedFile.has_value())
             {
                 ImGui::Separator();
+
+                if (selectedFile->path().extension() == ".obj"){
+                    if (ImGui::Button("Import"))
+                    {
+                        //AssetManager::OpenImportAssetPopup(selectedFile->path());
+                        Application::GetAssetManager().ImportFromFile(selectedFile->path());
+
+                    }
+                }
 
                 // Delete File
                 if (ImGui::Button("Delete"))

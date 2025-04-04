@@ -8,33 +8,60 @@
 namespace rl
 {
 
+    using Asset = size_t;
+
+    using Mesh = Asset;
+    using Texture = Asset;
+
     enum class AssetType : uint8_t
     {
         Unknown = 0,
-        Mesh = 1,
-        //Texture = 2,
-        //Audio = 3,
+        Scene = 1,
+        Mesh = 2,
+        //Texture = 3,
+        //Audio = 4,
         // ...
     };
 
-    class Asset
+    static std::string AssetTypeToString(AssetType type)
+    {
+        switch (type) {
+            case AssetType::Unknown:
+                return "Unknown";
+            case AssetType::Scene:
+                return "Scene";
+            case AssetType::Mesh:
+                return "Mesh";
+            default:
+                return "ERROR";
+        }
+    }
+
+    class AssetData
     {
     public:
-        virtual ~Asset() = default;
+        virtual ~AssetData() = default;
 
-        static std::shared_ptr<Asset> CreateAsset(const std::filesystem::path& location, const std::string& name);
-        static std::shared_ptr<Asset> ImportAsset(const std::filesystem::path& file);
-        static std::shared_ptr<Asset> OpenAssetFile(const std::filesystem::path& file);
+        static std::shared_ptr<AssetData> CreateAsset(const std::filesystem::path& location, const std::string& name, AssetType type, Asset id);
+        static std::shared_ptr<AssetData> ImportFromFile(const std::filesystem::path& file, Asset id);
+        static std::shared_ptr<AssetData> OpenAssetFile(const std::filesystem::path& file);
 
+        void Save();
         void WriteAssetFile(const std::filesystem::path& location, const std::string& name);
         void CheckForUpdates(const std::filesystem::path& file);
+
+        inline Asset GetID() const
+        {
+            return id;
+        }
 
     protected:
         virtual void ImportFile(const std::filesystem::path& file) = 0;
         virtual void ReadFile(std::ifstream& input) = 0;
         virtual void WriteData(std::ofstream& output) = 0;
 
+        Asset id;
         AssetType type = AssetType::Unknown;
-        std::chrono::time_point<std::filesystem::_File_time_clock> lastModified;
+        std::filesystem::path file;
     };
 }

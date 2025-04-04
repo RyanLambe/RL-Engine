@@ -3,27 +3,47 @@
 #include <fstream>
 #include <memory>
 
+#include "../core/Application.h"
 #include "../core/Logger.h"
 #include "Mesh.h"
 
 namespace rl
 {
 
-    std::shared_ptr<Asset> Asset::CreateAsset(const std::filesystem::path& location, const std::string& name)
+    std::shared_ptr<AssetData> AssetData::CreateAsset(const std::filesystem::path& location, const std::string& name, AssetType type, Asset id)
     {
-        RL_LOG_ERROR("Unable to create asset. Unknown file type: ");
+        std::string temp = "";
+        switch(type)
+        {
+            case AssetType::Scene:
+                RL_LOG(location.lexically_normal().string() + '\\' + name + ".scene");
+                if(Application::GetSceneManager().IsSceneOpen())
+                    temp = Application::GetSceneManager().GetCurrentScene().GetName();
+                Application::GetSceneManager().NewScene(location.lexically_normal().string() + '\\' + name + ".scene");
+                Application::GetSceneManager().SetScene(name);
+                Application::GetSceneManager().SaveScene();
+                if(!temp.empty())
+                    Application::GetSceneManager().SetScene(temp);
+                return nullptr;
+            case AssetType::Unknown:
+                return nullptr;
+            case AssetType::Mesh:
+                return nullptr;
+        }
+        RL_LOG_ERROR("Unable to create asset. Unknown file type: ", (u64)type);
         return nullptr;
     }
 
-    std::shared_ptr<Asset> Asset::ImportAsset(const std::filesystem::path& file)
+    std::shared_ptr<AssetData> AssetData::ImportFromFile(const std::filesystem::path& file, Asset id)
     {
         const auto ext = file.extension().string();
         if (ext == ".fbx" || ext == ".obj")
         {
-            std::shared_ptr<Asset> out = std::static_pointer_cast<Asset>(std::make_shared<Mesh>());
-            out->ImportFile(file);
+            std::shared_ptr<AssetData> out = std::static_pointer_cast<AssetData>(std::make_shared<MeshData>());
+            out->id = id;
+            out->file = std::filesystem::path(file.string() + ".asset");
             out->type = AssetType::Mesh;
-            out->lastModified = last_write_time(file);
+            out->ImportFile(file);
             return out;
         }
 
@@ -31,15 +51,32 @@ namespace rl
         return nullptr;
     }
 
-    std::shared_ptr<Asset> Asset::OpenAssetFile(const std::filesystem::path& file)
+    std::shared_ptr<AssetData> AssetData::OpenAssetFile(const std::filesystem::path& file)
     {
+        std::ifstream input;
+        input.open(file, std::ios::binary);
+        if (!input.is_open())
+        {
+            RL_LOG_ERROR("unable to open file");
+            return nullptr;
+        }
+
+        std::string code = "";
+        input.read(code.data(), 2);
+        if(code != "RL")
+        {
+            RL_LOG_ERROR("Corrupted asset file, unable to read: ", code);
+        }
+
+        AssetType type;
+        input.read((char*)&type, sizeof(type));
+
+        RL_LOG_WARNING("Type: ", AssetTypeToString(type));
         return nullptr;
     }
 
-    void Asset::WriteAssetFile(const std::filesystem::path& location, const std::string& name)
+    void AssetData::Save()
     {
-        std::filesystem::path file = location / (name + ".asset");
-
         std::ofstream output;
         output.open(file, std::ios::binary);
         if (!output.is_open())
@@ -49,15 +86,12 @@ namespace rl
         }
 
         output << "RL";
-        output << (uint8_t)type;
-
-        int64_t tempTime = lastModified.time_since_epoch().count();
-        output.write((char*)&tempTime, sizeof(int64_t));
+        output << std::bit_cast<char>(type);
 
         WriteData(output);
 
         output.close();
     }
 
-    void Asset::CheckForUpdates(const std::filesystem::path& file) {}
+    void AssetData::CheckForUpdates(const std::filesystem::path& file) {}
 }

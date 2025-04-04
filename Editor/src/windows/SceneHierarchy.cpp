@@ -36,17 +36,6 @@ namespace rl::ed
                 return;
             }
 
-            if (ImGui::Button("New Scene"))
-            {
-                Application::GetSceneManager().NewScene(ProjectManager::GetProjectDirectory() + "/testScene.scene");
-                Application::GetSceneManager().SetScene("testScene");
-            }
-            if (ImGui::Button("Open Scene"))
-            {
-                Application::GetSceneManager().LoadScene(ProjectManager::GetProjectDirectory() + "/testScene.scene");
-                Application::GetSceneManager().SetScene("testScene");
-            }
-
             if (!Application::GetSceneManager().IsSceneOpen())
             {
                 ImGui::Text("No scene is open.");

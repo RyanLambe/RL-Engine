@@ -6,7 +6,7 @@
 
 namespace rl
 {
-    void Mesh::ImportFile(const std::filesystem::path& file)
+    void MeshData::ImportFile(const std::filesystem::path& file)
     {
         std::ifstream fileStream(file);
         if (!fileStream.is_open())
@@ -107,26 +107,35 @@ namespace rl
         }
     }
 
-    void Mesh::ReadFile(std::ifstream& input) {}
+    void MeshData::ReadFile(std::ifstream& input) {
+        u64 vertCount, indexCount;
+        input >> vertCount >> indexCount;
 
-    void Mesh::WriteData(std::ofstream& output)
+        vertices = std::vector<Vertex>(vertCount);
+        indices = std::vector<u32>(indexCount);
+
+        input.read((char*)&vertices[0], vertCount * sizeof(Vertex));
+        input.read((char*)&indices[0], indexCount * sizeof(u32));
+    }
+
+    void MeshData::WriteData(std::ofstream& output)
     {
         output << vertices.size() << indices.size();
         output.write((char*)&vertices[0], vertices.size() * sizeof(Vertex));
         output.write((char*)&indices[0], indices.size() * sizeof(uint32_t));
     }
 
-    const std::vector<Vertex>& Mesh::GetVertices() const
+    const std::vector<Vertex>& MeshData::GetVertices() const
     {
         return vertices;
     }
 
-    const std::vector<uint32_t>& Mesh::GetIndices() const
+    const std::vector<uint32_t>& MeshData::GetIndices() const
     {
         return indices;
     }
 
-    size_t Mesh::GetIndexCount() const
+    size_t MeshData::GetIndexCount() const
     {
         return indices.size();
     }

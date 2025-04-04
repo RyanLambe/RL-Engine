@@ -171,6 +171,8 @@ add_library(Engine STATIC
         # assets
         src/assets/Asset.cpp
         src/assets/Asset.h
+        src/assets/AssetManager.cpp
+        src/assets/AssetManager.h
         src/assets/Mesh.cpp
         src/assets/Mesh.h
 

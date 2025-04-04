@@ -63,6 +63,9 @@ namespace rl
         // setup logger
         app->logger = std::make_unique<Logger>();
 
+        // setup asset manager
+        app->assetManager = std::make_unique<AssetManager>();
+
         app->isSetup = true;
     }
 
@@ -136,5 +139,9 @@ namespace rl
     void Application::RemoveGameContext()
     {
         app->gameContext = nullptr;
+    }
+
+    AssetManager &Application::GetAssetManager() {
+        return *app->assetManager;
     }
 }

@@ -4,6 +4,7 @@
 #include "../ecs/SceneManager.h"
 #include "../ecs/SystemManager.h"
 #include "../graphics/GraphicsContext.h"
+#include "../assets/AssetManager.h"
 #include "GameContext.h"
 #include "Logger.h"
 #include "Window.h"
@@ -42,6 +43,8 @@ namespace rl
         static void CreateNewGameContext(const std::shared_ptr<DynamicLibrary>& newLib);
         static void RemoveGameContext();
 
+        static AssetManager& GetAssetManager();
+
     private:
         static std::shared_ptr<Application> app;
         static bool allowApplicationCreation;
@@ -52,5 +55,6 @@ namespace rl
         std::shared_ptr<GraphicsContext> graphicsContext = nullptr;
         std::unique_ptr<GameContext> gameContext = nullptr;
         std::shared_ptr<Window> window = nullptr;
+        std::unique_ptr<AssetManager> assetManager = nullptr;
     };
 }

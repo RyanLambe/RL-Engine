@@ -13,22 +13,18 @@ void rl::MeshComponent::Enable() const
 
 uint32_t rl::MeshComponent::GetIndexCount() const
 {
-    if (const auto& m = mesh.lock())
-        return m->GetIndexCount();
-    RL_LOG_ERROR("Missing Mesh");
-    return 0;
+    return meshData->GetIndexCount();
 }
 
-void rl::MeshComponent::LoadMesh(const std::weak_ptr<Mesh>& meshAsset)
+void rl::MeshComponent::LoadMesh(Mesh mesh)
 {
-    const auto m = meshAsset.lock();
-    if (!m)
+    if (Application::GetAssetManager().IsAssetLoaded(mesh))
     {
         RL_LOG_ERROR("The input mesh is null");
         return;
     }
 
-    mesh = meshAsset;
-    vertexBuffer = VertexBuffer::Create(m->GetVertices(), false, Application::GetGraphicsContextPtr());
-    indexBuffer = IndexBuffer::Create(m->GetIndices(), false, Application::GetGraphicsContextPtr());
+    meshData = std::static_pointer_cast<MeshData>(Application::GetAssetManager().GetAssetData(mesh));
+    vertexBuffer = VertexBuffer::Create(meshData->GetVertices(), false, Application::GetGraphicsContextPtr());
+    indexBuffer = IndexBuffer::Create(meshData->GetIndices(), false, Application::GetGraphicsContextPtr());
 }

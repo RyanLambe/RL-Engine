@@ -62,35 +62,41 @@ namespace rl::ed
             ImGui::Text("File Type: ");
             ImGui::SameLine();
 
-            class Test
+            std::vector<AssetType> types;
+            if(importAsset)
             {
-            public:
-                Test(int n) : n(n) {}
-                int n;
-                [[nodiscard]] std::string GetFormatName() const
-                {
-                    return "test " + std::to_string(n);
-                }
-            };
-
-            std::vector<Test> tests;
-            tests.emplace_back(1);
-            tests.emplace_back(2);
-            tests.emplace_back(3);
-            tests.emplace_back(4);
-            tests.emplace_back(5);
+                types.push_back(AssetType::Mesh);
+            }
+            else
+            {
+                types.push_back(AssetType::Scene);
+            }
 
             std::string list;
-            for (const auto& test : tests)
+            for (const auto& type : types)
             {
-                list += test.GetFormatName() + '\0';
+                list += AssetTypeToString(type) + '\0';
             }
 
             static int currItem = 0;
             ImGui::Combo("##fileType", &currItem, list.c_str());
 
-            if (ImGui::Button(importAsset ? "Import" : "Create"))
-            {}
+            if(importAsset)
+            {
+                if(ImGui::Button("Import"))
+                {
+                    Application::GetAssetManager().ImportFromFile(location);
+                    ClosePopup();
+                }
+            }
+            else
+            {
+                if(ImGui::Button("Create"))
+                {
+                    Application::GetAssetManager().CreateAsset(location, std::string(filenameBuf), types[currItem]);
+                    ClosePopup();
+                }
+            }
 
             ImGui::End();
         }

@@ -1,14 +1,15 @@
 #pragma once
 
+#include "../types/Types.h"
 #include "../types/Vertex.h"
 #include "Asset.h"
 
 namespace rl
 {
-    class Mesh : public Asset
+    class MeshData : public AssetData
     {
     public:
-        Mesh() = default;
+        MeshData() = default;
 
         [[nodiscard]] const std::vector<uint32_t>& GetIndices() const;
         [[nodiscard]] const std::vector<Vertex>& GetVertices() const;
@@ -20,6 +21,6 @@ namespace rl
         void WriteData(std::ofstream& output) override;
 
         std::vector<Vertex> vertices;
-        std::vector<uint32_t> indices;
+        std::vector<u32> indices;
     };
 }
