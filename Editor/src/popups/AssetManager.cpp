@@ -1,6 +1,7 @@
 #include "AssetManager.h"
 
 #include "../Editor.h"
+#include "../tools/CodeManager.h"
 
 namespace rl::ed
 {
@@ -18,6 +19,7 @@ namespace rl::ed
 
         popup->importAsset = false;
         popup->location = location;
+        popup->filenameBuf[0] = '\0';
     }
 
     void AssetManager::OpenImportAssetPopup(const std::filesystem::path& file)
@@ -31,6 +33,7 @@ namespace rl::ed
 
         popup->importAsset = true;
         popup->location = file.parent_path();
+        popup->filenameBuf[0] = '\0';
         file.filename().string().copy((char*)popup->filenameBuf, 256);
     }
 
@@ -70,6 +73,8 @@ namespace rl::ed
             else
             {
                 types.push_back(AssetType::Scene);
+                types.push_back(AssetType::System);
+                types.push_back(AssetType::Component);
             }
 
             std::string list;
@@ -94,6 +99,19 @@ namespace rl::ed
                 if(ImGui::Button("Create"))
                 {
                     Application::GetAssetManager().CreateAsset(location, std::string(filenameBuf), types[currItem]);
+                    if (types[currItem] == AssetType::Component) {
+                        size_t pos = location.string().find("Assets");
+                        std::string tempPath = location.string().substr(pos) + "/" + std::string(filenameBuf);
+                        std::replace(tempPath.begin(), tempPath.end(), '\\', '/');
+                        CodeManager::AddComponent(tempPath + ".cpp", tempPath + ".h");
+                    }
+
+                    if (types[currItem] == AssetType::System) {
+                        size_t pos = location.string().find("Assets");
+                        std::string tempPath = location.string().substr(pos) + "/" + std::string(filenameBuf);
+                        std::replace(tempPath.begin(), tempPath.end(), '\\', '/');
+                        CodeManager::AddSystem(tempPath + ".cpp", tempPath + ".h");
+                    }
                     ClosePopup();
                 }
             }

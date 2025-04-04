@@ -1,0 +1,7 @@
+1. Engine/src/assets/Asset.h
+    - Create new Enum value
+    - Add Enum value to AssetTypeToString function
+2. Engine/src/assets/Asset.cpp
+    - Add implementation to CreateAsset function if created asset
+3. Editor/src/popups/AssetManager.cpp
+    - Add to types based on if its an imported or created asset

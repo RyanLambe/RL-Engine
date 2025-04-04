@@ -1,6 +1,5 @@
 #include "Editor.h"
 #include "ToolBar.h"
-#include "project/Project.h"
 #include "project/ProjectManager.h"
 #include "tools/CodeManager.h"
 #include "windows/AssetBrowser.h"
@@ -28,11 +27,6 @@ int main()
     SystemsManager::OpenWindow();
     SceneHierarchy::OpenWindow();
     Components::OpenWindow();
-
-    // temp
-    CodeManager::AddSystem(std::filesystem::path("Assets/Example.cpp"), std::filesystem::path("Assets/Example.h"));
-    CodeManager::AddComponent(std::filesystem::path("Assets/ExampleComp.cpp"),
-                              std::filesystem::path("Assets/ExampleComp.h"));
 
     CodeManager::AddBuiltInComponent(std::filesystem::path("/include/components/Transform.h"));
     CodeManager::AddBuiltInComponent(std::filesystem::path("/include/components/Camera.h"));

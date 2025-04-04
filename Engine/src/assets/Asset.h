@@ -18,6 +18,8 @@ namespace rl
         Unknown = 0,
         Scene = 1,
         Mesh = 2,
+        Component = 3,
+        System = 4,
         //Texture = 3,
         //Audio = 4,
         // ...
@@ -32,6 +34,10 @@ namespace rl
                 return "Scene";
             case AssetType::Mesh:
                 return "Mesh";
+            case AssetType::System:
+                return "System (C++)";
+            case AssetType::Component:
+                return "Component (C++)";
             default:
                 return "ERROR";
         }

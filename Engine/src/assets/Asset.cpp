@@ -5,6 +5,7 @@
 
 #include "../core/Application.h"
 #include "../core/Logger.h"
+#include "../files/FileParser.h"
 #include "Mesh.h"
 
 namespace rl
@@ -28,6 +29,21 @@ namespace rl
             case AssetType::Unknown:
                 return nullptr;
             case AssetType::Mesh:
+                return nullptr;
+            case AssetType::Component:
+                RL_LOG("CREATED Component TEST");
+                std::filesystem::copy_file("./templates/Component.cpp", location / (name + ".cpp"));
+                std::filesystem::copy_file("./templates/Component.h", location / (name + ".h"));
+
+                FileParser::ReplaceKeyword(location / (name + ".cpp"), "%NAME%", name);
+                FileParser::ReplaceKeyword(location / (name + ".h"), "%NAME%", name);
+                return nullptr;
+            case AssetType::System:
+                std::filesystem::copy_file("./templates/System.cpp", location / (name + ".cpp"));
+                std::filesystem::copy_file("./templates/System.h", location / (name + ".h"));
+
+                FileParser::ReplaceKeyword(location / (name + ".cpp"), "%NAME%", name);
+                FileParser::ReplaceKeyword(location / (name + ".h"), "%NAME%", name);
                 return nullptr;
         }
         RL_LOG_ERROR("Unable to create asset. Unknown file type: ", (u64)type);
