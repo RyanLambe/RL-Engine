@@ -113,6 +113,7 @@ bool ProjectManager::Open(const std::filesystem::path& project)
 
     projectManager->projectOpen = true;
     AssetBrowser::Setup(projectManager->projectDir.string());
+    CodeManager::LoadFromFile(projectManager->projectDir / "ProjectData/CodeManagerSave.txt");
     return true;
 }
 
@@ -214,6 +215,12 @@ bool ProjectManager::IsProjectCompiled()
 std::string ProjectManager::GetProjectDirectory()
 {
     return projectManager->projectDir.string() + "/";
+}
+
+void ProjectManager::SaveProject() {
+    if (!projectManager->projectOpen)
+        return;
+    CodeManager::SaveToFile(projectManager->projectDir / "ProjectData/CodeManagerSave.txt");
 }
 
 void ProjectManager::Start()

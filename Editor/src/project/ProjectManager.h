@@ -31,6 +31,8 @@ namespace rl::ed
         static bool IsProjectCompiled();
         static std::string GetProjectDirectory();
 
+        static void SaveProject();
+
     private:
         static ProjectManager* projectManager;
 

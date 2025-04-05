@@ -22,6 +22,7 @@ void ToolBar::Render()
             if (ImGui::MenuItem("Open"))
                 OpenProject::OpenPopup();
             ImGui::MenuItem("Save");
+                ProjectManager::SaveProject();
             ImGui::MenuItem("SaveAs");
             ImGui::Separator();
             if (ImGui::MenuItem("Exit"))

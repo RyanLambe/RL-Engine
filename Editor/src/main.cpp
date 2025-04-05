@@ -43,5 +43,6 @@ int main()
             rl::Application::Update();
         }
     }
+    ProjectManager::SaveProject();
     return 0;
 }

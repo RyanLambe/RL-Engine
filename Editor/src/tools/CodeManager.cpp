@@ -97,6 +97,61 @@ namespace rl::ed
         return componentVariables[component];
     }
 
+    void CodeManager::SaveToFile(const std::filesystem::path &file) {
+        std::ofstream fileStream(file);
+        if (!fileStream.is_open())
+        {
+            RL_LOG_ERROR("Unable to Open: ProjectData/CodeManagerSave.txt");
+            return;
+        }
+
+        fileStream << "Systems:\n";
+        for (const auto& system : systems) {
+            if (cppFiles.find(system) != cppFiles.end()) {
+                fileStream << headerFiles[system] << ":" << cppFiles[system] << "\n";
+            }
+        }
+
+        fileStream << "Components:\n";
+        for (const auto& system : components) {
+            if (cppFiles.find(system) != cppFiles.end()) {
+                fileStream << headerFiles[system] << ":" << cppFiles[system] << "\n";
+            }
+        }
+    }
+
+    void CodeManager::LoadFromFile(const std::filesystem::path &file) {
+        std::ifstream fileStream(file);
+        if (!fileStream.is_open()) {
+            RL_LOG_ERROR("Unable to Open: ProjectData/CodeManagerSave.txt");
+            return;
+        }
+
+        bool components = false;
+        std::string line;
+        std::string headerFile;
+        std::string cppFile;
+        std::stringstream ss;
+
+        std::getline(fileStream, line); // skip first line
+        while (std::getline(fileStream, line)) {
+            ss = std::stringstream(line);
+            if (!std::getline(ss, headerFile, ':'))
+                continue;
+            if (!std::getline(ss, cppFile, ':')) {
+                components = true;
+                continue;
+            }
+
+            if (components) {
+                AddComponent(cppFile, headerFile);
+            }
+            else {
+                AddSystem(cppFile, headerFile);
+            }
+        }
+    }
+
     void CodeManager::Generate()
     {
         componentVariables = {};

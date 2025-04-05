@@ -26,6 +26,9 @@ namespace rl::ed
 
         static const std::vector<std::pair<VariableType, std::string>>& GetProperties(const std::string& component);
 
+        static void SaveToFile(const std::filesystem::path &file);
+        static void LoadFromFile(const std::filesystem::path& file);
+
         static void Generate();
 
     private:
