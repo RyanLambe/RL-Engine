@@ -28,3 +28,7 @@ void rl::MeshComponent::LoadMesh(Mesh mesh)
     vertexBuffer = VertexBuffer::Create(meshData->GetVertices(), false, Application::GetGraphicsContextPtr());
     indexBuffer = IndexBuffer::Create(meshData->GetIndices(), false, Application::GetGraphicsContextPtr());
 }
+
+bool rl::MeshComponent::HasMesh() const {
+    return vertexBuffer != nullptr && indexBuffer != nullptr && meshData != nullptr;
+}

@@ -20,6 +20,8 @@ namespace rl
 
     void SceneManager::SaveScene()
     {
+        if (loadedScenes.find(currentScene) == loadedScenes.end())
+            return;
         loadedScenes[currentScene]->SaveToFile();
     }
 }

@@ -14,10 +14,11 @@ namespace rl
         [[nodiscard]] uint32_t GetIndexCount() const;
 
         void LoadMesh(Mesh meshAsset);
+        bool HasMesh() const;
 
     private:
         std::shared_ptr<VertexBuffer> vertexBuffer = nullptr;
         std::shared_ptr<IndexBuffer> indexBuffer = nullptr;
-        std::shared_ptr<MeshData> meshData;
+        std::shared_ptr<MeshData> meshData = nullptr;
     };
 }

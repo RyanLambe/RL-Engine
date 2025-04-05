@@ -136,6 +136,10 @@ bool Editor::Playing()
 
 void Editor::Play()
 {
+    if (!Application::GetSceneManager().IsSceneOpen()) {
+        RL_LOG_ERROR("Scene is not open");
+        return;
+    }
     Application::GetSceneManager().SaveScene();
     Application::Reset();
     Scene::GetScene().systemManager.StartSystems();

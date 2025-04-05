@@ -59,6 +59,10 @@ namespace rl
             // draw
             for (auto& mesh : MeshComponent::GetAllComponents())
             {
+                if (!mesh.HasMesh()) {
+                    RL_LOG_WARNING("Mesh Components require Mesh to be set to Render.");
+                    continue;
+                }
                 if (!Transform::HasComponent(mesh.GetEntity()))
                 {
                     RL_LOG_WARNING("Mesh Components require Transform Components to Render.");
