@@ -31,7 +31,6 @@ namespace rl
             case AssetType::Mesh:
                 return nullptr;
             case AssetType::Component:
-                RL_LOG("CREATED Component TEST");
                 std::filesystem::copy_file("./templates/Component.cpp", location / (name + ".cpp"));
                 std::filesystem::copy_file("./templates/Component.h", location / (name + ".h"));
 
@@ -44,6 +43,9 @@ namespace rl
 
                 FileParser::ReplaceKeyword(location / (name + ".cpp"), "%NAME%", name);
                 FileParser::ReplaceKeyword(location / (name + ".h"), "%NAME%", name);
+                return nullptr;
+            case AssetType::Folder:
+                std::filesystem::create_directory(location / name);
                 return nullptr;
         }
         RL_LOG_ERROR("Unable to create asset. Unknown file type: ", (u64)type);

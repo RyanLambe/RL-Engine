@@ -72,6 +72,7 @@ namespace rl::ed
             }
             else
             {
+                types.push_back(AssetType::Folder);
                 types.push_back(AssetType::Scene);
                 types.push_back(AssetType::System);
                 types.push_back(AssetType::Component);

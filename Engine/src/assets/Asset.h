@@ -20,6 +20,7 @@ namespace rl
         Mesh = 2,
         Component = 3,
         System = 4,
+        Folder = 5,
         //Texture = 3,
         //Audio = 4,
         // ...
@@ -38,6 +39,8 @@ namespace rl
                 return "System (C++)";
             case AssetType::Component:
                 return "Component (C++)";
+            case AssetType::Folder:
+                return "Folder";
             default:
                 return "ERROR";
         }
